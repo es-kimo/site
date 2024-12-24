@@ -124,10 +124,18 @@ export const mdxComponents: MDXComponents = {
   },
   Callout({ children, ...properties }) {
     return (
-      <div {...properties} className="mt-6 rounded p-4 bg-muted">
+      <div {...properties} className="mt-6 rounded p-4 bg-muted flex">
         <span className="mr-3">💡</span>
         {children}
       </div>
+    );
+  },
+  PostInfo(properties) {
+    return (
+      <p
+        {...properties}
+        className="text-muted-foreground pt-2 box-content text-xs h-4 fade-transition lg:invisible lg:opacity-0 lg:h-0 lg:pt-0"
+      ></p>
     );
   },
 };
