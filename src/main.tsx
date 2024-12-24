@@ -15,10 +15,10 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/fe" element={<CS01 />} />
           <Route path="/be" element={<Home />} />
           <Route path="/algo" element={<Home />} />
-          <Route path="/cs" element={<Home />} />
+          <Route path="/cs" element={<CS01 />} />
           <Route path="/about" element={<Home />} />
         </Route>
       </Routes>
     </BrowserRouter>
-  </StrictMode>
+  </StrictMode>,
 );
