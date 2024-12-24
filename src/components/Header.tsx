@@ -5,7 +5,7 @@ import { NavLink } from "react-router";
 
 export const Header = () => {
   return (
-    <header className="grid grid-cols-5 py-4">
+    <header className="grid grid-cols-5 py-4 sticky top-0 z-[100] bg-background">
       <h1>
         <NavigationButton to="/">블로그</NavigationButton>
       </h1>
