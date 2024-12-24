@@ -13,7 +13,7 @@ import { Link } from "react-router";
 const Content = () => {
   return (
     <WidthResizeTransition>
-      <section className="grid grid-cols-[minmax(96px,_3fr)_minmax(auto,_708px)_minmax(96px,_1fr)] p-[80px_0_20vh] w-full">
+      <section className="grid grid-cols-[minmax(0.875rem,_1fr)_minmax(auto,_708px)_minmax(0.875rem,_1fr)] sm:grid-cols-[minmax(96px,_3fr)_minmax(auto,_708px)_minmax(96px,_1fr)] pt-6 pb-[10vh] sm:pt-[80px] sm:pb-[20vh] w-full transition-all">
         <aside className="fade-transition invisible opacity-0 lg:opacity-100 lg:visible sticky top-[80px] left-3 border-t-2 border-b-2 w-[180px] h-fit">
           <dl className="border-b-[1px] border-muted px-[7px]">
             <dd className="py-[6px]">
