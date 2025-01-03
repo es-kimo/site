@@ -5,8 +5,10 @@ import { Outlet } from "react-router";
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <Header />
-      <Outlet />
+      <div className="max-w-blog mx-auto">
+        <Header />
+        <Outlet />
+      </div>
     </ThemeProvider>
   );
 }

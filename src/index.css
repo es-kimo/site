@@ -4,6 +4,7 @@
 
 @layer base {
   :root {
+    --blog-max-w: 1142px;
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -64,5 +65,10 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+@layer components {
+  .fade-transition {
+    @apply transition-[visibility,_opacity,_height,_margin,_padding] duration-500 delay-1000;
   }
 }
