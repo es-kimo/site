@@ -70,7 +70,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       );
     },
     PostInfo(properties) {
-      return <p {...properties} className="text-muted-foreground pt-2 box-content text-xs h-4 fade-transition lg:invisible lg:opacity-0 lg:h-0 lg:pt-0"></p>;
+      return <p {...properties} className="text-muted-foreground pt-2 text-xs lg:hidden"></p>;
     },
     ...components,
   };
