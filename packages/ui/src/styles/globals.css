@@ -65,4 +65,13 @@
   body {
     @apply bg-background text-foreground;
   }
+  :root {
+    --blog-max-w: 1142px;
+  }
+}
+
+@layer components {
+  .fade-transition {
+    @apply transition-[visibility,_opacity,_height,_margin,_padding] duration-500 delay-1000;
+  }
 }
