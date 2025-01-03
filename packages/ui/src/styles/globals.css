@@ -71,7 +71,7 @@
 }
 
 @layer components {
-  .fade-transition {
+  /* .fade-transition {
     @apply transition-[visibility,_opacity,_height,_margin,_padding] duration-500 delay-1000;
-  }
+  } */
 }
