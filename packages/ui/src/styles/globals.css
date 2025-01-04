@@ -67,6 +67,7 @@
   }
   :root {
     --blog-max-w: 1142px;
+    --header-h: 72px;
   }
 }
 
