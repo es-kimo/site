@@ -40,7 +40,6 @@ export function generateOGImageData({ title, alt }: { title: string; alt: string
         }
       ),
     alt,
-    runtime: "edge",
     size: {
       width: 1920,
       height: 1080,
