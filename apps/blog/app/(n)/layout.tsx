@@ -1,5 +1,13 @@
 import { BreadCrumb } from "@/components/breadcrumb";
 
+export async function generateMetadata() {
+  return {
+    authors: [{ name: "Kihyun Ryu" }],
+    creator: "Kihyun Ryu",
+    publisher: "Kihyun Ryu",
+  };
+}
+
 export default async function Layout({
   children,
 }: Readonly<{
