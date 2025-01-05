@@ -8,7 +8,7 @@ export default async function Layout({
   params,
 }: Readonly<{
   children: React.ReactNode;
-  params: Promise<{ category: string; sub: string }>;
+  params: Promise<{ category: string }>;
 }>) {
   const { category } = await params;
 
