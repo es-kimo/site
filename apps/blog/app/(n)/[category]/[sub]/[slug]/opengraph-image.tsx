@@ -1,8 +1,7 @@
-import { Params } from "@/constants/params.types";
+import { SlugParams } from "@/constants/params.types";
 import { ImageResponse } from "next/og";
 import path from "path";
 
-// Image metadata
 export const alt = "썸네일";
 export const size = {
   width: 1920,
@@ -11,7 +10,7 @@ export const size = {
 
 export const contentType = "image/png";
 
-export default async function Image({ params }: { params: Params }) {
+export default async function Image({ params }: { params: Promise<SlugParams> }) {
   const { category, sub, slug } = await params;
   const { metadata } = await import(`@/content/${path.join(category, sub, slug)}/page.mdx`);
 
