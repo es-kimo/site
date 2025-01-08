@@ -1,4 +1,4 @@
-import { Params } from "@/constants/params.type";
+import { Params } from "@/constants/params.types";
 
 export async function generateMetadata({ params }: { params: Params }) {
   const { category, sub, slug } = await params;

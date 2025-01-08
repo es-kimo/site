@@ -1,13 +1,11 @@
 import NavigationTab from "@/components/navigation-tab";
-import { categories } from "@/constants/categories";
+import { categoryParams } from "@/constants/params";
 import { isCategory } from "@/lib/type-guards";
 import { t } from "@/locales/translate";
 import { notFound } from "next/navigation";
 
 export function generateStaticParams() {
-  return categories.map((category) => ({
-    category,
-  }));
+  return categoryParams;
 }
 
 export default async function Layout({

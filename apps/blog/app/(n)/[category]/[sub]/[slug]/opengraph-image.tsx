@@ -1,4 +1,4 @@
-import { Params } from "@/constants/params.type";
+import { Params } from "@/constants/params.types";
 import { ImageResponse } from "next/og";
 import path from "path";
 

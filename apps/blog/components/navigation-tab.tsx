@@ -1,5 +1,4 @@
-import { subCategories } from "@/constants/categories";
-import { Category } from "@/constants/categories.types";
+import { getSubCategoriesByCategory } from "@/constants/notes";
 import { t } from "@/locales/translate";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "@workspace/ui/components/navigation-menu";
 import { cn } from "@workspace/ui/lib/utils";
@@ -8,7 +7,7 @@ import path from "path";
 
 export const restyledNavigationMenuTriggerStyle = () => cn(navigationMenuTriggerStyle(), "text-base text-neutral-400 hover:bg-inherit transition-colors duration-300");
 
-export default async function NavigationTab({ category }: { category: Category }) {
+export default async function NavigationTab({ category }: { category: string }) {
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -16,7 +15,7 @@ export default async function NavigationTab({ category }: { category: Category }
           <Link href={"/" + category} legacyBehavior passHref>
             <NavigationMenuLink className={restyledNavigationMenuTriggerStyle()}>전체보기</NavigationMenuLink>
           </Link>
-          {subCategories.get(category)?.map((sub) => (
+          {(await getSubCategoriesByCategory(category)).map((sub) => (
             <Link key={sub} href={"/" + path.join(category, sub)} legacyBehavior passHref>
               <NavigationMenuLink className={restyledNavigationMenuTriggerStyle()}>{t(sub)}</NavigationMenuLink>
             </Link>

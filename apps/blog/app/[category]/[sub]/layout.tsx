@@ -1,8 +1,7 @@
-import { getSubCategoriesByCategory } from "@/constants/subCategories";
-import { isCategory } from "@/lib/type-guards";
+import { getSubParams } from "@/constants/params";
 
 export async function generateStaticParams({ params: { category } }: { params: { category: string } }) {
-  return isCategory(category) ? getSubCategoriesByCategory(category).map((sub) => ({ category, sub })) : [];
+  return getSubParams(category);
 }
 
 export default async function Layout({
