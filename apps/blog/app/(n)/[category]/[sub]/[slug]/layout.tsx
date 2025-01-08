@@ -1,6 +1,20 @@
 import { BreadCrumb } from "@/components/breadcrumb";
+import { slugParams } from "@/constants/params";
 
-export default function Layout({
+/** route group이 달라서 부모로부터 static param을 받을 수 없음 */
+export function generateStaticParams() {
+  return slugParams;
+}
+
+export async function generateMetadata() {
+  return {
+    authors: [{ name: "Kihyun Ryu" }],
+    creator: "Kihyun Ryu",
+    publisher: "Kihyun Ryu",
+  };
+}
+
+export default async function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
