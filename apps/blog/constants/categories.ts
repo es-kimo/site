@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 
 // TODO: 빌드 시점에만 실행되는지 테스트
-const categoryPath = path.join(process.cwd(), "app", "(n)");
+const categoryPath = path.join(process.cwd(), "content");
 const items = await fs.promises.readdir(categoryPath, { withFileTypes: true });
 export const categories = items.filter((item) => item.isDirectory()).map((folder) => folder.name);
 export const subCategories = new Map(
