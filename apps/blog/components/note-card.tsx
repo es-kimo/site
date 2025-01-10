@@ -19,8 +19,8 @@ export async function NoteCard({ category, sub, slug, children }: SlugParams & {
   return (
     <article className="w-full">
       <SlugLink className="inline-block w-full transform-gpu hover:scale-[1.04] transition-transform overflow-hidden">{children}</SlugLink>
-      <div className="flex flex-col gap-[2px] mt-2">
-        <SlugLink className="inline-block">
+      <div className="flex flex-col gap-[2px]">
+        <SlugLink className="inline-block pt-2">
           <div className="flex justify-between items-center text-xs text-muted-foreground">
             <BreadCrumb category={category} sub={sub} link={false} />
             <span>3일 전</span>
