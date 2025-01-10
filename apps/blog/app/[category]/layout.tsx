@@ -22,8 +22,6 @@ export async function generateMetadata({ params }: { params: Promise<CategoryPar
   return {
     title: `${t(category)}`,
     description: `${t(category)} 분야의 다양한 주제를 글로 다룹니다.`,
-    authors: [{ name: "Kihyun Ryu" }],
-    // TODO: naver-site-verification
     // TODO: og image
   };
 }
