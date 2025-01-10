@@ -4,6 +4,16 @@ import createMDX from "@next/mdx";
 const nextConfig = {
   pageExtensions: ["mdx", "ts", "tsx"],
   transpilePackages: ["@workspace/ui"],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "3000",
+        pathname: "*/**",
+      },
+    ],
+  },
 };
 
 const withMDX = createMDX({

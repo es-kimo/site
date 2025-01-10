@@ -38,7 +38,7 @@ export default async function Image({ params }: { params: Promise<SlugParams> })
             color: "white",
             lineHeight: "120px",
             whiteSpace: "pre-wrap",
-            transform: "translateY(-50%)",
+            transform: "translateY(-100%)",
           }}
         >
           {metadata.title}
