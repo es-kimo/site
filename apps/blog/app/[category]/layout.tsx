@@ -5,6 +5,7 @@ import { categoryParams } from "@/constants/params";
 import { CategoryParams } from "@/constants/params.types";
 import { isCategory } from "@/lib/type-guards";
 import { t } from "@/locales/translate";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
@@ -12,6 +13,17 @@ export const experimental_ppr = true;
 
 export function generateStaticParams() {
   return categoryParams;
+}
+
+export async function generateMetadata({ params }: { params: Promise<CategoryParams> }): Promise<Metadata> {
+  const { category } = await params;
+  return {
+    title: `${t(category)}`,
+    description: `${t(category)} 분야의 다양한 주제를 글로 다룹니다.`,
+    authors: [{ name: "Kihyun Ryu" }],
+    // TODO: naver-site-verification
+    // TODO: og image
+  };
 }
 
 export default async function Layout({
