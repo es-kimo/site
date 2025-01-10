@@ -14,8 +14,12 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    ppr: "incremental",
+  },
 };
 
+/** @type {import('@next/mdx').WithMDX} */
 const withMDX = createMDX({
   // Add markdown plugins here, as desired
 });

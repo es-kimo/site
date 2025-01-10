@@ -1,15 +1,13 @@
 import { BreadCrumb } from "@/components/breadcrumb";
 import { getSlugMetadata } from "@/constants/notes";
-import { Category } from "@/constants/notes.types";
+import { SlugParams } from "@/constants/params.types";
 import { fetchOgImage } from "@/lib/opengraph-image";
+import { Skeleton } from "@workspace/ui/components/skeleton";
+import { LoaderCircleIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export async function NoteCard({ category, sub, slug }: { category: Category; sub: string; slug: string }) {
-  const noteUrl = `http://localhost:3000/${category}/${sub}/${slug}`;
-
-  const ogImage = await fetchOgImage(noteUrl);
-
+export async function NoteCard({ category, sub, slug, children }: SlugParams & { children: React.ReactNode }) {
   const metadata = await getSlugMetadata(category, sub, slug);
 
   const SlugLink = ({ children, className }: { children: React.ReactNode; className?: string }) => (
@@ -18,19 +16,16 @@ export async function NoteCard({ category, sub, slug }: { category: Category; su
     </Link>
   );
 
-  // TODO: Image Fallback, Image 로딩 중 스켈레톤
   return (
-    <article>
-      <SlugLink className="inline-block transform-gpu hover:scale-[1.04] transition-transform overflow-hidden">
-        {ogImage && (
-          <Image width={718} height={310} alt={metadata.title?.toString() ?? ""} src={ogImage} className="aspect-[7_/_3] object-cover transform-gpu hover:scale-[1.07] transition-transform" />
-        )}
-      </SlugLink>
+    <article className="w-full">
+      <SlugLink className="inline-block w-full transform-gpu hover:scale-[1.04] transition-transform overflow-hidden">{children}</SlugLink>
       <div className="flex flex-col gap-[2px] mt-2">
-        <div className="flex justify-between items-center text-xs text-muted-foreground">
-          <BreadCrumb category={category} sub={sub} link={false} />
-          <SlugLink className="inline-block">3일 전</SlugLink>
-        </div>
+        <SlugLink className="inline-block">
+          <div className="flex justify-between items-center text-xs text-muted-foreground">
+            <BreadCrumb category={category} sub={sub} link={false} />
+            <span>3일 전</span>
+          </div>
+        </SlugLink>
         <h2>
           <SlugLink className="text-lg font-bold inline-block w-full">{metadata.title?.toString()}</SlugLink>
         </h2>
@@ -39,3 +34,23 @@ export async function NoteCard({ category, sub, slug }: { category: Category; su
     </article>
   );
 }
+
+async function OpengraphImage({ category, sub, slug }: SlugParams) {
+  const noteUrl = `http://localhost:3000/${category}/${sub}/${slug}`;
+
+  const ogImage = await fetchOgImage(noteUrl);
+
+  return ogImage && <Image priority width={718} height={310} alt="썸네일 이미지" src={ogImage} className="aspect-[7/3] object-cover transform-gpu hover:scale-[1.07] transition-transform" />;
+}
+
+export function OpengraphImageFallback() {
+  return (
+    <Skeleton className="w-full aspect-[7/3] rounded-none flex justify-center items-center gap-1">
+      <LoaderCircleIcon className="animate-spin" size={12} color="hsl(var(--muted-foreground))" />
+      <span className="text-xs text-muted-foreground">로딩중...</span>
+    </Skeleton>
+  );
+}
+
+NoteCard.OpengraphImage = OpengraphImage;
+NoteCard.OpengraphImageFallback = OpengraphImageFallback;

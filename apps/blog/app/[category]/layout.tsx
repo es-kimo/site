@@ -6,6 +6,9 @@ import { CategoryParams } from "@/constants/params.types";
 import { isCategory } from "@/lib/type-guards";
 import { t } from "@/locales/translate";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
+
+export const experimental_ppr = true;
 
 export function generateStaticParams() {
   return categoryParams;
@@ -30,7 +33,19 @@ export default async function Layout({
             <h3 className="sr-only">아티클</h3>
             <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {/* TODO: sort by created date */}
-              {subs.map(async (sub) => (await getSlugsByCategoryAndSub(category, sub)).map((slug) => <li key={slug}>{<NoteCard category={category} sub={sub} slug={slug} />}</li>))}
+              {subs.map(async (sub) =>
+                (await getSlugsByCategoryAndSub(category, sub)).map((slug) => (
+                  <li key={slug} className="w-full">
+                    {
+                      <NoteCard category={category} sub={sub} slug={slug}>
+                        <Suspense fallback={<NoteCard.OpengraphImageFallback />}>
+                          <NoteCard.OpengraphImage category={category} sub={sub} slug={slug} />
+                        </Suspense>
+                      </NoteCard>
+                    }
+                  </li>
+                ))
+              )}
             </ul>
           </article>
 
