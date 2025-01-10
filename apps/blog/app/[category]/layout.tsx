@@ -5,6 +5,8 @@ import { categoryParams } from "@/constants/params";
 import { CategoryParams } from "@/constants/params.types";
 import { isCategory } from "@/lib/type-guards";
 import { t } from "@/locales/translate";
+import { Alert, AlertDescription, AlertTitle } from "@workspace/ui/components/alert";
+import { AlertCircle } from "lucide-react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -34,7 +36,7 @@ export default async function Layout({
   params: Promise<CategoryParams>;
 }>) {
   const { category, sub } = await params;
-  const subs = sub ? [sub] : [...(await getSubCategoriesByCategory(category))];
+  const subs = sub ? [sub] : await getSubCategoriesByCategory(category);
   return (
     <main className="pt-6 pb-[10vh] px-8 sm:pt-[80px] sm:pb-[20vh] space-y-10">
       {isCategory(category) ? (
@@ -57,6 +59,15 @@ export default async function Layout({
                     }
                   </li>
                 ))
+              )}
+              {!subs.length && (
+                <li>
+                  <Alert>
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>아직 등록한 글이 없어요.</AlertTitle>
+                    <AlertDescription>곧 새로운 글이 업데이트 될 예정이에요.</AlertDescription>
+                  </Alert>
+                </li>
               )}
             </ul>
           </article>
