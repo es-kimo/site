@@ -1,3 +1,4 @@
+import { formatPostDate } from "@/lib/date";
 import type { MDXComponents } from "mdx/types";
 import Image, { ImageProps } from "next/image";
 
@@ -69,8 +70,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </div>
       );
     },
-    PostInfo(properties) {
-      return <p {...properties} className="text-muted-foreground pt-2 text-xs lg:hidden"></p>;
+    PostDate({ children, ...properties }) {
+      return (
+        <div {...properties} className="text-muted-foreground pt-2 text-xs lg:hidden">
+          작성일: {formatPostDate(children)}
+        </div>
+      );
     },
     ...components,
   };

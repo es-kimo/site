@@ -1,14 +1,16 @@
 import { BreadCrumb } from "@/components/breadcrumb";
+import { Loader } from "@/components/loader";
 import { getSlugMetadata } from "@/constants/notes";
 import { SlugParams } from "@/constants/params.types";
+import { formatPostDate } from "@/lib/date";
 import { fetchOgImage } from "@/lib/opengraph-image";
 import { Skeleton } from "@workspace/ui/components/skeleton";
-import { LoaderCircleIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 export async function NoteCard({ category, sub, slug, children }: SlugParams & { children: React.ReactNode }) {
   const metadata = await getSlugMetadata(category, sub, slug);
+  const { createdAt, updatedAt } = metadata.other;
 
   const SlugLink = ({ children, className }: { children: React.ReactNode; className?: string }) => (
     <Link href={`/${category}/${sub}/${slug}`} className={className}>
@@ -23,7 +25,7 @@ export async function NoteCard({ category, sub, slug, children }: SlugParams & {
         <SlugLink className="inline-block pt-2">
           <div className="flex justify-between items-center text-xs text-muted-foreground">
             <BreadCrumb category={category} sub={sub} link={false} />
-            <span>3일 전</span>
+            <span>{formatPostDate(updatedAt ?? createdAt)}</span>
           </div>
         </SlugLink>
         <h2>
@@ -46,7 +48,7 @@ async function OpengraphImage({ category, sub, slug }: SlugParams) {
 export function OpengraphImageFallback() {
   return (
     <Skeleton className="w-full aspect-[7/3] rounded-none flex justify-center items-center gap-1">
-      <LoaderCircleIcon className="animate-spin" size={12} color="hsl(var(--muted-foreground))" />
+      <Loader />
       <span className="text-xs text-muted-foreground">로딩중...</span>
     </Skeleton>
   );
