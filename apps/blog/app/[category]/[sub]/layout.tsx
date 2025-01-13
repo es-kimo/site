@@ -1,7 +1,6 @@
 import { getSubParams } from "@/constants/params";
 import { SubParams } from "@/constants/params.types";
 import { t } from "@/locales/translate";
-import { ResolvingMetadata } from "next";
 
 export async function generateStaticParams({ params: { category } }: { params: { category: string } }) {
   return getSubParams(category);
