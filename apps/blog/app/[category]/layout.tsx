@@ -9,9 +9,6 @@ import { Alert, AlertDescription, AlertTitle } from "@workspace/ui/components/al
 import { AlertCircle } from "lucide-react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
-
-export const experimental_ppr = true;
 
 export function generateStaticParams() {
   return categoryParams;
@@ -48,13 +45,9 @@ export default async function Layout({
               {subs.map(async (sub) =>
                 (await getSlugsByCategoryAndSub(category, sub)).map((slug) => (
                   <li key={slug} className="w-full">
-                    {
-                      <NoteCard category={category} sub={sub} slug={slug}>
-                        <Suspense fallback={<NoteCard.OpengraphImageFallback />}>
-                          <NoteCard.OpengraphImage category={category} sub={sub} slug={slug} />
-                        </Suspense>
-                      </NoteCard>
-                    }
+                    <NoteCard category={category} sub={sub} slug={slug}>
+                      <NoteCard.OpengraphImage category={category} sub={sub} slug={slug} />
+                    </NoteCard>
                   </li>
                 ))
               )}
