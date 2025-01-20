@@ -1,8 +1,16 @@
-import { getSubCategoriesByCategory } from "@/constants/subCategories";
-import { isCategory } from "@/lib/type-guards";
+import { getSubParams } from "@/constants/params";
+import { SubParams } from "@/constants/params.types";
+import { t } from "@/locales/translate";
 
 export async function generateStaticParams({ params: { category } }: { params: { category: string } }) {
-  return isCategory(category) ? getSubCategoriesByCategory(category).map((sub) => ({ category, sub })) : [];
+  return getSubParams(category);
+}
+
+export async function generateMetadata({ params }: { params: Promise<SubParams> }) {
+  const { category, sub } = await params;
+  return {
+    title: `${t(category)} | ${t(sub)}`,
+  };
 }
 
 export default async function Layout({

@@ -49,6 +49,17 @@ const config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      keyframes: {
+        fadein: {
+          "0%": { filter: "blur(4px)" },
+          "100%": {
+            filter: "blur(0)",
+          },
+        },
+      },
+      animation: {
+        fadein: "fadein 0.3s ease-out",
+      },
     },
   },
   plugins: [tailwindcssAnimate],

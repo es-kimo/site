@@ -1,4 +1,4 @@
-import type { Category } from "@/constants/categories.types";
+import type { Category } from "@/constants/notes.types";
 
 export interface LocaleResources {
   ko: {

@@ -1,20 +1,29 @@
+import { t } from "@/locales/translate";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@workspace/ui/components/breadcrumb";
 import Link from "next/link";
 
-export const BreadCrumb = ({ className }: { className?: string }) => {
+export const BreadCrumb = ({ className, category, sub, link = true }: { className?: string; category: string; sub: string; link?: boolean }) => {
   return (
     <Breadcrumb className={className}>
-      <BreadcrumbList className="text-inherit font-semibold text-xs">
+      <BreadcrumbList className={`text-inherit font-semibold text-xs ${!link && "sm:gap-[2px]"}`}>
         <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link href="/cs">컴퓨터과학</Link>
-          </BreadcrumbLink>
+          {link ? (
+            <BreadcrumbLink asChild>
+              <Link href={`/${category}`}>{t(category)}</Link>
+            </BreadcrumbLink>
+          ) : (
+            t(category)
+          )}
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link href="/">컴퓨터구조</Link>
-          </BreadcrumbLink>
+          {link ? (
+            <BreadcrumbLink asChild>
+              <Link href={`/${category}/${sub}`}>{t(sub)}</Link>
+            </BreadcrumbLink>
+          ) : (
+            t(sub)
+          )}
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

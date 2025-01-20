@@ -26,6 +26,8 @@ export const Header = () => {
         <li>
           <Button variant="ghost" size="icon">
             <SearchIcon className="h-[1.2rem] w-[1.2rem]" />
+            {/* TODO: 버튼에 알맞은 이름 부여 */}
+            {/* <span className="sr-only">검색 아이콘</span> */}
           </Button>
         </li>
       </ul>
