@@ -2,7 +2,7 @@
 
 import { NavigationMenuLink, navigationMenuTriggerStyle } from "@workspace/ui/components/navigation-menu";
 import { cn } from "@workspace/ui/lib/utils";
-import Link from "next/link";
+import { useTransitionRouter } from "next-view-transitions";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 
@@ -11,10 +11,18 @@ export const restyledNavigationMenuTriggerStyle = () => cn(navigationMenuTrigger
 export function NavigationLink({ href, children }: { href: string; children: React.ReactNode }) {
   const pathname = usePathname();
   const isActive = useMemo(() => href === pathname, [href, pathname]);
+  const router = useTransitionRouter();
 
   return (
-    <Link href={href} legacyBehavior passHref>
-      <NavigationMenuLink className={cn(restyledNavigationMenuTriggerStyle(), isActive && "border-b-2 border-accent-foreground text-accent-foreground")}>{children}</NavigationMenuLink>
-    </Link>
+    <NavigationMenuLink
+      onClick={(e) => {
+        e.preventDefault();
+        router.push(href);
+      }}
+      href={href}
+      className={cn(restyledNavigationMenuTriggerStyle(), isActive && "border-b-2 border-accent-foreground text-accent-foreground")}
+    >
+      {children}
+    </NavigationMenuLink>
   );
 }

@@ -4,15 +4,16 @@ import { SlugParams } from "@/constants/params.types";
 import { formatPostDate } from "@/lib/date";
 import { fetchOgImage } from "@/lib/opengraph-image";
 import { Skeleton } from "@workspace/ui/components/skeleton";
+import { Link } from "next-view-transitions";
 import Image from "next/image";
-import Link from "next/link";
+import { HTMLAttributes } from "react";
 
 export async function NoteCard({ category, sub, slug, children }: SlugParams & { children: React.ReactNode }) {
   const metadata = await getSlugMetadata(category, sub, slug);
   const { createdAt, updatedAt } = metadata.other;
 
-  const SlugLink = ({ children, className }: { children: React.ReactNode; className?: string }) => (
-    <Link href={`/${category}/${sub}/${slug}`} className={className}>
+  const SlugLink = ({ children, className, ...props }: { children: React.ReactNode; className?: string } & HTMLAttributes<HTMLAnchorElement>) => (
+    <Link href={`/${category}/${sub}/${slug}`} className={className} {...props}>
       {children}
     </Link>
   );

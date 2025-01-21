@@ -5,7 +5,7 @@ import Image, { ImageProps } from "next/image";
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: ({ children, ...props }) => (
-      <h1 className="scroll-m-20 text-3xl font-bold tracking-tight" {...props}>
+      <h1 className="scroll-m-20 text-3xl font-bold tracking-tight animate-fadein" {...props}>
         {children}
       </h1>
     ),
