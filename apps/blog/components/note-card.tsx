@@ -41,8 +41,16 @@ async function OpengraphImage({ category, sub, slug }: SlugParams) {
 
   const ogImage = await fetchOgImage(noteUrl);
 
-  return (
-    ogImage && <Image priority width={718} height={310} alt="썸네일 이미지" src={ogImage} className="aspect-[7/3] object-cover transform-gpu hover:scale-[1.07] transition-transform animate-fadein" />
-  );
+  if (!ogImage) {
+    return <OpengraphImageFallback category={category} sub={sub} slug={slug} />;
+  }
+
+  return <Image priority width={718} height={310} alt="썸네일 이미지" src={ogImage} className="aspect-[7/3] object-cover transform-gpu hover:scale-[1.07] transition-transform animate-fadein" />;
 }
 NoteCard.OpengraphImage = OpengraphImage;
+
+async function OpengraphImageFallback({ category, sub, slug }: SlugParams) {
+  const metadata = await getSlugMetadata(category, sub, slug);
+
+  return <Skeleton className="w-full aspect-[7/3] rounded-none flex justify-center items-center gap-1">{metadata.title?.toString()}</Skeleton>;
+}
