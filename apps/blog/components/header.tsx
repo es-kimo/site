@@ -1,7 +1,7 @@
 import { Button } from "@workspace/ui/components/button";
 import { ModeToggle } from "@workspace/ui/components/mode-toggle";
 import { SearchIcon } from "lucide-react";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 
 export const Header = () => {
   return (

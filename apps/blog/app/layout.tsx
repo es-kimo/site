@@ -4,6 +4,7 @@ import { Header } from "@/components/header";
 import { Providers } from "@/components/providers";
 import "@workspace/ui/globals.css";
 import { Metadata } from "next";
+import { ViewTransitions } from "next-view-transitions";
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -31,15 +32,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" suppressHydrationWarning>
-      <body className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}>
-        <Providers>
-          <div className="max-w-blog mx-auto">
-            <Header />
-            {children}
-          </div>
-        </Providers>
-      </body>
-    </html>
+    <ViewTransitions>
+      <html lang="ko" suppressHydrationWarning>
+        <body className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}>
+          <Providers>
+            <div className="max-w-blog mx-auto">
+              <Header />
+              {children}
+            </div>
+          </Providers>
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }

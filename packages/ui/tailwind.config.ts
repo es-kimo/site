@@ -58,7 +58,7 @@ const config = {
         },
       },
       animation: {
-        fadein: "fadein 0.3s ease-out",
+        fadein: "fadein 0.5s ease-out",
       },
     },
   },
