@@ -1,0 +1,20 @@
+{
+  "name": "@workspace/common",
+  "type": "module",
+  "scripts": {},
+  "exports": {
+    "./lib/*": "./src/lib/*.ts",
+    "./structure/*": "./src/structure/*.ts"
+  },
+  "plugins": [
+    {
+      "name": "next"
+    }
+  ],
+  "devDependencies": {
+    "@types/node": "^22.13.8",
+    "@workspace/typescript-config": "workspace:*",
+    "next": "^15.2.0",
+    "typescript": "latest"
+  }
+}
