@@ -16,12 +16,15 @@ export const getSubCategoriesByCategory = async (category: Category) => getFolde
 /** 글 제목 */
 export const getSlugsByCategoryAndSub = async (category: Category, sub: string) => getFolderNames(path.join(CONTENT_PATH, category, sub));
 
-// TODO: metadata의 타입가드 및 불일치시 에러 던지기
-/** 글 정보 */
-export const getSlugMetadata = async (category: Category, sub: string, slug: string): Promise<NoteMetadata> => {
-  const { metadata } = await import(`@/content/${category}/${sub}/${slug}/page.mdx`);
-  return metadata;
-};
+/**
+ * 글 정보
+ *
+ * `common` 패키지에서 기존 함수를 생성하면, import 경로를 `common` 패키지 기준으로 잡게되어 cannot find module 에러가 발생합니다.
+ *
+ * 함수 생성 대신 사용하는 컴포넌트에서 아래와 같이 불러 사용하도록 합니다.
+ *
+ * const { metadata } = await import(`@/content/${category}/${sub}/${slug}/page.mdx`);
+ */
 
 // TODO: use Promise all to start concurrently
 /** 노트 */
