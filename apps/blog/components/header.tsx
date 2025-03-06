@@ -1,6 +1,6 @@
 import { Button } from "@workspace/ui/components/button";
 import { ModeToggle } from "@workspace/ui/components/mode-toggle";
-import { SearchIcon } from "lucide-react";
+import { Github } from "lucide-react";
 import { Link } from "next-view-transitions";
 
 export const Header = () => {
@@ -9,14 +9,7 @@ export const Header = () => {
       <h1>
         <NavigationButton href="/">블로그</NavigationButton>
       </h1>
-      <nav className="col-span-3">
-        <NavigationButton href="/fe">프론트엔드</NavigationButton>
-        <NavigationButton href="/be">백엔드</NavigationButton>
-        <NavigationButton href="/algo">알고리즘</NavigationButton>
-        <NavigationButton href="/cs">컴퓨터과학</NavigationButton>
-      </nav>
-
-      <ul className="flex justify-end">
+      <ul className="col-start-5 flex justify-end">
         <li>
           <NavigationButton href="/about">소개</NavigationButton>
         </li>
@@ -24,11 +17,13 @@ export const Header = () => {
           <ModeToggle />
         </li>
         <li>
-          <Button variant="ghost" size="icon">
-            <SearchIcon className="h-[1.2rem] w-[1.2rem]" />
-            {/* TODO: 버튼에 알맞은 이름 부여 */}
-            {/* <span className="sr-only">검색 아이콘</span> */}
+          <Button variant="ghost" size="icon" asChild>
+            <Link href="https://github.com/es-kimo" target="_blank">
+              <Github className="h-[1.2rem] w-[1.2rem]" />
+            </Link>
           </Button>
+          {/* TODO: 버튼에 알맞은 이름 부여 */}
+          <span className="sr-only">Github 연결</span>
         </li>
       </ul>
     </header>
