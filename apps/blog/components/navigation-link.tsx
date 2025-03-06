@@ -8,9 +8,14 @@ import { useMemo } from "react";
 
 export const restyledNavigationMenuTriggerStyle = () => cn(navigationMenuTriggerStyle(), "text-base text-neutral-400 hover:bg-inherit transition-colors duration-300 rounded-[initial] px-2");
 
-export function NavigationLink({ href, children }: { href: string; children: React.ReactNode }) {
+export function NavigationLink({ href, children, inclusiveActiveState }: { href: string; children: React.ReactNode; inclusiveActiveState?: boolean }) {
   const pathname = usePathname();
-  const isActive = useMemo(() => href === pathname, [href, pathname]);
+  const isActive = useMemo(() => {
+    if (inclusiveActiveState) {
+      return pathname.startsWith(href);
+    }
+    return href === pathname;
+  }, [href, pathname, inclusiveActiveState]);
   const router = useTransitionRouter();
 
   return (

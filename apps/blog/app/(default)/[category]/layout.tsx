@@ -1,4 +1,4 @@
-import NavigationTab from "@/components/navigation-tab";
+import { SubCategoryNavigationTab } from "@/components/navigation-tab";
 import { NoteCard } from "@/components/note-card";
 import { getSlugsByCategoryAndSub, getSubCategoriesByCategory } from "@/constants/notes";
 import { categoryParams } from "@/constants/params";
@@ -33,11 +33,11 @@ export default async function Layout({
   const { category, sub } = await params;
   const subs = sub ? [sub] : await getSubCategoriesByCategory(category);
   return (
-    <main className="pt-6 pb-[10vh] px-8 sm:pt-[80px] sm:pb-[20vh] space-y-10">
+    <section className="space-y-10">
       {isCategory(category) ? (
         <>
-          <h2 className="font-bold text-3xl">{t(category)}</h2>
-          <NavigationTab category={category} />
+          {/* <h2 className="font-bold text-3xl">{t(category)}</h2> */}
+          <SubCategoryNavigationTab category={category} />
           <article>
             <h3 className="sr-only">아티클</h3>
             <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -68,6 +68,6 @@ export default async function Layout({
       ) : (
         notFound()
       )}
-    </main>
+    </section>
   );
 }
