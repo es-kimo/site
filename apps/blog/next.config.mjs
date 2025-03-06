@@ -6,12 +6,19 @@ const nextConfig = {
   transpilePackages: ["@workspace/ui"],
   images: {
     remotePatterns: [
-      {
-        protocol: "http",
-        hostname: "localhost",
-        port: "3000",
-        pathname: "*/**",
-      },
+      process.env.NODE_ENV === "development"
+        ? {
+            protocol: "http",
+            hostname: "localhost",
+            port: "3000",
+            pathname: "*/**",
+          }
+        : {
+            protocol: "https",
+            hostname: process.env.HOST_NAME,
+            port: "",
+            pathname: "*/**",
+          },
     ],
   },
   experimental: {

@@ -38,7 +38,7 @@ export async function NoteCard({ category, sub, slug, children }: SlugParams & {
 }
 
 async function OpengraphImage({ category, sub, slug }: SlugParams) {
-  const noteUrl = `http://localhost:3000/${category}/${sub}/${slug}`;
+  const noteUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${category}/${sub}/${slug}`;
 
   const ogImage = await fetchOgImage(noteUrl);
 

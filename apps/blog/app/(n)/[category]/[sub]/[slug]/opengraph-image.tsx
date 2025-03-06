@@ -24,7 +24,7 @@ export default async function Image({ params }: { params: Promise<SlugParams> })
           flexDirection: "column",
           alignItems: "flex-start",
           justifyContent: "center",
-          backgroundImage: `url(http://localhost:3000/og-bg.png)`,
+          backgroundImage: `url(${process.env.NEXT_PUBLIC_BASE_URL}/og-bg.png)`,
         }}
       >
         <div
