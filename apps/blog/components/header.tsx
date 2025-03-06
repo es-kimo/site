@@ -10,9 +10,9 @@ export const Header = () => {
         <NavigationButton href="/">블로그</NavigationButton>
       </h1>
       <ul className="col-start-5 flex justify-end">
-        <li>
+        {/* <li>
           <NavigationButton href="/about">소개</NavigationButton>
-        </li>
+        </li> */}
         <li>
           <ModeToggle />
         </li>
