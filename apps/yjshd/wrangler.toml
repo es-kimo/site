@@ -1,0 +1,8 @@
+main = ".open-next/worker.js"
+name = "yjshd"
+compatibility_date = "2025-03-11"
+compatibility_flags = ["nodejs_compat"]
+assets = { directory = ".open-next/assets", binding = "ASSETS" }
+[[kv_namespaces]]
+binding = "NEXT_CACHE_WORKERS_KV"
+id = "28bb381ff01a4fa29d3b05f2c3f9cdef"

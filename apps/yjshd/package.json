@@ -7,7 +7,11 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:worker": "opennextjs-cloudflare",
+    "dev:worker": "wrangler dev --port 8771",
+    "preview:worker": "npm run build:worker && npm run dev:worker",
+    "deploy:worker": "npm run build:worker && wrangler deploy"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",
@@ -24,6 +28,8 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@opennextjs/aws": "^3.5.1",
+    "@opennextjs/cloudflare": "^0.5.10",
     "@types/node": "^20",
     "@types/react": "18.3.0",
     "@types/react-dom": "18.3.1",
