@@ -6,6 +6,8 @@ import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, 
 import { Menu } from "lucide-react";
 import { Link } from "next-view-transitions";
 import { removeNumbering } from "@workspace/common/lib/file-system";
+import Image from "next/image";
+import { HTMLAttributes } from "react";
 
 const H1 = "연세정성내과의원";
 
@@ -13,19 +15,25 @@ export const TheHeader = async () => {
   const categories = await getCategories();
 
   return (
-    <header className="grid grid-cols-5 py-4 sticky top-0 z-10 bg-background">
-      <h1>
-        <NavigationButton href="/">{H1}</NavigationButton>
-      </h1>
-      <nav className="col-span-3 hidden sm:block">
-        {categories.map((category) => (
-          <NavigationButton key={category} href={`/${category}`}>
-            {removeNumbering(category)}
+    <header className="max-w-full flex justify-between py-4 sticky top-0 z-10 bg-background">
+      <div className="flex lg:gap-8">
+        <h1 className="flex-shrink-0">
+          <NavigationButton href="/">
+            <Image alt={H1} src="/logo.jpeg" width={24} height={24} />
+            <span className="sm:hidden lg:inline">{H1}</span>
           </NavigationButton>
-        ))}
-      </nav>
+        </h1>
 
-      <ul className="flex justify-end col-start-5">
+        <nav className="hidden sm:flex flex-nowrap overflow-x-auto">
+          {categories.map((category) => (
+            <NavigationButton key={category} href={`/${category}`}>
+              {removeNumbering(category)}
+            </NavigationButton>
+          ))}
+        </nav>
+      </div>
+
+      <ul className="flex justify-end">
         <li>
           <ModeToggle />
         </li>
@@ -37,9 +45,9 @@ export const TheHeader = async () => {
   );
 };
 
-export const NavigationButton = ({ href, children }: { href: string; children: React.ReactNode }) => {
+export const NavigationButton = ({ href, children, ...rest }: { href: string } & HTMLAttributes<HTMLButtonElement>) => {
   return (
-    <Button asChild variant="ghost" className="text-base [&.active]:text-accent-foreground">
+    <Button asChild variant="ghost" className="text-base [&.active]:text-accent-foreground" {...rest}>
       <Link href={href}>{children}</Link>
     </Button>
   );
