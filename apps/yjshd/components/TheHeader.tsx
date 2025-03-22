@@ -1,11 +1,10 @@
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@workspace/ui/components/accordion";
+import { removeNumbering } from "@workspace/common/lib/file-system";
 import { getCategories, getSubCategoriesByCategory } from "@workspace/common/structure/notes";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@workspace/ui/components/accordion";
 import { Button } from "@workspace/ui/components/button";
-import { ModeToggle } from "@workspace/ui/components/mode-toggle";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@workspace/ui/components/sheet";
 import { Menu } from "lucide-react";
 import { Link } from "next-view-transitions";
-import { removeNumbering } from "@workspace/common/lib/file-system";
 import Image from "next/image";
 import { HTMLAttributes } from "react";
 
@@ -34,9 +33,6 @@ export const TheHeader = async () => {
       </div>
 
       <ul className="flex justify-end">
-        <li>
-          <ModeToggle />
-        </li>
         <li>
           <AllCategoriesSheetRight categories={categories} />
         </li>

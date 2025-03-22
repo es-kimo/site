@@ -1,6 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
 
-import { Providers } from "@/components/providers";
 import { TheHeader } from "@/components/TheHeader";
 import "@workspace/ui/globals.css";
 import { ViewTransitions } from "next-view-transitions";
@@ -24,10 +23,8 @@ export default function RootLayout({
     <ViewTransitions>
       <html lang="en" suppressHydrationWarning>
         <body className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}>
-          <Providers>
-            <TheHeader />
-            {children}
-          </Providers>
+          <TheHeader />
+          {children}
         </body>
       </html>
     </ViewTransitions>
