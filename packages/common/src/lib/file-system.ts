@@ -1,14 +1,21 @@
 import fs from "fs";
 
-export const getFolderNames = async (path: string) => {
-  let folderNames: string[] = [];
-
+export const getFolderNames = async (path: string): Promise<string[]> => {
   try {
     const items = await fs.promises.readdir(path, { withFileTypes: true });
-    folderNames = items.filter((item) => item.isDirectory()).map((folder) => folder.name);
+    return items.filter((item) => item.isDirectory()).map((folder) => folder.name);
   } catch (e) {
-    console.error("컨텐츠 경로가 잘못 되었습니다.", e);
+    console.error("경로가 잘못되었습니다.", e);
+    return [];
   }
+};
 
-  return folderNames;
+export const getFolderNamesSync = (path: string): string[] => {
+  try {
+    const items = fs.readdirSync(path, { withFileTypes: true });
+    return items.filter((item) => item.isDirectory()).map((folder) => folder.name);
+  } catch (e) {
+    console.error("경로가 잘못되었습니다.", e);
+    return [];
+  }
 };
