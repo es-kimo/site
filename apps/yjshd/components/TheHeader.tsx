@@ -39,7 +39,7 @@ export const TheHeader = async () => {
 
 export const NavigationButton = ({ href, children }: { href: string; children: React.ReactNode }) => {
   return (
-    <Button asChild variant="ghost" className="text-lg text-neutral-400 [&.active]:text-accent-foreground">
+    <Button asChild variant="ghost" className="text-base [&.active]:text-accent-foreground">
       <Link href={href}>{children}</Link>
     </Button>
   );
@@ -52,9 +52,9 @@ export const AllCategoriesSheetRight = async ({ categories }: { categories: stri
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" className="text-lg [&.active]:text-accent-foreground">
+        <Button variant="ghost" className="text-base [&.active]:text-accent-foreground">
           <Menu />
-          전체보기
+          메뉴보기
         </Button>
       </SheetTrigger>
       <SheetContent side="right" className="flex flex-col gap-10">
@@ -63,7 +63,7 @@ export const AllCategoriesSheetRight = async ({ categories }: { categories: stri
         </SheetHeader>
         <nav className="flex flex-col gap-2">
           <SheetClose asChild>
-            <Button asChild variant="ghost" className="text-lg [&.active]:text-accent-foreground justify-start border-b py-3 box-content">
+            <Button asChild variant="ghost" className="text-base [&.active]:text-accent-foreground justify-start border-b py-3 box-content">
               <Link href="/">홈</Link>
             </Button>
           </SheetClose>
@@ -74,7 +74,7 @@ export const AllCategoriesSheetRight = async ({ categories }: { categories: stri
                 <AccordionItem value={`item-${idx + 1}`} key={`item-${idx + 1}-${category}`}>
                   <AccordionTrigger>
                     <SheetClose asChild key={category}>
-                      <Button asChild variant="ghost" className="text-lg [&.active]:text-accent-foreground justify-start">
+                      <Button asChild variant="ghost" className="text-base [&.active]:text-accent-foreground justify-start">
                         <Link replace href={`/${category}`}>
                           {removeNumbering(category)}
                         </Link>
@@ -84,7 +84,7 @@ export const AllCategoriesSheetRight = async ({ categories }: { categories: stri
                   <AccordionContent className="flex flex-col">
                     {subs[idx]?.map((sub) => (
                       <SheetClose asChild key={sub}>
-                        <Button asChild variant="ghost" className="text-neutral-400 text-lg [&.active]:text-accent-foreground justify-start">
+                        <Button asChild variant="ghost" className="text-neutral-400 text-base [&.active]:text-accent-foreground justify-start">
                           <Link href={`/${category}/${sub}`}>{removeNumbering(sub)}</Link>
                         </Button>
                       </SheetClose>
@@ -97,7 +97,7 @@ export const AllCategoriesSheetRight = async ({ categories }: { categories: stri
             .filter((_, idx) => !hasSubCategories[idx])
             .map((category, idx) => (
               <SheetClose asChild key={`item-${idx + 1}-${category}`}>
-                <Button asChild variant="ghost" className="text-lg [&.active]:text-accent-foreground justify-start  border-b py-3 box-content">
+                <Button asChild variant="ghost" className="text-base [&.active]:text-accent-foreground justify-start  border-b py-3 box-content">
                   <Link href={`/${category}`}>{removeNumbering(category)}</Link>
                 </Button>
               </SheetClose>
