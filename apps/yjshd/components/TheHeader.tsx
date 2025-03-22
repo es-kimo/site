@@ -8,7 +8,7 @@ import { Link } from "next-view-transitions";
 import Image from "next/image";
 import { HTMLAttributes } from "react";
 
-const H1 = "연세정성내과의원";
+const PAGE_TITLE = "연세정성내과의원";
 
 export const TheHeader = async () => {
   const categories = await getCategories();
@@ -18,8 +18,8 @@ export const TheHeader = async () => {
       <div className="flex lg:gap-8">
         <h1 className="flex-shrink-0">
           <NavigationButton href="/">
-            <Image alt={H1} src="/logo.jpeg" width={24} height={24} />
-            <span className="sm:hidden lg:inline">{H1}</span>
+            <Image alt={PAGE_TITLE} src="/logo.jpeg" width={24} height={24} />
+            <span className="sm:hidden lg:inline">{PAGE_TITLE}</span>
           </NavigationButton>
         </h1>
 
@@ -63,7 +63,7 @@ export const AllCategoriesSheetRight = async ({ categories }: { categories: stri
       </SheetTrigger>
       <SheetContent side="right" className="flex flex-col gap-10">
         <SheetHeader>
-          <SheetTitle>{H1}</SheetTitle>
+          <SheetTitle>{PAGE_TITLE}</SheetTitle>
         </SheetHeader>
         <nav className="flex flex-col gap-2">
           <SheetClose asChild>
@@ -108,7 +108,7 @@ export const AllCategoriesSheetRight = async ({ categories }: { categories: stri
             ))}
         </nav>
         <SheetFooter>
-          <SheetClose>{H1}</SheetClose>
+          <SheetClose>{PAGE_TITLE}</SheetClose>
         </SheetFooter>
       </SheetContent>
     </Sheet>
