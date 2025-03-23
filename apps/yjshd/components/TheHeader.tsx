@@ -1,5 +1,5 @@
-import { removeNumbering } from "@workspace/common/lib/file-system";
-import { getCategories, getSubCategoriesByCategory } from "@workspace/common/structure/notes";
+import { removeNumbering } from "@workspace/common/lib/string-utils";
+import { categories, subCategoriesMap } from "@workspace/common/structure/structure";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@workspace/ui/components/accordion";
 import { Button } from "@workspace/ui/components/button";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@workspace/ui/components/sheet";
@@ -11,8 +11,6 @@ import { HTMLAttributes } from "react";
 const PAGE_TITLE = "연세정성내과의원";
 
 export const TheHeader = async () => {
-  const categories = await getCategories();
-
   return (
     <header className="max-w-full flex justify-between py-4 sticky top-0 z-10 bg-background">
       <div className="flex lg:gap-8">
@@ -34,7 +32,7 @@ export const TheHeader = async () => {
 
       <ul className="flex justify-end">
         <li>
-          <AllCategoriesSheetRight categories={categories} />
+          <AllCategoriesSheetRight />
         </li>
       </ul>
     </header>
@@ -49,9 +47,16 @@ export const NavigationButton = ({ href, children, ...rest }: { href: string } &
   );
 };
 
-export const AllCategoriesSheetRight = async ({ categories }: { categories: string[] }) => {
-  const subs = await Promise.all(categories.map(async (category) => await getSubCategoriesByCategory(category)));
-  const hasSubCategories = subs.map((sub) => !!sub.length);
+export const AllCategoriesSheetRight = async () => {
+  const categoriesWithSubCategories = categories.map((category) => {
+    const subCategories = subCategoriesMap.get(category) ?? [];
+    const hasSubCategory = !!subCategories.length;
+    return {
+      category,
+      subCategories,
+      hasSubCategory,
+    };
+  });
 
   return (
     <Sheet>
@@ -72,10 +77,10 @@ export const AllCategoriesSheetRight = async ({ categories }: { categories: stri
             </Button>
           </SheetClose>
           <Accordion type="single" collapsible>
-            {categories
-              .filter((_, idx) => hasSubCategories[idx])
-              .map((category, idx) => (
-                <AccordionItem value={`item-${idx + 1}`} key={`item-${idx + 1}-${category}`}>
+            {categoriesWithSubCategories
+              .filter(({ hasSubCategory }) => hasSubCategory)
+              .map(({ category, subCategories }, idx) => (
+                <AccordionItem value={`item-${idx}`} key={`item-${idx}-${category}`}>
                   <AccordionTrigger>
                     <SheetClose asChild key={category}>
                       <Button asChild variant="ghost" className="text-base [&.active]:text-accent-foreground justify-start">
@@ -86,7 +91,7 @@ export const AllCategoriesSheetRight = async ({ categories }: { categories: stri
                     </SheetClose>
                   </AccordionTrigger>
                   <AccordionContent className="flex flex-col">
-                    {subs[idx]?.map((sub) => (
+                    {subCategories.map((sub) => (
                       <SheetClose asChild key={sub}>
                         <Button asChild variant="ghost" className="text-neutral-400 text-base [&.active]:text-accent-foreground justify-start">
                           <Link href={`/${category}/${sub}`}>{removeNumbering(sub)}</Link>
@@ -97,10 +102,11 @@ export const AllCategoriesSheetRight = async ({ categories }: { categories: stri
                 </AccordionItem>
               ))}
           </Accordion>
-          {categories
-            .filter((_, idx) => !hasSubCategories[idx])
-            .map((category, idx) => (
-              <SheetClose asChild key={`item-${idx + 1}-${category}`}>
+
+          {categoriesWithSubCategories
+            .filter(({ hasSubCategory }) => !hasSubCategory)
+            .map(({ category }, idx) => (
+              <SheetClose asChild key={`item-${idx}-${category}`}>
                 <Button asChild variant="ghost" className="text-base [&.active]:text-accent-foreground justify-start  border-b py-3 box-content">
                   <Link href={`/${category}`}>{removeNumbering(category)}</Link>
                 </Button>
