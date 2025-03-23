@@ -4,7 +4,8 @@
   "scripts": {},
   "exports": {
     "./lib/*": "./src/lib/*.ts",
-    "./structure/*": "./src/structure/*.ts"
+    "./structure/*": "./src/structure/*.ts",
+    "./content/*": "./src/content/*.ts"
   },
   "plugins": [
     {
