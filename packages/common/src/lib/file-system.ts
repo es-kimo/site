@@ -19,3 +19,23 @@ export const getFolderNamesSync = (path: string): string[] => {
     return [];
   }
 };
+
+export const getFileNames = async (path: string): Promise<string[]> => {
+  try {
+    const items = await fs.promises.readdir(path);
+    return items;
+  } catch (e) {
+    console.error("경로가 잘못되었습니다.", e);
+    return [];
+  }
+};
+
+export const getFileNamesSync = (path: string): string[] => {
+  try {
+    const items = fs.readdirSync(path);
+    return items;
+  } catch (e) {
+    console.error("경로가 잘못되었습니다.", e);
+    return [];
+  }
+};

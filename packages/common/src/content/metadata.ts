@@ -8,6 +8,10 @@ import { ENTRY_POINT } from "@workspace/common/structure/utils.js";
  *
  * const { metadata } = await import(`@/content/${category}/${sub}/${slug}/page.mdx`); //error
  */
-export const buildPostMetadataImportPath = (category: string, subCategory: string, slug: string) => {
+export const buildPostMetadataImportPath = ({ category, subCategory, slug }: { category: string; subCategory?: string; slug: string }) => {
+  if (subCategory === undefined) {
+    return joinPath("@", ENTRY_POINT, category, `${slug}.mdx`);
+  }
+
   return joinPath("@", ENTRY_POINT, category, subCategory, slug, "page.mdx");
 };
