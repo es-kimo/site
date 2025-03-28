@@ -39,3 +39,5 @@ export const getFileNamesSync = (path: string): string[] => {
     return [];
   }
 };
+
+export const removeNumbering = (str: string) => str.split(".").pop() || "";
