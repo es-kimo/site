@@ -36,3 +36,10 @@ export const slugsMap = extend2DMap(
 export const allSubCategories = subCategories2DArray.flat();
 
 export const allSlugs = slugs3DArray.flat(2);
+
+export const contentStructureMaps = {
+  categories,
+  subCategoriesMap,
+};
+
+export type ContentStructureMaps = typeof contentStructureMaps;
