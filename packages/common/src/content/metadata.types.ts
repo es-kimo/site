@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 
-export type PostMetadata = Partial<Metadata> & {
+export interface PostMetadata extends Metadata {
   other: {
     status: "ready" | "draft";
     createdAt: string;
     updatedAt?: string;
   };
-};
+}
