@@ -49,7 +49,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     pre(properties) {
       return <pre {...properties}></pre>;
     },
-    Image: (props) => <Image {...(props as ImageProps)} className="w-4/5 mx-auto" />,
+    Image: (props) => <Image {...(props as ImageProps)} className="w-11/12 sm:w-4/5 mx-auto my-10" />,
     Lead(properties) {
       return <p {...properties} className="text-xl text-muted-foreground"></p>;
     },
@@ -72,7 +72,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     PostDate({ children, ...properties }) {
       return (
-        <div {...properties} className="text-muted-foreground pt-2 text-xs lg:hidden">
+        <div {...properties} className="text-muted-foreground mt-2 text-sm text-right">
           작성일: {formatPostDate(children)}
         </div>
       );
