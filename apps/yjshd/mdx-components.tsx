@@ -1,8 +1,10 @@
 import { formatPostDate } from "@workspace/common/lib/date";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@workspace/ui/components/carousel";
 import { cn } from "@workspace/ui/lib/utils";
 import { cva } from "class-variance-authority";
 import type { MDXComponents } from "mdx/types";
 import Image, { ImageProps } from "next/image";
+import { Children, isValidElement } from "react";
 
 const gridCn = ["", "", "sm:grid-cols-2", "sm:grid-cols-3", "sm:grid-cols-4"];
 
@@ -103,6 +105,15 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         <div {...props} className={`grid ${gridCols}`}>
           {children}
         </div>
+      );
+    },
+    Carousel({ children, ...props }) {
+      return (
+        <Carousel className="w-11/12 mx-auto" {...props}>
+          <CarouselContent>{Children.map(children, (child, index) => (isValidElement(child) ? <CarouselItem key={index}>{child}</CarouselItem> : null))}</CarouselContent>
+          <CarouselPrevious className="w-12 h-12 border-primary" />
+          <CarouselNext className="w-12 h-12 border-primary" />
+        </Carousel>
       );
     },
     ...components,
