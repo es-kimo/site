@@ -116,6 +116,34 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </Carousel>
       );
     },
+    DescriptionList({ children, ...props }) {
+      return (
+        <dl {...props} className="flex flex-col">
+          {children}
+        </dl>
+      );
+    },
+    DescriptionRow({ children, ...props }) {
+      return (
+        <div {...props} className="grid gap-2 py-4 sm:grid-cols-[0.2fr_0.8fr] sm:py-8 border-t">
+          {children}
+        </div>
+      );
+    },
+    DescriptionTerm({ children, ...props }) {
+      return (
+        <dt {...props} className="font-bold">
+          {children}
+        </dt>
+      );
+    },
+    DescriptionDetails({ children, ...props }) {
+      return (
+        <dd {...props} className="flex flex-col gap-2">
+          {children}
+        </dd>
+      );
+    },
     ...components,
   };
 }
