@@ -1,6 +1,23 @@
 import { formatPostDate } from "@workspace/common/lib/date";
+import { cn } from "@workspace/ui/lib/utils";
+import { cva } from "class-variance-authority";
 import type { MDXComponents } from "mdx/types";
 import Image, { ImageProps } from "next/image";
+
+const gridCn = ["", "", "sm:grid-cols-2", "sm:grid-cols-3", "sm:grid-cols-4"];
+
+const imageVariants = cva("w-11/12 mx-auto my-5", {
+  variants: {
+    size: {
+      default: "sm:w-4/5 sm:my-10",
+      full: "",
+      xs: "w-[130px] mx-[initial]",
+    },
+  },
+  defaultVariants: {
+    size: "default",
+  },
+});
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -49,7 +66,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     pre(properties) {
       return <pre {...properties}></pre>;
     },
-    Image: (props) => <Image {...(props as ImageProps)} className="w-11/12 sm:w-4/5 mx-auto my-10" />,
+    Image: ({ size, className, ...props }) => {
+      return <Image {...(props as ImageProps)} className={cn(imageVariants({ size, className }))} />;
+    },
     Lead(properties) {
       return <p {...properties} className="text-xl text-muted-foreground"></p>;
     },
@@ -74,6 +93,15 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       return (
         <div {...properties} className="text-muted-foreground mt-2 text-sm text-right border-b pb-2">
           작성일: {formatPostDate(children)}
+        </div>
+      );
+    },
+    Grid({ children, grid, ...props }) {
+      const gridCols = grid ? gridCn[Math.min(4, grid)] : "sm:grid-cols-2";
+
+      return (
+        <div {...props} className={`grid ${gridCols}`}>
+          {children}
         </div>
       );
     },
