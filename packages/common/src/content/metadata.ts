@@ -1,5 +1,5 @@
-import { joinPath } from "@workspace/common/lib/path.js";
-import { ENTRY_POINT } from "@workspace/common/structure/utils.js";
+import { joinPath } from "@workspace/common/lib/path";
+import { ENTRY_POINT } from "@workspace/common/structure/utils";
 
 /**
  * 글 정보 가져오기

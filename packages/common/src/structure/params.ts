@@ -1,5 +1,5 @@
 import { CategoryParams, SlugParams, SubCategoryParams } from "@workspace/common/structure/params.types";
-import { categories, slugs3DArray, slugsMap, subCategories2DArray, subCategoriesMap } from "@workspace/common/structure/structure.js";
+import { categories, slugs3DArray, slugsMap, subCategories2DArray, subCategoriesMap } from "@workspace/common/structure/structure";
 
 export const categoryParams: CategoryParams[] = categories.map((category) => ({
   category,
