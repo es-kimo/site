@@ -70,6 +70,7 @@
   }
   :root {
     --blog-max-w: 1142px;
+    --yjshd-max-w: 1280px;
     --header-h: 72px;
   }
 }

@@ -10,7 +10,7 @@ export default function RootLayout({
     <ViewTransitions>
       <html lang="en" suppressHydrationWarning>
         <body className={`antialiased`}>
-          <div className="max-w-blog mx-auto">{children}</div>
+          <div className="max-w-yjshd mx-auto">{children}</div>
         </body>
       </html>
     </ViewTransitions>
