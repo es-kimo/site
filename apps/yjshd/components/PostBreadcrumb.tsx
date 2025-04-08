@@ -38,7 +38,7 @@ export const PostBreadcrumb = ({ className, category, subCategory, isLink = true
 
   return (
     <Breadcrumb className={className}>
-      <BreadcrumbList className={`text-inherit font-semibold text-sm ${!isLink && "sm:gap-[2px]"}`}>
+      <BreadcrumbList className={`text-inherit font-normal tracking-tight text-sm ${!isLink && "sm:gap-[2px]"}`}>
         <BreadcrumbItem>
           <CategoryContent />
         </BreadcrumbItem>

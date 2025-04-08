@@ -5,13 +5,13 @@ import Image, { ImageProps } from "next/image";
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: ({ children, ...props }) => (
-      <h1 className="scroll-m-20 text-3xl font-bold tracking-tight animate-fadein" {...props}>
+      <h1 className="scroll-m-20 text-3xl font-semibold tracking-tight animate-fadein py-2" {...props}>
         {children}
       </h1>
     ),
-    h2: ({ children }) => <h2 className="mt-10 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0">{children}</h2>,
-    h3: ({ children }) => <h3 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight">{children}</h3>,
-    h4: ({ children }) => <h4 className="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">{children}</h4>,
+    h2: ({ children }) => <h2 className="mt-10 scroll-m-20 border-b pb-2 text-2xl font-medium tracking-tight first:mt-0 text-primary">{children}</h2>,
+    h3: ({ children }) => <h3 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight text-primary">{children}</h3>,
+    h4: ({ children }) => <h4 className="mt-8 scroll-m-20 text-lg font-semibold tracking-tight text-primary">{children}</h4>,
     p: ({ children }) => <p className="readability [&:not(:first-child)]:mt-6">{children}</p>,
     blockquote: ({ children }) => <blockquote className="mt-6 border-l-2 pl-6 italic">{children}</blockquote>,
     table: ({ children }) => (
@@ -72,7 +72,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     PostDate({ children, ...properties }) {
       return (
-        <div {...properties} className="text-muted-foreground mt-2 text-sm text-right">
+        <div {...properties} className="text-muted-foreground mt-2 text-sm text-right border-b pb-2">
           작성일: {formatPostDate(children)}
         </div>
       );
