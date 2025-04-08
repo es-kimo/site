@@ -109,7 +109,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     Carousel({ children, ...props }) {
       return (
-        <Carousel className="w-11/12 mx-auto" {...props}>
+        <Carousel className="w-4/6 sm:w-11/12 mx-auto" {...props}>
           <CarouselContent>{Children.map(children, (child, index) => (isValidElement(child) ? <CarouselItem key={index}>{child}</CarouselItem> : null))}</CarouselContent>
           <CarouselPrevious className="w-12 h-12 border-primary" />
           <CarouselNext className="w-12 h-12 border-primary" />
