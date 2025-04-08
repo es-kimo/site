@@ -82,5 +82,6 @@
     line-height: 1.75rem;
     word-break: keep-all;
     text-align: justify;
+    letter-spacing: -0.025em;
   }
 }
