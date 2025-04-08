@@ -75,4 +75,10 @@
   /* .fade-transition {
     @apply transition-[visibility,_opacity,_height,_margin,_padding] duration-500 delay-1000;
   } */
+
+  .readability {
+    line-height: 1.75rem;
+    word-break: keep-all;
+    text-align: justify;
+  }
 }
