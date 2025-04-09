@@ -6,14 +6,16 @@ import type { MDXComponents } from "mdx/types";
 import Image, { ImageProps } from "next/image";
 import { Children, isValidElement } from "react";
 
-const gridCn = ["", "", "sm:grid-cols-2", "sm:grid-cols-3", "sm:grid-cols-4"];
+const gridCn = ["", "", "sm:grid-cols-2", "grid-cols-2 md:grid-cols-3", "sm:grid-cols-4"];
 
 const imageVariants = cva("w-11/12 mx-auto my-5", {
   variants: {
     size: {
       default: "sm:w-4/5 sm:my-10",
       full: "",
-      xs: "w-[130px] mx-[initial]",
+      xs: "w-[130px] aspect-square object-cover mx-[initial]",
+      icon: "w-[180px] aspect-square object-cover mx-[initial]",
+      square: "w-full aspect-square object-cover mx-[initial]",
     },
   },
   defaultVariants: {
@@ -98,11 +100,11 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </div>
       );
     },
-    Grid({ children, grid, ...props }) {
+    Grid({ children, grid, preserveSize, className, ...props }) {
       const gridCols = grid ? gridCn[Math.min(4, grid)] : "sm:grid-cols-2";
 
       return (
-        <div {...props} className={`grid ${gridCols}`}>
+        <div {...props} className={cn(`grid ${gridCols} ${!preserveSize && "[&>img]:aspect-square [&>img]:object-cover"}`, className)}>
           {children}
         </div>
       );
