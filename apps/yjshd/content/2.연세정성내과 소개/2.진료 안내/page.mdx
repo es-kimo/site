@@ -1,0 +1,98 @@
+import bg from "./bg.png";
+import pay from "./pay.png";
+
+export const metadata = {
+  title: "진료 안내",
+  description: "연세정성내과 진료 안내",
+  keywords: ["연세정성내과", "연세정성내과 진료 안내"],
+  other: {
+    status: "ready",
+    createdAt: "2025-03-28T23:00:00",
+  },
+};
+
+# 진료 안내
+
+## 오시는길/진료시간
+
+<DescriptionList>
+  <DescriptionRow>
+    <DescriptionTerm>오시는 길</DescriptionTerm>
+    <DescriptionDetails>강서구청 바로 앞 횡단보도 건너편 5층 건물의 4층에 위치하고 있습니다.</DescriptionDetails>
+  </DescriptionRow>
+  <DescriptionRow>
+    <DescriptionTerm>외래 진료</DescriptionTerm>
+    <DescriptionDetails>
+      <span>월요일 09:00 ~ 18:00</span>
+      <span>화요일 09:00 ~ 18:00</span>
+      <span>수요일 09:00 ~ 18:00</span>
+      <span>목요일 09:00 ~ **13:00**</span>
+      <span>금요일 09:00 ~ 18:00</span>
+      <span>토요일 09:00 ~ **13:00**</span>
+      <span>* 점심시간: 13:00 ~ 14:30</span>
+    </DescriptionDetails>
+  </DescriptionRow>
+  <DescriptionRow>
+    <DescriptionTerm>전화번호</DescriptionTerm>
+    <DescriptionDetails>02-2692-2990</DescriptionDetails>
+  </DescriptionRow>
+</DescriptionList>
+
+## 진료 안내
+
+### 외래 진료
+
+1. 일반내과 진료
+
+   > 내과 전반의 급만성질환을 진료하고 관리합니다.
+
+   - 내과 영역의 각종 급성질환
+   - 다양한 내과 만성질환 (고혈압, 당뇨병, 고지혈증, 골다공증 및 기타 만성질환)에 대한 체계적인 관리
+   - 수액 및 영양치료
+   - 예방접종
+
+2. 콩팥 건강검진
+
+   <p className="my-4">콩팥은 우리 몸에 좌우 두 개가 있고, 각각은 약 100만개의 사구체로 구성되어 있습니다. 사구체는 혈액의 노폐물을 걸러주는 필터와 같은 역할을 합니다.</p>
+   <p className="my-4">만성콩팥병은 콩팥의 손상으로 3개월 이상 문제가 해결되지 않는 경우를 의미합니다. 만성콩팥병이 진단되면 사구체여과율에 따라 5단계로 나눕니다.</p>
+   <p className="my-4">연세정성내과는 만성콩팥병을 조기에 발견하고 만성콩팥병 단계와 동반 질환 및 합병증 여부에 따라 '맞춤치료'를 시행하는 곳입니다.</p>
+
+   - 간단한 검사로 만성콩팥병 조기 발견
+   - 만성콩팥병 환자의 혈관 합병증 예측 및 관리
+   - 만성콩팥병 단계에 따른 개인 맞춤형 치료 시행
+   - 체계적인 생활요법 교육 및 지원
+
+<Callout>
+  <div>
+    <p>다음의 사항에 해당된다면 콩팥 검진이 필요합니다.</p>
+    <ul className="my-4 ml-6 list-disc [&>li]:mt-2">
+      <li>당뇨병</li>
+      <li>고혈압</li>
+      <li>가족 중에 콩팥 질환이 있는 경우</li>
+      <li>몸이 자주 붓는 경우</li>
+      <li>소변에 피가 섞에 나오는 경우</li>
+      <li>소변에 거품이 생기는 경우</li>
+    </ul>
+  </div>
+</Callout>
+
+### 인공신장실 진료
+
+연세정성내과 인공신장실에서는 다음 원칙에 유의하며 혈액투석을 시행합니다.
+
+- 중요한 치료계획이 생길 때 정보를 공유하고 치료의 주체가 될 수 있도록 돕겠습니다.
+- 매번 투석하기 전 혈관을 사정하고 관리하여 오래도록 사용하도록 돕겠습니다.
+- 투석간 체중관리를 위해 같이 부족한 부분을 찾아서 개선할 수 있도록 돕겠습니다.
+- 매달 혈액검사를 시행하여 최적의 건강 상태를 유지하도록 돕겠습니다.
+- 주기적으로 혈액투석 적절도 검사를 시행하여 최적의 건강상태를 유지하도록 돕겠습니다.
+- 인공신장실 환경과 수질 환경을 권고사항에 맞게 관리해서 좀 더 편하고 적절한 투석이 이루어지도록 하겠습니다.
+
+## 비급여 진료비
+
+<Image src={pay} alt="비급여 진료비" />
+
+## 야간 투석
+
+<Callout>직장인들을 위하여 월/수/금요일에는 야간 투석이 가능합니다</Callout>
+
+<Image src={bg} alt="야간 투석 실시" />

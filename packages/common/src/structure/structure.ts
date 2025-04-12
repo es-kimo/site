@@ -1,5 +1,5 @@
 import { extend2DMap } from "@workspace/common/lib/2d-map";
-import { getCategories, getSlugsByCategoryAndSubCategory, getSubCategoriesByCategory } from "@workspace/common/structure/utils.js";
+import { getCategories, getSlugsByCategoryAndSubCategory, getSubCategoriesByCategory } from "@workspace/common/structure/utils";
 
 export const categories: readonly string[] = await getCategories();
 

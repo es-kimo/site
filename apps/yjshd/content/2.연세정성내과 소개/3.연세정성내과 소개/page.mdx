@@ -1,0 +1,188 @@
+import vision from "./vision.png";
+import logo from "./logo.png";
+
+import xray from "./img/2020_개원/xray.png";
+import welcome1 from "./img/2020_개원/welcome1.png";
+import welcome2 from "./img/2020_개원/welcome2.png";
+import open from "./img/2020_개원/open.png";
+import entry from "./img/2020_개원/entry.png";
+import desk from "./img/2020_개원/desk.png";
+import 초음파 from "./img/2020_개원/초음파.png";
+import 인공신장실1 from "./img/2020_개원/인공신장실1.png";
+import 인공신장실2 from "./img/2020_개원/인공신장실2.png";
+import 인공신장실3 from "./img/2020_개원/인공신장실3.png";
+
+import grid1 from "./img/2020_개원/1.png";
+import grid2 from "./img/2020_개원/2.png";
+import grid3 from "./img/2020_개원/3.png";
+import grid4 from "./img/2020_개원/4.png";
+import grid5 from "./img/2020_개원/5.png";
+import grid6 from "./img/2020_개원/6.png";
+import grid7 from "./img/2020_개원/7.png";
+import grid8 from "./img/2020_개원/8.png";
+import grid9 from "./img/2020_개원/9.png";
+import grid10 from "./img/2020_개원/10.png";
+import grid11 from "./img/2020_개원/11.png";
+import grid12 from "./img/2020_개원/12.png";
+import grid13 from "./img/2020_개원/13.png";
+import grid14 from "./img/2020_개원/14.png";
+import grid15 from "./img/2020_개원/15.png";
+import grid16 from "./img/2020_개원/16.png";
+import grid17 from "./img/2020_개원/17.png";
+import grid18 from "./img/2020_개원/18.png";
+import grid19 from "./img/2020_개원/19.png";
+import grid20 from "./img/2020_개원/20.png";
+import grid21 from "./img/2020_개원/21.png";
+
+export const metadata = {
+  title: "연세정성내과 소개",
+  description: "연세정성내과 소개",
+  keywords: ["연세정성내과", "연세정성내과 소개"],
+  other: {
+    status: "ready",
+    createdAt: "2025-03-28T23:00:00",
+  },
+};
+
+# 연세정성내과 소개
+
+## 오시는길/진료시간
+
+<DescriptionList>
+  <DescriptionRow>
+    <DescriptionTerm>오시는 길</DescriptionTerm>
+    <DescriptionDetails>강서구청 바로 앞 횡단보도 건너편 5층 건물의 4층에 위치하고 있습니다.</DescriptionDetails>
+  </DescriptionRow>
+  <DescriptionRow>
+    <DescriptionTerm>외래 진료</DescriptionTerm>
+    <DescriptionDetails>
+      <span>월요일 09:00 ~ 18:00</span>
+      <span>화요일 09:00 ~ 18:00</span>
+      <span>수요일 09:00 ~ 18:00</span>
+      <span>목요일 09:00 ~ **13:00**</span>
+      <span>금요일 09:00 ~ 18:00</span>
+      <span>토요일 09:00 ~ **13:00**</span>
+      <span>* 점심시간: 13:00 ~ 14:30</span>
+    </DescriptionDetails>
+  </DescriptionRow>
+  <DescriptionRow>
+    <DescriptionTerm>전화번호</DescriptionTerm>
+    <DescriptionDetails>02-2692-2990</DescriptionDetails>
+  </DescriptionRow>
+</DescriptionList>
+
+## 미션 • 비젼
+
+<Image src={vision} alt="연세정성내과 미션과 비젼" />
+
+## 로고
+
+<Image src={logo} alt="연세정성내과 로고의 의미" />
+
+## 전경
+
+<figure className="flex items-center gap-10 border-b">
+  <Image src={open} alt="외부사진" size="icon" />
+  <figcaption className="flex flex-col gap-2 text-sm">
+    <span className="font-medium">개원예정일 알림</span>
+    <div className="flex flex-col gap-1">
+      <span className="text-muted-foreground font-medium">2020년 6월 8일 9시 개원합니다.</span>
+    </div>
+  </figcaption>
+</figure>
+
+<figure className="flex items-center gap-10 border-b">
+  <Image src={entry} alt="입구사진" size="icon" />
+  <figcaption className="flex flex-col gap-2 text-sm">
+    <span className="font-medium">원풍빌딩 4층</span>
+    <div className="flex flex-col gap-1">
+      <span className="text-muted-foreground font-medium">강서구청 앞 건널목을 건너면 바로 보이는 건물 4층이에요.</span>
+    </div>
+  </figcaption>
+</figure>
+
+<Grid className="gap-4 border-b pb-4">
+  <figure>
+    <Image src={welcome1} alt="환영합니다" size={"square"} />
+    <figcaption className="flex flex-col text-sm px-5">
+      <span className="font-medium">입구 1</span>
+      <div className="flex flex-col gap-1">
+        <span className="text-muted-foreground font-medium">여러분을 환영합니다.</span>
+      </div>
+    </figcaption>
+  </figure>
+  <figure>
+    <Image src={welcome2} alt="환영합니다" size={"square"} />
+    <figcaption className="flex flex-col text-sm px-5">
+      <span className="font-medium">입구 2</span>
+      <div className="flex flex-col gap-1">
+        <span className="text-muted-foreground font-medium">이 곳을 찾는 모든 분들이 치유되시길 기원합니다.</span>
+      </div>
+    </figcaption>
+  </figure>
+</Grid>
+
+<Grid>
+  <figure className="flex items-center gap-4 border-b">
+    <Image src={desk} alt="접수" size="icon" />
+    <figcaption className="flex flex-col gap-2 text-sm">
+      <span className="font-medium">접수</span>
+    </figcaption>
+  </figure>
+  <figure className="flex items-center gap-4 border-b">
+    <Image src={초음파} alt="초음파" size="icon" />
+    <figcaption className="flex flex-col gap-2 text-sm">
+      <span className="font-medium">초음파</span>
+    </figcaption>
+  </figure>
+  <figure className="flex items-center gap-4 border-b">
+    <Image src={xray} alt="xray" size="icon" />
+    <figcaption className="flex flex-col gap-2 text-sm">
+      <span className="font-medium">X-Ray</span>
+    </figcaption>
+  </figure>
+  <figure className="flex items-center gap-4 border-b">
+    <Image src={인공신장실1} alt="인공신장실1" size="icon" />
+    <figcaption className="flex flex-col gap-2 text-sm">
+      <span className="font-medium">인공신장실1</span>
+    </figcaption>
+  </figure>
+  <figure className="flex items-center gap-4 border-b">
+    <Image src={인공신장실2} alt="인공신장실2" size="icon" />
+    <figcaption className="flex flex-col gap-2 text-sm">
+      <span className="font-medium">인공신장실2</span>
+    </figcaption>
+  </figure>
+  <figure className="flex items-center gap-4 border-b">
+    <Image src={인공신장실3} alt="인공신장실3" size="icon" />
+    <figcaption className="flex flex-col gap-2 text-sm">
+      <span className="font-medium">인공신장실3</span>
+    </figcaption>
+  </figure>
+</Grid>
+
+### 이외 전경
+
+<Grid grid={3}>
+  <Image src={grid1} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid2} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid3} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid4} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid5} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid6} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid7} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid8} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid9} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid10} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid11} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid12} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid13} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid14} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid15} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid16} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid17} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid18} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid19} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid20} alt="연세정성내과 전경" size={"full"} />
+  <Image src={grid21} alt="연세정성내과 전경" size={"full"} />
+</Grid>
