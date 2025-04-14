@@ -1,7 +1,7 @@
 import { TheHeader } from "@/components/TheHeader";
 import { SubCategoryParams } from "@workspace/common/structure/params.types";
 import { Button } from "@workspace/ui/components/button";
-import { ChevronDown, Link2 } from "lucide-react";
+import { Link2 } from "lucide-react";
 import { Link } from "next-view-transitions";
 import Image from "next/image";
 
@@ -45,10 +45,6 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
             </div>
           </div>
         </main>
-
-        <div className="absolute bottom-5 md:bottom-10 left-1/2 -translate-x-1/2">
-          <ChevronDown className="w-12 h-12 animate-bounce" color="hsl(var(--muted-foreground))" strokeWidth={3} />
-        </div>
       </div>
     </>
   );
