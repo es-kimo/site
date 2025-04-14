@@ -1,25 +1,27 @@
 import { AllCategoriesSheet } from "@/components/AllCategoriesSheet";
 import { PAGE_H1 } from "@/lib/metadata";
 import { removeNumbering } from "@workspace/common/lib/string-utils";
+import { decodeURIS } from "@workspace/common/lib/uri";
 import { DefaultParams } from "@workspace/common/structure/params.types";
-import { categories } from "@workspace/common/structure/structure";
+import { categories, subCategoriesMap } from "@workspace/common/structure/structure";
 import { Button } from "@workspace/ui/components/button";
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger } from "@workspace/ui/components/navigation-menu";
 import { cn } from "@workspace/ui/lib/utils";
 import { Link } from "next-view-transitions";
-import type { HTMLAttributes } from "react";
+import { type HTMLAttributes } from "react";
 
 interface TheHeaderProps {
   params: Promise<DefaultParams>;
 }
 
 export const TheHeader = async ({ params }: TheHeaderProps) => {
-  const { category } = await params;
+  const { category, subCategory } = await params;
 
-  const decodedCategory = category && decodeURI(category);
+  const [decodedCategory, decodedSubCategory] = decodeURIS(category, subCategory);
 
   return (
-    <>
-      <header className="max-w-full flex justify-between py-4 px-2 sm:px-4 sticky top-0 z-50 bg-[#fcfcfc]">
+    <div className="max-w-full sticky top-0 z-50 bg-[#fcfcfc]">
+      <header className="w-full flex justify-between py-4 px-2 sm:px-4">
         <h1 className="flex-shrink-0">
           <Button asChild variant="ghost" className={`${decodedCategory === undefined && "active"} text-xl [&.active]:text-accent-foreground`}>
             <Link href="/">
@@ -36,24 +38,63 @@ export const TheHeader = async ({ params }: TheHeaderProps) => {
           </li>
         </ul>
       </header>
-      <NavigationBar activeCategory={decodedCategory} className="hidden sm:flex lg:hidden justify-center bg-muted/30" />
-    </>
+      <NavigationBar activeCategory={decodedCategory} activeSubCategory={decodedSubCategory} className="hidden sm:flex lg:hidden justify-center bg-muted/30" />
+    </div>
   );
 };
 
-const NavigationBar = ({ className, activeCategory }: HTMLAttributes<HTMLDivElement> & { activeCategory?: string }) => {
+const NavigationBar = ({ className, activeCategory, activeSubCategory }: HTMLAttributes<HTMLDivElement> & { activeCategory?: string; activeSubCategory?: string }) => {
   return (
-    <nav className={cn("flex-nowrap overflow-x-auto ml-auto", className)}>
-      {categories.map((category) => (
-        <Button
-          asChild
-          variant="ghost"
-          key={category}
-          className={`${activeCategory === category && "active"} text-neutral-400 text-[15px] hover:text-primary [&.active]:text-primary [&.active]:bg-muted/50`}
-        >
-          <Link href={`/${category}`}>{removeNumbering(category)}</Link>
-        </Button>
-      ))}
+    <nav className={cn("flex-nowrap ml-auto", className)}>
+      <NavigationMenu>
+        <NavigationMenuList>
+          {categories.map((category) =>
+            subCategoriesMap.get(category)?.length ? (
+              <NavigationMenuItem key={category}>
+                <NavigationMenuTrigger
+                  className={`${activeCategory === category && "active"} text-neutral-400 text-[15px] hover:text-primary [&.active]:text-primary bg-transparent [&.active]:bg-muted/50`}
+                >
+                  <Link href={`/${category}`}>{removeNumbering(category)}</Link>
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="flex w-[500px] gap-3 p-4 overflow-x-auto">
+                    {subCategoriesMap
+                      .get(category)
+                      ?.map((subCategory) => <ListItem key={subCategory} subCategory={subCategory} href={`/${category}/${subCategory}`} activeSubCategory={activeSubCategory} />)}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            ) : (
+              <Button
+                key={category}
+                variant="ghost"
+                className={`${activeCategory === category && "active"} text-neutral-400 text-[15px] hover:text-primary [&.active]:text-primary [&.active]:bg-muted/50`}
+              >
+                <Link href={`/${category}`}>{removeNumbering(category)}</Link>
+              </Button>
+            )
+          )}
+        </NavigationMenuList>
+      </NavigationMenu>
     </nav>
+  );
+};
+
+const ListItem = ({ className, subCategory, activeSubCategory, href, children, ...props }: HTMLAttributes<HTMLAnchorElement> & { subCategory: string; href: string; activeSubCategory?: string }) => {
+  return (
+    <li className="flex-shrink-0">
+      <Link
+        className={cn(
+          `${activeSubCategory === subCategory && "active"}`,
+          "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground [&.active]:text-primary [&.active]:bg-muted/50",
+          className
+        )}
+        {...props}
+        href={href}
+      >
+        <div className="text-sm font-medium leading-none">{removeNumbering(subCategory)}</div>
+        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">{children}</p>
+      </Link>
+    </li>
   );
 };

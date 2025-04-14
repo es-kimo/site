@@ -12,7 +12,7 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
       <div>
         <TheHeader params={params} />
 
-        <main className="p-6 mt-3 lg:mt-32 flex flex-col gap-8 lg:gap-16 w-fit mx-auto">
+        <main className="p-6 mt-3 sm:mt-12 lg:mt-32 flex flex-col gap-8 lg:gap-16 w-fit mx-auto">
           <div>
             <div className="text-2xl sm:text-4xl">
               <p className="font-bold">더 나은 의료 서비스를 향한 도약</p>
