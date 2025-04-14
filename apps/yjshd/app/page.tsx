@@ -9,7 +9,7 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
   return (
     <>
       <Background />
-      <div className="min-h-dvh">
+      <div>
         <TheHeader params={params} />
 
         <main className="p-6 mt-3 lg:mt-32 flex flex-col gap-8 lg:gap-16 w-fit mx-auto">
@@ -50,4 +50,4 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
   );
 }
 
-export const Background = () => <div className="-z-50 absolute top-0 left-0 w-full h-dvh bg-[linear-gradient(180deg,_#FCFCFC_80%,_#D8E7F2_100%)]" />;
+export const Background = () => <div className="-z-50 fixed top-0 left-0 w-full h-dvh bg-[linear-gradient(180deg,_#FCFCFC_80%,_#D8E7F2_100%)]" />;
