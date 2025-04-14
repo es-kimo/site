@@ -9,8 +9,8 @@ export default function RootLayout({
   return (
     <ViewTransitions>
       <html lang="en" suppressHydrationWarning>
-        <body className={`antialiased`}>
-          <div className="max-w-yjshd mx-auto">{children}</div>
+        <body className={`antialiased flex flex-col`}>
+          <div className="w-full max-w-yjshd mx-auto">{children}</div>
         </body>
       </html>
     </ViewTransitions>
