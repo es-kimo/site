@@ -4,8 +4,9 @@ import { removeNumbering } from "@workspace/common/lib/string-utils";
 import { DefaultParams } from "@workspace/common/structure/params.types";
 import { categories } from "@workspace/common/structure/structure";
 import { Button } from "@workspace/ui/components/button";
+import { cn } from "@workspace/ui/lib/utils";
 import { Link } from "next-view-transitions";
-import Image from "next/image";
+import type { HTMLAttributes } from "react";
 
 interface TheHeaderProps {
   params: Promise<DefaultParams>;
@@ -17,37 +18,42 @@ export const TheHeader = async ({ params }: TheHeaderProps) => {
   const decodedCategory = category && decodeURI(category);
 
   return (
-    <header className="max-w-full flex justify-between py-4 sticky top-0 z-10 bg-background">
-      <div className="flex lg:gap-8">
+    <>
+      <header className="max-w-full flex justify-between py-4 px-2 sm:px-4 sticky top-0 z-50 bg-[#fcfcfc]">
         <h1 className="flex-shrink-0">
-          <Button asChild variant="ghost" className={`${decodedCategory === undefined && "active"} text-base [&.active]:text-accent-foreground`}>
+          <Button asChild variant="ghost" className={`${decodedCategory === undefined && "active"} text-xl [&.active]:text-accent-foreground`}>
             <Link href="/">
-              {" "}
-              <Image alt={PAGE_H1} src="/logo.jpeg" width={24} height={24} />
-              <span className="sm:hidden lg:inline">{PAGE_H1}</span>
+              <span>{PAGE_H1}</span>
             </Link>
           </Button>
         </h1>
 
-        <nav className="hidden sm:flex flex-nowrap overflow-x-auto">
-          {categories.map((category) => (
-            <Button
-              asChild
-              variant="ghost"
-              key={category}
-              className={`${decodedCategory === category && "active"} text-neutral-400 text-base [&.active]:text-accent-foreground [&.active]:bg-muted/50`}
-            >
-              <Link href={`/${category}`}>{removeNumbering(category)}</Link>
-            </Button>
-          ))}
-        </nav>
-      </div>
+        <NavigationBar activeCategory={decodedCategory} className="hidden lg:flex" />
 
-      <ul className="flex justify-end">
-        <li>
-          <AllCategoriesSheet params={params} />
-        </li>
-      </ul>
-    </header>
+        <ul className="flex justify-end ml-6">
+          <li>
+            <AllCategoriesSheet params={params} />
+          </li>
+        </ul>
+      </header>
+      <NavigationBar activeCategory={decodedCategory} className="hidden sm:flex lg:hidden justify-center bg-muted/30" />
+    </>
+  );
+};
+
+const NavigationBar = ({ className, activeCategory }: HTMLAttributes<HTMLDivElement> & { activeCategory?: string }) => {
+  return (
+    <nav className={cn("flex-nowrap overflow-x-auto ml-auto", className)}>
+      {categories.map((category) => (
+        <Button
+          asChild
+          variant="ghost"
+          key={category}
+          className={`${activeCategory === category && "active"} text-neutral-400 text-[15px] hover:text-primary [&.active]:text-primary [&.active]:bg-muted/50`}
+        >
+          <Link href={`/${category}`}>{removeNumbering(category)}</Link>
+        </Button>
+      ))}
+    </nav>
   );
 };
