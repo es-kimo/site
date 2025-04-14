@@ -20,7 +20,7 @@ export const TheHeader = async ({ params }: TheHeaderProps) => {
   const [decodedCategory, decodedSubCategory] = decodeURIS(category, subCategory);
 
   return (
-    <div className="max-w-full sticky top-0 z-50 bg-[#fcfcfc]">
+    <div className="max-w-full sticky top-0 z-50 bg-background">
       <header className="w-full flex justify-between py-4 px-2 sm:px-4">
         <h1 className="flex-shrink-0">
           <Button asChild variant="ghost" className={`${decodedCategory === undefined && "active"} text-xl [&.active]:text-accent-foreground`}>
@@ -44,17 +44,22 @@ export const TheHeader = async ({ params }: TheHeaderProps) => {
 };
 
 const NavigationBar = ({ className, activeCategory, activeSubCategory }: HTMLAttributes<HTMLDivElement> & { activeCategory?: string; activeSubCategory?: string }) => {
+  const data = categories.map((category) => {
+    const firstSubCategory = (subCategoriesMap.get(category) ?? [])[0];
+    return { category, firstSubCategory };
+  });
+
   return (
     <nav className={cn("flex-nowrap ml-auto", className)}>
       <NavigationMenu>
         <NavigationMenuList>
-          {categories.map((category) =>
+          {data.map(({ category, firstSubCategory }) =>
             subCategoriesMap.get(category)?.length ? (
               <NavigationMenuItem key={category}>
                 <NavigationMenuTrigger
                   className={`${activeCategory === category && "active"} text-neutral-400 text-[15px] hover:text-primary [&.active]:text-primary bg-transparent [&.active]:bg-muted/50`}
                 >
-                  <Link href={`/${category}`}>{removeNumbering(category)}</Link>
+                  <Link href={`/${category}/${firstSubCategory}`}>{removeNumbering(category)}</Link>
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="flex w-[500px] gap-3 p-4 overflow-x-auto">

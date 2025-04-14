@@ -60,7 +60,7 @@ export const AllCategoriesSheet = async ({ params }: AllCategoriesSheetProps) =>
                   <AccordionTrigger>
                     <SheetClose asChild key={category}>
                       <Button asChild variant="ghost" className="text-base [&.active]:text-accent-foreground justify-start">
-                        <Link replace href={`/${category}`}>
+                        <Link replace href={`/${category}/${subCategories[0]}`}>
                           {removeNumbering(category)}
                         </Link>
                       </Button>
