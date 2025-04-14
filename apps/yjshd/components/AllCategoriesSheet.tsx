@@ -33,7 +33,7 @@ export const AllCategoriesSheet = async ({ params }: AllCategoriesSheetProps) =>
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" className="text-base [&.active]:text-accent-foreground">
+        <Button variant="ghost" className="text-[15px] [&.active]:text-accent-foreground">
           <Menu />
           메뉴보기
         </Button>
@@ -42,7 +42,7 @@ export const AllCategoriesSheet = async ({ params }: AllCategoriesSheetProps) =>
         <SheetHeader>
           <SheetTitle>{PAGE_H1}</SheetTitle>
         </SheetHeader>
-        <nav className="flex flex-col gap-2">
+        <nav className="flex flex-col">
           <SheetClose asChild>
             <Button
               asChild
