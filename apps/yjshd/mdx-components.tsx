@@ -4,6 +4,8 @@ import { cn } from "@workspace/ui/lib/utils";
 import { cva } from "class-variance-authority";
 import type { MDXComponents } from "mdx/types";
 import Image, { ImageProps } from "next/image";
+import Link from "next/link";
+import { Link as LinkIcon } from "lucide-react";
 import { Children, isValidElement } from "react";
 
 const gridCn = ["", "", "sm:grid-cols-2", "grid-cols-2 md:grid-cols-3", "sm:grid-cols-4"];
@@ -30,9 +32,39 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </h1>
     ),
-    h2: ({ children }) => <h2 className="mt-10 scroll-m-20 border-b pb-2 text-2xl font-medium tracking-tight first:mt-0 text-primary">{children}</h2>,
-    h3: ({ children }) => <h3 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight text-primary">{children}</h3>,
-    h4: ({ children }) => <h4 className="mt-8 scroll-m-20 text-lg font-semibold tracking-tight text-primary">{children}</h4>,
+    h2: ({ children }) => {
+      const id = children?.toString().toLowerCase().replace(/\s+/g, "-");
+      return (
+        <h2 id={id} className="mt-10 scroll-m-20 border-b pb-2 text-2xl font-medium tracking-tight first:mt-0 text-primary">
+          <Link href={`#${id}`} aria-label="Anchor link" className="inline-flex items-center gap-2 group">
+            {children}
+            <LinkIcon className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+          </Link>
+        </h2>
+      );
+    },
+    h3: ({ children }) => {
+      const id = children?.toString().toLowerCase().replace(/\s+/g, "-");
+      return (
+        <h3 id={id} className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight text-primary">
+          <Link href={`#${id}`} aria-label="Anchor link" className="inline-flex items-center gap-2 group">
+            {children}
+            <LinkIcon className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+          </Link>
+        </h3>
+      );
+    },
+    h4: ({ children }) => {
+      const id = children?.toString().toLowerCase().replace(/\s+/g, "-");
+      return (
+        <h4 id={id} className="mt-8 scroll-m-20 text-lg font-semibold tracking-tight text-primary">
+          <Link href={`#${id}`} aria-label="Anchor link" className="inline-flex items-center gap-2 group">
+            {children}
+            <LinkIcon className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+          </Link>
+        </h4>
+      );
+    },
     p: ({ children }) => <p className="readability [&:not(:first-child)]:mt-6">{children}</p>,
     blockquote: ({ children }) => <blockquote className="mt-6 border-l-2 pl-6 italic">{children}</blockquote>,
     table: ({ children }) => (
