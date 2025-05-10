@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { remarkExtractHeadings } from "@workspace/common/content/heading";
+import { remarkExtractContent } from "@workspace/common/content/content";
 import { compile } from "@mdx-js/mdx";
 
 export type Heading = {
@@ -9,14 +10,11 @@ export type Heading = {
   id: string;
 };
 
-export async function getMdxContent({ category, subCategory, slug }: { category: string; subCategory?: string; slug?: string }) {
+export async function getMdxContent({ category, subCategory, slug }: { category: string; subCategory: string; slug?: string }) {
   let filePath = "";
 
-  if (subCategory === undefined) {
-    if (slug) {
-      filePath = path.join("content", `${category}/${slug}.mdx`);
-    }
-    throw new Error("subCategory와 slug 중 하나는 명시해야합니다.");
+  if (slug) {
+    filePath = path.join("content", category, subCategory, slug, "page.mdx");
   } else {
     filePath = path.join("content", category, subCategory, "page.mdx");
   }
@@ -25,11 +23,12 @@ export async function getMdxContent({ category, subCategory, slug }: { category:
 
   const compiled = await compile(source, {
     outputFormat: "function-body",
-    remarkPlugins: [remarkExtractHeadings],
+    remarkPlugins: [remarkExtractHeadings, remarkExtractContent],
   });
 
   return {
     code: String(compiled),
     headings: compiled.data.headings as Heading[],
+    content: compiled.data.content as string,
   };
 }

@@ -4,23 +4,23 @@ import { getMdxContent } from "@/lib/content";
 import { getPostContent, getPostMetadata } from "@/lib/metadata";
 import { PostMetadata } from "@workspace/common/content/metadata.types";
 import { decodeURIS } from "@workspace/common/lib/uri";
-import { SubCategoryParams } from "@workspace/common/structure/params.types";
+import { type SlugParams } from "@workspace/common/structure/params.types";
 
-export async function generateMetadata({ params }: { params: Promise<SubCategoryParams> }): Promise<PostMetadata> {
-  const { category, subCategory } = await params;
-  const [decodedCategory, decodedSubCategory] = decodeURIS(category, subCategory);
+export async function generateMetadata({ params }: { params: Promise<SlugParams> }): Promise<PostMetadata> {
+  const { category, subCategory, slug } = await params;
+  const [decodedCategory, decodedSubCategory, decodedSlug] = decodeURIS(category, subCategory, slug);
 
-  const metadata = await getPostMetadata({ category: decodedCategory, subCategory: decodedSubCategory });
+  const metadata = await getPostMetadata({ category: decodedCategory, subCategory: decodedSubCategory, slug: decodedSlug });
 
   return { ...metadata, authors: [{ name: "연세정성내과" }], creator: "연세정성내과", publisher: "연세정성내과" };
 }
 
-export default async function Page({ params }: { params: Promise<SubCategoryParams> }) {
-  const { category, subCategory } = await params;
-  const [decodedCategory, decodedSubCategory] = decodeURIS(category, subCategory);
-  const { headings } = await getMdxContent({ category: decodedCategory, subCategory: decodedSubCategory });
+export default async function Page({ params }: { params: Promise<SlugParams> }) {
+  const { category, subCategory, slug } = await params;
+  const [decodedCategory, decodedSubCategory, decodedSlug] = decodeURIS(category, subCategory, slug);
+  const { headings } = await getMdxContent({ category: decodedCategory, subCategory: decodedSubCategory, slug: decodedSlug });
 
-  const Post = await getPostContent({ category: decodedCategory, subCategory: decodedSubCategory });
+  const Post = await getPostContent({ category: decodedCategory, subCategory: decodedSubCategory, slug: decodedSlug });
 
   return (
     <section className="grid grid-cols-[minmax(0.875rem,_1fr)_minmax(auto,_708px)_minmax(0.875rem,_1fr)] sm:grid-cols-[minmax(96px,_3fr)_minmax(auto,_850px)_minmax(96px,_1fr)] pt-6 pb-[10vh] sm:pt-[80px] sm:pb-[20vh] w-full transition-all">

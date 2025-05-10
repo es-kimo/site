@@ -11,11 +11,12 @@ export async function generateMetadata() {
 
 export default async function Layout({
   children,
-  params,
 }: Readonly<{
   children: React.ReactNode;
-  params: Promise<SubCategoryParams>;
 }>) {
+  const params = new Promise<SubCategoryParams>((resolve) => {
+    resolve({ category: "3.콩팥질환 강좌", subCategory: "2.콩팥질환 정보" });
+  });
   return (
     <>
       <TheHeader params={params} />
