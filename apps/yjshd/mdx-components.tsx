@@ -65,6 +65,11 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </h4>
       );
     },
+    a: ({ children, ...props }) => (
+      <a {...props} className="text-primary underline">
+        {children}
+      </a>
+    ),
     p: ({ children }) => <p className="readability [&:not(:first-child)]:mt-6">{children}</p>,
     blockquote: ({ children }) => <blockquote className="mt-6 border-l-2 pl-6 italic">{children}</blockquote>,
     table: ({ children }) => (
