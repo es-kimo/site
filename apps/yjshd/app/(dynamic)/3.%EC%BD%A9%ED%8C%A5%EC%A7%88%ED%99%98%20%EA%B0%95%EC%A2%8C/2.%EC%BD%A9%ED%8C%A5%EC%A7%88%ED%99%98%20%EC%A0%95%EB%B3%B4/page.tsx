@@ -23,7 +23,7 @@ export default async function KidneyPostsSample() {
       const content = await getMdxContent({ category: "3.콩팥질환 강좌", subCategory: "2.콩팥질환 정보", slug });
       return { ...metadata, ...content, id: `${metadata.other.createdAt}-${slug}`, excerpt: content.content, slug };
     })
-  );
+  ).then((posts) => posts.sort((a, b) => new Date(b.other.createdAt).getTime() - new Date(a.other.createdAt).getTime()));
   const categorizedPosts = posts.reduce(
     (acc, post) => {
       if (!post.category) {
@@ -58,10 +58,6 @@ export default async function KidneyPostsSample() {
           </TabsContent>
         ))}
       </Tabs>
-
-      <div className="flex justify-center mt-6">
-        <Button variant="outline">더 보기</Button>
-      </div>
     </div>
   );
 }
