@@ -1,0 +1,39 @@
+{
+  "name": "@yjshd/mdx-cli",
+  "version": "1.0.0",
+  "description": "MDX 파일과 메타데이터를 생성하는 CLI 도구",
+  "main": "dist/cli.js",
+  "type": "module",
+  "bin": {
+    "mdx": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/cli.ts",
+    "dev": "ts-node src/cli.ts"
+  },
+  "keywords": [
+    "mdx",
+    "cli",
+    "content"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^11.1.0",
+    "date-fns": "^3.3.1",
+    "inquirer": "^8.2.6"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^8.2.6",
+    "@types/node": "^20.11.24",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

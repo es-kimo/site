@@ -14,4 +14,4 @@ export const getSubCategoriesByCategory = async (category: string) => getFolderN
 /** 글 제목 */
 export const getSlugsByCategoryAndSubCategory = async (category: string, subCategory: string) => getFolderNames(path.join(CONTENT_PATH, category, subCategory));
 
-export const getSlugsByCategory = async (category: string) => (await getFileNames(path.join(CONTENT_PATH, category))).filter((item) => item.endsWith(".md") || item.endsWith(".mdx"));
+export const getSlugsByCategory = async (category: string) => getFolderNames(path.join(CONTENT_PATH, category));
