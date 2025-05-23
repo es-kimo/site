@@ -46,15 +46,16 @@ export const TheHeader = async ({ params }: TheHeaderProps) => {
 const NavigationBar = ({ className, activeCategory, activeSubCategory }: HTMLAttributes<HTMLDivElement> & { activeCategory?: string; activeSubCategory?: string }) => {
   const data = categories.map((category) => {
     const firstSubCategory = (subCategoriesMap.get(category) ?? [])[0];
-    return { category, firstSubCategory };
+    const hasSubCategory = !!firstSubCategory && category !== "4.게시판";
+    return { category, firstSubCategory, hasSubCategory };
   });
 
   return (
     <nav className={cn("flex-nowrap ml-auto", className)}>
       <NavigationMenu>
         <NavigationMenuList>
-          {data.map(({ category, firstSubCategory }) =>
-            subCategoriesMap.get(category)?.length ? (
+          {data.map(({ category, firstSubCategory, hasSubCategory }) =>
+            hasSubCategory ? (
               <NavigationMenuItem key={category}>
                 <NavigationMenuTrigger
                   className={`${activeCategory === category && "active"} text-neutral-400 text-[15px] hover:text-primary [&.active]:text-primary bg-transparent [&.active]:bg-muted/50`}
@@ -85,7 +86,18 @@ const NavigationBar = ({ className, activeCategory, activeSubCategory }: HTMLAtt
   );
 };
 
-const ListItem = ({ className, subCategory, activeSubCategory, href, children, ...props }: HTMLAttributes<HTMLAnchorElement> & { subCategory: string; href: string; activeSubCategory?: string }) => {
+const ListItem = ({
+  className,
+  subCategory,
+  activeSubCategory,
+  href,
+  children,
+  ...props
+}: HTMLAttributes<HTMLAnchorElement> & {
+  subCategory: string;
+  href: string;
+  activeSubCategory?: string;
+}) => {
   return (
     <li className="flex-shrink-0">
       <Link
