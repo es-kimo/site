@@ -18,7 +18,7 @@ export const AllCategoriesSheet = async ({ params }: AllCategoriesSheetProps) =>
 
   const categoriesWithSubCategories = categories.map((category) => {
     const subCategories = subCategoriesMap.get(category) ?? [];
-    const hasSubCategory = !!subCategories.length;
+    const hasSubCategory = !!subCategories.length && category !== "4.게시판";
     return {
       category,
       subCategories,

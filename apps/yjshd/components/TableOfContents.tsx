@@ -35,7 +35,7 @@ export const TableOfContents = ({ headings }: { headings: Heading[] }) => {
   return (
     <div className="w-full max-w-xs">
       <h2 className="sr-only">목차</h2>
-      <ScrollArea className="h-[400px]">
+      <ScrollArea className="h-fit">
         <ul className="space-y-2 border-l-2 border-slate-200">
           {headings.map((heading, idx) => (
             <li

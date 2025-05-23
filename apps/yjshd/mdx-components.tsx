@@ -65,6 +65,11 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </h4>
       );
     },
+    a: ({ children, ...props }) => (
+      <a {...props} className="text-primary underline">
+        {children}
+      </a>
+    ),
     p: ({ children }) => <p className="readability [&:not(:first-child)]:mt-6">{children}</p>,
     blockquote: ({ children }) => <blockquote className="mt-6 border-l-2 pl-6 italic">{children}</blockquote>,
     table: ({ children }) => (
@@ -176,6 +181,21 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         <dd {...props} className="flex flex-col gap-2">
           {children}
         </dd>
+      );
+    },
+    Video({ src, ...props }) {
+      return (
+        <iframe
+          width="560"
+          height="315"
+          src={src}
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
+          className="mt-4"
+          {...props}
+        ></iframe>
       );
     },
     ...components,
