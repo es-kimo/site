@@ -50,4 +50,4 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
   );
 }
 
-export const Background = () => <div className="-z-50 fixed top-0 left-0 w-full h-dvh bg-[linear-gradient(180deg,_#FCFCFC_80%,_#D8E7F2_100%)]" />;
+const Background = () => <div className="-z-50 fixed top-0 left-0 w-full h-dvh bg-[linear-gradient(180deg,_#FCFCFC_80%,_#D8E7F2_100%)]" />;
