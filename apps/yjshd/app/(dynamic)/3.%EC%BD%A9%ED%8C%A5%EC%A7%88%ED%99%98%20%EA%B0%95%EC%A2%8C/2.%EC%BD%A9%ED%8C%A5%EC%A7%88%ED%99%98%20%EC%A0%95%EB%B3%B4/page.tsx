@@ -7,6 +7,33 @@ import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@workspace/ui/components/tabs";
 import { Link } from "next-view-transitions";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "콩팥질환 정보",
+  description:
+    "콩팥(신장)질환에 대한 전문적이고 신뢰할 수 있는 의료 정보를 제공합니다. 만성 신부전, 급성 신부전, 사구체신염 등 다양한 콩팥질환에 대한 이해를 돕는 전문 의료 정보를 확인하실 수 있습니다.",
+  keywords: ["콩팥질환", "신장질환", "만성신부전", "급성신부전", "사구체신염", "의료정보", "건강교육", "연세정성내과"],
+  openGraph: {
+    title: "연세정성내과 콩팥질환 정보",
+    description:
+      "콩팥(신장)질환에 대한 전문적이고 신뢰할 수 있는 의료 정보를 제공합니다. 만성 신부전, 급성 신부전, 사구체신염 등 다양한 콩팥질환에 대한 이해를 돕는 전문 의료 정보를 확인하실 수 있습니다.",
+    type: "article",
+    locale: "ko_KR",
+    siteName: "연세정성내과",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  authors: [{ name: "연세정성내과" }],
+  creator: "연세정성내과",
+  publisher: "연세정성내과",
+  category: "의료정보",
+  alternates: {
+    canonical: `https://www.yonsei-jshd.com/${encodeURI("3.콩팥질환 강좌")}/${encodeURI("2.콩팥질환 정보")}`,
+  },
+};
 
 type Post = Awaited<ReturnType<typeof getPostMetadata>> &
   Awaited<ReturnType<typeof getMdxContent>> & {

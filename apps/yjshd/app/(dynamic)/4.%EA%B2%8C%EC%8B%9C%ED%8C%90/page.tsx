@@ -4,8 +4,29 @@ import { getSlugsByCategory } from "@workspace/common/structure/utils";
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@workspace/ui/components/pagination";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@workspace/ui/components/table";
 import { Link } from "next-view-transitions";
+import { Metadata } from "next";
 
 const category = "4.게시판";
+
+export const metadata: Metadata = {
+  title: "게시판",
+  description: "연세정성내과의 공지사항과 의료 정보를 확인하실 수 있는 게시판입니다. 환자분들을 위한 유용한 건강 정보와 병원 소식을 제공합니다.",
+  keywords: ["연세정성내과", "게시판", "공지사항", "의료정보", "건강정보", "병원소식"],
+  openGraph: {
+    title: "연세정성내과 게시판",
+    description: "연세정성내과의 공지사항과 의료 정보를 확인하실 수 있는 게시판입니다. 환자분들을 위한 유용한 건강 정보와 병원 소식을 제공합니다.",
+    type: "website",
+    locale: "ko_KR",
+    siteName: "연세정성내과",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  authors: [{ name: "연세정성내과" }],
+  creator: "연세정성내과",
+  publisher: "연세정성내과",
+};
 
 export default async function BoardPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
   const { page } = await searchParams;
