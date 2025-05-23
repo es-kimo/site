@@ -2,17 +2,52 @@ import { PostBreadcrumb } from "@/components/PostBreadcrumb";
 import { TableOfContents } from "@/components/TableOfContents";
 import { getMdxContent } from "@/lib/content";
 import { getPostContent, getPostMetadata } from "@/lib/metadata";
-import { PostMetadata } from "@workspace/common/content/metadata.types";
 import { decodeURIS } from "@workspace/common/lib/uri";
 import { SubCategoryParams } from "@workspace/common/structure/params.types";
+import { Metadata } from "next";
 
-export async function generateMetadata({ params }: { params: Promise<SubCategoryParams> }): Promise<PostMetadata> {
+export async function generateMetadata({ params }: { params: Promise<SubCategoryParams> }): Promise<Metadata> {
   const { category, subCategory } = await params;
   const [decodedCategory, decodedSubCategory] = decodeURIS(category, subCategory);
 
   const metadata = await getPostMetadata({ category: decodedCategory, subCategory: decodedSubCategory });
+  const title = `${metadata.title} | 연세정성내과`;
+  const description = metadata.description || `연세정성내과의 ${decodedCategory} - ${decodedSubCategory} 페이지입니다.`;
 
-  return { ...metadata, authors: [{ name: "연세정성내과" }], creator: "연세정성내과", publisher: "연세정성내과" };
+  return {
+    title,
+    description,
+    keywords: ["연세정성내과", decodedCategory.replace(/^\d+\./, ""), decodedSubCategory.replace(/^\d+\./, ""), ...(metadata.keywords || [])],
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      locale: "ko_KR",
+      siteName: "연세정성내과",
+      images: metadata.openGraph?.images || [
+        {
+          url: "/og-default.png",
+          width: 1200,
+          height: 630,
+          alt: "연세정성내과 기본 이미지",
+        },
+      ],
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+    authors: [{ name: "연세정성내과" }],
+    creator: "연세정성내과",
+    publisher: "연세정성내과",
+    alternates: {
+      canonical: `https://yonsei-jshd.com/${category}/${subCategory}`,
+    },
+    other: {
+      "article:published_time": metadata.other?.createdAt || "",
+      "article:modified_time": metadata.other?.updatedAt || metadata.other?.createdAt || "",
+    },
+  };
 }
 
 export default async function Page({ params }: { params: Promise<SubCategoryParams> }) {

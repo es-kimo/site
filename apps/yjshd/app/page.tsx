@@ -4,6 +4,24 @@ import { Button } from "@workspace/ui/components/button";
 import { Link2 } from "lucide-react";
 import { Link } from "next-view-transitions";
 import Image from "next/image";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "연세정성내과",
+  description: "더 나은 의료 서비스를 향한 도약, 연세정성내과의 발돋움 2025",
+  openGraph: {
+    title: "연세정성내과",
+    description: "더 나은 의료 서비스를 향한 도약, 연세정성내과의 발돋움 2025",
+    images: [
+      {
+        url: "/doctor.png",
+        width: 230,
+        height: 250,
+        alt: "연세정성내과 의사선생님",
+      },
+    ],
+  },
+};
 
 export default function Page({ params }: { params: Promise<SubCategoryParams> }) {
   return (
