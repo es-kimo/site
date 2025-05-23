@@ -1,4 +1,4 @@
-import { Mail, MapPin, Phone, Youtube } from "lucide-react";
+import { Mail, MapPin, PhoneOutgoing, Youtube } from "lucide-react";
 import Link from "next/link";
 
 export default function Footer() {
@@ -35,12 +35,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/2.연세정성내과 소개/2.진료 안내#진료-안내" className="hover:underline">
+                <Link href="/2.연세정성내과 소개/2.진료 안내" className="hover:underline">
                   진료 과목
                 </Link>
               </li>
               <li>
-                <Link href="/2.연세정성내과 소개/2.진료 안내#오시는길/진료시간" className="hover:underline">
+                <Link href="/2.연세정성내과 소개/3.연세정성내과 소개" className="hover:underline">
                   오시는 길
                 </Link>
               </li>
@@ -56,7 +56,7 @@ export default function Footer() {
                 서울시 강서구 화곡로 301 원풍빌딩 402호
               </li>
               <li className="flex items-center">
-                <Phone size={18} className="mr-2" />
+                <PhoneOutgoing size={18} className="mr-2" />
                 <a href="tel:0226922990" className="hover:underline">
                   02-2692-2990
                 </a>
@@ -80,7 +80,7 @@ export default function Footer() {
         {/* Mobile 간소화 레이아웃 */}
         <div className="flex flex-col space-y-4 md:hidden mb-8">
           <Link href="tel:0226922990" className="flex items-center justify-center space-x-2">
-            <Phone size={20} />
+            <PhoneOutgoing size={20} />
             <span className="text-sm">02-2692-2990</span>
           </Link>
           <Link href="/2.연세정성내과 소개/2.진료 안내#오시는길/진료시간" className="flex items-center justify-center space-x-2">

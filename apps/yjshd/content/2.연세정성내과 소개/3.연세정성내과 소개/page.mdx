@@ -1,5 +1,6 @@
 import vision from "./vision.png";
 import logo from "./logo.png";
+import { PhoneOutgoing, Youtube } from "lucide-react";
 
 import xray from "./img/2020_개원/xray.png";
 import welcome1 from "./img/2020_개원/welcome1.png";
@@ -67,7 +68,21 @@ export const metadata = {
   </DescriptionRow>
   <DescriptionRow>
     <DescriptionTerm>전화번호</DescriptionTerm>
-    <DescriptionDetails>02-2692-2990</DescriptionDetails>
+    <DescriptionDetails>
+      <a href="tel:0226922990" className="hover:underline">
+        <PhoneOutgoing size={18} className="mr-2 inline-block" />
+        <span>02-2692-2990</span>
+      </a>
+    </DescriptionDetails>
+  </DescriptionRow>
+  <DescriptionRow>
+    <DescriptionTerm>유튜브</DescriptionTerm>
+    <DescriptionDetails>
+      <a href="https://www.youtube.com/@dr6302" aria-label="Youtube" target="_blank" className="hover:underline">
+        <Youtube size={18} className="mr-2 inline-block" />
+        <span>Youtube 바로가기</span>
+      </a>
+    </DescriptionDetails>
   </DescriptionRow>
 </DescriptionList>
 
