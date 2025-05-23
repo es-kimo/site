@@ -12,9 +12,9 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
       <div>
         <TheHeader params={params} />
 
-        <main className="p-6 mt-3 sm:mt-12 lg:mt-24 flex flex-col gap-8 lg:gap-16 w-fit mx-auto">
+        <main className="p-6 my-3 sm:my-6 lg:my-24 flex flex-col gap-8 lg:gap-16 w-fit mx-auto min-h-[calc(100vh-72px)] sm:min-h-[calc(100vh-112px)] lg:min-h-[calc(100vh-72px)] xl:min-h-initial">
           <div>
-            <div className="text-2xl sm:text-4xl">
+            <div className="text-2xl md:text-4xl">
               <p className="font-bold">더 나은 의료 서비스를 향한 도약</p>
               <h2>연세정성내과의 발돋움 2025</h2>
             </div>
@@ -22,7 +22,7 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
 
           <div className="flex flex-col lg:flex-row lg:justify-between gap-8 lg:gap-36">
             <div>
-              <p className="mb-3 sm:text-xl sm:leading-10 text-muted-foreground opacity-0 animate-fade-in-up">
+              <p className="mb-3 md:text-xl md:leading-10 text-muted-foreground opacity-0 animate-fade-in-up">
                 정상이 어디인지 누구도 알 수 없습니다.
                 <br />
                 어제보다 나은 내일을 위해
