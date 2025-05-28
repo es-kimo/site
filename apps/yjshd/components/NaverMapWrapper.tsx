@@ -1,10 +1,10 @@
 "use client";
 
+import { ViewOnMapButton } from "@/components/ViewOnMapButton";
+import { Skeleton } from "@workspace/ui/components/skeleton";
 import Script from "next/script";
 import { useState } from "react";
 import NaverMap from "./NaverMap";
-import { Skeleton } from "@workspace/ui/components/skeleton";
-import ViewOnMapButton from "@/components/ViewOnMapButton";
 
 interface NaverMapWrapperProps {
   lat: number;
