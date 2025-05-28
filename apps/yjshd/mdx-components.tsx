@@ -186,14 +186,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     Video({ src, ...props }) {
       return (
         <iframe
-          width="560"
-          height="315"
+          width="100%"
           src={src}
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen
-          className="mt-4"
+          className="mt-4 aspect-video"
           {...props}
         ></iframe>
       );
