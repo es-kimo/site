@@ -2,11 +2,14 @@ import { formatPostDate } from "@workspace/common/lib/date";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@workspace/ui/components/carousel";
 import { cn } from "@workspace/ui/lib/utils";
 import { cva } from "class-variance-authority";
+import { Link as LinkIcon } from "lucide-react";
 import type { MDXComponents } from "mdx/types";
+import dynamic from "next/dynamic";
 import Image, { ImageProps } from "next/image";
 import Link from "next/link";
-import { Link as LinkIcon } from "lucide-react";
 import { Children, isValidElement } from "react";
+
+const NaverMapWrapper = dynamic(() => import("./components/NaverMapWrapper"));
 
 const gridCn = ["", "", "sm:grid-cols-2", "grid-cols-2 md:grid-cols-3", "sm:grid-cols-4"];
 
@@ -186,17 +189,19 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     Video({ src, ...props }) {
       return (
         <iframe
-          width="560"
-          height="315"
+          width="100%"
           src={src}
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen
-          className="mt-4"
+          className="mt-4 aspect-video"
           {...props}
         ></iframe>
       );
+    },
+    NaverMap({ zoom, width }) {
+      return <NaverMapWrapper lat={37.5512848} lng={126.8487854} zoom={zoom} width={width} />;
     },
     ...components,
   };

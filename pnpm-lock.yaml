@@ -34,7 +34,7 @@ importers:
         version: 3.1.0(@types/react@18.3.0)(react@19.0.0)
       '@next/mdx':
         specifier: ^15.1.3
-        version: 15.3.2(@mdx-js/loader@3.1.0(acorn@8.14.0))(@mdx-js/react@3.1.0(@types/react@18.3.0)(react@19.0.0))
+        version: 15.3.2(@mdx-js/loader@3.1.0)(@mdx-js/react@3.1.0(@types/react@18.3.0)(react@19.0.0))
       '@types/mdx':
         specifier: ^2.0.13
         version: 2.0.13
@@ -101,7 +101,7 @@ importers:
         version: 3.1.0(@types/react@18.3.0)(react@19.0.0)
       '@next/mdx':
         specifier: ^15.3.2
-        version: 15.3.2(@mdx-js/loader@3.1.0(acorn@8.14.0))(@mdx-js/react@3.1.0(@types/react@18.3.0)(react@19.0.0))
+        version: 15.3.2(@mdx-js/loader@3.1.0)(@mdx-js/react@3.1.0(@types/react@18.3.0)(react@19.0.0))
       '@types/mdx':
         specifier: ^2.0.13
         version: 2.0.13
@@ -136,6 +136,9 @@ importers:
       '@opennextjs/cloudflare':
         specifier: ^0.5.10
         version: 0.5.12(wrangler@4.14.4)
+      '@types/navermaps':
+        specifier: ^3.7.10
+        version: 3.7.10
       '@types/node':
         specifier: ^20
         version: 20.17.10
@@ -2578,6 +2581,9 @@ packages:
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
 
+  '@types/geojson@7946.0.16':
+    resolution: {integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==}
+
   '@types/glob@7.2.0':
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
 
@@ -2604,6 +2610,9 @@ packages:
 
   '@types/ms@0.7.34':
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
+
+  '@types/navermaps@3.7.10':
+    resolution: {integrity: sha512-lYOC2afpIo54OTLcDmMy1gD2BWEj8l8AbgkCmLSWJ9doSVOIDtLNNHn0faJxzvAOmwvu1JSwO/IV5OtMHIblzw==}
 
   '@types/node@20.17.10':
     resolution: {integrity: sha512-/jrvh5h6NXhEauFFexRin69nA0uHJ5gwk4iDivp/DeoEua3uwCUto6PC86IpRITBOs4+6i2I56K5x5b6WYGXHA==}
@@ -4036,6 +4045,7 @@ packages:
 
   lodash.get@4.4.2:
     resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
+    deprecated: This package is deprecated. Use the optional chaining (?.) operator instead.
 
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
@@ -7068,7 +7078,7 @@ snapshots:
     dependencies:
       fast-glob: 3.3.1
 
-  '@next/mdx@15.3.2(@mdx-js/loader@3.1.0(acorn@8.14.0))(@mdx-js/react@3.1.0(@types/react@18.3.0)(react@19.0.0))':
+  '@next/mdx@15.3.2(@mdx-js/loader@3.1.0)(@mdx-js/react@3.1.0(@types/react@18.3.0)(react@19.0.0))':
     dependencies:
       source-map: 0.7.4
     optionalDependencies:
@@ -8333,6 +8343,8 @@ snapshots:
 
   '@types/estree@1.0.6': {}
 
+  '@types/geojson@7946.0.16': {}
+
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
@@ -8363,6 +8375,10 @@ snapshots:
   '@types/minimatch@5.1.2': {}
 
   '@types/ms@0.7.34': {}
+
+  '@types/navermaps@3.7.10':
+    dependencies:
+      '@types/geojson': 7946.0.16
 
   '@types/node@20.17.10':
     dependencies:

@@ -53,7 +53,9 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex items-center">
                 <MapPin size={18} className="mr-2" />
-                서울시 강서구 화곡로 301 원풍빌딩 402호
+                <a href={`https://map.naver.com/v5/entry/place/${1634387039}`} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                  서울시 강서구 화곡로 301 원풍빌딩 402호
+                </a>
               </li>
               <li className="flex items-center">
                 <PhoneOutgoing size={18} className="mr-2" />
@@ -83,7 +85,7 @@ export default function Footer() {
             <PhoneOutgoing size={20} />
             <span className="text-sm">02-2692-2990</span>
           </Link>
-          <Link href="/2.연세정성내과 소개/2.진료 안내#오시는길/진료시간" className="flex items-center justify-center space-x-2">
+          <Link href={`https://map.naver.com/v5/entry/place/${1634387039}`} target="_blank" className="flex items-center justify-center space-x-2">
             <MapPin size={20} />
             <span className="text-sm">오시는 길</span>
           </Link>

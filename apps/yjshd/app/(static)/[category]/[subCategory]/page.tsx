@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: { params: Promise<SubCategory
   const [decodedCategory, decodedSubCategory] = decodeURIS(category, subCategory);
 
   const metadata = await getPostMetadata({ category: decodedCategory, subCategory: decodedSubCategory });
-  const title = `${metadata.title} | 연세정성내과`;
+  const title = `${metadata.title}`;
   const description = metadata.description || `연세정성내과의 ${decodedCategory} - ${decodedSubCategory} 페이지입니다.`;
 
   return {

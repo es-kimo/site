@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<SlugParams>
   const metadata = await getPostMetadata({ category: decodedCategory, subCategory: decodedSubCategory, slug: decodedSlug });
   const { content } = await getMdxContent({ category: decodedCategory, subCategory: decodedSubCategory, slug: decodedSlug });
 
-  const title = `${metadata.title} | 연세정성내과`;
+  const title = `${metadata.title}`;
   const description = metadata.description || content.slice(0, 150).replace(/\n/g, " ") + "...";
 
   const keywords = ["연세정성내과", decodedCategory.replace(/^\d+\./, ""), decodedSubCategory.replace(/^\d+\./, ""), decodedSlug.replace(/^\d+\./, ""), ...(metadata.keywords || [])];
