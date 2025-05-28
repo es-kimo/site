@@ -2,11 +2,14 @@ import { formatPostDate } from "@workspace/common/lib/date";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@workspace/ui/components/carousel";
 import { cn } from "@workspace/ui/lib/utils";
 import { cva } from "class-variance-authority";
+import { Link as LinkIcon } from "lucide-react";
 import type { MDXComponents } from "mdx/types";
+import dynamic from "next/dynamic";
 import Image, { ImageProps } from "next/image";
 import Link from "next/link";
-import { Link as LinkIcon } from "lucide-react";
 import { Children, isValidElement } from "react";
+
+const NaverMapWrapper = dynamic(() => import("./components/NaverMapWrapper"));
 
 const gridCn = ["", "", "sm:grid-cols-2", "grid-cols-2 md:grid-cols-3", "sm:grid-cols-4"];
 
@@ -196,6 +199,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
           {...props}
         ></iframe>
       );
+    },
+    NaverMap({ zoom, width }) {
+      return <NaverMapWrapper lat={37.5512848} lng={126.8487854} zoom={zoom} width={width} />;
     },
     ...components,
   };
