@@ -3,7 +3,7 @@
 import { ViewOnMapButton } from "@/components/ViewOnMapButton";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import Script from "next/script";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import NaverMap from "./NaverMap";
 
 interface NaverMapWrapperProps {
@@ -17,9 +17,19 @@ export default function NaverMapWrapper({ lat, lng, zoom, width }: NaverMapWrapp
   const [isLoaded, setIsLoaded] = useState(false);
   const NAVER_MAP_CLIENT_ID = process.env.NODE_ENV === "development" ? process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID_DEV : process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID;
 
+  useEffect(() => {
+    if (window.naver?.maps) {
+      setIsLoaded(true);
+    }
+  }, []);
+
+  const handleLoad = useCallback(() => {
+    setIsLoaded(true);
+  }, []);
+
   return (
     <>
-      <Script src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${NAVER_MAP_CLIENT_ID}`} strategy="lazyOnload" onLoad={() => setIsLoaded(true)} />
+      <Script src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${NAVER_MAP_CLIENT_ID}`} strategy="lazyOnload" onLoad={handleLoad} />
       <div className="my-4">
         <div className="flex flex-col gap-2">
           {isLoaded ? <NaverMap lat={lat} lng={lng} zoom={zoom} width={width} /> : <Skeleton className="w-full aspect-video" />}
