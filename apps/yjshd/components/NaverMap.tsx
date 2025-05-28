@@ -1,7 +1,7 @@
 "use client";
 
 import { RefreshCcw } from "lucide-react";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface NaverMapProps {
   lat: number;
@@ -14,6 +14,15 @@ export default function NaverMap({ lat, lng, zoom = 15, width = "100%" }: NaverM
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<naver.maps.Map | null>(null);
   const initialCenterRef = useRef<naver.maps.LatLng | null>(null);
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768); // break point
+    const onResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   useEffect(() => {
     const naver = window.naver;
@@ -104,8 +113,11 @@ export default function NaverMap({ lat, lng, zoom = 15, width = "100%" }: NaverM
   `,
       pixelOffset: new naver.maps.Point(0, 0),
     });
-    // 컴포넌트 마운트 시 바로 열기
-    infoWindow.open(map, marker);
+
+    if (!isMobile) {
+      // 컴포넌트 마운트 시 바로 열기
+      infoWindow.open(map, marker);
+    }
 
     // (선택) 마커 클릭 시에도 토글 열기/닫기
     marker.addListener("click", () => {
@@ -118,7 +130,7 @@ export default function NaverMap({ lat, lng, zoom = 15, width = "100%" }: NaverM
       naver.maps.Event.clearInstanceListeners(map);
       infoWindow.close();
     };
-  }, [lat, lng, zoom]);
+  }, [lat, lng, zoom, isMobile]);
 
   const handleRecenter = useCallback(() => {
     if (mapRef.current && initialCenterRef.current) {
