@@ -106,11 +106,11 @@ const Content = async ({ category, activeSubCategory, activeHeading }: { categor
 
   return (
     <NavigationMenuContent>
-      <div className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+      <div className="grid gap-3 p-4 sm:w-[500px] sm:grid-cols-[.75fr_1fr]">
         {subCategories.map(({ subCategory, hasSlug, headings, description }) =>
           !hasSlug ? (
             <Fragment key={subCategory}>
-              <div className="pr-2 border-r border-r-muted-foreground/20">
+              <div className="pr-2 sm:border-r">
                 <StyledLink title={subCategory} href={`/${category}/${subCategory}`} className={cn(activeSubCategory === subCategory && "active")} bold />
               </div>
               <ul>
