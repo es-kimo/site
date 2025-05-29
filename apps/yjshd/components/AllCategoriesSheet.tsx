@@ -1,8 +1,10 @@
+import { getMdxContent } from "@/lib/content";
 import { PAGE_H1 } from "@/lib/metadata";
 import { removeNumbering } from "@workspace/common/lib/string-utils";
 import { decodeURIS } from "@workspace/common/lib/uri";
 import { DefaultParams } from "@workspace/common/structure/params.types";
 import { contentStructureMaps } from "@workspace/common/structure/structure";
+import { getSlugsByCategoryAndSubCategory } from "@workspace/common/structure/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@workspace/ui/components/accordion";
 import { Button } from "@workspace/ui/components/button";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@workspace/ui/components/sheet";
@@ -38,7 +40,7 @@ export const AllCategoriesSheet = async ({ params }: AllCategoriesSheetProps) =>
           메뉴보기
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="flex flex-col gap-10">
+      <SheetContent side="right" className="flex flex-col gap-10 overflow-scroll">
         <SheetHeader>
           <SheetTitle>{PAGE_H1}</SheetTitle>
         </SheetHeader>
@@ -57,27 +59,50 @@ export const AllCategoriesSheet = async ({ params }: AllCategoriesSheetProps) =>
               .filter(({ hasSubCategory }) => hasSubCategory)
               .map(({ category, subCategories }, idx) => (
                 <AccordionItem value={category} key={`item-${idx}-${category}`}>
-                  <AccordionTrigger>
-                    <SheetClose asChild key={category}>
-                      <Button asChild variant="ghost" className="text-base [&.active]:text-accent-foreground justify-start">
-                        <Link replace href={`/${category}/${subCategories[0]}`}>
-                          {removeNumbering(category)}
-                        </Link>
-                      </Button>
-                    </SheetClose>
-                  </AccordionTrigger>
+                  <AccordionTrigger className="text-base px-4">{removeNumbering(category)}</AccordionTrigger>
                   <AccordionContent className="flex flex-col">
-                    {subCategories.map((sub) => (
-                      <SheetClose asChild key={sub}>
-                        <Button
-                          asChild
-                          variant="ghost"
-                          className={`${sub === decodedSubCategory && "active"} text-neutral-400 text-base [&.active]:text-accent-foreground [&.active]:bg-muted/50 justify-start`}
-                        >
-                          <Link href={`/${category}/${sub}`}>{removeNumbering(sub)}</Link>
-                        </Button>
-                      </SheetClose>
-                    ))}
+                    {subCategories.map(async (subCategory) => {
+                      const slug = await getSlugsByCategoryAndSubCategory(category, subCategory);
+                      if (slug.length > 0) {
+                        return (
+                          <SheetClose asChild key={subCategory}>
+                            <Button asChild variant="ghost" className="ml-3 w-full text-sm [&.active]:text-accent-foreground [&.active]:bg-muted/50 justify-start">
+                              <Link href={`/${category}/${subCategory}`}>{removeNumbering(subCategory)}</Link>
+                            </Button>
+                          </SheetClose>
+                        );
+                      }
+
+                      const { headings } = await getMdxContent({ category, subCategory });
+                      return (
+                        <SheetClose asChild key={subCategory}>
+                          <ul className="ml-3">
+                            <li>
+                              <Button
+                                asChild
+                                variant="ghost"
+                                className={`${subCategory === decodedSubCategory && "active"} w-full text-sm [&.active]:text-accent-foreground [&.active]:bg-muted/50 justify-start`}
+                              >
+                                <Link href={`/${category}/${subCategory}`}>{removeNumbering(subCategory)}</Link>
+                              </Button>
+                            </li>
+                            {headings
+                              .filter((heading) => heading.depth === 2)
+                              .map((heading) => (
+                                <li key={heading.id}>
+                                  <SheetClose asChild>
+                                    <Button asChild variant="ghost" className="w-full text-sm text-neutral-400 [&.active]:text-accent-foreground [&.active]:bg-muted/50 justify-start">
+                                      <Link replace href={`/${category}/${subCategory}#${heading.id}`}>
+                                        <span className="ml-3">{heading.value}</span>
+                                      </Link>
+                                    </Button>
+                                  </SheetClose>
+                                </li>
+                              ))}
+                          </ul>
+                        </SheetClose>
+                      );
+                    })}
                   </AccordionContent>
                 </AccordionItem>
               ))}
