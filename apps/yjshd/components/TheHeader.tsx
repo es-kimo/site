@@ -75,7 +75,7 @@ const NavigationBar = async ({
   );
 };
 
-const StyledLink = ({ title, className, href, children }: HTMLAttributes<HTMLAnchorElement> & { title: string; href: string }) => {
+const StyledLink = ({ title, className, href, children, bold }: HTMLAttributes<HTMLAnchorElement> & { title: string; href: string; bold?: boolean }) => {
   return (
     <Link
       className={cn(
@@ -84,7 +84,7 @@ const StyledLink = ({ title, className, href, children }: HTMLAttributes<HTMLAnc
       )}
       href={href}
     >
-      <div className="text-sm font-medium leading-none line-clamp-1">{removeNumbering(title)}</div>
+      <div className={cn("text-sm leading-none text-muted-foreground line-clamp-1", bold && "text-[initial] font-medium")}>{removeNumbering(title)}</div>
       <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">{children}</p>
     </Link>
   );
@@ -111,9 +111,7 @@ const Content = async ({ category, activeSubCategory, activeHeading }: { categor
           !hasSlug ? (
             <Fragment key={subCategory}>
               <div className="pr-2 border-r border-r-muted-foreground/20">
-                <StyledLink title={subCategory} href={`/${category}/${subCategory}`} className={cn(activeSubCategory === subCategory && "active")}>
-                  {description}
-                </StyledLink>
+                <StyledLink title={subCategory} href={`/${category}/${subCategory}`} className={cn(activeSubCategory === subCategory && "active")} bold />
               </div>
               <ul>
                 {headings.map((heading) => (
@@ -124,7 +122,7 @@ const Content = async ({ category, activeSubCategory, activeHeading }: { categor
               </ul>
             </Fragment>
           ) : (
-            <StyledLink key={subCategory} title={subCategory} href={`/${category}/${subCategory}`} className={cn(activeSubCategory === subCategory && "active", "col-span-2")}>
+            <StyledLink key={subCategory} title={subCategory} href={`/${category}/${subCategory}`} className={cn(activeSubCategory === subCategory && "active", "col-span-2")} bold>
               {description}
             </StyledLink>
           )
