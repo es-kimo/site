@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="bg-gray-900 text-gray-200 py-8">
       <div className="max-w-7xl mx-auto px-6 sm:px-12">
         {/* Desktop 레이아웃 */}
-        <div className="hidden md:grid grid-cols-[1fr_0.5fr_1fr] gap-8 mb-8">
+        <div className="hidden lg:grid grid-cols-[1fr_0.5fr_1fr] gap-8 mb-8">
           {/* About */}
           <div>
             <h4 className="text-xl font-semibold mb-4">연세정성내과의원</h4>
@@ -53,7 +53,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex items-center">
                 <MapPin size={18} className="mr-2" />
-                <a href={`https://map.naver.com/v5/entry/place/${1634387039}`} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                <a href={`/2.연세정성내과 소개/3.연세정성내과 소개#오시는길/진료시간`} className="hover:underline">
                   서울시 강서구 화곡로 301 원풍빌딩 402호
                 </a>
               </li>
@@ -80,12 +80,12 @@ export default function Footer() {
         </div>
 
         {/* Mobile 간소화 레이아웃 */}
-        <div className="flex flex-col space-y-4 md:hidden mb-8">
+        <div className="flex flex-col space-y-4 lg:hidden mb-8">
           <Link href="tel:0226922990" className="flex items-center justify-center space-x-2">
             <PhoneOutgoing size={20} />
             <span className="text-sm">02-2692-2990</span>
           </Link>
-          <Link href={`https://map.naver.com/v5/entry/place/${1634387039}`} target="_blank" className="flex items-center justify-center space-x-2">
+          <Link href={`/2.연세정성내과 소개/3.연세정성내과 소개#오시는길/진료시간`} className="flex items-center justify-center space-x-2">
             <MapPin size={20} />
             <span className="text-sm">오시는 길</span>
           </Link>

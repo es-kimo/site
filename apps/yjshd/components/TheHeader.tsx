@@ -1,14 +1,16 @@
 import { AllCategoriesSheet } from "@/components/AllCategoriesSheet";
-import { PAGE_H1 } from "@/lib/metadata";
+import { getMdxContent } from "@/lib/content";
+import { getPostMetadata, PAGE_H1 } from "@/lib/metadata";
 import { removeNumbering } from "@workspace/common/lib/string-utils";
 import { decodeURIS } from "@workspace/common/lib/uri";
 import { DefaultParams } from "@workspace/common/structure/params.types";
 import { categories, subCategoriesMap } from "@workspace/common/structure/structure";
+import { getSlugsByCategoryAndSubCategory } from "@workspace/common/structure/utils";
 import { Button } from "@workspace/ui/components/button";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger } from "@workspace/ui/components/navigation-menu";
 import { cn } from "@workspace/ui/lib/utils";
 import { Link } from "next-view-transitions";
-import { type HTMLAttributes } from "react";
+import { Fragment, type HTMLAttributes } from "react";
 
 interface TheHeaderProps {
   params: Promise<DefaultParams>;
@@ -43,75 +45,89 @@ export const TheHeader = async ({ params }: TheHeaderProps) => {
   );
 };
 
-const NavigationBar = ({ className, activeCategory, activeSubCategory }: HTMLAttributes<HTMLDivElement> & { activeCategory?: string; activeSubCategory?: string }) => {
-  const data = categories.map((category) => {
-    const firstSubCategory = (subCategoriesMap.get(category) ?? [])[0];
-    const hasSubCategory = !!firstSubCategory && category !== "4.게시판";
-    return { category, firstSubCategory, hasSubCategory };
-  });
-
+const NavigationBar = async ({
+  className,
+  activeCategory,
+  activeSubCategory,
+  activeSlug,
+}: HTMLAttributes<HTMLDivElement> & { activeCategory?: string; activeSubCategory?: string; activeSlug?: string }) => {
+  const categoriesWithSubCategories = categories.filter((category) => category !== "4.게시판");
   return (
     <nav className={cn("flex-nowrap ml-auto", className)}>
       <NavigationMenu>
         <NavigationMenuList>
-          {data.map(({ category, firstSubCategory, hasSubCategory }) =>
-            hasSubCategory ? (
-              <NavigationMenuItem key={category}>
-                <NavigationMenuTrigger
-                  className={`${activeCategory === category && "active"} text-neutral-400 text-[15px] hover:text-primary [&.active]:text-primary bg-transparent [&.active]:bg-muted/50`}
-                >
-                  <Link href={`/${category}/${firstSubCategory}`}>{removeNumbering(category)}</Link>
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="flex w-[500px] gap-3 p-4 overflow-x-auto">
-                    {subCategoriesMap
-                      .get(category)
-                      ?.map((subCategory) => <ListItem key={subCategory} subCategory={subCategory} href={`/${category}/${subCategory}`} activeSubCategory={activeSubCategory} />)}
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            ) : (
-              <Button
-                key={category}
-                variant="ghost"
-                className={`${activeCategory === category && "active"} text-neutral-400 text-[15px] hover:text-primary [&.active]:text-primary [&.active]:bg-muted/50`}
+          {categoriesWithSubCategories.map((category) => (
+            <NavigationMenuItem key={category}>
+              <NavigationMenuTrigger
+                className={`${activeCategory === category && "active"} text-neutral-400 text-[15px] hover:text-primary [&.active]:text-primary bg-transparent [&.active]:bg-muted/50`}
               >
-                <Link href={`/${category}`}>{removeNumbering(category)}</Link>
-              </Button>
-            )
-          )}
+                {removeNumbering(category)}
+              </NavigationMenuTrigger>
+              <Content category={category} activeSubCategory={activeSubCategory} activeHeading={activeSlug} />
+            </NavigationMenuItem>
+          ))}
+          <Button variant="ghost" className={`${activeCategory === "4.게시판" && "active"} text-neutral-400 text-[15px] hover:text-primary [&.active]:text-primary [&.active]:bg-muted/50`}>
+            <Link href="/4.게시판">{removeNumbering("4.게시판")}</Link>
+          </Button>
         </NavigationMenuList>
       </NavigationMenu>
     </nav>
   );
 };
 
-const ListItem = ({
-  className,
-  subCategory,
-  activeSubCategory,
-  href,
-  children,
-  ...props
-}: HTMLAttributes<HTMLAnchorElement> & {
-  subCategory: string;
-  href: string;
-  activeSubCategory?: string;
-}) => {
+const StyledLink = ({ title, className, href, children, bold }: HTMLAttributes<HTMLAnchorElement> & { title: string; href: string; bold?: boolean }) => {
   return (
-    <li className="flex-shrink-0">
-      <Link
-        className={cn(
-          `${activeSubCategory === subCategory && "active"}`,
-          "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground [&.active]:text-primary [&.active]:bg-muted/50",
-          className
+    <Link
+      className={cn(
+        "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground [&.active]:text-primary [&.active]:bg-muted/50",
+        className
+      )}
+      href={href}
+    >
+      <div className={cn("text-sm leading-none text-muted-foreground line-clamp-1", bold && "text-[initial] font-medium")}>{removeNumbering(title)}</div>
+      <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">{children}</p>
+    </Link>
+  );
+};
+
+const Content = async ({ category, activeSubCategory, activeHeading }: { category: string; activeSubCategory?: string; activeHeading?: string }) => {
+  const subCategories = await Promise.all(
+    (subCategoriesMap.get(category) ?? []).map(async (subCategory) => {
+      const slugs = await getSlugsByCategoryAndSubCategory(category, subCategory);
+      const hasSlug = slugs && slugs.length > 0;
+      if (hasSlug) {
+        return { subCategory, hasSlug, headings: [{ value: "hello world", id: "hello world", depth: 1 }], description: "hello world" };
+      }
+      const { headings } = await getMdxContent({ category, subCategory });
+      const { description } = await getPostMetadata({ category, subCategory });
+      return { subCategory, hasSlug, headings: headings.filter((heading) => heading.depth === 2), description };
+    })
+  );
+
+  return (
+    <NavigationMenuContent>
+      <div className="grid gap-3 p-4 sm:w-[500px] sm:grid-cols-[.75fr_1fr]">
+        {subCategories.map(({ subCategory, hasSlug, headings, description }) =>
+          !hasSlug ? (
+            <Fragment key={subCategory}>
+              <div className="pr-2 sm:border-r">
+                <StyledLink title={subCategory} href={`/${category}/${subCategory}`} className={cn(activeSubCategory === subCategory && "active")} bold />
+              </div>
+              <ul>
+                {headings.map((heading) => (
+                  <li key={heading.id}>
+                    <StyledLink title={heading.value} href={`/${category}/${subCategory}#${heading.id}`} className={cn(activeHeading === heading.id && "active")} />
+                  </li>
+                ))}
+              </ul>
+            </Fragment>
+          ) : (
+            <StyledLink key={subCategory} title={subCategory} href={`/${category}/${subCategory}`} className={cn(activeSubCategory === subCategory && "active", "col-span-2")} bold>
+              {description}
+            </StyledLink>
+          )
         )}
-        {...props}
-        href={href}
-      >
-        <div className="text-sm font-medium leading-none">{removeNumbering(subCategory)}</div>
-        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">{children}</p>
-      </Link>
-    </li>
+      </div>
+    </NavigationMenuContent>
   );
 };

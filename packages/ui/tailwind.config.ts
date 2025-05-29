@@ -5,6 +5,19 @@ const config = {
   darkMode: ["class"],
   content: ["*.tsx", "app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}", "../../packages/ui/src/components/**/*.{ts,tsx}"],
   theme: {
+    screens: {
+      // 기존 width 브레이크포인트
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+      "2xl": "1536px",
+
+      // height 기준 커스텀
+      "h-sm": { raw: "(min-height: 600px)" },
+      "h-md": { raw: "(min-height: 800px)" },
+      "h-lg": { raw: "(min-height: 1000px)" },
+    },
     extend: {
       maxWidth: {
         blog: "var(--blog-max-w)",
