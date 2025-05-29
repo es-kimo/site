@@ -4,9 +4,10 @@ import { getPostMetadata, PAGE_H1 } from "@/lib/metadata";
 import { removeNumbering } from "@workspace/common/lib/string-utils";
 import { decodeURIS } from "@workspace/common/lib/uri";
 import { DefaultParams } from "@workspace/common/structure/params.types";
-import { categories, slugsMap, subCategoriesMap } from "@workspace/common/structure/structure";
+import { categories, subCategoriesMap } from "@workspace/common/structure/structure";
+import { getSlugsByCategoryAndSubCategory } from "@workspace/common/structure/utils";
 import { Button } from "@workspace/ui/components/button";
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@workspace/ui/components/navigation-menu";
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger } from "@workspace/ui/components/navigation-menu";
 import { cn } from "@workspace/ui/lib/utils";
 import { Link } from "next-view-transitions";
 import { Fragment, type HTMLAttributes } from "react";
@@ -92,7 +93,7 @@ const StyledLink = ({ title, className, href, children }: HTMLAttributes<HTMLAnc
 const Content = async ({ category, activeSubCategory, activeHeading }: { category: string; activeSubCategory?: string; activeHeading?: string }) => {
   const subCategories = await Promise.all(
     (subCategoriesMap.get(category) ?? []).map(async (subCategory) => {
-      const slugs = slugsMap.get(category, subCategory) ?? [];
+      const slugs = await getSlugsByCategoryAndSubCategory(category, subCategory);
       const hasSlug = slugs && slugs.length > 0;
       if (hasSlug) {
         return { subCategory, hasSlug, headings: [{ value: "hello world", id: "hello world", depth: 1 }], description: "hello world" };

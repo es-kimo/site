@@ -1,4 +1,4 @@
-import { getFileNames, getFolderNames } from "@workspace/common/lib/file-system";
+import { getFolderNames } from "@workspace/common/lib/file-system";
 import path from "path";
 
 export const ENTRY_POINT = "content";
@@ -12,6 +12,7 @@ export const getCategories = async () => getFolderNames(CONTENT_PATH);
 export const getSubCategoriesByCategory = async (category: string) => getFolderNames(path.join(CONTENT_PATH, category));
 
 /** 글 제목 */
-export const getSlugsByCategoryAndSubCategory = async (category: string, subCategory: string) => getFolderNames(path.join(CONTENT_PATH, category, subCategory));
+export const getSlugsByCategoryAndSubCategory = async (category: string, subCategory: string) =>
+  (await getFolderNames(path.join(CONTENT_PATH, category, subCategory))).filter((slug) => slug !== "img");
 
 export const getSlugsByCategory = async (category: string) => getFolderNames(path.join(CONTENT_PATH, category));
