@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Children, isValidElement } from "react";
 
 const NaverMapWrapper = dynamic(() => import("./components/NaverMapWrapper"));
+const ImageLightbox = dynamic(() => import("./components/ImageLightbox"));
 
 const gridCn = ["", "", "sm:grid-cols-2", "grid-cols-2 md:grid-cols-3", "sm:grid-cols-4"];
 
@@ -202,6 +203,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     NaverMap({ zoom, width }) {
       return <NaverMapWrapper lat={37.5512848} lng={126.8487854} zoom={zoom} width={width} />;
+    },
+    ImageLightbox({ children, grid, preserveSize, ...props }) {
+      return (
+        <ImageLightbox grid={grid} preserveSize={preserveSize} {...props}>
+          {children}
+        </ImageLightbox>
+      );
     },
     ...components,
   };
