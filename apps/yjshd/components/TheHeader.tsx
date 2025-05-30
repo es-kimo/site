@@ -96,18 +96,17 @@ const Content = async ({ category, activeSubCategory, activeHeading }: { categor
       const slugs = await getSlugsByCategoryAndSubCategory(category, subCategory);
       const hasSlug = slugs && slugs.length > 0;
       if (hasSlug) {
-        return { subCategory, hasSlug, headings: [{ value: "hello world", id: "hello world", depth: 1 }], description: "hello world" };
+        return { subCategory, hasSlug, headings: null };
       }
       const { headings } = await getMdxContent({ category, subCategory });
-      const { description } = await getPostMetadata({ category, subCategory });
-      return { subCategory, hasSlug, headings: headings.filter((heading) => heading.depth === 2), description };
+      return { subCategory, hasSlug, headings: headings.filter((heading) => heading.depth === 2) };
     })
   );
 
   return (
     <NavigationMenuContent>
       <div className="grid gap-3 p-4 sm:w-[500px] sm:grid-cols-[.75fr_1fr]">
-        {subCategories.map(({ subCategory, hasSlug, headings, description }) =>
+        {subCategories.map(({ subCategory, hasSlug, headings }) =>
           !hasSlug ? (
             <Fragment key={subCategory}>
               <div className="pr-2 sm:border-r">
@@ -122,9 +121,7 @@ const Content = async ({ category, activeSubCategory, activeHeading }: { categor
               </ul>
             </Fragment>
           ) : (
-            <StyledLink key={subCategory} title={subCategory} href={`/${category}/${subCategory}`} className={cn(activeSubCategory === subCategory && "active", "col-span-2")} bold>
-              {description}
-            </StyledLink>
+            <StyledLink key={subCategory} title={subCategory} href={`/${category}/${subCategory}`} className={cn(activeSubCategory === subCategory && "active", "col-span-2")} bold />
           )
         )}
       </div>
