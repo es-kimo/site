@@ -1,5 +1,4 @@
 import { formatPostDate } from "@workspace/common/lib/date";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@workspace/ui/components/carousel";
 import { cn } from "@workspace/ui/lib/utils";
 import { cva } from "class-variance-authority";
 import { Link as LinkIcon } from "lucide-react";
@@ -7,9 +6,10 @@ import type { MDXComponents } from "mdx/types";
 import dynamic from "next/dynamic";
 import Image, { ImageProps } from "next/image";
 import Link from "next/link";
-import { Children, isValidElement } from "react";
 
 const NaverMapWrapper = dynamic(() => import("./components/NaverMapWrapper"));
+const ImageLightbox = dynamic(() => import("./components/ImageLightbox"));
+const TheCarousel = dynamic(() => import("./components/TheCarousel"));
 
 const gridCn = ["", "", "sm:grid-cols-2", "grid-cols-2 md:grid-cols-3", "sm:grid-cols-4"];
 
@@ -111,6 +111,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       return <pre {...properties}></pre>;
     },
     Image: ({ size, className, ...props }) => {
+      return (
+        <ImageLightbox grid={1} preserveSize>
+          <Image {...(props as ImageProps)} className={cn(imageVariants({ size, className }))} />
+        </ImageLightbox>
+      );
+    },
+    ImageWithoutLightbox: ({ size, className, ...props }) => {
       return <Image {...(props as ImageProps)} className={cn(imageVariants({ size, className }))} />;
     },
     Lead(properties) {
@@ -149,14 +156,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </div>
       );
     },
-    Carousel({ children, ...props }) {
-      return (
-        <Carousel className="w-4/6 sm:w-11/12 mx-auto" {...props}>
-          <CarouselContent>{Children.map(children, (child, index) => (isValidElement(child) ? <CarouselItem key={index}>{child}</CarouselItem> : null))}</CarouselContent>
-          <CarouselPrevious className="w-12 h-12 border-primary" />
-          <CarouselNext className="w-12 h-12 border-primary" />
-        </Carousel>
-      );
+    Carousel({ children }) {
+      return <TheCarousel>{children}</TheCarousel>;
     },
     DescriptionList({ children, ...props }) {
       return (
@@ -202,6 +203,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     NaverMap({ zoom, width }) {
       return <NaverMapWrapper lat={37.5512848} lng={126.8487854} zoom={zoom} width={width} />;
+    },
+    ImageLightbox({ children, grid, preserveSize, ...props }) {
+      return (
+        <ImageLightbox grid={grid} preserveSize={preserveSize} {...props}>
+          {children}
+        </ImageLightbox>
+      );
     },
     ...components,
   };
