@@ -6,7 +6,19 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "blog:profile": "git config user.name 'Kihyun Ryu' && git config user.email 'khryu0610@gmail.com'",
+    "blog:checkout": "git fetch origin blog && ((git branch | grep blog > /dev/null && git checkout blog) || git checkout -b blog origin/blog) && git pull origin blog",
+    "yjshd:profile": "git config user.name 'Kihyun Ryu' && git config user.email 'khryu0610@gmail.com'",
+    "yjshd:checkout": "git fetch origin yjshd && ((git branch | grep yjshd > /dev/null && git checkout yjshd) || git checkout -b yjshd origin/yjshd) && git pull origin yjshd",
+    "cli:init": "pnpm -F mdx-cli build",
+    "mdx": "pnpm cli:init && node packages/mdx-cli/dist/cli.js",
+    "mdx:blog": "pnpm blog:profile && pnpm blog:checkout && pnpm mdx",
+    "mdx:yjshd": "pnpm yjshd:profile && pnpm yjshd:checkout && pnpm mdx",
+    "게시판": "pnpm mdx:yjshd create yjshd 4.게시판",
+    "콩팥질환정보": "pnpm mdx:yjshd create yjshd '3.콩팥질환 강좌' '2.콩팥질환 정보'",
+    "게시": "pnpm yjshd:checkout && git add . && git commit -m 'post: 글 작성' && git push origin yjshd",
+    "게시:blog": "pnpm blog:checkout && git add . && git commit -m 'post: 글 작성' && git push origin blog"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
