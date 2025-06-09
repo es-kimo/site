@@ -2,11 +2,11 @@ import { getPostMetadata } from "@/lib/metadata";
 import { formatPostDate } from "@workspace/common/lib/date";
 import { getSlugsByCategory } from "@workspace/common/structure/utils";
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@workspace/ui/components/pagination";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@workspace/ui/components/table";
 import { Link } from "next-view-transitions";
 import { Metadata } from "next";
 
 const category = "4.게시판";
+const NEW_THRESHOLD_DAYS = 3; // New 뱃지 표시 기준
 
 export const metadata: Metadata = {
   title: "게시판",
@@ -28,85 +28,125 @@ export const metadata: Metadata = {
   publisher: "연세정성내과",
 };
 
+function getVisiblePages(totalPages: number, currentPage: number) {
+  const pages: (number | string)[] = [];
+  if (currentPage > 2) {
+    pages.push(1, "...");
+  }
+  for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+    if (i >= 1 && i <= totalPages) {
+      pages.push(i);
+    }
+  }
+  if (currentPage < totalPages - 1) {
+    pages.push("...", totalPages);
+  }
+  return pages;
+}
+
 export default async function BoardPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
   const { page } = await searchParams;
-  const currentPage = parseInt(page || "1", 10);
+  const currentPage = Math.max(parseInt(page || "1", 10), 1);
   const pageSize = 10;
+
+  // 1) 모든 글 불러오기 & 정렬
   const slugs = await getSlugsByCategory(category);
   console.time("게시판 포스트 로딩 시간");
   const posts = await Promise.all(
     slugs.map(async (slug) => {
-      const metadata = await getPostMetadata({ category, slug });
-      return { ...metadata, id: `${metadata.other.createdAt}-${slug}`, slug };
+      const meta = await getPostMetadata({ category, slug });
+      return {
+        ...meta,
+        id: `${meta.other.createdAt}-${slug}`,
+        slug,
+      };
     })
-  ).then((posts) => {
-    const sorted = posts.sort((a, b) => new Date(b.other.createdAt).getTime() - new Date(a.other.createdAt).getTime());
+  ).then((list) => {
+    const sorted = list.sort((a, b) => new Date(b.other.createdAt).getTime() - new Date(a.other.createdAt).getTime());
     console.timeEnd("게시판 포스트 로딩 시간");
     return sorted;
   });
 
-  const totalItems = posts.length;
+  // 2) 공지글(pinned) 먼저, 나머지 글 뒤에
+  const pinned = posts.filter((p) => p.other.pinned);
+  const normal = posts.filter((p) => !p.other.pinned);
+  const ordered = [...pinned, ...normal];
+
+  // 3) 페이징
+  const totalItems = ordered.length;
   const totalPages = Math.ceil(totalItems / pageSize);
   const start = (currentPage - 1) * pageSize;
-  const end = start + pageSize;
-  const paginated = posts.slice(start, end);
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const paginated = ordered.slice(start, start + pageSize);
+
+  // 4) New 뱃지 표시 여부 체크
+  const now = new Date();
+  const isNewPost = (createdAt: string) => {
+    const diffDays = (now.getTime() - new Date(createdAt).getTime()) / (1000 * 60 * 60 * 24);
+    return diffDays <= NEW_THRESHOLD_DAYS;
+  };
+
+  const visiblePages = getVisiblePages(totalPages, currentPage);
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">게시판</h2>
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <Table className="w-full">
-          <TableHeader>
-            <TableRow className="bg-gray-100">
-              <TableHead className="px-4 py-3 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">글 제목</TableHead>
-              <TableHead className="px-4 py-3 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">작성자</TableHead>
-              <TableHead className="px-4 py-3 text-left text-sm font-medium text-gray-600 uppercase tracking-wider">작성일</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {paginated.map((post) => (
-              <TableRow key={post.id} className="odd:bg-white even:bg-gray-50 hover:bg-blue-50 cursor-pointer transition-colors">
-                <TableCell className="px-4 py-3 text-sm text-gray-700">
-                  <Link href={`/${category}/${post.slug}`} className="hover:underline">
-                    {String(post.title)}
-                  </Link>
-                </TableCell>
-                <TableCell className="px-4 py-3 text-sm text-gray-700">관리자</TableCell>
-                <TableCell className="px-4 py-3 text-sm text-gray-700">{formatPostDate(post.other.createdAt)}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
 
-      <div className="flex justify-center mt-6">
+      <ul className="divide-y divide-gray-200">
+        {paginated.map((post) => (
+          <li key={post.id} className="py-3 flex flex-col sm:flex-row sm:items-center justify-between">
+            <div className="flex items-center space-x-2">
+              {post.other.pinned && <span className="bg-red-500 text-white text-xs px-1 rounded">공지</span>}
+              <Link href={`/${category}/${post.slug}`} className="text-lg text-gray-800 hover:text-blue-600">
+                {String(post.title)}
+              </Link>
+              {isNewPost(post.other.createdAt) && <span className="bg-blue-100 text-blue-600 text-xs px-1 rounded">New</span>}
+            </div>
+            <div className="text-sm text-gray-500 mt-1 sm:mt-0">관리자 • {formatPostDate(post.other.createdAt)}</div>
+          </li>
+        ))}
+      </ul>
+
+      {/* Pagination */}
+      <nav role="navigation" aria-label="페이지 네비게이션" className="flex justify-center mt-6">
         <Pagination>
           <PaginationContent className="flex items-center space-x-2">
+            {/* 처음, 이전 */}
             <PaginationItem>
-              <PaginationPrevious href={`?page=${currentPage - 1}`}>이전</PaginationPrevious>
+              <PaginationLink href={`?page=1`} aria-label="첫 페이지" disabled={currentPage === 1}>
+                «
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationPrevious href={`?page=${currentPage - 1}`} disabled={currentPage === 1} />
             </PaginationItem>
 
-            {pages.map((page) => (
-              <PaginationItem key={page}>
-                <PaginationLink href={`?page=${page}`} isActive={page === currentPage}>
-                  {page}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
-
-            <PaginationItem>
-              <PaginationNext href={`?page=${currentPage + 1}`}>다음</PaginationNext>
-            </PaginationItem>
-
-            {totalPages > pages.length && (
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
+            {/* 숫자 페이지 */}
+            {visiblePages.map((p, idx) =>
+              typeof p === "string" ? (
+                <PaginationItem key={`el-${idx}`}>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              ) : (
+                <PaginationItem key={p}>
+                  <PaginationLink href={`?page=${p}`} isActive={p === currentPage} aria-current={p === currentPage ? "page" : undefined}>
+                    {p}
+                  </PaginationLink>
+                </PaginationItem>
+              )
             )}
+
+            {/* 다음, 마지막 */}
+            <PaginationItem>
+              <PaginationNext href={`?page=${currentPage + 1}`} disabled={currentPage === totalPages} />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href={`?page=${totalPages}`} aria-label="마지막 페이지" disabled={currentPage === totalPages}>
+                »
+              </PaginationLink>
+            </PaginationItem>
           </PaginationContent>
         </Pagination>
-      </div>
+      </nav>
     </div>
   );
 }
