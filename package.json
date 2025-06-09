@@ -6,7 +6,11 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "cli:init": "git pull origin main && pnpm -F mdx-cli build",
+    "mdx": "node packages/mdx-cli/dist/cli.js",
+    "게시판": "pnpm cli:init && pnpm mdx create yjshd 4.게시판",
+    "콩팥질환정보": "pnpm cli:init && pnpm mdx create yjshd '3.콩팥질환 강좌' '2.콩팥질환 정보'"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
