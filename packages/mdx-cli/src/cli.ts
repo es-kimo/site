@@ -139,14 +139,20 @@ program
           type: "input",
           name: "keywords",
           message: "키워드를 쉼표로 구분하여 입력하세요 (선택사항, 검색엔진 최적화 용도) :",
-          transform: (input: string) => input.split(",").map((k: string) => k.trim()),
         },
       ]);
+
+      const keywords = answers.keywords
+        ? answers.keywords
+            .split(",")
+            .map((k: string) => k.trim())
+            .filter(Boolean)
+        : [];
 
       const metadata = {
         title: answers.title,
         description: answers.description,
-        keywords: answers.keywords,
+        keywords,
         other: {
           status: "ready",
           createdAt: new Date().toISOString(),
