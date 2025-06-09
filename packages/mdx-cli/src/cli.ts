@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import { mkdirSync, readdirSync, statSync, writeFileSync } from "fs";
+import { mkdirSync, readdirSync, statSync, writeFileSync, existsSync } from "fs";
 import inquirer from "inquirer";
 import { join } from "path";
 
@@ -122,12 +122,33 @@ program
       }
 
       // 4. 페이지 정보 입력
+      const validateTitle = async (input: string) => {
+        if (!input.length) return "제목을 입력해주세요.";
+        if (input.includes("?")) return "제목에 물음표(?)를 포함할 수 없습니다.";
+
+        const folderName = input.toLowerCase();
+        const contentPath = [projectPath, "content", menu];
+        if (submenu) {
+          contentPath.push(submenu);
+        }
+        contentPath.push(folderName);
+
+        const targetDir = join(...contentPath);
+        const filePath = join(targetDir, "page.mdx");
+
+        if (existsSync(filePath)) {
+          return `이미 존재하는 페이지입니다: ${filePath}`;
+        }
+
+        return true;
+      };
+
       const answers = await inquirer.prompt([
         {
           type: "input",
           name: "title",
           message: "페이지 제목을 입력하세요:",
-          validate: (input: string) => input.length > 0 && !input.includes("?"),
+          validate: validateTitle,
         },
         {
           type: "input",
