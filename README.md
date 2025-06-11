@@ -1,31 +1,66 @@
-# shadcn/ui monorepo template
+# Modern Monorepo Template
 
-This template is for creating a monorepo with shadcn/ui.
+A modern, type-safe monorepo template powered by Turborepo and shadcn/ui, designed for building scalable web applications.
 
-## Usage
+## 🌟 Features
 
-```bash
-pnpm dlx shadcn@latest init
+- 📦 Monorepo structure with Turborepo
+- 🎨 Shared UI components with shadcn/ui
+- 🔒 Type-safe with TypeScript
+- 🎯 Next.js applications
+- 🛠 Shared configurations (ESLint, TypeScript, Tailwind)
+
+## 📁 Project Structure
+
+```
+├── apps/
+│   ├── blog/          # Blog application
+│   └── yjshd/         # Web application
+└── packages/
+    ├── ui/            # Shared UI components
+    ├── common/        # Common utilities
+    └── mdx-cli/       # MDX tooling
 ```
 
-## Adding components
+## 🚀 Getting Started
 
-To add components to your app, run the following command at the root of your `blog` app:
+1. **Setup**
+
+   ```bash
+   pnpm install
+   ```
+
+2. **Development**
+
+   ```bash
+   pnpm dev
+   ```
+
+3. **Build**
+   ```bash
+   pnpm build
+   ```
+
+## 💅 UI Components
+
+This template uses shadcn/ui for beautiful, accessible components. Add new components to your app:
 
 ```bash
-pnpm dlx shadcn@latest add button -c apps/blog
+pnpm dlx shadcn@latest add button -c apps/[app-name]
 ```
 
-This will place the ui components in the `packages/ui/src/components` directory.
-
-## Tailwind
-
-Your `tailwind.config.ts` and `globals.css` are already set up to use the components from the `ui` package.
-
-## Using components
-
-To use the components in your app, import them from the `ui` package.
+Import components in your app:
 
 ```tsx
 import { Button } from "@workspace/ui/components/ui/button";
 ```
+
+## 📦 Package Management
+
+- `@workspace/ui`: Shared UI components
+- `@workspace/common`: Common utilities and helpers
+- `@workspace/mdx-cli`: MDX processing tools
+
+## 📄 License
+
+MIT
