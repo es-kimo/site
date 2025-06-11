@@ -5,7 +5,7 @@
 ## 시작하기 전에 알아두세요!
 
 - 이 가이드는 Windows와 Mac 컴퓨터 모두에서 사용할 수 있습니다.
-- 모든 설치 과정은 약 15-20분 정도 소요됩니다.
+- 전체 설정 과정은 약 30-40분 정도 소요됩니다.
 - 설치 중 어려움이 있다면 언제든 관리자에게 문의해주세요.
 
 ## 필요한 프로그램 설치하기
@@ -21,13 +21,16 @@
 4. 설치 과정에서 나오는 모든 항목에 대해 '다음(Next)' 버튼을 클릭하시면 됩니다.
    - 특별히 변경할 설정은 없습니다.
 
-### 2. VS Code(비주얼 스튜디오 코드) 설치하기
+### 2. Cursor 설치하기
 
-1. [VS Code 공식 웹사이트](https://code.visualstudio.com/)에 접속합니다.
-2. 파란색 다운로드 버튼을 클릭합니다.
+1. [Cursor 공식 웹사이트](https://cursor.sh/)에 접속합니다.
+2. "Download" 버튼을 클릭합니다.
 3. 다운로드된 설치 파일을 실행합니다.
-4. 설치 과정에서 나오는 모든 항목에 '다음(Next)' 버튼을 클릭하시면 됩니다.
-   - "Code로 열기" 항목이 나오면 체크해주세요.
+4. 설치가 완료되면 Cursor를 실행합니다.
+5. 처음 실행 시 나타나는 설정:
+   - 테마 선택: 원하는 테마를 선택하세요 (나중에 변경 가능)
+   - AI 기능: "Enable AI" 선택
+   - 로그인: OpenAI 계정으로 로그인 (관리자에게 계정 정보를 요청하세요)
 
 ### 3. Git 설치하기
 
@@ -37,35 +40,76 @@
 4. 설치 과정에서 나오는 모든 항목에 '다음(Next)' 버튼을 클릭하시면 됩니다.
    - 특별히 변경할 설정은 없습니다.
 
-## VS Code로 프로젝트 시작하기
+### 4. GitHub 계정 로그인하기
 
-### 1. VS Code 실행하기
+1. 관리자에게 문의해주세요.
 
-- Windows: 시작 메뉴에서 "Visual Studio Code" 검색
-- Mac: Launchpad에서 "Visual Studio Code" 검색
+### 5. pnpm 설치하기
 
-### 2. 프로젝트 폴더 열기
-
-1. VS Code 메뉴에서 "파일(File)" > "폴더 열기(Open Folder)" 선택
-2. 관리자가 알려준 프로젝트 폴더를 선택합니다.
-
-### 3. 터미널 열기
-
-1. VS Code 상단 메뉴에서 "터미널(Terminal)" > "새 터미널(New Terminal)" 선택
-   - Windows 단축키: Ctrl + `
-   - Mac 단축키: Command + `
-2. 아래쪽에 검은색 창(터미널)이 나타납니다.
+1. Cursor를 실행합니다.
+2. 상단 메뉴에서 "Terminal" > "New Terminal"을 선택합니다.
 3. 터미널에 다음 명령어를 입력하고 Enter 키를 누릅니다:
+
+   Windows와 Mac 모두:
+
+   ```bash
+   npm install -g pnpm
+   ```
+
+4. 설치가 완료되면 Cursor를 완전히 종료했다가 다시 실행해주세요.
+
+## Git 초기 설정하기
+
+### 1. GitHub 인증 설정
+
+1. Cursor 터미널에서 다음 명령어를 입력합니다:
+   ```bash
+   gh auth login
+   ```
+2. 다음과 같이 선택해주세요:
+   - "GitHub.com" 선택
+   - "HTTPS" 선택
+   - "Authenticate with your GitHub credentials" 선택
+   - GitHub 계정 로그인 정보 입력
+
+## 프로젝트 가져오기
+
+### 1. 프로젝트 복제하기
+
+1. Cursor를 실행합니다.
+2. 터미널에서 다음 명령어를 입력합니다:
+   ```bash
+   cd Desktop
+   git clone https://github.com/es-kimo/site.git
+   cd site
+   ```
+   - 이렇게 하면 바탕화면에 프로젝트 폴더가 생성됩니다.
+
+### 2. 프로젝트 설정하기
+
+1. Cursor 터미널에서 다음 명령어를 입력합니다:
    ```bash
    pnpm install
    ```
-4. 설치가 완료될 때까지 기다려주세요. (약 1-2분 소요)
+2. 설치가 완료될 때까지 기다려주세요. (약 2-3분 소요)
+
+### 3. 프로젝트 열기
+
+1. Cursor 메뉴에서 "File" > "Open Folder"를 선택합니다.
+2. 바탕화면의 'yjshd' 폴더를 선택합니다.
+3. 처음 열 때 "Do you trust the authors of the files in this folder?" 메시지가 나타나면 "Yes, I trust the authors"를 선택합니다.
+
+### 4. Cursor AI 설정 확인
+
+1. Cursor 오른쪽 사이드바에서 AI 아이콘을 클릭합니다.
+2. AI가 활성화되어 있는지 확인합니다.
+3. 활성화되어 있지 않다면 관리자에게 문의해주세요.
 
 ## 글 작성하기
 
 ### 1. 게시판에 글 쓰기
 
-1. VS Code 터미널에서 다음 명령어를 입력하고 Enter 키를 누릅니다:
+1. Cursor 터미널에서 다음 명령어를 입력하고 Enter 키를 누릅니다:
    ```bash
    pnpm 게시판
    ```
@@ -81,7 +125,7 @@
 
 ### 2. 콩팥질환 정보 글 쓰기
 
-1. VS Code 터미널에서 다음 명령어를 입력하고 Enter 키를 누릅니다:
+1. Cursor 터미널에서 다음 명령어를 입력하고 Enter 키를 누릅니다:
    ```bash
    pnpm 콩팥질환정보
    ```
@@ -365,7 +409,7 @@ import image2 from "./image2.png";
 
 ### 2. 명령어가 실행되지 않을 때
 
-- VS Code를 완전히 종료했다가 다시 실행해보세요.
+- Cursor를 완전히 종료했다가 다시 실행해보세요.
 - 터미널에서 `pnpm install`을 다시 실행해보세요.
 
 ### 3. 이미지가 보이지 않을 때
