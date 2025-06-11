@@ -63,7 +63,7 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
             </Button>
           </div>
 
-          <div className="hidden h-md:grid sm:grid grid-cols-2 overflow-auto">
+          <div className="grid grid-cols-2 overflow-auto">
             <Image src={"/doctor.png"} alt="의사선생님" width={200} height={230} className="aspect-[200/230]" />
             <Image src={"/mission.png"} alt="연세정성내과 미션과 비젼" width={200} height={230} className="aspect-[200/230]" />
           </div>
