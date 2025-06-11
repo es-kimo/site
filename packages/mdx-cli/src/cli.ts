@@ -163,6 +163,20 @@ program
         },
       ]);
 
+      // 게시판 메뉴인 경우 공지글 여부 확인
+      let isPinned = false;
+      if (menu === "4.게시판") {
+        const pinnedAnswer = await inquirer.prompt([
+          {
+            type: "confirm",
+            name: "pinned",
+            message: "이 글을 공지글로 설정하시겠습니까?",
+            default: false,
+          },
+        ]);
+        isPinned = pinnedAnswer.pinned;
+      }
+
       const keywords = answers.keywords
         ? answers.keywords
             .split(",")
@@ -178,6 +192,7 @@ program
           status: "ready",
           createdAt: new Date().toISOString(),
         },
+        ...(isPinned && { pinned: true }),
       };
 
       const content = `export const metadata = ${JSON.stringify(metadata, null, 2)};
