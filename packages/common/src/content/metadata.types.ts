@@ -6,4 +6,5 @@ export interface PostMetadata extends Metadata {
     createdAt: string;
     updatedAt?: string;
   };
+  pinned?: boolean;
 }
