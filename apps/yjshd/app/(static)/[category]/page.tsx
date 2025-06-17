@@ -3,11 +3,10 @@ import { getMdxContent } from "@/lib/content";
 import { removeNumbering } from "@workspace/common/lib/string-utils";
 import { decodeURIS } from "@workspace/common/lib/uri";
 import type { CategoryParams } from "@workspace/common/structure/params.types";
-import { subCategoriesMap } from "@workspace/common/structure/structure";
+import { slugsMap, subCategoriesMap } from "@workspace/common/structure/structure";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@workspace/ui/components/card";
-import { Skeleton } from "@workspace/ui/components/skeleton";
 import { ExternalLink } from "lucide-react";
 import { Link } from "next-view-transitions";
 
@@ -34,7 +33,17 @@ export default async function Page({ params }: { params: Promise<CategoryParams>
   const { category } = await params;
   const [decodedCategory] = decodeURIS(category);
   const subCategories = subCategoriesMap.get(decodedCategory) ?? [];
-  const mdxContents = await Promise.all(subCategories.map((subCategory) => getMdxContent({ category: decodedCategory, subCategory })));
+  const mdxContents = await Promise.all(
+    subCategories.map(async (subCategory) => {
+      const slugs = slugsMap.get(decodedCategory, subCategory);
+      const hasSlug = slugs && slugs.length > 0;
+      if (hasSlug) {
+        return { subCategory, headings: null };
+      }
+      const { headings } = await getMdxContent({ category: decodedCategory, subCategory });
+      return { subCategory, headings: headings.filter((heading) => heading.depth === 2) };
+    })
+  );
 
   return (
     <>
@@ -46,8 +55,7 @@ export default async function Page({ params }: { params: Promise<CategoryParams>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {mdxContents.map(({ headings }, idx) => {
             const tag = subCategories[idx] ?? "";
-            const firstDepthHeadings = headings.filter((heading) => heading.depth === 2);
-            const hasHeadings = firstDepthHeadings.length > 0;
+            const firstDepthHeadings = headings?.filter((heading) => heading.depth === 2);
 
             return (
               <Link href={`/${category}/${encodeURIComponent(tag)}`} key={tag} className="block">
@@ -57,20 +65,13 @@ export default async function Page({ params }: { params: Promise<CategoryParams>
                     <div className="mt-2 h-1 w-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full" />
                   </CardHeader>
                   <CardContent className="flex-1 overflow-y-auto">
-                    {hasHeadings ? (
-                      <div className="flex flex-wrap gap-2">
-                        {firstDepthHeadings.map((heading, i) => (
-                          <Badge key={i} variant="outline" className="text-gray-700">
-                            {heading.value}
-                          </Badge>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="mt-3 space-y-2">
-                        <Skeleton className="h-3 w-full bg-gray-200" />
-                        <Skeleton className="h-3 w-5/6 bg-gray-200" />
-                      </div>
-                    )}
+                    <div className="flex flex-wrap gap-2">
+                      {firstDepthHeadings?.map((heading, i) => (
+                        <Badge key={i} variant="outline" className="text-gray-700">
+                          {heading.value}
+                        </Badge>
+                      ))}
+                    </div>
                   </CardContent>
                   <CardFooter>
                     <Button variant="outline" className="w-full py-2">
