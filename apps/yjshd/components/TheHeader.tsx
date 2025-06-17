@@ -1,6 +1,6 @@
 import { AllCategoriesSheet } from "@/components/AllCategoriesSheet";
 import { getMdxContent } from "@/lib/content";
-import { getPostMetadata, PAGE_H1 } from "@/lib/metadata";
+import { PAGE_H1 } from "@/lib/metadata";
 import { removeNumbering } from "@workspace/common/lib/string-utils";
 import { decodeURIS } from "@workspace/common/lib/uri";
 import { DefaultParams } from "@workspace/common/structure/params.types";
@@ -61,7 +61,7 @@ const NavigationBar = async ({
               <NavigationMenuTrigger
                 className={`${activeCategory === category && "active"} text-neutral-400 text-[15px] hover:text-primary [&.active]:text-primary bg-transparent [&.active]:bg-muted/50`}
               >
-                {removeNumbering(category)}
+                <Link href={`/${category}`}>{removeNumbering(category)}</Link>
               </NavigationMenuTrigger>
               <Content category={category} activeSubCategory={activeSubCategory} activeHeading={activeSlug} />
             </NavigationMenuItem>
