@@ -14,8 +14,8 @@ import { Link } from "next-view-transitions";
 export async function generateMetadata({ params }: { params: Promise<CategoryParams> }) {
   const { category } = await params;
   const [decodedCategory] = decodeURIS(category);
-  const title = `연세정성내과의 ${decodedCategory} 페이지`;
-  const description = `연세정성내과의 ${decodedCategory} 페이지입니다.`;
+  const title = `${removeNumbering(decodedCategory)}`;
+  const description = `연세정성내과의 ${removeNumbering(decodedCategory)} 글 모음입니다.`;
 
   return {
     title,
