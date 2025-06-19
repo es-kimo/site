@@ -21,9 +21,6 @@ const nextConfig = {
           },
     ],
   },
-  experimental: {
-    ppr: "incremental",
-  },
 };
 
 /** @type {import('@next/mdx').WithMDX} */
