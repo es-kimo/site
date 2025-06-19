@@ -235,3 +235,19 @@ export async function getLectureStructure(lectureName: string): Promise<Lecture 
     return null;
   }
 }
+
+export async function getCourse(lectureName: string, courseName: string): Promise<Course | null> {
+  try {
+    const courses = await getLectureCourses(lectureName);
+    const course = courses.find((course) => course.name === courseName);
+
+    if (!course) {
+      throw new Error(`Course ${courseName} not found in lecture ${lectureName}`);
+    }
+
+    return course;
+  } catch (error) {
+    console.error(`Error fetching readme for course ${courseName} in lecture ${lectureName}:`, error);
+    return null;
+  }
+}
