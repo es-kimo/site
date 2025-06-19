@@ -27,6 +27,25 @@ interface GitHubApiResponse {
   };
 }
 
+// 블로그 렌더링을 위한 새로운 타입들
+interface Course {
+  name: string;
+  path: string;
+  readmeContent: string;
+  readmeUrl: string;
+}
+
+interface Lecture {
+  name: string;
+  path: string;
+  topics: string[];
+  courses: Course[];
+}
+
+interface ArchiveStructure {
+  lectures: Lecture[];
+}
+
 export async function getOssuLectureList(): Promise<string[]> {
   try {
     const owner = "es-kimo";
@@ -97,5 +116,122 @@ export async function getFolderContents(folderName: string): Promise<GitHubConte
   } catch (error) {
     console.error(`Error fetching folder contents for ${folderName}:`, error);
     return [];
+  }
+}
+
+// 특정 파일의 내용을 가져오는 함수
+export async function getFileContent(filePath: string): Promise<string> {
+  try {
+    const owner = "es-kimo";
+    const repo = "computer-science";
+    const branch = "es-kimo";
+
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}?ref=${branch}`;
+
+    const response = await fetch(url, {
+      headers: {
+        Accept: "application/vnd.github.v3+json",
+        "User-Agent": "Mozilla/5.0 (compatible; MyApp/1.0)",
+      },
+      next: { revalidate: 3600 },
+    });
+
+    if (!response.ok) {
+      throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+    }
+
+    const data: GitHubApiResponse = await response.json();
+
+    if (data.content && data.encoding === "base64") {
+      return Buffer.from(data.content, "base64").toString("utf-8");
+    }
+
+    return "";
+  } catch (error) {
+    console.error(`Error fetching file content for ${filePath}:`, error);
+    return "";
+  }
+}
+
+// 강의의 토픽을 가져오는 함수
+export async function getLectureTopics(lectureName: string): Promise<string[]> {
+  try {
+    const topicContent = await getFileContent(`archive/${lectureName}/.topics`);
+    return topicContent.split("\n").filter((topic) => topic.trim() !== "");
+  } catch (error) {
+    console.error(`Error fetching topics for lecture ${lectureName}:`, error);
+    return [];
+  }
+}
+
+// 강의의 코스들을 가져오는 함수
+export async function getLectureCourses(lectureName: string): Promise<Course[]> {
+  try {
+    const courses: Course[] = [];
+    const lectureContents = await getFolderContents(lectureName);
+
+    // 강의 폴더 내의 하위 폴더들 (코스들)
+    const courseFolders = lectureContents.filter((item) => item.type === "dir");
+
+    for (const courseFolder of courseFolders) {
+      const courseContents = await getFolderContents(`${lectureName}/${courseFolder.name}`);
+      const readmeFile = courseContents.find((item) => item.name === "README.md");
+
+      if (readmeFile) {
+        const readmeContent = await getFileContent(readmeFile.path);
+        courses.push({
+          name: courseFolder.name,
+          path: courseFolder.path,
+          readmeContent,
+          readmeUrl: readmeFile.html_url,
+        });
+      }
+    }
+
+    return courses;
+  } catch (error) {
+    console.error(`Error fetching courses for lecture ${lectureName}:`, error);
+    return [];
+  }
+}
+
+// 전체 archive 구조를 가져오는 메인 함수
+export async function getArchiveStructure(): Promise<ArchiveStructure> {
+  try {
+    const lectures: Lecture[] = [];
+    const lectureNames = await getOssuLectureList();
+
+    for (const lectureName of lectureNames) {
+      const [topics, courses] = await Promise.all([getLectureTopics(lectureName), getLectureCourses(lectureName)]);
+
+      lectures.push({
+        name: lectureName,
+        path: `archive/${lectureName}`,
+        topics,
+        courses,
+      });
+    }
+
+    return { lectures };
+  } catch (error) {
+    console.error("Error fetching archive structure:", error);
+    return { lectures: [] };
+  }
+}
+
+// 특정 강의의 구조만 가져오는 함수
+export async function getLectureStructure(lectureName: string): Promise<Lecture | null> {
+  try {
+    const [topics, courses] = await Promise.all([getLectureTopics(lectureName), getLectureCourses(lectureName)]);
+
+    return {
+      name: lectureName,
+      path: `archive/${lectureName}`,
+      topics,
+      courses,
+    };
+  } catch (error) {
+    console.error(`Error fetching lecture structure for ${lectureName}:`, error);
+    return null;
   }
 }
