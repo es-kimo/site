@@ -38,6 +38,9 @@ importers:
       '@types/mdx':
         specifier: ^2.0.13
         version: 2.0.13
+      '@workspace/common':
+        specifier: workspace:*
+        version: link:../../packages/common
       '@workspace/ui':
         specifier: workspace:*
         version: link:../../packages/ui
