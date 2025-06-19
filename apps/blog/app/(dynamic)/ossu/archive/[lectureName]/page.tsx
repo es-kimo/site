@@ -15,10 +15,7 @@ export default async function LecturePage({ params }: { params: { lectureName: s
             item={name}
             href={`/ossu/archive/${params.lectureName}/${name}`}
             title={name}
-            hashtags={readmeContent
-              .split("\n")
-              .slice(0, 1)
-              .map((topic) => topic.trim())}
+            hashtags={[readmeContent.substring(0, readmeContent.indexOf("\n")).trim()]}
           />
         ))}
       </IndexList.Grid>
