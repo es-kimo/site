@@ -6,7 +6,7 @@ import { Metadata } from "next";
 export const revalidate = 3600;
 const SUBCATEGORY = "3.혈액투석 1,2,3";
 const PLAYLIST_ID = process.env.NEXT_PUBLIC_YOUTUBE_PLAYLIST_ID ?? "";
-const API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY ?? "";
+const API_KEY = process.env.YOUTUBE_API_KEY ?? "";
 
 export const metadata: Metadata = {
   title: "콩팥질환 정보",
