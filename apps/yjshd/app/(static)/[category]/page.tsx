@@ -64,7 +64,7 @@ export default async function Page({ params }: { params: Promise<CategoryParams>
             const firstDepthHeadings = headings?.filter((heading) => heading.depth === 2);
 
             return (
-              <Link href={`/${category}/${encodeURIComponent(tag)}`} key={tag} className="block">
+              <Link href={`/${category}/${encodeURI(tag)}`} key={tag} className="block">
                 <Card className="group relative h-64 rounded-2xl shadow-lg hover:shadow-2xl transform hover:scale-[1.03] transition-all duration-300 bg-white overflow-hidden flex flex-col">
                   <CardHeader className="flex-none">
                     <CardTitle className="text-xl font-medium text-gray-800 line-clamp-2">{removeNumbering(tag)}</CardTitle>
