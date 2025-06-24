@@ -117,7 +117,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </ImageLightbox>
       );
     },
-    ImageWithoutLightbox: ({ size, className, ...props }) => {
+    ImageWithoutLightbox: ({ size = "full", className, ...props }) => {
       return <Image {...(props as ImageProps)} className={cn(imageVariants({ size, className }))} />;
     },
     Lead(properties) {
