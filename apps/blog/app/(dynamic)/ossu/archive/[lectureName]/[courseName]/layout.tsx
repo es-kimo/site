@@ -41,7 +41,7 @@ export default async function Layout({
   );
 }
 
-export const Breadcrumb = ({ lectureName, courseName }: { lectureName: string; courseName: string }) => {
+const Breadcrumb = ({ lectureName, courseName }: { lectureName: string; courseName: string }) => {
   return (
     <BreadcrumbUI>
       <BreadcrumbList className={`text-inherit font-semibold text-xs`}>
