@@ -5,6 +5,10 @@ import { Calendar, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+interface YoutubePlaylistProps {
+  videos: VideoItem[];
+}
+
 export interface VideoItem {
   kind: string;
   etag: string;
@@ -91,7 +95,7 @@ export function VideoCard({ video }: { video: VideoItem }) {
     <Card role="group" aria-labelledby={titleId} className="group flex flex-col rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden bg-white h-full">
       <CardHeader className="p-0 relative">
         <AspectRatio ratio={16 / 9} className="relative">
-          <Image src={thumbnails.medium.url} alt={title} fill className="object-cover" />
+          <Image src={thumbnails.maxres?.url ?? thumbnails.high.url} alt={title} fill className="object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent" />
           <h3 id={titleId} className="absolute bottom-3 left-3 right-3 text-white text-lg font-semibold drop-shadow-md line-clamp-2">
             {title}
@@ -118,5 +122,21 @@ export function VideoCard({ video }: { video: VideoItem }) {
         </Button>
       </CardFooter>
     </Card>
+  );
+}
+
+export default function YoutubePlaylist({ videos }: YoutubePlaylistProps) {
+  const sorted = [...videos].sort((a, b) => {
+    const aTime = new Date(a.snippet.publishedAt).getTime();
+    const bTime = new Date(b.snippet.publishedAt).getTime();
+    return aTime - bTime;
+  });
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {sorted.map((video) => (
+        <VideoCard key={video.id} video={video} />
+      ))}
+    </div>
   );
 }

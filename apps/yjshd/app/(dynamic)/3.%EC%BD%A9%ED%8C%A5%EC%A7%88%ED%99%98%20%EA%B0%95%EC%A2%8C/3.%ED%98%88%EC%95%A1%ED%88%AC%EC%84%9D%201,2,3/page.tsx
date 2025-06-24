@@ -1,5 +1,5 @@
-import PlaylistClient from "@/components/Playlist";
-import type { VideoItem } from "@/components/VideoCard";
+import YoutubePlaylist from "@/components/YoutubePlaylist";
+import type { VideoItem } from "@/components/YoutubePlaylist";
 import { Metadata } from "next";
 
 // 페이지 재생성 주기 (1시간)
@@ -46,5 +46,15 @@ async function getVideos(pageToken?: string) {
 
 export default async function PlaylistPage() {
   const { items: videos } = await getVideos();
-  return <PlaylistClient videos={videos} />;
+  return (
+    <section className="mx-auto py-12 px-4">
+      <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">혈액투석 1,2,3</span> 강좌
+      </h2>
+      <p className="text-sm md:text-base text-muted-foreground mb-8">
+        연세정성내과 투석 환우들께서 가장 흔하게 질문하는 주제에 대해 핵심 3가지만 말씀드리는 &apos;혈액투석 하나 둘 셋&apos; 시리즈입니다.
+      </p>
+      <YoutubePlaylist videos={videos} />
+    </section>
+  );
 }
