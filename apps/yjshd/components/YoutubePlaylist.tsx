@@ -94,13 +94,15 @@ export function VideoCard({ video }: { video: VideoItem }) {
   return (
     <Card role="group" aria-labelledby={titleId} className="group flex flex-col rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden bg-white h-full">
       <CardHeader className="p-0 relative">
-        <AspectRatio ratio={16 / 9} className="relative">
-          <Image src={thumbnails.maxres?.url ?? thumbnails.high.url} alt={title} fill className="object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent" />
-          <h3 id={titleId} className="absolute bottom-3 left-3 right-3 text-white text-lg font-semibold drop-shadow-md line-clamp-2">
-            {title}
-          </h3>
-        </AspectRatio>
+        <Link href={`https://www.youtube.com/watch?v=${resourceId.videoId}`} target="_blank" rel="noopener noreferrer">
+          <AspectRatio ratio={16 / 9} className="relative">
+            <Image src={thumbnails.maxres?.url ?? thumbnails.high.url} alt={title} fill className="object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent" />
+            <h3 id={titleId} className="absolute bottom-3 left-3 right-3 text-white text-lg font-semibold drop-shadow-md line-clamp-2">
+              {title}
+            </h3>
+          </AspectRatio>
+        </Link>
       </CardHeader>
 
       <CardContent className="pt-4 flex-1">
@@ -114,7 +116,7 @@ export function VideoCard({ video }: { video: VideoItem }) {
             <span>{formatDate(publishedAt)}</span>
           </div>
         </div>
-        <Button variant="outline" size="sm" className="group-hover:bg-blue-50 transition-colors self-end">
+        <Button variant="outline" size="sm" className="group-hover:bg-blue-50 transition-colors w-full">
           <Link href={`https://www.youtube.com/watch?v=${resourceId.videoId}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
             <Play className="w-4 h-4" />
             <span className="text-sm">시청</span>
