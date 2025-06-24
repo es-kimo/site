@@ -163,6 +163,24 @@ program
         },
       ]);
 
+      // 콩팥질환정보 메뉴인 경우 카테고리 선택
+      let category: string | undefined;
+      if (menu === "3.콩팥질환 강좌" && submenu === "2.콩팥질환 정보") {
+        const categoryAnswer = await inquirer.prompt([
+          {
+            type: "list",
+            name: "category",
+            message: "카테고리를 선택하세요:",
+            choices: [
+              { name: "예방·관리", value: "예방·관리" },
+              { name: "영양·식생활", value: "영양·식생활" },
+              { name: "연구·통계", value: "연구·통계" },
+            ],
+          },
+        ]);
+        category = categoryAnswer.category;
+      }
+
       // 게시판 메뉴인 경우 공지글 여부 확인
       let isPinned = false;
       if (menu === "4.게시판") {
@@ -192,6 +210,7 @@ program
           status: "ready",
           createdAt: new Date().toISOString(),
         },
+        ...(category && { category }),
         ...(isPinned && { pinned: true }),
       };
 
