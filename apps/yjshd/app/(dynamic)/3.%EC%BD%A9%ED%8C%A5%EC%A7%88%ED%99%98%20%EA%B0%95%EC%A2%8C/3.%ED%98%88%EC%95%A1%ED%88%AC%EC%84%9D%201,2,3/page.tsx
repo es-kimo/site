@@ -47,7 +47,7 @@ async function getVideos(pageToken?: string) {
 export default async function PlaylistPage() {
   const { items: videos } = await getVideos();
   return (
-    <section className="mx-auto py-12 px-4">
+    <section className="mx-auto px-6 py-8">
       <h2 className="text-xl font-semibold text-gray-800 mb-4">
         <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">혈액투석 1,2,3</span> 강좌
       </h2>
