@@ -108,18 +108,14 @@ export default async function BoardPage({ searchParams }: { searchParams: Promis
             <PaginationContent className="flex items-center justify-center gap-1">
               {/* First */}
               <PaginationItem className="hidden sm:block">
-                <PaginationLink
-                  href="?page=1#boardTop"
-                  aria-label="첫 페이지"
-                  className="px-3 py-2 min-w-11 min-h-11 inline-flex items-center justify-center rounded-md hover:bg-muted focus-visible:ring-2 ring-primary/60"
-                >
+                <PaginationLink href="?page=1#boardTop" aria-label="첫 페이지" className={`${prevHref ? "" : "pointer-events-none opacity-50"}`}>
                   «
                 </PaginationLink>
               </PaginationItem>
 
               {/* Prev */}
               <PaginationItem className="hidden sm:block">
-                <PaginationLink href={`${prevHref}#boardTop`} aria-disabled={!prevHref} aria-label="이전 페이지">
+                <PaginationLink href={`${prevHref}#boardTop`} aria-disabled={!prevHref} aria-label="이전 페이지" className={`${prevHref ? "" : "pointer-events-none opacity-50"}`}>
                   <ChevronLeft className="h-4 w-4" />
                 </PaginationLink>
               </PaginationItem>
@@ -141,23 +137,14 @@ export default async function BoardPage({ searchParams }: { searchParams: Promis
 
               {/* Next */}
               <PaginationItem className="hidden sm:block">
-                <PaginationLink
-                  href={`${nextHref}#boardTop`}
-                  aria-disabled={!nextHref}
-                  aria-label="다음 페이지"
-                  className="px-3 py-2 min-w-11 min-h-11 disabled:opacity-40 disabled:pointer-events-none rounded-md hover:bg-muted focus-visible:ring-2 ring-primary/60"
-                >
+                <PaginationLink href={`${nextHref}#boardTop`} aria-disabled={!nextHref} aria-label="다음 페이지" className={`${nextHref ? "" : "pointer-events-none opacity-50"}`}>
                   <ChevronRight className="h-4 w-4" />
                 </PaginationLink>
               </PaginationItem>
 
               {/* Last */}
               <PaginationItem className="hidden sm:block">
-                <PaginationLink
-                  href={`?page=${totalPages}#boardTop`}
-                  aria-label="마지막 페이지"
-                  className="px-3 py-2 min-w-11 min-h-11 inline-flex items-center justify-center rounded-md hover:bg-muted focus-visible:ring-2 ring-primary/60"
-                >
+                <PaginationLink href={`?page=${totalPages}#boardTop`} aria-label="마지막 페이지" className={`${nextHref ? "" : "pointer-events-none opacity-50"}`}>
                   »
                 </PaginationLink>
               </PaginationItem>
