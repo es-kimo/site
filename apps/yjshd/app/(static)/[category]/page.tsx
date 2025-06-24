@@ -3,12 +3,13 @@ import { getMdxContent } from "@/lib/content";
 import { removeNumbering } from "@workspace/common/lib/string-utils";
 import { decodeURIS } from "@workspace/common/lib/uri";
 import type { CategoryParams } from "@workspace/common/structure/params.types";
-import { slugsMap, subCategoriesMap } from "@workspace/common/structure/structure";
+import { categories, slugsMap, subCategoriesMap } from "@workspace/common/structure/structure";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@workspace/ui/components/card";
 import { ExternalLink } from "lucide-react";
 import { Link } from "next-view-transitions";
+import { notFound } from "next/navigation";
 
 export async function generateMetadata({ params }: { params: Promise<CategoryParams> }) {
   const { category } = await params;
@@ -32,6 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<CategoryPar
 export default async function Page({ params }: { params: Promise<CategoryParams> }) {
   const { category } = await params;
   const [decodedCategory] = decodeURIS(category);
+  const categorySet = new Set(categories);
   const subCategories = subCategoriesMap.get(decodedCategory) ?? [];
   const mdxContents = await Promise.all(
     subCategories.map(async (subCategory) => {
@@ -44,6 +46,10 @@ export default async function Page({ params }: { params: Promise<CategoryParams>
       return { subCategory, headings: headings.filter((heading) => heading.depth === 2) };
     })
   );
+
+  if (!categorySet.has(decodedCategory)) {
+    return notFound();
+  }
 
   return (
     <>
