@@ -40,14 +40,14 @@ export default function Pagination({ currentPage, totalPages, baseUrl, anchor = 
         <PaginationContent className="flex items-center justify-center gap-1">
           {/* First */}
           <PaginationItem className="hidden sm:block">
-            <PaginationLink href={`${baseUrl}?page=1${anchor}`} aria-label="첫 페이지" className={`${prevHref ? "" : "pointer-events-none opacity-50"}`}>
+            <PaginationLink href={`${baseUrl}?page=1${anchor}`} aria-label="첫 페이지" className={`${prevHref ? "" : "pointer-events-none opacity-30"}`}>
               «
             </PaginationLink>
           </PaginationItem>
 
           {/* Prev */}
           <PaginationItem className="hidden sm:block">
-            <PaginationLink href={prevHref || "#"} aria-disabled={!prevHref} aria-label="이전 페이지" className={`${prevHref ? "" : "pointer-events-none opacity-50"}`}>
+            <PaginationLink href={prevHref || "#"} aria-disabled={!prevHref} aria-label="이전 페이지" className={`${prevHref ? "" : "pointer-events-none opacity-30"}`}>
               <ChevronLeft className="h-4 w-4" />
             </PaginationLink>
           </PaginationItem>
@@ -69,14 +69,14 @@ export default function Pagination({ currentPage, totalPages, baseUrl, anchor = 
 
           {/* Next */}
           <PaginationItem className="hidden sm:block">
-            <PaginationLink href={nextHref || "#"} aria-disabled={!nextHref} aria-label="다음 페이지" className={`${nextHref ? "" : "pointer-events-none opacity-50"}`}>
+            <PaginationLink href={nextHref || "#"} aria-disabled={!nextHref} aria-label="다음 페이지" className={`${nextHref ? "" : "pointer-events-none opacity-30"}`}>
               <ChevronRight className="h-4 w-4" />
             </PaginationLink>
           </PaginationItem>
 
           {/* Last */}
           <PaginationItem className="hidden sm:block">
-            <PaginationLink href={`${baseUrl}?page=${totalPages}${anchor}`} aria-label="마지막 페이지" className={`${nextHref ? "" : "pointer-events-none opacity-50"}`}>
+            <PaginationLink href={`${baseUrl}?page=${totalPages}${anchor}`} aria-label="마지막 페이지" className={`${nextHref ? "" : "pointer-events-none opacity-30"}`}>
               »
             </PaginationLink>
           </PaginationItem>

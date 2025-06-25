@@ -39,11 +39,12 @@ export default function VideosSection({ page, videos }: VideosSectionProps) {
           <div className="flex items-center gap-2 text-muted-foreground text-sm">
             <span className="font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">혈액투석</span>
             <div className="h-[3px] w-[3px] bg-gray-400 rounded-full opacity-60" />
-            <span>총 {videos.length}개 강의 중</span>
-            <Badge variant="secondary">
+            <span className="hidden sm:inline">총 {videos.length}개 강의 중</span>
+            <Badge variant="secondary" className="text-xs">
               {startIndex + 1} - {Math.min(endIndex, videos.length)}
             </Badge>
-            <span>번째 강의</span>
+            <span className="sm:hidden">/ {videos.length}</span>
+            <span className="hidden sm:inline">번째 강의</span>
           </div>
 
           {/* 다음 페이지 버튼 */}
