@@ -1,26 +1,24 @@
 // app/playlist/VideosSection.tsx
 import Pagination from "@/components/Pagination";
 import YoutubePlaylist from "@/components/YoutubePlaylist";
-import { getAllVideos } from "@/lib/youtube";
 import { Badge } from "@workspace/ui/components/badge";
+import { VideoItem } from "@/lib/youtube";
 
 interface VideosSectionProps {
   page?: string;
+  videos: VideoItem[];
 }
 
 const pageSize = 12; // 한 페이지당 표시할 비디오 수
 
-export default async function VideosSection({ page }: VideosSectionProps) {
+export default function VideosSection({ page, videos }: VideosSectionProps) {
   const currentPage = Math.max(parseInt(page || "1", 10), 1);
 
-  // 모든 비디오 데이터를 한 번에 가져오기
-  const allVideos = await getAllVideos();
-
   // 페이지네이션 계산
-  const totalPages = Math.ceil(allVideos.length / pageSize);
+  const totalPages = Math.ceil(videos.length / pageSize);
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const currentPageVideos = allVideos.slice(startIndex, endIndex);
+  const currentPageVideos = videos.slice(startIndex, endIndex);
 
   return (
     <div className="space-y-6 relative">
@@ -29,9 +27,9 @@ export default async function VideosSection({ page }: VideosSectionProps) {
         <div className="flex justify-center items-center gap-2 text-muted-foreground text-sm">
           <span className="font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">혈액투석</span>
           <div className="h-[3px] w-[3px] bg-gray-400 rounded-full opacity-60" />
-          <span>총 {allVideos.length}개 강의 중</span>
+          <span>총 {videos.length}개 강의 중</span>
           <Badge variant="secondary">
-            {startIndex + 1} - {Math.min(endIndex, allVideos.length)}
+            {startIndex + 1} - {Math.min(endIndex, videos.length)}
           </Badge>
           <span>번째 강의</span>
         </div>

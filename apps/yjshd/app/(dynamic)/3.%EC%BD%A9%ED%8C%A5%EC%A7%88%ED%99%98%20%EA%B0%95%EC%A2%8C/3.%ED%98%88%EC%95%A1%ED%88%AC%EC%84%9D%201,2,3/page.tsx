@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { getAllVideos } from "@/lib/youtube";
 import VideosSection from "./VideoSection";
 
 const SUBCATEGORY = "3.혈액투석 1,2,3";
@@ -30,13 +31,19 @@ export const revalidate = 3600;
 
 export default async function PlaylistPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
   const { page } = await searchParams;
+  const allVideos = await getAllVideos();
+  const sortedVideos = allVideos.sort((a, b) => {
+    const dateA = new Date(a.contentDetails.videoPublishedAt).getTime();
+    const dateB = new Date(b.contentDetails.videoPublishedAt).getTime();
+    return dateB - dateA; // 최신순 (내림차순)
+  });
 
   return (
     <section className="container mx-auto px-6 py-8">
       <h2 className="text-xl font-semibold text-gray-800 mb-4">
         <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">혈액투석 1,2,3</span> 강의
       </h2>
-      <VideosSection page={page} />
+      <VideosSection page={page} videos={sortedVideos} />
     </section>
   );
 }
