@@ -116,8 +116,8 @@ export function VideoCard({ video }: { video: VideoItem }) {
             <span>{formatDate(publishedAt)}</span>
           </div>
         </div>
-        <Button variant="outline" size="sm" className="group-hover:bg-blue-50 transition-colors w-full">
-          <Link href={`https://www.youtube.com/watch?v=${resourceId.videoId}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
+        <Button variant="outline" className="group-hover:bg-blue-50 transition-colors w-full" asChild>
+          <Link href={`https://www.youtube.com/watch?v=${resourceId.videoId}`} target="_blank" rel="noopener noreferrer">
             <Play className="w-4 h-4" />
             <span className="text-sm">시청</span>
           </Link>
