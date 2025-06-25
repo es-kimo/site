@@ -25,10 +25,10 @@ export default async function VideosSection({ page }: VideosSectionProps) {
   return (
     <div className="space-y-6 relative">
       {/* 인디케이터 */}
-      <div className="sticky top-[var(--header-h)] sm:top-[calc(var(--header-h)_+_var(--sub-header-h))] lg:top-[var(--header-h)] z-10 backdrop-blur-md px-2 py-4 mb-8">
-        <div className="flex items-center gap-3 text-muted-foreground text-sm">
-          <span className="font-medium sm:text-base bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">혈액투석</span>
-          <div className="h-1 w-1 bg-gray-300 rounded-full" />
+      <div className="sticky top-[var(--header-h)] sm:top-[calc(var(--header-h)_+_var(--sub-header-h))] lg:top-[var(--header-h)] z-10 bg-white/70 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.08)] border border-white/20 px-2 py-4 mb-8 rounded-b-xl">
+        <div className="flex justify-center items-center gap-2 text-muted-foreground text-sm">
+          <span className="font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">혈액투석</span>
+          <div className="h-[3px] w-[3px] bg-gray-400 rounded-full opacity-60" />
           <span>총 {allVideos.length}개 강의 중</span>
           <Badge variant="secondary">
             {startIndex + 1} - {Math.min(endIndex, allVideos.length)}
