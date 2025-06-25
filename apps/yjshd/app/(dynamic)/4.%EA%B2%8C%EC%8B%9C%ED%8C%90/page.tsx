@@ -1,10 +1,8 @@
-import PaginationLink from "@/components/PaginationLink";
+import Pagination from "@/components/Pagination";
 import { getPostMetadata } from "@/lib/metadata";
 import { formatPostDate } from "@workspace/common/lib/date";
 import { getSlugsByCategory } from "@workspace/common/structure/utils";
 import { Badge } from "@workspace/ui/components/badge";
-import { Pagination, PaginationContent, PaginationItem } from "@workspace/ui/components/pagination";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Metadata } from "next";
 import { Link } from "next-view-transitions";
 
@@ -25,27 +23,6 @@ export const metadata: Metadata = {
   },
 };
 
-/* ---------- Pagination 계산 ---------- */
-function buildPages(total: number, current: number) {
-  const out: (number | "…")[] = [];
-  const sibling = 1;
-  const first = 1;
-  const last = total;
-
-  out.push(first);
-
-  const left = Math.max(current - sibling, first + 1);
-  const right = Math.min(current + sibling, last - 1);
-
-  if (left > first + 1) out.push("…");
-  for (let i = left; i <= right; i++) out.push(i);
-  if (right < last - 1) out.push("…");
-
-  if (last !== first) out.push(last);
-  return out;
-}
-
-/* ---------- 페이지 컴포넌트 ---------- */
 export default async function BoardPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
   const { page } = await searchParams;
   const now = new Date();
@@ -66,7 +43,6 @@ export default async function BoardPage({ searchParams }: { searchParams: Promis
   const totalPages = Math.ceil(ordered.length / pageSize);
   const currentPage = Math.min(Math.max(parseInt(page || "1", 10), 1), totalPages);
   const pageItems = ordered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-  const pages = buildPages(totalPages, currentPage);
 
   const prevHref = currentPage > 1 ? `?page=${currentPage - 1}` : undefined;
   const nextHref = currentPage < totalPages ? `?page=${currentPage + 1}` : undefined;
@@ -101,69 +77,7 @@ export default async function BoardPage({ searchParams }: { searchParams: Promis
           ))}
         </ul>
 
-        {/* ---------- Pagination ---------- */}
-        <nav aria-label="게시판 페이지" className="mt-8">
-          {/* 데스크톱 : 풀 페이지네이터 */}
-          <Pagination>
-            <PaginationContent className="flex items-center justify-center gap-1">
-              {/* First */}
-              <PaginationItem className="hidden sm:block">
-                <PaginationLink
-                  href="?page=1#boardTop"
-                  aria-label="첫 페이지"
-                  className="px-3 py-2 min-w-11 min-h-11 inline-flex items-center justify-center rounded-md hover:bg-muted focus-visible:ring-2 ring-primary/60"
-                >
-                  «
-                </PaginationLink>
-              </PaginationItem>
-
-              {/* Prev */}
-              <PaginationItem className="hidden sm:block">
-                <PaginationLink href={`${prevHref}#boardTop`} aria-disabled={!prevHref} aria-label="이전 페이지">
-                  <ChevronLeft className="h-4 w-4" />
-                </PaginationLink>
-              </PaginationItem>
-
-              {/* 숫자 & Ellipsis */}
-              {pages.map((p, idx) =>
-                typeof p === "number" ? (
-                  <PaginationItem key={idx}>
-                    <PaginationLink href={`?page=${p}#boardTop`} isActive={p === currentPage}>
-                      {p}
-                    </PaginationLink>
-                  </PaginationItem>
-                ) : (
-                  <li key={idx} className="px-3 py-2 min-w-11 min-h-11 flex items-center justify-center text-gray-400 select-none">
-                    …
-                  </li>
-                )
-              )}
-
-              {/* Next */}
-              <PaginationItem className="hidden sm:block">
-                <PaginationLink
-                  href={`${nextHref}#boardTop`}
-                  aria-disabled={!nextHref}
-                  aria-label="다음 페이지"
-                  className="px-3 py-2 min-w-11 min-h-11 disabled:opacity-40 disabled:pointer-events-none rounded-md hover:bg-muted focus-visible:ring-2 ring-primary/60"
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </PaginationLink>
-              </PaginationItem>
-
-              {/* Last */}
-              <PaginationItem className="hidden sm:block">
-                <PaginationLink
-                  href={`?page=${totalPages}#boardTop`}
-                  aria-label="마지막 페이지"
-                  className="px-3 py-2 min-w-11 min-h-11 inline-flex items-center justify-center rounded-md hover:bg-muted focus-visible:ring-2 ring-primary/60"
-                >
-                  »
-                </PaginationLink>
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </nav>
+        <Pagination currentPage={currentPage} totalPages={totalPages} baseUrl="/4.게시판" anchor="#boardTop" className="mt-8" />
       </div>
     </>
   );

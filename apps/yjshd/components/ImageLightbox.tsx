@@ -6,7 +6,7 @@ import { cn } from "@workspace/ui/lib/utils";
 import { X } from "lucide-react";
 import { Children, isValidElement, useCallback, useEffect, useMemo, useState } from "react";
 
-const gridCn = ["", "", "sm:grid-cols-2", "grid-cols-2 md:grid-cols-3", "grid-cols-3 md:grid-cols-4"];
+const gridCn = ["", "", "sm:grid-cols-2", "grid-cols-3", "grid-cols-3 md:grid-cols-4"];
 
 export default function ImageLightbox({ children, grid, preserveSize, title }: { children: React.ReactNode; grid?: number; preserveSize?: boolean; title?: string }) {
   const gridCols = grid ? gridCn[Math.min(4, grid)] : "grid-cols-2";

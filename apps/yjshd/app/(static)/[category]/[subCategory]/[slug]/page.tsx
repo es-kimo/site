@@ -64,7 +64,7 @@ export default async function Page({ params }: { params: Promise<SlugParams> }) 
   const Post = await getPostContent({ category: decodedCategory, subCategory: decodedSubCategory, slug: decodedSlug });
 
   return (
-    <section className="grid grid-cols-[minmax(0.875rem,_1fr)_minmax(auto,_708px)_minmax(0.875rem,_1fr)] sm:grid-cols-[minmax(96px,_3fr)_minmax(auto,_850px)_minmax(96px,_1fr)] pt-6 pb-[10vh] sm:pt-[80px] sm:pb-[20vh] w-full transition-all">
+    <section className="grid grid-cols-[minmax(0.875rem,_1fr)_minmax(auto,_708px)_minmax(0.875rem,_1fr)] sm:grid-cols-[minmax(96px,_3fr)_minmax(auto,_1024px)_minmax(96px,_1fr)] pt-6 pb-[10vh] sm:pt-[80px] sm:pb-[20vh] w-full transition-all">
       <aside className="hidden lg:block sticky top-[80px] left-3 w-[180px] h-fit px-2">
         <TableOfContents headings={headings.filter((heading) => heading.depth >= 2)} />
       </aside>
