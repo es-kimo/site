@@ -1,6 +1,7 @@
-import YoutubePlaylist from "@/components/YoutubePlaylist";
-import type { VideoItem } from "@/components/YoutubePlaylist";
 import { Metadata } from "next";
+import { Suspense } from "react";
+import ScrollNavigator from "./ScrollNavigator";
+import VideosSection from "./VideoSection";
 
 const SUBCATEGORY = "3.혈액투석 1,2,3";
 
@@ -28,33 +29,22 @@ export const metadata: Metadata = {
 };
 
 export const revalidate = 3600;
-const PLAYLIST_ID = process.env.NEXT_PUBLIC_YOUTUBE_PLAYLIST_ID ?? "";
-const API_KEY = process.env.YOUTUBE_API_KEY ?? "";
 
-async function getVideos(pageToken?: string) {
-  const params = new URLSearchParams({
-    part: "snippet,contentDetails",
-    maxResults: "50",
-    playlistId: PLAYLIST_ID,
-    key: API_KEY,
-    ...(pageToken ? { pageToken } : {}),
-  });
+export default async function PlaylistPage({ searchParams }: { searchParams: Promise<{ pageToken?: string }> }) {
+  // 초기 커서 (처음엔 undefined)
+  const initialCursor = (await searchParams).pageToken || null;
 
-  const res = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?${params.toString()}`, { next: { revalidate } });
-  return (await res.json()) as { items: VideoItem[]; nextPageToken?: string };
-}
-
-export default async function PlaylistPage() {
-  const { items: videos } = await getVideos();
   return (
-    <section className="mx-auto px-6 py-8">
-      <h2 className="text-xl font-semibold text-gray-800 mb-4">
-        <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">혈액투석 1,2,3</span> 강좌
-      </h2>
-      <p className="text-sm md:text-base text-muted-foreground mb-8">
-        연세정성내과 투석 환우들께서 가장 흔하게 질문하는 주제에 대해 핵심 3가지만 말씀드리는 &apos;혈액투석 하나 둘 셋&apos; 시리즈입니다.
-      </p>
-      <YoutubePlaylist videos={videos} />
-    </section>
+    <main className="container mx-auto px-6 py-8">
+      <h1 className="text-2xl font-semibold mb-6">혈액투석 1,2,3 강좌</h1>
+
+      {/* 스트리밍 SSR: 준비되는 즉시 각 섹션을 클라이언트에 전송 */}
+      <Suspense fallback={<p>로딩 중…</p>}>
+        <VideosSection initialCursor={initialCursor} />
+      </Suspense>
+
+      {/* 스크롤 하단 감지용 클라이언트 컴포넌트 */}
+      <ScrollNavigator />
+    </main>
   );
 }
