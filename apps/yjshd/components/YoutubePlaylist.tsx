@@ -121,15 +121,9 @@ export function VideoCard({ video }: { video: VideoItem }) {
 }
 
 export default function YoutubePlaylist({ videos }: YoutubePlaylistProps) {
-  const sorted = [...videos].sort((a, b) => {
-    const aTime = new Date(a.contentDetails.videoPublishedAt).getTime();
-    const bTime = new Date(b.contentDetails.videoPublishedAt).getTime();
-    return aTime - bTime;
-  });
-
   return (
     <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {sorted.map((video) => (
+      {videos.map((video) => (
         <li key={video.id}>
           <VideoCard video={video} />
         </li>
