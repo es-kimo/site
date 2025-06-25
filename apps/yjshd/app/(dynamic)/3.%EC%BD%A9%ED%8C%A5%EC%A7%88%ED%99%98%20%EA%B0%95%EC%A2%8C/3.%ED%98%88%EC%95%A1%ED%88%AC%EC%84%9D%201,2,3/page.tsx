@@ -29,9 +29,8 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600;
 
-export default async function PlaylistPage({ searchParams }: { searchParams: Promise<{ pageToken?: string }> }) {
-  // 페이지 토큰 (처음엔 undefined)
-  const pageToken = (await searchParams).pageToken;
+export default async function PlaylistPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+  const { page } = await searchParams;
 
   return (
     <main className="container mx-auto px-6 py-8">
@@ -39,7 +38,7 @@ export default async function PlaylistPage({ searchParams }: { searchParams: Pro
 
       {/* 스트리밍 SSR: 준비되는 즉시 각 섹션을 클라이언트에 전송 */}
       <Suspense fallback={<p>로딩 중…</p>}>
-        <VideosSection pageToken={pageToken} />
+        <VideosSection page={page} />
       </Suspense>
     </main>
   );

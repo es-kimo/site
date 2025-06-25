@@ -78,7 +78,7 @@ export const revalidate = 3600;
 export async function getVideos(pageToken?: string) {
   const params = new URLSearchParams({
     part: "snippet,contentDetails",
-    maxResults: "18",
+    maxResults: "50",
     playlistId: PLAYLIST_ID,
     key: API_KEY,
     ...(pageToken ? { pageToken } : {}),
@@ -86,4 +86,17 @@ export async function getVideos(pageToken?: string) {
 
   const res = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?${params.toString()}`, { next: { revalidate } });
   return (await res.json()) as YoutubePlaylistResponse;
+}
+
+export async function getAllVideos(): Promise<VideoItem[]> {
+  const allVideos: VideoItem[] = [];
+  let nextPageToken: string | undefined;
+
+  do {
+    const response = await getVideos(nextPageToken);
+    allVideos.push(...response.items);
+    nextPageToken = response.nextPageToken;
+  } while (nextPageToken);
+
+  return allVideos;
 }
