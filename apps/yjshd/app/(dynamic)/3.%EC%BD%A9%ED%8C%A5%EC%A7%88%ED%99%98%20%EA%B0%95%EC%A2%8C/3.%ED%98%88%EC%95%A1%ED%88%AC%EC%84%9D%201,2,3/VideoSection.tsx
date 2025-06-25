@@ -1,18 +1,24 @@
 // app/playlist/VideosSection.tsx
 import YoutubePlaylist from "@/components/YoutubePlaylist";
 import { getVideos } from "@/lib/youtube";
+import Pagination from "./Pagination";
 
 interface VideosSectionProps {
-  initialCursor: string | null;
+  pageToken?: string;
 }
 
-export default async function VideosSection({ initialCursor }: VideosSectionProps) {
-  const { items, nextPageToken, prevPageToken } = await getVideos(initialCursor ?? undefined);
+export default async function VideosSection({ pageToken }: VideosSectionProps) {
+  const { items, nextPageToken, prevPageToken } = await getVideos(pageToken ?? undefined);
 
   return (
-    // 다음 페이지 커서를 data 속성에 실어두면, 클라이언트에서 꺼내 쓸 수 있습니다.
-    <section data-next-token={nextPageToken ?? ""} data-prev-token={prevPageToken ?? ""} className="mb-8">
-      <YoutubePlaylist videos={items} />
-    </section>
+    <div className="space-y-8">
+      {/* 비디오 목록 */}
+      <section className="mb-8">
+        <YoutubePlaylist videos={items} />
+      </section>
+
+      {/* 페이지네이션 컨트롤 */}
+      <Pagination nextPageToken={nextPageToken} prevPageToken={prevPageToken} currentPageToken={pageToken} />
+    </div>
   );
 }
