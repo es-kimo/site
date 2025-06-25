@@ -33,13 +33,14 @@ export default async function PlaylistPage({ searchParams }: { searchParams: Pro
   const { page } = await searchParams;
 
   return (
-    <main className="container mx-auto px-6 py-8">
-      <h1 className="text-2xl font-semibold mb-6">혈액투석 1,2,3 강좌</h1>
-
+    <section className="container mx-auto px-6 py-8">
+      <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">혈액투석 1,2,3</span> 강의
+      </h2>
       {/* 스트리밍 SSR: 준비되는 즉시 각 섹션을 클라이언트에 전송 */}
       <Suspense fallback={<p>로딩 중…</p>}>
         <VideosSection page={page} />
       </Suspense>
-    </main>
+    </section>
   );
 }

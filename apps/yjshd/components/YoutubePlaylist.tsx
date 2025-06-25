@@ -128,10 +128,12 @@ export default function YoutubePlaylist({ videos }: YoutubePlaylistProps) {
   });
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {sorted.map((video) => (
-        <VideoCard key={video.id} video={video} />
+        <li key={video.id}>
+          <VideoCard video={video} />
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }

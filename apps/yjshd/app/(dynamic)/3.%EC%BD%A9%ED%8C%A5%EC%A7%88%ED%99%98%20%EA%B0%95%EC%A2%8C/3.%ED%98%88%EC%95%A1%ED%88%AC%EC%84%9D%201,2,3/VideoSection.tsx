@@ -2,6 +2,7 @@
 import PaginationLink from "@/components/PaginationLink";
 import YoutubePlaylist from "@/components/YoutubePlaylist";
 import { getAllVideos } from "@/lib/youtube";
+import { Badge } from "@workspace/ui/components/badge";
 import { Pagination, PaginationContent, PaginationItem } from "@workspace/ui/components/pagination";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -51,9 +52,16 @@ export default async function VideosSection({ page }: VideosSectionProps) {
   return (
     <div className="space-y-8">
       {/* 비디오 목록 */}
-      <section className="mb-8">
+      <article className="mb-8">
+        <h3 className="flex items-center gap-2 text-sm text-gray-600 mb-4">
+          <span>총 {allVideos.length}개의 강의 중</span>
+          <Badge variant="secondary">
+            {startIndex + 1} - {Math.min(endIndex, allVideos.length)}
+          </Badge>
+          <span>번째 강의</span>
+        </h3>
         <YoutubePlaylist videos={currentPageVideos} />
-      </section>
+      </article>
 
       {/* 페이지네이션 컨트롤 */}
       <nav aria-label="비디오 페이지" className="mt-8">
