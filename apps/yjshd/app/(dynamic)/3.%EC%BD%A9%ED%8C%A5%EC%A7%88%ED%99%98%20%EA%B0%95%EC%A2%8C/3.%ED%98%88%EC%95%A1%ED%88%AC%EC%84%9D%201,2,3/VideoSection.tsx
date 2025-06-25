@@ -50,16 +50,22 @@ export default async function VideosSection({ page }: VideosSectionProps) {
   const nextHref = currentPage < totalPages ? `?page=${currentPage + 1}` : undefined;
 
   return (
-    <div className="space-y-8">
-      {/* 비디오 목록 */}
-      <article className="mb-8">
-        <h3 className="flex items-center gap-2 text-sm text-gray-600 mb-4">
-          <span>총 {allVideos.length}개의 강의 중</span>
+    <div className="space-y-6 relative">
+      {/* 인디케이터 */}
+      <div className="sticky top-[var(--header-h)] sm:top-[calc(var(--header-h)_+_var(--sub-header-h))] lg:top-[var(--header-h)] z-10 backdrop-blur-md px-2 py-4 mb-8">
+        <div className="flex items-center gap-3 text-muted-foreground text-sm">
+          <span className="font-medium sm:text-base bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">혈액투석</span>
+          <div className="h-1 w-1 bg-gray-300 rounded-full" />
+          <span>총 {allVideos.length}개 강의 중</span>
           <Badge variant="secondary">
             {startIndex + 1} - {Math.min(endIndex, allVideos.length)}
           </Badge>
           <span>번째 강의</span>
-        </h3>
+        </div>
+      </div>
+
+      {/* 비디오 목록 */}
+      <article className="mb-8">
         <YoutubePlaylist videos={currentPageVideos} />
       </article>
 
