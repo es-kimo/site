@@ -14,10 +14,7 @@ export interface VideoItem {
   etag: string;
   id: string;
   snippet: {
-    resourceId: {
-      videoId: string;
-    };
-    publishedAt: string; // ISO date string
+    publishedAt: string; // ISO 8601 datetime
     channelId: string;
     title: string;
     description: string;
@@ -54,34 +51,30 @@ export interface VideoItem {
       };
     };
     channelTitle: string;
-    defaultLanguage?: string;
-    localized?: {
-      title: string;
-      description: string;
+    videoOwnerChannelTitle: string;
+    videoOwnerChannelId: string;
+    playlistId: string;
+    position: number;
+    resourceId: {
+      kind: string;
+      videoId: string;
     };
   };
-  status: {
-    privacyStatus: string;
-    podcastStatus?: string;
-  };
   contentDetails: {
-    itemCount: number;
+    videoId: string;
+    startAt: string; // e.g. "00:01:23"
+    endAt: string; // e.g. "00:04:56"
+    note: string;
+    videoPublishedAt: string; // ISO 8601 datetime
   };
-  player: {
-    embedHtml: string;
+  status: {
+    privacyStatus: string; // e.g. "public" | "private" | "unlisted"
   };
-  /** BCP-47 언어 코드를 키로 사용하는 현지화된 제목/설명 맵 */
-  localizations?: Record<
-    string,
-    {
-      title: string;
-      description: string;
-    }
-  >;
 }
 
 export function VideoCard({ video }: { video: VideoItem }) {
-  const { title, description, thumbnails, publishedAt, resourceId } = video.snippet;
+  const { title, description, thumbnails, resourceId } = video.snippet;
+  const { videoPublishedAt } = video.contentDetails;
   const titleId = `video-title-${video.id}`;
 
   const formatDate = (d: string) =>
@@ -113,7 +106,7 @@ export function VideoCard({ video }: { video: VideoItem }) {
         <div className="flex text-xs text-gray-500 space-x-4">
           <div className="flex gap-1">
             <Calendar className="w-4 h-4" />
-            <span>{formatDate(publishedAt)}</span>
+            <span>{formatDate(videoPublishedAt)}</span>
           </div>
         </div>
         <Button variant="outline" className="group-hover:bg-blue-50 transition-colors w-full" asChild>
@@ -129,16 +122,18 @@ export function VideoCard({ video }: { video: VideoItem }) {
 
 export default function YoutubePlaylist({ videos }: YoutubePlaylistProps) {
   const sorted = [...videos].sort((a, b) => {
-    const aTime = new Date(a.snippet.publishedAt).getTime();
-    const bTime = new Date(b.snippet.publishedAt).getTime();
+    const aTime = new Date(a.contentDetails.videoPublishedAt).getTime();
+    const bTime = new Date(b.contentDetails.videoPublishedAt).getTime();
     return aTime - bTime;
   });
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {sorted.map((video) => (
-        <VideoCard key={video.id} video={video} />
+        <li key={video.id}>
+          <VideoCard video={video} />
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
