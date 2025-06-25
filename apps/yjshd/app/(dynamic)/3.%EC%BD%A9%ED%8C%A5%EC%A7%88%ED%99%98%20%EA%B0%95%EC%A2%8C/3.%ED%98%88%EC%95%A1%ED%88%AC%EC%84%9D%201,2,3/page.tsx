@@ -2,11 +2,7 @@ import YoutubePlaylist from "@/components/YoutubePlaylist";
 import type { VideoItem } from "@/components/YoutubePlaylist";
 import { Metadata } from "next";
 
-// 페이지 재생성 주기 (1시간)
-export const revalidate = 3600;
 const SUBCATEGORY = "3.혈액투석 1,2,3";
-const PLAYLIST_ID = process.env.NEXT_PUBLIC_YOUTUBE_PLAYLIST_ID ?? "";
-const API_KEY = process.env.YOUTUBE_API_KEY ?? "";
 
 export const metadata: Metadata = {
   title: "콩팥질환 정보",
@@ -31,9 +27,13 @@ export const metadata: Metadata = {
   },
 };
 
+export const revalidate = 3600;
+const PLAYLIST_ID = process.env.NEXT_PUBLIC_YOUTUBE_PLAYLIST_ID ?? "";
+const API_KEY = process.env.YOUTUBE_API_KEY ?? "";
+
 async function getVideos(pageToken?: string) {
   const params = new URLSearchParams({
-    part: "snippet",
+    part: "snippet,contentDetails",
     maxResults: "50",
     playlistId: PLAYLIST_ID,
     key: API_KEY,
