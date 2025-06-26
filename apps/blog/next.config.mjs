@@ -23,9 +23,17 @@ const nextConfig = {
   },
 };
 
+/** @type {import('rehype-pretty-code').Options} */
+const options = {
+  theme: "github-dark",
+};
+
 /** @type {import('@next/mdx').WithMDX} */
 const withMDX = createMDX({
-  // Add markdown plugins here, as desired
+  options: {
+    remarkPlugins: [["remark-gfm"]],
+    rehypePlugins: [["rehype-pretty-code", options]],
+  },
 });
 
 export default withMDX(nextConfig);
