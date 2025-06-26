@@ -103,8 +103,8 @@ export function FloatingMenu({ className, showScrollToTop = true, showSearch = t
   };
 
   return (
-    <div className={cn("fixed bottom-6 right-6 z-50 flex flex-col gap-2", className)}>
-      <div className={cn("flex flex-col gap-2 transition-all duration-300 ease-in-out", isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
+    <div className={cn("fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 flex flex-col gap-2", className)}>
+      <div className={cn("flex flex-row gap-2 transition-all duration-300 ease-in-out", isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
         {showScrollToTop && (
           <Button
             size="icon"
@@ -139,7 +139,7 @@ export function FloatingMenu({ className, showScrollToTop = true, showSearch = t
         )}
       </div>
 
-      <div className={cn("flex flex-col gap-2 transition-all duration-300 ease-in-out", isMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
+      <div className={cn("flex flex-row gap-2 transition-all duration-300 ease-in-out", isMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
         <Button
           size="icon"
           variant="secondary"
