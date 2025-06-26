@@ -47,7 +47,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       return (
         <code
           {...properties}
-          className="rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold [pre_&]:bg-[var(--code-block-bg)] [pre_&]:p-0 [pre_&]:rounded-none [pre_&]:font-normal [pre_&]:text-xs [pre_&]:border-[var(--code-block-border)]"
+          className="rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold [pre_&]:bg-[var(--code-block-bg)] [pre_&]:p-0 [pre_&]:rounded-none [pre_&]:font-normal [pre_&]:text-[13px] [pre_&]:border-[var(--code-block-border)]"
         ></code>
       );
     },
