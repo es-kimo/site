@@ -18,33 +18,73 @@ interface FloatingMenuProps {
 export function FloatingMenu({ className, showScrollToTop = true, showSearch = true, showMenu = true, onSearchClick, onMenuClick, onHomeClick }: FloatingMenuProps) {
   const [isVisible, setIsVisible] = React.useState(false);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const [lastScrollY, setLastScrollY] = React.useState(0);
+  const lastScrollYRef = React.useRef(0);
+  const hasScrollRef = React.useRef(false);
 
   React.useEffect(() => {
+    const checkScrollAvailability = () => {
+      const viewportHeight = window.innerHeight;
+      const documentHeight = Math.max(
+        document.body.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.clientHeight,
+        document.documentElement.scrollHeight,
+        document.documentElement.offsetHeight
+      );
+
+      const hasScrollContent = documentHeight > viewportHeight;
+      const hasOverflow = document.documentElement.scrollHeight > document.documentElement.clientHeight;
+      const bodyHasOverflow = document.body.scrollHeight > document.body.clientHeight;
+
+      const canScroll = hasScrollContent || hasOverflow || bodyHasOverflow;
+
+      hasScrollRef.current = canScroll;
+
+      if (!canScroll) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
     const handleScroll = () => {
+      console.log("handleScroll");
+      if (!hasScrollRef.current) return;
+
       const currentScrollY = window.pageYOffset;
 
-      // 스크롤 방향 감지
-      const isScrollingUp = currentScrollY < lastScrollY;
-      const isScrollingDown = currentScrollY > lastScrollY;
+      const isScrollingUp = currentScrollY < lastScrollYRef.current;
+      const isScrollingDown = currentScrollY > lastScrollYRef.current;
 
-      // 스크롤 위치가 100px 이상이고 위로 스크롤할 때 메뉴 표시
       if (currentScrollY > 100 && isScrollingUp) {
         setIsVisible(true);
       }
 
-      // 아래로 스크롤하거나 맨 위에 가까우면 메뉴 숨김
       if (isScrollingDown || currentScrollY <= 100) {
         setIsVisible(false);
-        setIsMenuOpen(false); // 메뉴가 열려있으면 닫기
+        setIsMenuOpen(false);
       }
 
-      setLastScrollY(currentScrollY);
+      lastScrollYRef.current = currentScrollY;
     };
 
+    const resizeObserver = new ResizeObserver(() => {
+      console.log("resizeObserver");
+      checkScrollAvailability();
+    });
+
+    resizeObserver.observe(document.body);
+    resizeObserver.observe(document.documentElement);
+
+    checkScrollAvailability();
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -60,9 +100,7 @@ export function FloatingMenu({ className, showScrollToTop = true, showSearch = t
 
   return (
     <div className={cn("fixed bottom-6 right-6 z-50 flex flex-col gap-2", className)}>
-      {/* Main floating menu */}
       <div className={cn("flex flex-col gap-2 transition-all duration-300 ease-in-out", isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
-        {/* Scroll to top button */}
         {showScrollToTop && (
           <Button
             size="icon"
@@ -74,7 +112,6 @@ export function FloatingMenu({ className, showScrollToTop = true, showSearch = t
           </Button>
         )}
 
-        {/* Search button */}
         {showSearch && (
           <Button
             size="icon"
@@ -86,7 +123,6 @@ export function FloatingMenu({ className, showScrollToTop = true, showSearch = t
           </Button>
         )}
 
-        {/* Menu button */}
         {showMenu && (
           <Button
             size="icon"
@@ -99,7 +135,6 @@ export function FloatingMenu({ className, showScrollToTop = true, showSearch = t
         )}
       </div>
 
-      {/* Expanded menu items */}
       <div className={cn("flex flex-col gap-2 transition-all duration-300 ease-in-out", isMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
         <Button
           size="icon"
