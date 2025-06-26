@@ -5,6 +5,10 @@ import { cn } from "@workspace/ui/lib/utils";
 import { Button } from "@workspace/ui/components/button";
 import { ChevronUp, Home, Search, Menu, X, BookOpen, Calendar, User } from "lucide-react";
 
+// 상수 정의
+const SCROLL_THRESHOLD = 10; // 스크롤 임계값
+const BOTTOM_MARGIN = 10; // 하단 여백
+
 interface FloatingMenuProps {
   className?: string;
   showScrollToTop?: boolean;
@@ -19,7 +23,6 @@ export function FloatingMenu({ className, showScrollToTop = true, showSearch = t
   const [isVisible, setIsVisible] = React.useState(false);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const lastScrollYRef = React.useRef(0);
-  const hasScrollRef = React.useRef(false);
 
   React.useEffect(() => {
     const checkScrollAvailability = () => {
@@ -38,8 +41,6 @@ export function FloatingMenu({ className, showScrollToTop = true, showSearch = t
 
       const canScroll = hasScrollContent || hasOverflow || bodyHasOverflow;
 
-      hasScrollRef.current = canScroll;
-
       if (!canScroll) {
         setIsVisible(true);
       } else {
@@ -48,19 +49,23 @@ export function FloatingMenu({ className, showScrollToTop = true, showSearch = t
     };
 
     const handleScroll = () => {
-      console.log("handleScroll");
-      if (!hasScrollRef.current) return;
-
       const currentScrollY = window.pageYOffset;
+      const viewportHeight = window.innerHeight;
+      const documentHeight = Math.max(
+        document.body.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.clientHeight,
+        document.documentElement.scrollHeight,
+        document.documentElement.offsetHeight
+      );
 
+      const isAtBottom = currentScrollY + viewportHeight >= documentHeight - BOTTOM_MARGIN;
       const isScrollingUp = currentScrollY < lastScrollYRef.current;
       const isScrollingDown = currentScrollY > lastScrollYRef.current;
 
-      if (currentScrollY > 100 && isScrollingUp) {
+      if (isAtBottom || (currentScrollY > SCROLL_THRESHOLD && isScrollingUp)) {
         setIsVisible(true);
-      }
-
-      if (isScrollingDown || currentScrollY <= 100) {
+      } else if (isScrollingDown && currentScrollY > SCROLL_THRESHOLD) {
         setIsVisible(false);
         setIsMenuOpen(false);
       }
@@ -69,7 +74,6 @@ export function FloatingMenu({ className, showScrollToTop = true, showSearch = t
     };
 
     const resizeObserver = new ResizeObserver(() => {
-      console.log("resizeObserver");
       checkScrollAvailability();
     });
 
@@ -77,7 +81,6 @@ export function FloatingMenu({ className, showScrollToTop = true, showSearch = t
     resizeObserver.observe(document.documentElement);
 
     checkScrollAvailability();
-
     window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
