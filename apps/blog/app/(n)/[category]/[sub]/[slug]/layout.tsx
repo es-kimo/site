@@ -41,7 +41,7 @@ export default async function Layout({
           <dd>{formatPostDate(updatedAt ?? createdAt)}</dd>
         </dl>
       </aside>
-      <article className="col-start-2">
+      <article className="col-start-2 min-w-0">
         <BreadCrumb className="lg:hidden text-muted-foreground mb-1" category={category} sub={sub} />
         {children}
       </article>

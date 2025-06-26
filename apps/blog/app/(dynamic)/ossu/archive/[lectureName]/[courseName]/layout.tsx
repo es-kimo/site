@@ -33,7 +33,7 @@ export default async function Layout({
           </dd>
         </dl>
       </aside>
-      <article className="col-start-2">
+      <article className="col-start-2 min-w-0">
         <Breadcrumb lectureName={lectureName} courseName={courseName} />
         {children}
       </article>
