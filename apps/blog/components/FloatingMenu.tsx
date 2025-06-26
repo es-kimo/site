@@ -6,8 +6,8 @@ import { Button } from "@workspace/ui/components/button";
 import { ChevronUp, Home, Search, Menu, X, BookOpen, Calendar, User } from "lucide-react";
 
 // 상수 정의
-const SCROLL_THRESHOLD = 10; // 스크롤 임계값
-const BOTTOM_MARGIN = 10; // 하단 여백
+const SCROLL_THRESHOLD = 20; // 스크롤 임계값
+const BOTTOM_MARGIN = 20; // 하단 여백
 
 interface FloatingMenuProps {
   className?: string;
@@ -60,12 +60,13 @@ export function FloatingMenu({ className, showScrollToTop = true, showSearch = t
       );
 
       const isAtBottom = currentScrollY + viewportHeight >= documentHeight - BOTTOM_MARGIN;
+      const isAtTop = currentScrollY <= SCROLL_THRESHOLD;
       const isScrollingUp = currentScrollY < lastScrollYRef.current;
       const isScrollingDown = currentScrollY > lastScrollYRef.current;
 
-      if (isAtBottom || (currentScrollY > SCROLL_THRESHOLD && isScrollingUp)) {
+      if ((isAtBottom || (currentScrollY > SCROLL_THRESHOLD && isScrollingUp)) && !isAtTop) {
         setIsVisible(true);
-      } else if (isScrollingDown && currentScrollY > SCROLL_THRESHOLD) {
+      } else if ((isScrollingDown && currentScrollY > SCROLL_THRESHOLD) || isAtTop) {
         setIsVisible(false);
         setIsMenuOpen(false);
       }
