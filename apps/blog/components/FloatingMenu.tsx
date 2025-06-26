@@ -18,19 +18,33 @@ interface FloatingMenuProps {
 export function FloatingMenu({ className, showScrollToTop = true, showSearch = true, showMenu = true, onSearchClick, onMenuClick, onHomeClick }: FloatingMenuProps) {
   const [isVisible, setIsVisible] = React.useState(false);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [lastScrollY, setLastScrollY] = React.useState(0);
 
   React.useEffect(() => {
-    const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
+    const handleScroll = () => {
+      const currentScrollY = window.pageYOffset;
+
+      // 스크롤 방향 감지
+      const isScrollingUp = currentScrollY < lastScrollY;
+      const isScrollingDown = currentScrollY > lastScrollY;
+
+      // 스크롤 위치가 100px 이상이고 위로 스크롤할 때 메뉴 표시
+      if (currentScrollY > 100 && isScrollingUp) {
         setIsVisible(true);
-      } else {
-        setIsVisible(false);
       }
+
+      // 아래로 스크롤하거나 맨 위에 가까우면 메뉴 숨김
+      if (isScrollingDown || currentScrollY <= 100) {
+        setIsVisible(false);
+        setIsMenuOpen(false); // 메뉴가 열려있으면 닫기
+      }
+
+      setLastScrollY(currentScrollY);
     };
 
-    window.addEventListener("scroll", toggleVisibility);
-    return () => window.removeEventListener("scroll", toggleVisibility);
-  }, []);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
   const scrollToTop = () => {
     window.scrollTo({
