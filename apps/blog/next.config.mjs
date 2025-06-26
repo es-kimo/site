@@ -25,7 +25,11 @@ const nextConfig = {
 
 /** @type {import('rehype-pretty-code').Options} */
 const options = {
-  theme: "github-dark",
+  theme: {
+    dark: "github-dark-high-contrast",
+    light: "github-light-high-contrast",
+  },
+  keepBackground: false,
 };
 
 /** @type {import('@next/mdx').WithMDX} */

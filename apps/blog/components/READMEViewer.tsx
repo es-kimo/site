@@ -1,11 +1,19 @@
 import { useMDXComponents } from "@/mdx-components";
 import { MDXRemote } from "next-mdx-remote-client/rsc";
-import rehypePrettyCode from "rehype-pretty-code";
+import rehypePrettyCode, { type Options } from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
 
 interface READMEViewerProps {
   content: string;
 }
+
+const prettyCodeOptions: Options = {
+  theme: {
+    dark: "github-dark-high-contrast",
+    light: "github-light-high-contrast",
+  },
+  keepBackground: false,
+};
 
 export function READMEViewer({ content }: READMEViewerProps) {
   const components = useMDXComponents({});
@@ -16,7 +24,7 @@ export function READMEViewer({ content }: READMEViewerProps) {
       options={{
         mdxOptions: {
           remarkPlugins: [remarkGfm],
-          rehypePlugins: [rehypePrettyCode],
+          rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
         },
       }}
     />
