@@ -15,7 +15,7 @@ export default async function ArchivePage() {
       <IndexList.Header>OSSU Archive</IndexList.Header>
       <IndexList.Grid>
         {zip(lectures, topics).map(([lecture, topics]) => (
-          <IndexList.Item key={lecture} Link={Link} item={lecture} href={`/ossu/archive/${lecture}`} title={lecture} hashtags={topics} />
+          <IndexList.Item key={lecture} Link={Link} item={lecture} href={`/writing/ossu/archive/${lecture}`} title={lecture} hashtags={topics} />
         ))}
       </IndexList.Grid>
     </IndexList>
