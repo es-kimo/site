@@ -6,7 +6,7 @@ import { Separator } from "@workspace/ui/components/separator";
 import { cn } from "@workspace/ui/lib/utils";
 import { DatabaseZap, Github, Home, PencilLine, Signature } from "lucide-react";
 import { Link } from "next-view-transitions";
-import * as React from "react";
+import { useEffect, useRef, useState } from "react";
 
 // 상수 정의
 const SCROLL_THRESHOLD = 20; // 스크롤 임계값
@@ -38,20 +38,13 @@ function GlassButton({ onClick, children, className, asChild }: GlassButtonProps
 
 interface FloatingMenuProps {
   className?: string;
-  showScrollToTop?: boolean;
-  showSearch?: boolean;
-  showMenu?: boolean;
-  onSearchClick?: () => void;
-  onMenuClick?: () => void;
-  onHomeClick?: () => void;
 }
 
-export function FloatingMenu({ className, onMenuClick, onHomeClick }: FloatingMenuProps) {
-  const [isVisible, setIsVisible] = React.useState(false);
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const lastScrollYRef = React.useRef(0);
+export function FloatingMenu({ className }: FloatingMenuProps) {
+  const [isVisible, setIsVisible] = useState(false);
+  const lastScrollYRef = useRef(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const checkScrollAvailability = () => {
       const viewportHeight = window.innerHeight;
       const documentHeight = Math.max(
@@ -95,7 +88,6 @@ export function FloatingMenu({ className, onMenuClick, onHomeClick }: FloatingMe
         setIsVisible(true);
       } else if ((isScrollingDown && currentScrollY > SCROLL_THRESHOLD) || isAtTop) {
         setIsVisible(false);
-        setIsMenuOpen(false);
       }
 
       lastScrollYRef.current = currentScrollY;
@@ -116,11 +108,6 @@ export function FloatingMenu({ className, onMenuClick, onHomeClick }: FloatingMe
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  const handleMenuClick = () => {
-    setIsMenuOpen(!isMenuOpen);
-    onMenuClick?.();
-  };
 
   return (
     <div className={cn("fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 rounded-3xl overflow-hidden", isVisible ? "shadow-2xl [.dark_&]:shadow-slate-700" : "", className)}>
@@ -194,7 +181,7 @@ export function FloatingMenu({ className, onMenuClick, onHomeClick }: FloatingMe
       ></div>
 
       <div className={cn("flex flex-row gap-2 p-4 transition-all duration-300 ease-in-out items-center", isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
-        <GlassButton onClick={onHomeClick}>
+        <GlassButton>
           <Home className="h-5 w-5" />
         </GlassButton>
 
