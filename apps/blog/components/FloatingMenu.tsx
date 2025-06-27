@@ -181,8 +181,10 @@ export function FloatingMenu({ className }: FloatingMenuProps) {
       ></div>
 
       <div className={cn("flex flex-row gap-2 p-4 transition-all duration-300 ease-in-out items-center", isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
-        <GlassButton>
-          <Home className="h-5 w-5" />
+        <GlassButton asChild>
+          <Link href="/">
+            <Home className="h-5 w-5" />
+          </Link>
         </GlassButton>
 
         <GlassButton>
