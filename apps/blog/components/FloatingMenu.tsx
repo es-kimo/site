@@ -173,76 +173,72 @@ export function FloatingMenu({ className, showScrollToTop = true, showSearch = t
         )}
       ></div>
 
-      <div className="flex flex-col justify-center gap-2 p-6">
-        <div className={cn("flex flex-row gap-2 transition-all duration-300 ease-in-out", isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
-          {showScrollToTop && (
-            <Button
-              size="icon"
-              variant="secondary"
-              onClick={scrollToTop}
-              className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-background/90"
-            >
-              <ChevronUp className="h-5 w-5" />
-            </Button>
-          )}
-
-          {showSearch && (
-            <Button
-              size="icon"
-              variant="secondary"
-              onClick={onSearchClick}
-              className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-background/90"
-            >
-              <Search className="h-5 w-5" />
-            </Button>
-          )}
-
-          {showMenu && (
-            <Button
-              size="icon"
-              variant="secondary"
-              onClick={handleMenuClick}
-              className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-background/90"
-            >
-              {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </Button>
-          )}
-        </div>
-
-        <div className={cn("flex flex-row gap-2 transition-all duration-300 ease-in-out", isMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
+      <div className={cn("flex flex-row gap-2 p-4 transition-all duration-300 ease-in-out", isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
+        {showScrollToTop && (
           <Button
             size="icon"
             variant="secondary"
-            onClick={onHomeClick}
+            onClick={scrollToTop}
             className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-background/90"
           >
-            <Home className="h-5 w-5" />
+            <ChevronUp className="h-5 w-5" />
           </Button>
+        )}
 
+        {showSearch && (
           <Button
             size="icon"
             variant="secondary"
+            onClick={onSearchClick}
             className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-background/90"
           >
-            <BookOpen className="h-5 w-5" />
+            <Search className="h-5 w-5" />
           </Button>
+        )}
 
+        {showMenu && (
           <Button
             size="icon"
             variant="secondary"
+            onClick={handleMenuClick}
             className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-background/90"
           >
-            <Calendar className="h-5 w-5" />
+            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
+        )}
 
-          <Button
-            size="icon"
-            variant="secondary"
-            className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-background/90"
-          >
-            <User className="h-5 w-5" />
-          </Button>
-        </div>
+        <Button
+          size="icon"
+          variant="secondary"
+          onClick={onHomeClick}
+          className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-background/90"
+        >
+          <Home className="h-5 w-5" />
+        </Button>
+
+        <Button
+          size="icon"
+          variant="secondary"
+          className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-background/90"
+        >
+          <BookOpen className="h-5 w-5" />
+        </Button>
+
+        <Button
+          size="icon"
+          variant="secondary"
+          className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-background/90"
+        >
+          <Calendar className="h-5 w-5" />
+        </Button>
+
+        <Button
+          size="icon"
+          variant="secondary"
+          className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-background/90"
+        >
+          <User className="h-5 w-5" />
+        </Button>
       </div>
     </div>
   );
