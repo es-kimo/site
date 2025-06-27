@@ -187,16 +187,22 @@ export function FloatingMenu({ className }: FloatingMenuProps) {
           </Link>
         </GlassButton>
 
-        <GlassButton>
-          <DatabaseZap className="h-5 w-5" />
+        <GlassButton asChild>
+          <Link href="/database">
+            <DatabaseZap className="h-5 w-5" />
+          </Link>
         </GlassButton>
 
-        <GlassButton>
-          <PencilLine className="h-5 w-5" />
+        <GlassButton asChild>
+          <Link href="/writing">
+            <PencilLine className="h-5 w-5" />
+          </Link>
         </GlassButton>
 
-        <GlassButton>
-          <Signature className="h-5 w-5" />
+        <GlassButton asChild>
+          <Link href="/about">
+            <Signature className="h-5 w-5" />
+          </Link>
         </GlassButton>
 
         <Separator orientation="vertical" className="h-10" />
