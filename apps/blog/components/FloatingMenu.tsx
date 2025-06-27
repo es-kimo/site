@@ -9,6 +9,29 @@ import { ChevronUp, Home, Search, Menu, X, BookOpen, Calendar, User } from "luci
 const SCROLL_THRESHOLD = 20; // 스크롤 임계값
 const BOTTOM_MARGIN = 20; // 하단 여백
 
+interface GlassButtonProps {
+  onClick?: () => void;
+  children: React.ReactNode;
+  className?: string;
+}
+
+function GlassButton({ onClick, children, className }: GlassButtonProps) {
+  return (
+    <Button
+      size="icon"
+      variant="secondary"
+      onClick={onClick}
+      className={cn(
+        "h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 backdrop-blur-md bg-zinc-800/40 border border-slate-300/20 hover:bg-black text-white/90 hover:text-white",
+        "[.light_&]:bg-white/70 [.light_&]:hover:bg-white [.light_&]:border-neutral-300/20 [.light_&]:hover:border-slate-400/20 [.light_&]:text-neutral-500 [.light_&]:hover:text-neutral-800",
+        className
+      )}
+    >
+      {children}
+    </Button>
+  );
+}
+
 interface FloatingMenuProps {
   className?: string;
   showScrollToTop?: boolean;
@@ -175,70 +198,34 @@ export function FloatingMenu({ className, showScrollToTop = true, showSearch = t
 
       <div className={cn("flex flex-row gap-2 p-4 transition-all duration-300 ease-in-out", isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
         {showScrollToTop && (
-          <Button
-            size="icon"
-            variant="secondary"
-            onClick={scrollToTop}
-            className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-background/90"
-          >
+          <GlassButton onClick={scrollToTop}>
             <ChevronUp className="h-5 w-5" />
-          </Button>
+          </GlassButton>
         )}
 
         {showSearch && (
-          <Button
-            size="icon"
-            variant="secondary"
-            onClick={onSearchClick}
-            className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-background/90"
-          >
+          <GlassButton onClick={onSearchClick}>
             <Search className="h-5 w-5" />
-          </Button>
+          </GlassButton>
         )}
 
-        {showMenu && (
-          <Button
-            size="icon"
-            variant="secondary"
-            onClick={handleMenuClick}
-            className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-background/90"
-          >
-            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
-        )}
+        {showMenu && <GlassButton onClick={handleMenuClick}>{isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</GlassButton>}
 
-        <Button
-          size="icon"
-          variant="secondary"
-          onClick={onHomeClick}
-          className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-background/90"
-        >
+        <GlassButton onClick={onHomeClick}>
           <Home className="h-5 w-5" />
-        </Button>
+        </GlassButton>
 
-        <Button
-          size="icon"
-          variant="secondary"
-          className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-background/90"
-        >
+        <GlassButton>
           <BookOpen className="h-5 w-5" />
-        </Button>
+        </GlassButton>
 
-        <Button
-          size="icon"
-          variant="secondary"
-          className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-background/90"
-        >
+        <GlassButton>
           <Calendar className="h-5 w-5" />
-        </Button>
+        </GlassButton>
 
-        <Button
-          size="icon"
-          variant="secondary"
-          className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 bg-background/80 backdrop-blur-sm border border-border/50 hover:bg-background/90"
-        >
+        <GlassButton>
           <User className="h-5 w-5" />
-        </Button>
+        </GlassButton>
       </div>
     </div>
   );
