@@ -90,11 +90,23 @@ export function FloatingMenu({ className }: FloatingMenuProps) {
   const lastScrollYRef = useRef(0);
   const [mousePos, setMousePos] = useState({ x: -9999, y: -9999 });
   const { theme, setTheme } = useTheme();
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
+      const menuElement = menuRef.current;
+      if (!menuElement) return;
+
+      const rect = menuElement.getBoundingClientRect();
+      const isInsideMenu = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+
+      if (isInsideMenu) {
+        setMousePos({ x: e.clientX, y: e.clientY });
+      } else {
+        setMousePos({ x: -9999, y: -9999 });
+      }
     };
+
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
@@ -165,7 +177,7 @@ export function FloatingMenu({ className }: FloatingMenuProps) {
   }, []);
 
   return (
-    <div className={cn("fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 rounded-full", isVisible ? "shadow-2xl [.dark_&]:shadow-slate-700" : "", className)}>
+    <div ref={menuRef} className={cn("fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 rounded-full", isVisible ? "shadow-2xl [.dark_&]:shadow-slate-700" : "", className)}>
       <div className="absolute rounded-full overflow-hidden w-full h-[72px]">
         <div className={cn("absolute w-full h-full")}>
           <svg viewBox="0 0 2000 200">
