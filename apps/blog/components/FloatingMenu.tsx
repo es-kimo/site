@@ -1,32 +1,36 @@
 "use client";
 
-import * as React from "react";
-import { cn } from "@workspace/ui/lib/utils";
 import { Button } from "@workspace/ui/components/button";
-import { ChevronUp, Home, Search, Menu, X, BookOpen, Calendar, User } from "lucide-react";
+import { ModeToggle } from "@workspace/ui/components/mode-toggle";
+import { Separator } from "@workspace/ui/components/separator";
+import { cn } from "@workspace/ui/lib/utils";
+import { DatabaseZap, Github, Home, PencilLine, Signature } from "lucide-react";
+import { Link } from "next-view-transitions";
+import * as React from "react";
 
 // 상수 정의
 const SCROLL_THRESHOLD = 20; // 스크롤 임계값
 const BOTTOM_MARGIN = 20; // 하단 여백
 
+// Glass button 스타일 함수
+const glassButtonStyle = (className?: string) => {
+  return cn(
+    "h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 backdrop-blur-md bg-zinc-800/40 border border-slate-300/20 hover:bg-black text-white/90 hover:text-white",
+    "[.light_&]:bg-white/70 [.light_&]:hover:bg-white [.light_&]:border-neutral-300/20 [.light_&]:hover:border-slate-400/20 [.light_&]:text-neutral-500 [.light_&]:hover:text-neutral-800",
+    className
+  );
+};
+
 interface GlassButtonProps {
   onClick?: () => void;
   children: React.ReactNode;
   className?: string;
+  asChild?: boolean;
 }
 
-function GlassButton({ onClick, children, className }: GlassButtonProps) {
+function GlassButton({ onClick, children, className, asChild }: GlassButtonProps) {
   return (
-    <Button
-      size="icon"
-      variant="secondary"
-      onClick={onClick}
-      className={cn(
-        "h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 backdrop-blur-md bg-zinc-800/40 border border-slate-300/20 hover:bg-black text-white/90 hover:text-white",
-        "[.light_&]:bg-white/70 [.light_&]:hover:bg-white [.light_&]:border-neutral-300/20 [.light_&]:hover:border-slate-400/20 [.light_&]:text-neutral-500 [.light_&]:hover:text-neutral-800",
-        className
-      )}
-    >
+    <Button size="icon" variant="secondary" onClick={onClick} asChild={asChild} className={glassButtonStyle(className)}>
       {children}
     </Button>
   );
@@ -42,7 +46,7 @@ interface FloatingMenuProps {
   onHomeClick?: () => void;
 }
 
-export function FloatingMenu({ className, showScrollToTop = true, showSearch = true, showMenu = true, onSearchClick, onMenuClick, onHomeClick }: FloatingMenuProps) {
+export function FloatingMenu({ className, onMenuClick, onHomeClick }: FloatingMenuProps) {
   const [isVisible, setIsVisible] = React.useState(false);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const lastScrollYRef = React.useRef(0);
@@ -112,13 +116,6 @@ export function FloatingMenu({ className, showScrollToTop = true, showSearch = t
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
 
   const handleMenuClick = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -196,35 +193,31 @@ export function FloatingMenu({ className, showScrollToTop = true, showSearch = t
         )}
       ></div>
 
-      <div className={cn("flex flex-row gap-2 p-4 transition-all duration-300 ease-in-out", isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
-        {showScrollToTop && (
-          <GlassButton onClick={scrollToTop}>
-            <ChevronUp className="h-5 w-5" />
-          </GlassButton>
-        )}
-
-        {showSearch && (
-          <GlassButton onClick={onSearchClick}>
-            <Search className="h-5 w-5" />
-          </GlassButton>
-        )}
-
-        {showMenu && <GlassButton onClick={handleMenuClick}>{isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</GlassButton>}
-
+      <div className={cn("flex flex-row gap-2 p-4 transition-all duration-300 ease-in-out items-center", isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
         <GlassButton onClick={onHomeClick}>
           <Home className="h-5 w-5" />
         </GlassButton>
 
         <GlassButton>
-          <BookOpen className="h-5 w-5" />
+          <DatabaseZap className="h-5 w-5" />
         </GlassButton>
 
         <GlassButton>
-          <Calendar className="h-5 w-5" />
+          <PencilLine className="h-5 w-5" />
         </GlassButton>
 
         <GlassButton>
-          <User className="h-5 w-5" />
+          <Signature className="h-5 w-5" />
+        </GlassButton>
+
+        <Separator orientation="vertical" className="h-10" />
+
+        <ModeToggle className={glassButtonStyle()} />
+
+        <GlassButton asChild>
+          <Link href="https://github.com/es-kimo" target="_blank" rel="noopener noreferrer">
+            <Github className="h-5 w-5" />
+          </Link>
         </GlassButton>
       </div>
     </div>
