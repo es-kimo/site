@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@workspace/ui/components/button";
-import { ModeToggle } from "@workspace/ui/components/mode-toggle";
 import { Separator } from "@workspace/ui/components/separator";
 import { cn } from "@workspace/ui/lib/utils";
-import { DatabaseZap, Github, Home, PencilLine, Signature } from "lucide-react";
+import { DatabaseZap, Github, Home, Moon, PencilLine, Signature, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
 import { Link } from "next-view-transitions";
 import { useEffect, useRef, useState } from "react";
 
@@ -28,9 +28,54 @@ interface GlassButtonProps {
   asChild?: boolean;
 }
 
-function GlassButton({ onClick, children, className, asChild }: GlassButtonProps) {
+interface MagnetizedButtonProps extends GlassButtonProps {
+  mousePos: { x: number; y: number };
+  baseSize?: number;
+  maxScale?: number;
+}
+
+export function MagnetizedButton({ children, className, mousePos, baseSize = 48, maxScale = 2, ...props }: MagnetizedButtonProps) {
+  const ref = useRef<HTMLButtonElement>(null);
+  const [size, setSize] = useState({ width: baseSize, height: baseSize });
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height; // 하단 고정
+
+    const dx = mousePos.x - cx;
+    const dy = mousePos.y - cy;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const radius = 120;
+
+    if (dist < radius) {
+      const scaleRatio = 1 + (1 - dist / radius) * (maxScale - 1);
+      setSize({
+        width: baseSize * scaleRatio,
+        height: baseSize * scaleRatio,
+      });
+    } else {
+      setSize({ width: baseSize, height: baseSize });
+    }
+  }, [mousePos, baseSize, maxScale]);
+
   return (
-    <Button size="icon" variant="secondary" onClick={onClick} asChild={asChild} className={glassButtonStyle(className)}>
+    <Button
+      ref={ref}
+      size="icon"
+      variant="secondary"
+      className={cn("transition-all duration-100 ease-out flex items-center justify-center p-0", glassButtonStyle(className))}
+      style={{
+        width: `${size.width}px`,
+        height: `${size.height}px`,
+        position: "relative",
+        bottom: 0,
+      }}
+      {...props}
+    >
       {children}
     </Button>
   );
@@ -43,6 +88,16 @@ interface FloatingMenuProps {
 export function FloatingMenu({ className }: FloatingMenuProps) {
   const [isVisible, setIsVisible] = useState(false);
   const lastScrollYRef = useRef(0);
+  const [mousePos, setMousePos] = useState({ x: -9999, y: -9999 });
+  const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   useEffect(() => {
     const checkScrollAvailability = () => {
@@ -180,40 +235,44 @@ export function FloatingMenu({ className }: FloatingMenuProps) {
         )}
       ></div>
 
-      <div className={cn("flex flex-row gap-2 p-3 transition-all duration-300 ease-in-out items-center", isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
-        <GlassButton asChild>
+      <div className={cn("flex flex-row gap-2 p-3 transition-all duration-300 ease-in-out items-end", isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
+        <MagnetizedButton mousePos={mousePos} asChild>
           <Link href="/">
             <Home className="h-5 w-5" />
           </Link>
-        </GlassButton>
+        </MagnetizedButton>
 
-        <GlassButton asChild>
+        <MagnetizedButton mousePos={mousePos} asChild>
           <Link href="/database">
             <DatabaseZap className="h-5 w-5" />
           </Link>
-        </GlassButton>
+        </MagnetizedButton>
 
-        <GlassButton asChild>
+        <MagnetizedButton mousePos={mousePos} asChild>
           <Link href="/writing">
             <PencilLine className="h-5 w-5" />
           </Link>
-        </GlassButton>
+        </MagnetizedButton>
 
-        <GlassButton asChild>
+        <MagnetizedButton mousePos={mousePos} asChild>
           <Link href="/about">
             <Signature className="h-5 w-5" />
           </Link>
-        </GlassButton>
+        </MagnetizedButton>
 
-        <Separator orientation="vertical" className="h-10" />
+        <Separator orientation="vertical" className="h-12" />
 
-        <ModeToggle className={glassButtonStyle()} />
+        <MagnetizedButton mousePos={mousePos} onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
+          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">화면 모드 토글</span>
+        </MagnetizedButton>
 
-        <GlassButton asChild>
+        <MagnetizedButton mousePos={mousePos} asChild>
           <Link href="https://github.com/es-kimo" target="_blank" rel="noopener noreferrer">
             <Github className="h-5 w-5" />
           </Link>
-        </GlassButton>
+        </MagnetizedButton>
       </div>
     </div>
   );
