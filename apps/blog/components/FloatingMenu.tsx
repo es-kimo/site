@@ -103,13 +103,7 @@ export function FloatingMenu({ className, showScrollToTop = true, showSearch = t
   };
 
   return (
-    <div
-      className={cn(
-        "fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 rounded-3xl overflow-hidden",
-        isVisible ? "border shadow-[0px_8px_32px_rgba(0,0,0,0.20),inset_0_1px_0_rgba(255,255,255,0),inset_0_-1px_0_rgba(0,0,0,0.05)]" : "",
-        className
-      )}
-    >
+    <div className={cn("fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 rounded-3xl overflow-hidden", isVisible ? "shadow-2xl [.dark_&]:shadow-slate-700" : "", className)}>
       <div className={cn("absolute w-full h-full")}>
         <svg>
           <defs>
