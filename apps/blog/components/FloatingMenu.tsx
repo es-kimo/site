@@ -21,6 +21,9 @@ const glassButtonStyle = (className?: string) => {
   );
 };
 
+// 아이콘 스타일 함수
+const iconStyle = () => "h-5 w-5 transition-transform duration-100 [transform:scale(var(--icon-scale,1))]";
+
 interface GlassButtonProps {
   onClick?: () => void;
   children: React.ReactNode;
@@ -34,9 +37,10 @@ interface MagnetizedButtonProps extends GlassButtonProps {
   maxScale?: number;
 }
 
-export function MagnetizedButton({ children, className, mousePos, baseSize = 48, maxScale = 2, ...props }: MagnetizedButtonProps) {
+export function MagnetizedButton({ children, className, mousePos, baseSize = 48, maxScale = 1.8, ...props }: MagnetizedButtonProps) {
   const ref = useRef<HTMLButtonElement>(null);
   const [size, setSize] = useState({ width: baseSize, height: baseSize });
+  const [iconScale, setIconScale] = useState(1);
 
   useEffect(() => {
     const el = ref.current;
@@ -57,8 +61,10 @@ export function MagnetizedButton({ children, className, mousePos, baseSize = 48,
         width: baseSize * scaleRatio,
         height: baseSize * scaleRatio,
       });
+      setIconScale(scaleRatio);
     } else {
       setSize({ width: baseSize, height: baseSize });
+      setIconScale(1);
     }
   }, [mousePos, baseSize, maxScale]);
 
@@ -68,12 +74,15 @@ export function MagnetizedButton({ children, className, mousePos, baseSize = 48,
       size="icon"
       variant="secondary"
       className={cn("transition-all duration-100 ease-out flex items-center justify-center p-0", glassButtonStyle(className))}
-      style={{
-        width: `${size.width}px`,
-        height: `${size.height}px`,
-        position: "relative",
-        bottom: 0,
-      }}
+      style={
+        {
+          width: `${size.width}px`,
+          height: `${size.height}px`,
+          position: "relative",
+          bottom: 0,
+          "--icon-scale": iconScale,
+        } as React.CSSProperties
+      }
       {...props}
     >
       {children}
@@ -257,39 +266,49 @@ export function FloatingMenu({ className }: FloatingMenuProps) {
       >
         <MagnetizedButton mousePos={mousePos} asChild>
           <Link href="/">
-            <Home className="h-5 w-5" />
+            <Home className={iconStyle()} />
           </Link>
         </MagnetizedButton>
 
         <MagnetizedButton mousePos={mousePos} asChild>
           <Link href="/database">
-            <DatabaseZap className="h-5 w-5" />
+            <DatabaseZap className={iconStyle()} />
           </Link>
         </MagnetizedButton>
 
         <MagnetizedButton mousePos={mousePos} asChild>
           <Link href="/writing">
-            <PencilLine className="h-5 w-5" />
+            <PencilLine className={iconStyle()} />
           </Link>
         </MagnetizedButton>
 
         <MagnetizedButton mousePos={mousePos} asChild>
           <Link href="/about">
-            <Signature className="h-5 w-5" />
+            <Signature className={iconStyle()} />
           </Link>
         </MagnetizedButton>
 
         <Separator orientation="vertical" className="h-12" />
 
         <MagnetizedButton mousePos={mousePos} onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
-          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <Sun
+            className={cn(
+              "h-5 w-5 rotate-0 transition-all dark:-rotate-90",
+              "[transform:scale(var(--icon-scale,1))_rotate(0deg)_scale(1)] dark:[transform:scale(var(--icon-scale,1))_rotate(-90deg)_scale(0)]"
+            )}
+          />
+          <Moon
+            className={cn(
+              "absolute h-5 w-5 rotate-90 transition-all dark:rotate-0",
+              "[transform:scale(var(--icon-scale,1))_rotate(90deg)_scale(0)] dark:[transform:scale(var(--icon-scale,1))_rotate(0deg)_scale(1)]"
+            )}
+          />
           <span className="sr-only">화면 모드 토글</span>
         </MagnetizedButton>
 
         <MagnetizedButton mousePos={mousePos} asChild>
           <Link href="https://github.com/es-kimo" target="_blank" rel="noopener noreferrer">
-            <Github className="h-5 w-5" />
+            <Github className={iconStyle()} />
           </Link>
         </MagnetizedButton>
       </div>
