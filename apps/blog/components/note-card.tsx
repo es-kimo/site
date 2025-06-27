@@ -13,7 +13,7 @@ export async function NoteCard({ category, sub, slug, children }: SlugParams & {
   const { createdAt, updatedAt } = metadata.other;
 
   const SlugLink = ({ children, className, ...props }: { children: React.ReactNode; className?: string } & HTMLAttributes<HTMLAnchorElement>) => (
-    <Link href={`/${category}/${sub}/${slug}`} className={className} {...props}>
+    <Link href={`/writing/${category}/${sub}/${slug}`} className={className} {...props}>
       {children}
     </Link>
   );
@@ -38,7 +38,7 @@ export async function NoteCard({ category, sub, slug, children }: SlugParams & {
 }
 
 async function OpengraphImage({ category, sub, slug }: SlugParams) {
-  const noteUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/${category}/${sub}/${slug}`;
+  const noteUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/writing/${category}/${sub}/${slug}`;
 
   const ogImage = await fetchOgImage(noteUrl);
 
