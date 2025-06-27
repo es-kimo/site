@@ -110,7 +110,7 @@ export function FloatingMenu({ className }: FloatingMenuProps) {
   }, []);
 
   return (
-    <div className={cn("fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 rounded-3xl overflow-hidden", isVisible ? "shadow-2xl [.dark_&]:shadow-slate-700" : "", className)}>
+    <div className={cn("fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 rounded-full overflow-hidden", isVisible ? "shadow-2xl [.dark_&]:shadow-slate-700" : "", className)}>
       <div className={cn("absolute w-full h-full")}>
         <svg viewBox="0 0 2000 200">
           <defs>
@@ -180,7 +180,7 @@ export function FloatingMenu({ className }: FloatingMenuProps) {
         )}
       ></div>
 
-      <div className={cn("flex flex-row gap-2 p-4 transition-all duration-300 ease-in-out items-center", isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
+      <div className={cn("flex flex-row gap-2 p-3 transition-all duration-300 ease-in-out items-center", isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
         <GlassButton asChild>
           <Link href="/">
             <Home className="h-5 w-5" />
