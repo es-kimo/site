@@ -105,7 +105,7 @@ export function FloatingMenu({ className, showScrollToTop = true, showSearch = t
   return (
     <div className={cn("fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 rounded-3xl overflow-hidden", isVisible ? "shadow-2xl [.dark_&]:shadow-slate-700" : "", className)}>
       <div className={cn("absolute w-full h-full")}>
-        <svg>
+        <svg viewBox="0 0 2000 200">
           <defs>
             <filter id="liquid-glass-filter" colorInterpolationFilters="sRGB">
               <feImage id="displacement-map" x="0" y="0" width="100%" height="100%" href="/displacement-maps/texture.jpeg" result="DISPLACEMENT_MAP" preserveAspectRatio="xMidYMid slice"></feImage>
