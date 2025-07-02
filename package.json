@@ -18,7 +18,10 @@
     "게시판": "pnpm mdx:yjshd create yjshd 4.게시판",
     "콩팥질환정보": "pnpm mdx:yjshd create yjshd '3.콩팥질환 강좌' '2.콩팥질환 정보'",
     "게시": "pnpm yjshd:checkout && git add . && git commit -m 'post: 글 작성' && git push origin yjshd",
-    "게시:blog": "pnpm blog:checkout && git add . && git commit -m 'post: 글 작성' && git push origin blog"
+    "게시:blog": "pnpm blog:checkout && git add . && git commit -m 'post: 글 작성' && git push origin blog",
+    "inspiration:build": "pnpm -F @repo/rsshub-to-mdx build",
+    "inspiration": "pnpm inspiration:build && node packages/rsshub-to-mdx/dist/cli.js ryurlah --output-dir ./apps/blog/content/inspiration",
+    "inspiration:clean": "pnpm inspiration:build && node packages/rsshub-to-mdx/dist/cli.js ryurlah --output-dir ./apps/blog/content/inspiration --no-retweets"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
