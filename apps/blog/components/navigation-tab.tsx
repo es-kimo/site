@@ -8,11 +8,11 @@ export async function SubCategoryNavigationTab({ category }: { category: string 
     <NavigationMenu>
       <NavigationMenuList className="space-x-4">
         <NavigationMenuItem>
-          <NavigationLink href={`/${category}`}>전체</NavigationLink>
+          <NavigationLink href={`/writing/${category}`}>전체</NavigationLink>
         </NavigationMenuItem>
         {(await getSubCategoriesByCategory(category)).map((sub) => (
           <NavigationMenuItem key={category + sub}>
-            <NavigationLink href={`/${category}/${sub}`}>{t(sub)}</NavigationLink>
+            <NavigationLink href={`/writing/${category}/${sub}`}>{t(sub)}</NavigationLink>
           </NavigationMenuItem>
         ))}
       </NavigationMenuList>
@@ -29,7 +29,7 @@ export async function CategoryNavigationTab() {
         </NavigationMenuItem>
         {CATEGORIES.map((category) => (
           <NavigationMenuItem key={category}>
-            <NavigationLink href={`/${category}`} inclusiveActiveState>
+            <NavigationLink href={`/writing/${category}`} inclusiveActiveState>
               {t(category)}
             </NavigationLink>
           </NavigationMenuItem>

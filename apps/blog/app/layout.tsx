@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 
-import { Header } from "@/components/header";
+import { FloatingMenu } from "@/components/FloatingMenu";
 import { Providers } from "@/components/providers";
 import "@workspace/ui/globals.css";
 import { Metadata } from "next";
@@ -36,10 +36,8 @@ export default function RootLayout({
       <html lang="ko" suppressHydrationWarning>
         <body className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}>
           <Providers>
-            <div className="max-w-blog mx-auto">
-              <Header />
-              {children}
-            </div>
+            <div className="max-w-blog mx-auto">{children}</div>
+            <FloatingMenu />
           </Providers>
         </body>
       </html>
