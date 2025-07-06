@@ -261,6 +261,7 @@ export default function AnniversaryContent() {
 
               <div className="space-y-4 sm:space-y-6 text-gray-700">
                 <p className="text-lg sm:text-xl md:text-2xl font-light leading-relaxed">내가 떠올랐으면 좋겠다.</p>
+                <p className="text-lg sm:text-xl md:text-2xl font-light leading-relaxed">그럼, 조수석 수납함을 열어봐!</p>
               </div>
             </div>
           </div>
