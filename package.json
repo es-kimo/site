@@ -6,6 +6,7 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
+    "test": "turbo test",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "blog:profile": "git config user.name 'Kihyun Ryu' && git config user.email 'khryu0610@gmail.com'",
     "blog:checkout": "git fetch origin blog && ((git branch | grep blog > /dev/null && git checkout blog) || git checkout -b blog origin/blog) && git pull origin blog",
