@@ -31,6 +31,12 @@ export const blockNodeSchema: z.ZodType<BlockNode> = z
         message: `${val.type} must not have children`,
       });
     }
+    if (allowsChildren && !val.children) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `${val.type} requires children array`,
+      });
+    }
 
     // Validate props against the block-specific schema
     const res = schema.safeParse(val.props);

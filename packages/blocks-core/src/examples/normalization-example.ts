@@ -88,10 +88,91 @@ const exampleBlockTree: BlockTree = [
           parentId: null,
           props: {
             text: "정보 카드 내부의 내용",
+            // marks가 누락됨 (정규화 시 []가 주입됨)
           },
         },
       ],
       // icon, image는 optional이므로 기본값 없음
+    },
+  },
+  {
+    id: "block-8",
+    type: "faq_item",
+    order: 700,
+    parentId: null,
+    props: {
+      question: "자주 묻는 질문",
+      answer: [
+        {
+          id: "block-8-1",
+          type: "paragraph",
+          order: 0,
+          parentId: null,
+          props: {
+            text: "답변 내용입니다.",
+            // marks가 누락됨 (정규화 시 []가 주입됨)
+          },
+        },
+      ],
+    },
+  },
+  {
+    id: "block-9",
+    type: "accordion_group",
+    order: 800,
+    parentId: null,
+    props: {
+      items: [
+        {
+          title: "아코디언 항목 1",
+          body: [
+            {
+              id: "block-9-1",
+              type: "paragraph",
+              order: 0,
+              parentId: null,
+              props: {
+                text: "아코디언 내용입니다.",
+                // marks가 누락됨 (정규화 시 []가 주입됨)
+              },
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    id: "block-10",
+    type: "columns",
+    order: 900,
+    parentId: null,
+    props: {
+      columns: [
+        [
+          {
+            id: "block-10-1",
+            type: "paragraph",
+            order: 0,
+            parentId: null,
+            props: {
+              text: "첫 번째 컬럼",
+              // marks가 누락됨 (정규화 시 []가 주입됨)
+            },
+          },
+        ],
+        [
+          {
+            id: "block-10-2",
+            type: "paragraph",
+            order: 0,
+            parentId: null,
+            props: {
+              text: "두 번째 컬럼",
+              // marks가 누락됨 (정규화 시 []가 주입됨)
+            },
+          },
+        ],
+      ],
     },
   },
 ];
@@ -159,6 +240,18 @@ export function runNormalizationExample() {
   // info_card body 확인
   const infoCard = normalizedTree.find((b) => b.type === "info_card");
   console.log(`Info card body:`, (infoCard?.props as any)?.body);
+
+  // faq_item answer 확인
+  const faqItem = normalizedTree.find((b) => b.type === "faq_item");
+  console.log(`FAQ item answer:`, (faqItem?.props as any)?.answer);
+
+  // accordion_group items 확인
+  const accordionGroup = normalizedTree.find((b) => b.type === "accordion_group");
+  console.log(`Accordion group items:`, (accordionGroup?.props as any)?.items);
+
+  // columns 확인
+  const columns = normalizedTree.find((b) => b.type === "columns");
+  console.log(`Columns:`, (columns?.props as any)?.columns);
 }
 
 // 서버 액션에서 사용하는 예제

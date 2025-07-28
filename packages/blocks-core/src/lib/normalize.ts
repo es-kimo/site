@@ -1,6 +1,5 @@
-import { z } from "zod";
 import type { BlockNode, BlockTree } from "../types";
-import { blockSchemas, blockTypes, containerTypesUsingChildren, type BlockType } from "../schema/registry";
+import { blockSchemas, containerTypesUsingChildren, type BlockType } from "../schema/registry";
 import { blockTreeSchema } from "../schema/tree";
 
 // Local type definitions
@@ -22,7 +21,7 @@ interface NormalizedBlockNode extends BlockNode {
  * - 중첩 구조 정규화
  */
 export function normalizeBlockTree(tree: BlockTree): BlockTree {
-  return tree.map((node, idx) => normalizeNode(node, { fallbackOrder: idx * 100 }));
+  return tree.map((node, idx) => normalizeNode(node, { fallbackOrder: (idx + 1) * 100 }));
 }
 
 /**
@@ -39,7 +38,10 @@ export function normalizeNode(node: BlockNode, context: NormalizationContext): N
 
   // props 스키마 파싱 + 기본값 주입
   const parsed = schema.parse(node.props);
-  const props = applyDefaults(node.type as BlockType, parsed);
+  let props = applyDefaults(node.type as BlockType, parsed);
+
+  // 중첩 트리 정규화 (props 내부의 BlockTree)
+  props = normalizeNestedTrees(node.type as BlockType, props);
 
   // children 처리 (section만 children 필드 사용)
   let children: BlockNode[] | undefined;
@@ -59,6 +61,30 @@ export function normalizeNode(node: BlockNode, context: NormalizationContext): N
     children,
     parentId: context.parentId ?? node.parentId,
   };
+}
+
+/**
+ * props 내부의 중첩 트리를 정규화합니다.
+ */
+function normalizeNestedTrees(type: BlockType, props: any): Record<string, unknown> {
+  switch (type) {
+    case "faq_item":
+      props.answer = normalizeBlockTree(props.answer);
+      break;
+    case "accordion_group":
+      props.items = props.items.map((it: any, idx: number) => ({
+        ...it,
+        body: normalizeBlockTree(it.body),
+      }));
+      break;
+    case "info_card":
+      props.body = normalizeBlockTree(props.body);
+      break;
+    case "columns":
+      props.columns = props.columns.map((col: BlockTree) => normalizeBlockTree(col));
+      break;
+  }
+  return props;
 }
 
 /**
@@ -115,7 +141,7 @@ function applyDefaults(type: BlockType, props: any): Record<string, unknown> {
     case "faq_item":
     case "accordion_group":
     case "columns":
-      // 중첩 블록 트리는 별도 처리
+      // 중첩 블록 트리는 normalizeNestedTrees에서 처리
       break;
 
     default:
@@ -167,6 +193,9 @@ export function validateNormalizedTree(tree: BlockTree): { valid: boolean; error
       errors.push(`${currentPath}: Invalid order value ${node.order}`);
     }
 
+    // 중첩 트리 검증 (props 내부의 BlockTree)
+    validateNestedTrees(node.type as BlockType, node.props, currentPath, errors);
+
     // children 재귀 검사 (section만)
     if (node.children) {
       if (!containerTypesUsingChildren.has(node.type as BlockType)) {
@@ -184,4 +213,50 @@ export function validateNormalizedTree(tree: BlockTree): { valid: boolean; error
   });
 
   return { valid: errors.length === 0, errors };
+}
+
+/**
+ * props 내부의 중첩 트리를 검증합니다.
+ */
+function validateNestedTrees(type: BlockType, props: any, path: string, errors: string[]) {
+  switch (type) {
+    case "faq_item":
+      if (props.answer) {
+        const result = validateBlockTree(props.answer);
+        if (!result.valid) {
+          errors.push(`${path}.answer: ${result.errors.join(", ")}`);
+        }
+      }
+      break;
+    case "accordion_group":
+      if (props.items) {
+        props.items.forEach((item: any, idx: number) => {
+          if (item.body) {
+            const result = validateBlockTree(item.body);
+            if (!result.valid) {
+              errors.push(`${path}.items[${idx}].body: ${result.errors.join(", ")}`);
+            }
+          }
+        });
+      }
+      break;
+    case "info_card":
+      if (props.body) {
+        const result = validateBlockTree(props.body);
+        if (!result.valid) {
+          errors.push(`${path}.body: ${result.errors.join(", ")}`);
+        }
+      }
+      break;
+    case "columns":
+      if (props.columns) {
+        props.columns.forEach((col: BlockTree, idx: number) => {
+          const result = validateBlockTree(col);
+          if (!result.valid) {
+            errors.push(`${path}.columns[${idx}]: ${result.errors.join(", ")}`);
+          }
+        });
+      }
+      break;
+  }
 }
