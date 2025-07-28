@@ -35,7 +35,8 @@ function normalizeBlockTreeWithParent(tree: BlockTree, parentId: string): BlockT
  * 단일 블록 노드를 정규화합니다.
  */
 export function normalizeNode(node: BlockNode, context: NormalizationContext): NormalizedBlockNode {
-  const schema = blockSchemas[node.type as BlockType];
+  const type = node.type as BlockType;
+  const schema = blockSchemas[type];
   if (!schema) {
     throw new Error(`Unknown block type: ${node.type}`);
   }
@@ -45,10 +46,10 @@ export function normalizeNode(node: BlockNode, context: NormalizationContext): N
 
   // props 스키마 파싱 + 기본값 주입
   const parsed = schema.parse(node.props);
-  let props = applyDefaults(node.type as BlockType, parsed);
+  let props = applyDefaults(type, parsed);
 
   // 중첩 트리 정규화 (props 내부의 BlockTree)
-  props = normalizeNestedTrees(node.type as BlockType, props, node.id);
+  props = normalizeNestedTrees(type, props, node.id);
 
   // children 처리 (section만 children 필드 사용)
   let children: BlockNode[] | undefined;
@@ -73,22 +74,22 @@ export function normalizeNode(node: BlockNode, context: NormalizationContext): N
 /**
  * props 내부의 중첩 트리를 정규화합니다.
  */
-function normalizeNestedTrees(type: BlockType, props: any, parentId: string): Record<string, unknown> {
+function normalizeNestedTrees(type: BlockType, props: Record<string, unknown>, parentId: string): Record<string, unknown> {
   switch (type) {
     case "faq_item":
-      props.answer = normalizeBlockTreeWithParent(props.answer, parentId);
+      props.answer = normalizeBlockTreeWithParent(props.answer as BlockTree, parentId);
       break;
     case "accordion_group":
-      props.items = props.items.map((it: any, idx: number) => ({
+      props.items = (props.items as Array<{ body: BlockTree }>).map((it) => ({
         ...it,
         body: normalizeBlockTreeWithParent(it.body, parentId),
       }));
       break;
     case "info_card":
-      props.body = normalizeBlockTreeWithParent(props.body, parentId);
+      props.body = normalizeBlockTreeWithParent(props.body as BlockTree, parentId);
       break;
     case "columns":
-      props.columns = props.columns.map((col: BlockTree) => normalizeBlockTreeWithParent(col, parentId));
+      props.columns = (props.columns as BlockTree[]).map((col) => normalizeBlockTreeWithParent(col, parentId));
       break;
   }
   return props;
@@ -97,7 +98,7 @@ function normalizeNestedTrees(type: BlockType, props: any, parentId: string): Re
 /**
  * 블록 타입별 기본값을 적용합니다.
  */
-function applyDefaults(type: BlockType, props: any): Record<string, unknown> {
+function applyDefaults(type: BlockType, props: Record<string, unknown>): Record<string, unknown> {
   switch (type) {
     case "paragraph":
       props.marks ??= [];
@@ -134,7 +135,7 @@ function applyDefaults(type: BlockType, props: any): Record<string, unknown> {
       break;
 
     case "embed":
-      props.provider ??= inferProvider(props.url);
+      props.provider ??= inferProvider(props.url as string);
       break;
 
     case "info_card":
@@ -225,7 +226,7 @@ export function validateNormalizedTree(tree: BlockTree): { valid: boolean; error
 /**
  * props 내부의 중첩 트리를 검증합니다.
  */
-function validateNestedTrees(type: BlockType, props: any, path: string, errors: string[]) {
+function validateNestedTrees(type: BlockType, props: Record<string, unknown>, path: string, errors: string[]) {
   switch (type) {
     case "faq_item":
       if (props.answer) {
@@ -237,7 +238,7 @@ function validateNestedTrees(type: BlockType, props: any, path: string, errors: 
       break;
     case "accordion_group":
       if (props.items) {
-        props.items.forEach((item: any, idx: number) => {
+        (props.items as Array<{ body: unknown }>).forEach((item, idx: number) => {
           if (item.body) {
             const result = validateBlockTree(item.body);
             if (!result.valid) {
@@ -257,7 +258,7 @@ function validateNestedTrees(type: BlockType, props: any, path: string, errors: 
       break;
     case "columns":
       if (props.columns) {
-        props.columns.forEach((col: BlockTree, idx: number) => {
+        (props.columns as BlockTree[]).forEach((col, idx: number) => {
           const result = validateBlockTree(col);
           if (!result.valid) {
             errors.push(`${path}.columns[${idx}]: ${result.errors.join(", ")}`);
