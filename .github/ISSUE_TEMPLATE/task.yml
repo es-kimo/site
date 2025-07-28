@@ -1,0 +1,21 @@
+name: Task
+description: Small implementation task
+labels: ["type:task"]
+body:
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps / Notes
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Phase
+      options: ["1","2","3","4","5","6","7","8","9","10"]
+  - type: input
+    id: due
+    attributes:
+      label: Due date (YYYY-MM-DD)
