@@ -25,6 +25,13 @@ export function normalizeBlockTree(tree: BlockTree): BlockTree {
 }
 
 /**
+ * 부모 ID와 함께 블록 트리를 정규화합니다.
+ */
+function normalizeBlockTreeWithParent(tree: BlockTree, parentId: string): BlockTree {
+  return tree.map((node, idx) => normalizeNode(node, { fallbackOrder: (idx + 1) * 100, parentId }));
+}
+
+/**
  * 단일 블록 노드를 정규화합니다.
  */
 export function normalizeNode(node: BlockNode, context: NormalizationContext): NormalizedBlockNode {
@@ -41,7 +48,7 @@ export function normalizeNode(node: BlockNode, context: NormalizationContext): N
   let props = applyDefaults(node.type as BlockType, parsed);
 
   // 중첩 트리 정규화 (props 내부의 BlockTree)
-  props = normalizeNestedTrees(node.type as BlockType, props);
+  props = normalizeNestedTrees(node.type as BlockType, props, node.id);
 
   // children 처리 (section만 children 필드 사용)
   let children: BlockNode[] | undefined;
@@ -66,22 +73,22 @@ export function normalizeNode(node: BlockNode, context: NormalizationContext): N
 /**
  * props 내부의 중첩 트리를 정규화합니다.
  */
-function normalizeNestedTrees(type: BlockType, props: any): Record<string, unknown> {
+function normalizeNestedTrees(type: BlockType, props: any, parentId: string): Record<string, unknown> {
   switch (type) {
     case "faq_item":
-      props.answer = normalizeBlockTree(props.answer);
+      props.answer = normalizeBlockTreeWithParent(props.answer, parentId);
       break;
     case "accordion_group":
       props.items = props.items.map((it: any, idx: number) => ({
         ...it,
-        body: normalizeBlockTree(it.body),
+        body: normalizeBlockTreeWithParent(it.body, parentId),
       }));
       break;
     case "info_card":
-      props.body = normalizeBlockTree(props.body);
+      props.body = normalizeBlockTreeWithParent(props.body, parentId);
       break;
     case "columns":
-      props.columns = props.columns.map((col: BlockTree) => normalizeBlockTree(col));
+      props.columns = props.columns.map((col: BlockTree) => normalizeBlockTreeWithParent(col, parentId));
       break;
   }
   return props;
