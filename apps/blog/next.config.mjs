@@ -21,14 +21,23 @@ const nextConfig = {
           },
     ],
   },
-  experimental: {
-    ppr: "incremental",
+};
+
+/** @type {import('rehype-pretty-code').Options} */
+const options = {
+  theme: {
+    dark: "github-dark-high-contrast",
+    light: "github-light-high-contrast",
   },
+  keepBackground: false,
 };
 
 /** @type {import('@next/mdx').WithMDX} */
 const withMDX = createMDX({
-  // Add markdown plugins here, as desired
+  options: {
+    remarkPlugins: [["remark-gfm"]],
+    rehypePlugins: [["rehype-pretty-code", options]],
+  },
 });
 
 export default withMDX(nextConfig);

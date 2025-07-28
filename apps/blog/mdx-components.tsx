@@ -44,10 +44,15 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       return <li {...properties}></li>;
     },
     code(properties) {
-      return <code {...properties} className="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold"></code>;
+      return (
+        <code
+          {...properties}
+          className="rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold [pre_&]:bg-[var(--code-block-bg)] [pre_&]:p-0 [pre_&]:rounded-none [pre_&]:font-normal [pre_&]:text-[13px] [pre_&]:border-[var(--code-block-border)]"
+        ></code>
+      );
     },
     pre(properties) {
-      return <pre {...properties}></pre>;
+      return <pre {...properties} className="border border-[var(--code-block-border)] rounded-[10px] p-4 bg-[var(--code-block-bg)] mt-6 overflow-x-auto"></pre>;
     },
     Image: (props) => <Image {...(props as ImageProps)} className="w-4/5 mx-auto" />,
     Lead(properties) {
