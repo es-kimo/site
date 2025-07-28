@@ -1,0 +1,20 @@
+{
+  "name": "@workspace/blocks-core",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . --max-warnings 0"
+  },
+  "exports": {
+    "./lib/*": "./src/lib/*.ts",
+    "./types/*": "./src/types/*.ts",
+    "./types/index": "./src/types/index.ts",
+    "./types/index.js": "./src/types/index.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.8",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "typescript": "latest"
+  },
+  "dependencies": {}
+}

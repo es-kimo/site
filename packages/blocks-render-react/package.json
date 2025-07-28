@@ -1,0 +1,25 @@
+{
+  "name": "@workspace/blocks-render-react",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint . --max-warnings 0"
+  },
+  "exports": {
+    "./components/*": "./src/components/*.tsx",
+    "./hooks/*": "./src/hooks/*.ts",
+    "./lib/*": "./src/lib/*.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.8",
+    "@types/react": "18.3.0",
+    "@types/react-dom": "18.3.1",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "typescript": "latest"
+  },
+  "dependencies": {
+    "@workspace/blocks-core": "workspace:*",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}
