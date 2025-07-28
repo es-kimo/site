@@ -1,0 +1,30 @@
+import { defineConfig } from "tsup";
+
+export default defineConfig({
+  entry: {
+    index: "src/index.ts",
+    types: "src/types.ts",
+    "schema/registry": "src/schema/registry.ts",
+    "schema/base": "src/schema/base.ts",
+    "schema/tree": "src/schema/tree.ts",
+    "schema/blocks/paragraph": "src/schema/blocks/paragraph.ts",
+    "schema/blocks/heading": "src/schema/blocks/heading.ts",
+    "schema/blocks/list": "src/schema/blocks/list.ts",
+    "schema/blocks/image": "src/schema/blocks/image.ts",
+    "schema/blocks/table": "src/schema/blocks/table.ts",
+    "schema/blocks/divider": "src/schema/blocks/divider.ts",
+    "schema/blocks/embed": "src/schema/blocks/embed.ts",
+    "schema/blocks/faq_item": "src/schema/blocks/faq_item.ts",
+    "schema/blocks/accordion_group": "src/schema/blocks/accordion_group.ts",
+    "schema/blocks/cta": "src/schema/blocks/cta.ts",
+    "schema/blocks/info_card": "src/schema/blocks/info_card.ts",
+    "schema/blocks/section": "src/schema/blocks/section.ts",
+    "schema/blocks/columns": "src/schema/blocks/columns.ts",
+  },
+  format: ["esm", "cjs"],
+  dts: true,
+  splitting: false,
+  sourcemap: true,
+  clean: true,
+  external: ["zod"],
+});

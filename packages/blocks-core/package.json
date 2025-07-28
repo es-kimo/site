@@ -1,20 +1,46 @@
 {
   "name": "@workspace/blocks-core",
   "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "lint": "eslint . --max-warnings 0"
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint . --max-warnings 0",
+    "test": "vitest"
   },
   "exports": {
-    "./lib/*": "./src/lib/*.ts",
-    "./types/*": "./src/types/*.ts",
-    "./types/index": "./src/types/index.ts",
-    "./types/index.js": "./src/types/index.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js",
+      "require": "./dist/types.cjs"
+    },
+    "./schema/*": {
+      "types": "./dist/schema/*.d.ts",
+      "import": "./dist/schema/*.js",
+      "require": "./dist/schema/*.cjs"
+    },
+    "./schema/blocks/*": {
+      "types": "./dist/schema/blocks/*.d.ts",
+      "import": "./dist/schema/blocks/*.js",
+      "require": "./dist/schema/blocks/*.cjs"
+    }
   },
   "devDependencies": {
     "@types/node": "^22.13.8",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
-    "typescript": "latest"
+    "typescript": "latest",
+    "tsup": "^8.5.0",
+    "vitest": "^2.1.8"
   },
-  "dependencies": {}
+  "dependencies": {
+    "zod": "^3.23.8"
+  }
 }
