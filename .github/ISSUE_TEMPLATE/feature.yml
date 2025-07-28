@@ -1,0 +1,23 @@
+name: Feature
+description: New feature or enhancement
+labels: ["type:feature"]
+body:
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      placeholder: What do you want to build?
+  - type: textarea
+    id: details
+    attributes:
+      label: Details / Acceptance Criteria
+      placeholder: Context, requirements, done criteria...
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Phase
+      options: ["1","2","3","4","5","6","7","8","9","10"]
+  - type: input
+    id: due
+    attributes:
+      label: Due date (YYYY-MM-DD)
