@@ -211,6 +211,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </ImageLightbox>
       );
     },
+    Link({ children, className, ...props }) {
+      return (
+        <Link {...props} className={cn("text-primary underline my-2", className)}>
+          {children}
+        </Link>
+      );
+    },
     ...components,
   };
 }
