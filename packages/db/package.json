@@ -4,19 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:drop": "drizzle-kit drop"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^17.2.2",
-    "drizzle-orm": "^0.44.5",
-    "pg": "^8.16.3"
+    "@neondatabase/serverless": "^1.0.1",
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.44.5"
   },
   "devDependencies": {
-    "@types/pg": "^8.15.5",
-    "drizzle-kit": "^0.31.4",
-    "tsx": "^4.20.5"
+    "drizzle-kit": "^0.31.4"
   }
 }
