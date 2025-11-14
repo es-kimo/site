@@ -31,16 +31,16 @@ This ensures all generated numbers are valid and symmetric under rotation.
 
 - Time complexity:
   Each recursion level generates approximately 5× more strings than the previous level.
-  The total number of strobogrammatic numbers of length n is O(5^{n/2}), so the time complexity is
-  O(5^{n/2})
+  The total number of strobogrammatic numbers of length n is `O(5^{n/2})`, so the time complexity is
+  `O(5^{n/2})`
 - Space complexity:
-  The recursion depth is O(n), and the output list itself contains O(5^{n/2}) strings.
+  The recursion depth is `O(n)`, and the output list itself contains `O(5^{n/2})` strings.
   Thus total space usage is
-  O(5^{n/2})
+  `O(5^{n/2})`
 
 ## Code
 
-```javascript []
+```javascript
 /**
  * @param {number} n
  * @return {string[]}
