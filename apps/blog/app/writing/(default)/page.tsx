@@ -7,7 +7,7 @@ export default function Page() {
   const noteItems = Object.entries(NOTES).flatMap(([category, subCategories]) =>
     Object.entries(subCategories).flatMap(([sub, slugs]) =>
       slugs.map((slug) => (
-        <li key={slug} className="w-full">
+        <li key={`${category}-${sub}-${slug}`} className="w-full">
           <NoteCard category={category} sub={sub} slug={slug}>
             <NoteCard.OpengraphImage category={category} sub={sub} slug={slug} />
           </NoteCard>
