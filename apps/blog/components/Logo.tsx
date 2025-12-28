@@ -9,7 +9,7 @@ const particleSystem = new ParticleSystem("khryu.dev");
 
 export function Logo({ className }: { className?: string }) {
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isGradientAnimating, setIsGradientAnimating] = useState(false);
+  const [gradientKey, setGradientKey] = useState(0);
   const [charPositions, setCharPositions] = useState<number[]>([]);
   const textRef = useRef<SVGTextElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -53,12 +53,8 @@ export function Logo({ className }: { className?: string }) {
         completedCount++;
         if (completedCount === totalParticles) {
           setIsAnimating(false);
-          // 파티클 애니메이션이 끝나면 그라데이션 애니메이션 시작
-          setIsGradientAnimating(true);
+          setGradientKey((prev) => prev + 1);
         }
-      } else if (e.animationName === "gradientFill") {
-        // 그라데이션 애니메이션이 끝나면 상태 리셋
-        setIsGradientAnimating(false);
       }
     };
 
@@ -93,10 +89,10 @@ export function Logo({ className }: { className?: string }) {
     >
       <svg ref={svgRef} width="72" height="24" viewBox="0 0 72 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="block overflow-visible" aria-hidden="true">
         <defs>
-          <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#6ee7ff" />
+          <linearGradient id="textGradient" x1="120%" y1="0%" x2="-20%" y2="0%">
+            <stop offset="0%" stopColor="#fca5a5" />
             <stop offset="50%" stopColor="#a78bfa" />
-            <stop offset="100%" stopColor="#fca5a5" />
+            <stop offset="100%" stopColor="#6ee7ff" />
           </linearGradient>
 
           <style>{`
@@ -119,13 +115,13 @@ export function Logo({ className }: { className?: string }) {
 
             @keyframes gradientFill {
               0% {
-                clip-path: inset(0 100% 0 0);
+                clip-path: inset(0 0 0 100%);
               }
               50% {
                 clip-path: inset(0 0 0 0);
               }
               100% {
-                clip-path: inset(0 0 0 100%);
+                clip-path: inset(0 100% 0 0);
               }
             }
 
@@ -137,10 +133,6 @@ export function Logo({ className }: { className?: string }) {
 
             .particle.active {
               animation: convergeAndRotate ${particleSystem.getAnimationDuration()}s ease forwards;
-            }
-
-            .gradient-text {
-              clip-path: inset(0 100% 0 0);
             }
 
             .gradient-text.active {
@@ -162,16 +154,18 @@ export function Logo({ className }: { className?: string }) {
         </text>
 
         {/* 그라데이션 텍스트 (위에 겹침) */}
-        <text y="18" fontSize="16" fill="url(#textGradient)" fontWeight="500" style={{ fontFamily: "Inter, system-ui, sans-serif" }} className={cn("gradient-text", isGradientAnimating && "active")}>
-          {particleSystem.text.split("").map((char, i) => {
-            const charX = charPositions.length > 0 ? (charPositions[i] ?? particleSystem.getCharX(i)) : particleSystem.getCharX(i);
-            return (
-              <tspan key={`gradient-${i}`} x={charX}>
-                {char}
-              </tspan>
-            );
-          })}
-        </text>
+        {gradientKey > 0 && (
+          <text key={gradientKey} y="18" fontSize="16" fill="url(#textGradient)" fontWeight="500" style={{ fontFamily: "Inter, system-ui, sans-serif" }} className="gradient-text active">
+            {particleSystem.text.split("").map((char, i) => {
+              const charX = charPositions.length > 0 ? (charPositions[i] ?? particleSystem.getCharX(i)) : particleSystem.getCharX(i);
+              return (
+                <tspan key={`gradient-${i}`} x={charX}>
+                  {char}
+                </tspan>
+              );
+            })}
+          </text>
+        )}
 
         {/* Particle 텍스트들 (각 글자당 1개) */}
         {particleSystem.text.split("").map((char, charIndex) => {
