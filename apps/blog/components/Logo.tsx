@@ -137,7 +137,7 @@ export function Logo({ className }: { className?: string }) {
             }
 
             .gradient-text.active {
-              animation: gradientFill .3s ease-in-out forwards;
+              animation: gradientFill .4s ease-in-out forwards;
             }
           `}</style>
         </defs>

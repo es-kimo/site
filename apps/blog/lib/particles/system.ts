@@ -17,7 +17,7 @@ export class ParticleSystem {
     this.config = {
       radius: 30,
       delayPerChar: 0,
-      animationDuration: 0.5,
+      animationDuration: 0.6,
       saturation: 50, // 뮤트 톤의 절제된 채도
       lightness: 72, // 파스텔 느낌의 밝기
       saturationVariance: 3, // 미니멀한 변화
