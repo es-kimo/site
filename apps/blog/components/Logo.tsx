@@ -10,35 +10,7 @@ const particleSystem = new ParticleSystem("khryu.dev");
 export function Logo({ className }: { className?: string }) {
   const [isAnimating, setIsAnimating] = useState(false);
   const [gradientKey, setGradientKey] = useState(0);
-  const [charPositions, setCharPositions] = useState<number[]>([]);
-  const textRef = useRef<SVGTextElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
-
-  // 실제 렌더링된 글자 위치 측정
-  useEffect(() => {
-    if (!textRef.current) return;
-
-    const measurePositions = () => {
-      const positions: number[] = [];
-      const tspans = textRef.current?.querySelectorAll("tspan");
-
-      tspans?.forEach((tspan) => {
-        const bbox = tspan.getBBox();
-        positions.push(bbox.x);
-      });
-
-      if (positions.length > 0) {
-        setCharPositions(positions);
-      }
-    };
-
-    // 폰트 로드 후 측정
-    if (document.fonts?.ready) {
-      document.fonts.ready.then(measurePositions);
-    } else {
-      measurePositions();
-    }
-  }, []);
 
   // 파티클 애니메이션 완료 감지
   useEffect(() => {
@@ -143,43 +115,34 @@ export function Logo({ className }: { className?: string }) {
         </defs>
 
         {/* 원본 텍스트 (currentColor, 항상 보임) */}
-        <text ref={textRef} y="18" fontSize="16" fill="currentColor" fontWeight="500" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
-          {particleSystem.text.split("").map((char, i) => {
-            const charX = charPositions.length > 0 ? (charPositions[i] ?? particleSystem.getCharX(i)) : particleSystem.getCharX(i);
-            return (
-              <tspan key={`original-${i}`} x={charX}>
-                {char}
-              </tspan>
-            );
-          })}
+        <text y="18" fontSize="16" fill="currentColor" fontWeight="500" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
+          {particleSystem.text.split("").map((char, i) => (
+            <tspan key={`original-${i}`} x={particleSystem.getCharX(i)}>
+              {char}
+            </tspan>
+          ))}
         </text>
 
         {/* 그라데이션 텍스트 (위에 겹침) */}
         {gradientKey > 0 && (
           <text key={gradientKey} y="18" fontSize="16" fill="url(#textGradient)" fontWeight="500" style={{ fontFamily: "Inter, system-ui, sans-serif" }} className="gradient-text active">
-            {particleSystem.text.split("").map((char, i) => {
-              const charX = charPositions.length > 0 ? (charPositions[i] ?? particleSystem.getCharX(i)) : particleSystem.getCharX(i);
-              return (
-                <tspan key={`gradient-${i}`} x={charX}>
-                  {char}
-                </tspan>
-              );
-            })}
+            {particleSystem.text.split("").map((char, i) => (
+              <tspan key={`gradient-${i}`} x={particleSystem.getCharX(i)}>
+                {char}
+              </tspan>
+            ))}
           </text>
         )}
 
         {/* Particle 텍스트들 (각 글자당 1개) */}
         {particleSystem.text.split("").map((char, charIndex) => {
-          // 브라우저 측정값이 있으면 사용, 없으면 계산값 사용
-          const charX = charPositions.length > 0 ? (charPositions[charIndex] ?? particleSystem.getCharX(charIndex)) : particleSystem.getCharX(charIndex);
-
           const particle = particleSystem.getParticle(charIndex);
           if (!particle) return null;
 
           return (
             <text
               key={charIndex}
-              x={charX}
+              x={particleSystem.getCharX(charIndex)}
               y={18}
               fontSize="16"
               fontWeight="500"
