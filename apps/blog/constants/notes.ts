@@ -25,7 +25,6 @@ export const getSlugMetadata = async (category: Category, sub: string, slug: str
 // TODO: use Promise all to start concurrently
 /** 노트 */
 export const NOTES: Notes = await (async () => {
-  console.log("NOTES CALLED");
   const notes: Notes = {};
   for (const category of CATEGORIES) {
     const tempCategory: Record<string, string[]> = {};
