@@ -18,11 +18,11 @@ export class ParticleSystem {
       radius: 30,
       delayPerChar: 0,
       animationDuration: 0.5,
-      saturation: 62,
-      lightness: 80,
-      saturationVariance: 8,
-      lightnessVariance: 4,
-      opacity: 0.9,
+      saturation: 50, // 뮤트 톤의 절제된 채도
+      lightness: 72, // 파스텔 느낌의 밝기
+      saturationVariance: 3, // 미니멀한 변화
+      lightnessVariance: 3, // 미니멀한 변화
+      opacity: 0.88, // 약간 투명하게
       ...config,
     };
 

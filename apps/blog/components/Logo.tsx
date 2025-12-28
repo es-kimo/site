@@ -90,9 +90,10 @@ export function Logo({ className }: { className?: string }) {
       <svg ref={svgRef} width="72" height="24" viewBox="0 0 72 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="block overflow-visible" aria-hidden="true">
         <defs>
           <linearGradient id="textGradient" x1="120%" y1="0%" x2="-20%" y2="0%">
-            <stop offset="0%" stopColor="#fca5a5" />
-            <stop offset="50%" stopColor="#a78bfa" />
-            <stop offset="100%" stopColor="#6ee7ff" />
+            <stop offset="0%" stopColor="#89CFF0" />
+            <stop offset="33%" stopColor="#B4A7D6" />
+            <stop offset="66%" stopColor="#E4B1AB" />
+            <stop offset="100%" stopColor="#D4C5A9" />
           </linearGradient>
 
           <style>{`
@@ -109,7 +110,7 @@ export function Logo({ className }: { className?: string }) {
 
               100% {
                 transform: translate(0px, 0px) rotate(0deg);
-                opacity: 0;
+                opacity: 0.2;
               }
             }
 
