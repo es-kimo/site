@@ -91,7 +91,16 @@ export function Logo({ className }: { className?: string }) {
         </defs>
 
         {/* 원본 텍스트 (항상 보임) - 각 글자를 tspan으로 분리 */}
-        <text ref={textRef} y="18" fontSize="16" fill="currentColor" style={{ fontFamily: "Inter, system-ui, sans-serif" }} opacity={isAnimating ? 0.3 : 1} className="transition-opacity duration-300">
+        <text
+          ref={textRef}
+          y="18"
+          fontSize="16"
+          fill="currentColor"
+          fontWeight="500"
+          style={{ fontFamily: "Inter, system-ui, sans-serif" }}
+          opacity={isAnimating ? 0.3 : 1}
+          className="transition-opacity duration-300"
+        >
           {particleSystem.text.split("").map((char, i) => (
             <tspan key={`original-${i}`} x={particleSystem.getCharX(i)}>
               {char}
@@ -114,6 +123,7 @@ export function Logo({ className }: { className?: string }) {
               y={18}
               fontSize="16"
               fontWeight="500"
+              letterSpacing="0.02em"
               fill={particle.color}
               style={{
                 fontFamily: "Inter, system-ui, sans-serif",
