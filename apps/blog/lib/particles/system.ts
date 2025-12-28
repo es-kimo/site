@@ -16,8 +16,8 @@ export class ParticleSystem {
 
     this.config = {
       radius: 30,
-      delayPerChar: 0.05,
-      animationDuration: 0.8,
+      delayPerChar: 0,
+      animationDuration: 0.2,
       saturation: 62,
       lightness: 80,
       saturationVariance: 8,

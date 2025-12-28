@@ -11,6 +11,7 @@ export function Logo({ className }: { className?: string }) {
   const [isAnimating, setIsAnimating] = useState(false);
   const [charPositions, setCharPositions] = useState<number[]>([]);
   const textRef = useRef<SVGTextElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
 
   // 실제 렌더링된 글자 위치 측정
   useEffect(() => {
@@ -38,11 +39,35 @@ export function Logo({ className }: { className?: string }) {
     }
   }, []);
 
+  // 애니메이션 완료 감지
+  useEffect(() => {
+    const svgElement = svgRef.current;
+    if (!svgElement || !isAnimating) return;
+
+    let completedCount = 0;
+    const totalParticles = particleSystem.text.length;
+
+    const handleAnimationEnd = (e: AnimationEvent) => {
+      if (e.animationName === "convergeAndRotate") {
+        completedCount++;
+        if (completedCount === totalParticles) {
+          setIsAnimating(false);
+        }
+      }
+    };
+
+    svgElement.addEventListener("animationend", handleAnimationEnd);
+
+    return () => {
+      svgElement.removeEventListener("animationend", handleAnimationEnd);
+    };
+  }, [isAnimating]);
+
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    setIsAnimating(true);
-    // 정확한 애니메이션 종료 시간 계산
-    setTimeout(() => setIsAnimating(false), particleSystem.getTotalAnimationTime());
+    requestAnimationFrame(() => {
+      setIsAnimating(true);
+    });
   };
 
   return (
@@ -60,7 +85,7 @@ export function Logo({ className }: { className?: string }) {
         className
       )}
     >
-      <svg width="72" height="24" viewBox="0 0 72 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="block overflow-visible" aria-hidden="true">
+      <svg ref={svgRef} width="72" height="24" viewBox="0 0 72 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="block overflow-visible" aria-hidden="true">
         <defs>
           <style>{`
             @keyframes convergeAndRotate {
@@ -73,7 +98,7 @@ export function Logo({ className }: { className?: string }) {
               }
               100% {
                 transform: translate(0px, 0px) rotate(0deg);
-                opacity: 0;
+                opacity: 1;
               }
             }
 
@@ -84,8 +109,7 @@ export function Logo({ className }: { className?: string }) {
             }
 
             .particle.active {
-              animation: convergeAndRotate ${particleSystem.getAnimationDuration()}s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-              animation-delay: var(--delay);
+              animation: convergeAndRotate ${particleSystem.getAnimationDuration()}s ease forwards;
             }
           `}</style>
         </defs>
