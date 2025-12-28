@@ -93,12 +93,15 @@ export function Logo({ className }: { className?: string }) {
                 transform: translate(var(--start-x), var(--start-y)) rotate(var(--start-rotation));
                 opacity: 1;
               }
-              85% {
-                opacity: 1;
+           
+              75% {
+                transform: translate(0px, 0px) rotate(0deg);
+                opacity: 0.9;
               }
+
               100% {
                 transform: translate(0px, 0px) rotate(0deg);
-                opacity: 1;
+                opacity: 0;
               }
             }
 
@@ -115,16 +118,7 @@ export function Logo({ className }: { className?: string }) {
         </defs>
 
         {/* 원본 텍스트 (항상 보임) - 각 글자를 tspan으로 분리 */}
-        <text
-          ref={textRef}
-          y="18"
-          fontSize="16"
-          fill="currentColor"
-          fontWeight="500"
-          style={{ fontFamily: "Inter, system-ui, sans-serif" }}
-          opacity={isAnimating ? 0.3 : 1}
-          className="transition-opacity duration-300"
-        >
+        <text ref={textRef} y="18" fontSize="16" fill="currentColor" fontWeight="500" style={{ fontFamily: "Inter, system-ui, sans-serif" }} className="transition-opacity duration-300">
           {particleSystem.text.split("").map((char, i) => (
             <tspan key={`original-${i}`} x={particleSystem.getCharX(i)}>
               {char}

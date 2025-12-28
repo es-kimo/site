@@ -17,11 +17,12 @@ export class ParticleSystem {
     this.config = {
       radius: 30,
       delayPerChar: 0,
-      animationDuration: 0.2,
+      animationDuration: 0.5,
       saturation: 62,
       lightness: 80,
       saturationVariance: 8,
       lightnessVariance: 4,
+      opacity: 0.9,
       ...config,
     };
 

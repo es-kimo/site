@@ -9,4 +9,5 @@ export interface ParticleConfig {
   lightness: number;
   saturationVariance?: number; // 채도 랜덤 범위 (기본값: 5)
   lightnessVariance?: number; // 밝기 랜덤 범위 (기본값: 3)
+  opacity?: number; // 파티클 투명도 (기본값: 0.9)
 }

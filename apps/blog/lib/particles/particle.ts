@@ -27,7 +27,7 @@ export class Particle {
   public readonly color: string;
 
   constructor(charIndex: number, config: ParticleConfig) {
-    const { radius, delayPerChar, saturation, lightness, saturationVariance = 5, lightnessVariance = 3 } = config;
+    const { radius, delayPerChar, saturation, lightness, saturationVariance = 5, lightnessVariance = 3, opacity = 0.9 } = config;
 
     // 시드 기반 pseudo-random (매번 같은 위치)
     const seed = charIndex * 12345;
@@ -47,7 +47,7 @@ export class Particle {
     const sat = saturation + (random(3) - 0.5) * 2 * saturationVariance;
     const light = lightness + (random(4) - 0.5) * 2 * lightnessVariance;
 
-    this.color = `hsl(${hue}, ${Math.max(0, Math.min(100, sat))}%, ${Math.max(0, Math.min(100, light))}%)`;
+    this.color = `hsla(${hue}, ${Math.max(0, Math.min(100, sat))}%, ${Math.max(0, Math.min(100, light))}%, ${opacity})`;
   }
 
   /**
