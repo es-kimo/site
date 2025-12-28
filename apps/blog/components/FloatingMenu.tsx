@@ -1,187 +1,23 @@
 "use client";
 
 import { Button } from "@workspace/ui/components/button";
-import { Separator } from "@workspace/ui/components/separator";
+import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "@workspace/ui/components/navigation-menu";
 import { cn } from "@workspace/ui/lib/utils";
-import { DatabaseZap, Github, Home, Moon, PencilLine, Signature, Sun } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Link } from "next-view-transitions";
-import { useEffect, useRef, useState } from "react";
-
-// 상수 정의
-const SCROLL_THRESHOLD = 20; // 스크롤 임계값
-const BOTTOM_MARGIN = 20; // 하단 여백
-
-// Glass button 스타일 함수
-const glassButtonStyle = (className?: string) => {
-  return cn(
-    "h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 backdrop-blur-md bg-zinc-800/40 border border-slate-300/20 hover:bg-black text-white/90 hover:text-white",
-    "[.light_&]:bg-white/70 [.light_&]:hover:bg-white [.light_&]:border-neutral-300/20 [.light_&]:hover:border-slate-400/20 [.light_&]:text-neutral-500 [.light_&]:hover:text-neutral-800",
-    className
-  );
-};
-
-// 아이콘 스타일 함수
-const iconStyle = () => "h-5 w-5 transition-transform duration-100 [transform:scale(var(--icon-scale,1))]";
-
-interface GlassButtonProps {
-  onClick?: () => void;
-  children: React.ReactNode;
-  className?: string;
-  asChild?: boolean;
-}
-
-interface MagnetizedButtonProps extends GlassButtonProps {
-  mousePos: { x: number; y: number };
-  baseSize?: number;
-  maxScale?: number;
-}
-
-export function MagnetizedButton({ children, className, mousePos, baseSize = 48, maxScale = 1.8, ...props }: MagnetizedButtonProps) {
-  const ref = useRef<HTMLButtonElement>(null);
-  const [size, setSize] = useState({ width: baseSize, height: baseSize });
-  const [iconScale, setIconScale] = useState(1);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const rect = el.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height; // 하단 고정
-
-    const dx = mousePos.x - cx;
-    const dy = mousePos.y - cy;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    const radius = 120;
-
-    if (dist < radius) {
-      const scaleRatio = 1 + (1 - dist / radius) * (maxScale - 1);
-      setSize({
-        width: baseSize * scaleRatio,
-        height: baseSize * scaleRatio,
-      });
-      setIconScale(scaleRatio);
-    } else {
-      setSize({ width: baseSize, height: baseSize });
-      setIconScale(1);
-    }
-  }, [mousePos, baseSize, maxScale]);
-
-  return (
-    <Button
-      ref={ref}
-      size="icon"
-      variant="secondary"
-      className={cn("transition-all duration-100 ease-out flex items-center justify-center p-0", glassButtonStyle(className))}
-      style={
-        {
-          width: `${size.width}px`,
-          height: `${size.height}px`,
-          position: "relative",
-          bottom: 0,
-          "--icon-scale": iconScale,
-        } as React.CSSProperties
-      }
-      {...props}
-    >
-      {children}
-    </Button>
-  );
-}
+import { Logo } from "./Logo";
 
 interface FloatingMenuProps {
   className?: string;
 }
 
 export function FloatingMenu({ className }: FloatingMenuProps) {
-  const [isVisible, setIsVisible] = useState(false);
-  const lastScrollYRef = useRef(0);
-  const [mousePos, setMousePos] = useState({ x: -9999, y: -9999 });
   const { theme, setTheme } = useTheme();
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    setMousePos({ x: e.clientX, y: e.clientY });
-  };
-
-  const handleMouseLeave = () => {
-    setMousePos({ x: -9999, y: -9999 });
-  };
-
-  useEffect(() => {
-    const checkScrollAvailability = () => {
-      const viewportHeight = window.innerHeight;
-      const documentHeight = Math.max(
-        document.body.scrollHeight,
-        document.body.offsetHeight,
-        document.documentElement.clientHeight,
-        document.documentElement.scrollHeight,
-        document.documentElement.offsetHeight
-      );
-
-      const hasScrollContent = documentHeight > viewportHeight;
-      const hasOverflow = document.documentElement.scrollHeight > document.documentElement.clientHeight;
-      const bodyHasOverflow = document.body.scrollHeight > document.body.clientHeight;
-
-      const canScroll = hasScrollContent || hasOverflow || bodyHasOverflow;
-
-      if (!canScroll) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
-
-    const handleScroll = () => {
-      const currentScrollY = window.pageYOffset;
-      const viewportHeight = window.innerHeight;
-      const documentHeight = Math.max(
-        document.body.scrollHeight,
-        document.body.offsetHeight,
-        document.documentElement.clientHeight,
-        document.documentElement.scrollHeight,
-        document.documentElement.offsetHeight
-      );
-
-      const isAtBottom = currentScrollY + viewportHeight >= documentHeight - BOTTOM_MARGIN;
-      const isAtTop = currentScrollY <= SCROLL_THRESHOLD;
-      const isScrollingUp = currentScrollY < lastScrollYRef.current;
-      const isScrollingDown = currentScrollY > lastScrollYRef.current;
-
-      if ((isAtBottom || (currentScrollY > SCROLL_THRESHOLD && isScrollingUp)) && !isAtTop) {
-        setIsVisible(true);
-      } else if ((isScrollingDown && currentScrollY > SCROLL_THRESHOLD) || isAtTop) {
-        setIsVisible(false);
-      }
-
-      lastScrollYRef.current = currentScrollY;
-    };
-
-    const resizeObserver = new ResizeObserver(() => {
-      checkScrollAvailability();
-    });
-
-    resizeObserver.observe(document.body);
-    resizeObserver.observe(document.documentElement);
-
-    checkScrollAvailability();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      resizeObserver.disconnect();
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   return (
-    <div
-      ref={menuRef}
-      className={cn("fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 rounded-full", isVisible ? "shadow-2xl [.dark_&]:shadow-slate-700" : "", className)}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-    >
-      <div className="absolute rounded-full overflow-hidden w-full h-[72px]">
+    <div className={cn("fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 shadow-2xl dark:shadow-slate-700 rounded-md", className)}>
+      <div className="absolute overflow-hidden w-full h-[48px] rounded-md">
         <div className={cn("absolute w-full h-full")}>
           <svg viewBox="0 0 2000 200">
             <defs>
@@ -244,47 +80,12 @@ export function FloatingMenu({ className }: FloatingMenuProps) {
           </svg>
         </div>
 
-        <div
-          className={cn(
-            "absolute inset-0 [filter:url(#liquid-glass-filter)] backdrop-blur-[12px] saturate-[110%] brightness-[1.05]",
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
-          )}
-        ></div>
+        <div className={cn("absolute inset-0 [filter:url(#liquid-glass-filter)] backdrop-blur-[12px] saturate-[110%] brightness-[1.05]")}></div>
       </div>
 
-      <div
-        className={cn(
-          "flex flex-row gap-2 p-3 transition-all duration-300 ease-in-out items-end max-h-[72px] overflow-visible rounded-full",
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
-        )}
-      >
-        <MagnetizedButton mousePos={mousePos} asChild>
-          <Link href="/">
-            <Home className={iconStyle()} />
-          </Link>
-        </MagnetizedButton>
-
-        <MagnetizedButton mousePos={mousePos} asChild>
-          <Link href="/database">
-            <DatabaseZap className={iconStyle()} />
-          </Link>
-        </MagnetizedButton>
-
-        <MagnetizedButton mousePos={mousePos} asChild>
-          <Link href="/writing">
-            <PencilLine className={iconStyle()} />
-          </Link>
-        </MagnetizedButton>
-
-        <MagnetizedButton mousePos={mousePos} asChild>
-          <Link href="/about">
-            <Signature className={iconStyle()} />
-          </Link>
-        </MagnetizedButton>
-
-        <Separator orientation="vertical" className="h-12" />
-
-        <MagnetizedButton mousePos={mousePos} onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
+      <div className={cn("relative flex flex-row gap-2 py-1 px-4 transition-all duration-300 ease-in-out items-center max-h-[72px] overflow-visible rounded-full")}>
+        <Logo />
+        <Button variant="ghost" size="icon" onClick={() => setTheme(theme === "light" ? "dark" : "light")} className="relative">
           <Sun
             className={cn(
               "h-5 w-5 rotate-0 transition-all dark:-rotate-90",
@@ -298,13 +99,16 @@ export function FloatingMenu({ className }: FloatingMenuProps) {
             )}
           />
           <span className="sr-only">화면 모드 토글</span>
-        </MagnetizedButton>
-
-        <MagnetizedButton mousePos={mousePos} asChild>
-          <Link href="https://github.com/es-kimo" target="_blank" rel="noopener noreferrer">
-            <Github className={iconStyle()} />
-          </Link>
-        </MagnetizedButton>
+        </Button>
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                <Link href="/about">About</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
       </div>
     </div>
   );
