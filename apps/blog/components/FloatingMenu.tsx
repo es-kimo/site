@@ -103,7 +103,7 @@ export function FloatingMenu({ className }: FloatingMenuProps) {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+              <NavigationMenuLink asChild className={navigationMenuTriggerStyle({ className: "bg-transparent" })}>
                 <Link href="/about">About</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
