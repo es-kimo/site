@@ -18,7 +18,7 @@ export const getSlugsByCategoryAndSub = async (category: Category, sub: string) 
 // TODO: metadata의 타입가드 및 불일치시 에러 던지기
 /** 글 정보 */
 export const getSlugMetadata = async (category: Category, sub: string, slug: string): Promise<NoteMetadata> => {
-  const { metadata } = await import(`@/content/${category}/${sub}/${slug}/page.mdx`);
+  const { metadata } = await import(`@/content/${decodeURIComponent(category)}/${decodeURIComponent(sub)}/${decodeURIComponent(slug)}/page.mdx`);
   return metadata;
 };
 
