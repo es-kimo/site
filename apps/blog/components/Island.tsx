@@ -16,7 +16,7 @@ export function Island({ className }: IslandProps) {
   const { theme, setTheme } = useTheme();
 
   return (
-    <div className={cn("fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 shadow-2xl dark:shadow-slate-700 rounded-md", className)}>
+    <div className={cn("fixed top-1.5 w-[calc(100%-12px)] left-1/2 transform -translate-x-1/2 z-50 shadow-2xl dark:shadow-slate-700 rounded-md", className)}>
       <div className="absolute overflow-hidden w-full h-[48px] rounded-md">
         <div className={cn("absolute w-full h-full")}>
           <svg viewBox="0 0 2000 200">
@@ -83,7 +83,7 @@ export function Island({ className }: IslandProps) {
         <div className={cn("absolute inset-0 [filter:url(#liquid-glass-filter)] backdrop-blur-[12px] saturate-[110%] brightness-[1.05]")}></div>
       </div>
 
-      <div className={cn("relative flex flex-row gap-2 py-1 px-4 transition-all duration-300 ease-in-out items-center max-h-[72px] overflow-visible rounded-full")}>
+      <div className={cn("relative flex flex-row gap-2 justify-between py-1 px-2 transition-all duration-300 ease-in-out items-center max-h-[72px] overflow-visible rounded-full")}>
         <Logo />
         <Button variant="ghost" size="icon" onClick={() => setTheme(theme === "light" ? "dark" : "light")} className="bg-background/20">
           <Sun
