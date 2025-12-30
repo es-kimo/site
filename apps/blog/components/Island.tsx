@@ -85,7 +85,7 @@ export function Island({ className }: IslandProps) {
 
       <div className={cn("relative flex flex-row gap-2 py-1 px-4 transition-all duration-300 ease-in-out items-center max-h-[72px] overflow-visible rounded-full")}>
         <Logo />
-        <Button variant="ghost" size="icon" onClick={() => setTheme(theme === "light" ? "dark" : "light")} className="relative">
+        <Button variant="ghost" size="icon" onClick={() => setTheme(theme === "light" ? "dark" : "light")} className="bg-background/20">
           <Sun
             className={cn(
               "h-5 w-5 rotate-0 transition-all dark:-rotate-90",
@@ -103,7 +103,7 @@ export function Island({ className }: IslandProps) {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuLink asChild className={navigationMenuTriggerStyle({ className: "bg-transparent" })}>
+              <NavigationMenuLink asChild className={navigationMenuTriggerStyle({ className: "bg-background/20" })}>
                 <Link href="/about">About</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
