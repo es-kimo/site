@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 
-import { FloatingMenu } from "@/components/FloatingMenu";
+import { Island } from "@/components/Island";
 import { Providers } from "@/components/providers";
 import "@workspace/ui/globals.css";
 import { Metadata } from "next";
@@ -37,7 +37,7 @@ export default function RootLayout({
         <body className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}>
           <Providers>
             <div className="max-w-blog mx-auto">{children}</div>
-            <FloatingMenu />
+            <Island />
           </Providers>
         </body>
       </html>

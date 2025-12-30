@@ -8,11 +8,11 @@ import { useTheme } from "next-themes";
 import { Link } from "next-view-transitions";
 import { Logo } from "./Logo";
 
-interface FloatingMenuProps {
+interface IslandProps {
   className?: string;
 }
 
-export function FloatingMenu({ className }: FloatingMenuProps) {
+export function Island({ className }: IslandProps) {
   const { theme, setTheme } = useTheme();
 
   return (
