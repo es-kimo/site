@@ -36,7 +36,7 @@ export default function RootLayout({
       <html lang="ko" suppressHydrationWarning>
         <body className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}>
           <Providers>
-            <div className="max-w-blog mx-auto">{children}</div>
+            <div className="max-w-blog mx-auto pt-[50px]">{children}</div>
             <DynamicIsland />
           </Providers>
         </body>
