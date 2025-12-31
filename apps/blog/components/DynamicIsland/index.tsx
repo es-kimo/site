@@ -1,22 +1,17 @@
 "use client";
 
-import { Button } from "@workspace/ui/components/button";
-import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "@workspace/ui/components/navigation-menu";
 import { cn } from "@workspace/ui/lib/utils";
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
-import { Link } from "next-view-transitions";
-import { Logo } from "./Logo";
+import { usePathname } from "next/navigation";
+import { IdleIsland } from "./idle";
+import { ReaderIsland } from "./Reader";
 
-interface IslandProps {
-  className?: string;
-}
-
-export function Island({ className }: IslandProps) {
-  const { theme, setTheme } = useTheme();
+export const DynamicIsland = () => {
+  const pathname = usePathname();
+  const isIdle = pathname === "/writing";
+  const isReader = pathname.startsWith("/writing/");
 
   return (
-    <div className={cn("fixed top-1.5 w-[calc(100%-12px)] left-1/2 transform -translate-x-1/2 z-50 shadow-2xl dark:shadow-slate-700 rounded-md", className)}>
+    <div className={cn("fixed top-1.5 max-w-[calc(100%-12px)] w-fit left-1/2 transform -translate-x-1/2 z-50 shadow-2xl dark:shadow-slate-700 rounded-md transition-all duration-300 ease-in-out")}>
       <div className="absolute overflow-hidden w-full h-[48px] rounded-md">
         <div className={cn("absolute w-full h-full")}>
           <svg viewBox="0 0 2000 200">
@@ -83,33 +78,8 @@ export function Island({ className }: IslandProps) {
         <div className={cn("absolute inset-0 [filter:url(#liquid-glass-filter)] backdrop-blur-[12px] saturate-[110%] brightness-[1.05]")}></div>
       </div>
 
-      <div className={cn("relative flex flex-row gap-2 justify-between py-1 px-2 transition-all duration-300 ease-in-out items-center max-h-[72px] overflow-visible rounded-full")}>
-        <Logo />
-        <Button variant="ghost" size="icon" onClick={() => setTheme(theme === "light" ? "dark" : "light")} className="bg-background/20">
-          <Sun
-            className={cn(
-              "h-5 w-5 rotate-0 transition-all dark:-rotate-90",
-              "[transform:scale(var(--icon-scale,1))_rotate(0deg)_scale(1)] dark:[transform:scale(var(--icon-scale,1))_rotate(-90deg)_scale(0)]"
-            )}
-          />
-          <Moon
-            className={cn(
-              "absolute h-5 w-5 rotate-90 transition-all dark:rotate-0",
-              "[transform:scale(var(--icon-scale,1))_rotate(90deg)_scale(0)] dark:[transform:scale(var(--icon-scale,1))_rotate(0deg)_scale(1)]"
-            )}
-          />
-          <span className="sr-only">화면 모드 토글</span>
-        </Button>
-        <NavigationMenu>
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild className={navigationMenuTriggerStyle({ className: "bg-background/20" })}>
-                <Link href="/about">About</Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-      </div>
+      {isIdle && <IdleIsland />}
+      {isReader && <ReaderIsland />}
     </div>
   );
-}
+};
