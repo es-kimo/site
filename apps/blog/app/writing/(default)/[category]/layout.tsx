@@ -1,11 +1,7 @@
 import { SubCategoryNavigationTab } from "@/components/navigation-tab";
-import { NoteCard } from "@/components/note-card";
-import { getSlugsByCategoryAndSub, getSubCategoriesByCategory, NOTES } from "@/constants/notes";
 import { categoryParams } from "@/constants/params";
 import { CategoryParams } from "@/constants/params.types";
 import { isCategory } from "@/lib/type-guards";
-import { Alert, AlertDescription, AlertTitle } from "@workspace/ui/components/alert";
-import { AlertCircle } from "lucide-react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -29,41 +25,13 @@ export default async function Layout({
   children: React.ReactNode;
   params: Promise<CategoryParams>;
 }>) {
-  const { category, sub } = await params;
-  // draft 제외된 NOTES를 활용하여 실제 글이 있는 서브 카테고리만 필터링
-  const allSubs = sub ? [sub] : await getSubCategoriesByCategory(category);
-  const subs = allSubs.filter((s) => (NOTES[category]?.[s]?.length ?? 0) > 0);
+  const { category } = await params;
   return (
     <section className="space-y-10">
       {isCategory(category) ? (
         <>
           {/* <h2 className="font-bold text-3xl">{t(category)}</h2> */}
           <SubCategoryNavigationTab category={category} />
-          <article>
-            <h3 className="sr-only">아티클</h3>
-            <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {/* TODO: sort by created date */}
-              {subs.map(async (sub) =>
-                (await getSlugsByCategoryAndSub(category, sub)).map((slug) => (
-                  <li key={slug} className="w-full">
-                    <NoteCard category={category} sub={sub} slug={slug}>
-                      <NoteCard.OpengraphImage category={category} sub={sub} slug={slug} />
-                    </NoteCard>
-                  </li>
-                ))
-              )}
-              {!subs.length && (
-                <li>
-                  <Alert>
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>아직 등록한 글이 없어요.</AlertTitle>
-                    <AlertDescription>곧 새로운 글이 업데이트 될 예정이에요.</AlertDescription>
-                  </Alert>
-                </li>
-              )}
-            </ul>
-          </article>
-
           {children}
         </>
       ) : (
