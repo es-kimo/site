@@ -1,4 +1,5 @@
 import { SlugParams } from "@/constants/params.types";
+import { decodeURIS } from "@workspace/common/lib/uri";
 import { ImageResponse } from "next/og";
 import path from "path";
 
@@ -12,7 +13,8 @@ export const contentType = "image/png";
 
 export default async function Image({ params }: { params: Promise<SlugParams> }) {
   const { category, sub, slug } = await params;
-  const { metadata } = await import(`@/content/${path.join(category, sub, slug)}/page.mdx`);
+  const [decodedCategory, decodedSub, decodedSlug] = decodeURIS(category, sub, slug);
+  const { metadata } = await import(`@/content/${path.join(decodedCategory, decodedSub, decodedSlug)}/page.mdx`);
 
   return new ImageResponse(
     (
