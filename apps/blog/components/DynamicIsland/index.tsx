@@ -7,8 +7,8 @@ import { ReaderIsland } from "./Reader";
 
 export const DynamicIsland = () => {
   const pathname = usePathname();
-  const isIdle = pathname === "/writing";
-  const isReader = pathname.startsWith("/writing/");
+  const isReader = pathname.match(/^\/writing\/.+\/.+\/.+$/);
+  const isIdle = !isReader;
 
   return (
     <div className={cn("fixed top-1.5 max-w-[calc(100%-12px)] w-fit left-1/2 transform -translate-x-1/2 z-50 shadow-2xl dark:shadow-slate-700 rounded-md transition-all duration-300 ease-in-out")}>
