@@ -16,7 +16,7 @@ export function NoteGrid({ notes }: NoteGridProps) {
   return (
     <article>
       <h3 className="sr-only">아티클</h3>
-      <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <ul className="flex flex-col gap-4">
         {notes.length === 0 && (
           <li>
             <Alert>
@@ -30,9 +30,7 @@ export function NoteGrid({ notes }: NoteGridProps) {
         {/* TODO: sort by created date */}
         {notes.map(({ category, sub, slug }) => (
           <li key={`${category}-${sub}-${slug}`} className="w-full">
-            <NoteCard category={category} sub={sub} slug={slug}>
-              <NoteCard.OpengraphImage category={category} sub={sub} slug={slug} />
-            </NoteCard>
+            <NoteCard category={category} sub={sub} slug={slug} />
           </li>
         ))}
       </ul>
