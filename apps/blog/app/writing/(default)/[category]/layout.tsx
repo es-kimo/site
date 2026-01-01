@@ -4,7 +4,6 @@ import { getSlugsByCategoryAndSub, getSubCategoriesByCategory, NOTES } from "@/c
 import { categoryParams } from "@/constants/params";
 import { CategoryParams } from "@/constants/params.types";
 import { isCategory } from "@/lib/type-guards";
-import { t } from "@/locales/translate";
 import { Alert, AlertDescription, AlertTitle } from "@workspace/ui/components/alert";
 import { AlertCircle } from "lucide-react";
 import { Metadata } from "next";
@@ -17,8 +16,8 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<CategoryParams> }): Promise<Metadata> {
   const { category } = await params;
   return {
-    title: `${t(category)}`,
-    description: `${t(category)} 분야의 다양한 주제를 글로 다룹니다.`,
+    title: `${category}`,
+    description: `${category} 분야의 다양한 주제를 글로 다룹니다.`,
     // TODO: og image
   };
 }
