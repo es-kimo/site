@@ -12,8 +12,26 @@ export const CATEGORIES: Category[] = await getFolderNames(CONTENT_PATH);
 /** 서브 카테고리 */
 export const getSubCategoriesByCategory = async (category: Category) => getFolderNames(path.join(CONTENT_PATH, category));
 
-/** 글 제목 */
-export const getSlugsByCategoryAndSub = async (category: Category, sub: string) => getFolderNames(path.join(CONTENT_PATH, category, sub));
+/** 글 제목 (draft 제외) */
+export const getSlugsByCategoryAndSub = async (category: Category, sub: string) => {
+  const slugs = await getFolderNames(path.join(CONTENT_PATH, category, sub));
+
+  // draft 상태인 글 필터링
+  const publishedSlugs = await Promise.all(
+    slugs.map(async (slug) => {
+      try {
+        const metadata = await getSlugMetadata(category, sub, slug);
+        return metadata.other?.status !== "draft" ? slug : null;
+      } catch (error) {
+        // metadata를 가져올 수 없는 경우 제외
+        console.error(`Failed to load metadata for ${category}/${sub}/${slug}:`, error);
+        return null;
+      }
+    })
+  );
+
+  return publishedSlugs.filter((slug): slug is string => slug !== null);
+};
 
 // TODO: metadata의 타입가드 및 불일치시 에러 던지기
 /** 글 정보 */

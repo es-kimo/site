@@ -1,6 +1,6 @@
 import { SubCategoryNavigationTab } from "@/components/navigation-tab";
 import { NoteCard } from "@/components/note-card";
-import { getSlugsByCategoryAndSub, getSubCategoriesByCategory } from "@/constants/notes";
+import { getSlugsByCategoryAndSub, getSubCategoriesByCategory, NOTES } from "@/constants/notes";
 import { categoryParams } from "@/constants/params";
 import { CategoryParams } from "@/constants/params.types";
 import { isCategory } from "@/lib/type-guards";
@@ -31,7 +31,9 @@ export default async function Layout({
   params: Promise<CategoryParams>;
 }>) {
   const { category, sub } = await params;
-  const subs = sub ? [sub] : await getSubCategoriesByCategory(category);
+  // draft 제외된 NOTES를 활용하여 실제 글이 있는 서브 카테고리만 필터링
+  const allSubs = sub ? [sub] : await getSubCategoriesByCategory(category);
+  const subs = allSubs.filter((s) => (NOTES[category]?.[s]?.length ?? 0) > 0);
   return (
     <section className="space-y-10">
       {isCategory(category) ? (
