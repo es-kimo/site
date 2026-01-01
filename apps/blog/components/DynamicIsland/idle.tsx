@@ -15,7 +15,7 @@ export function IdleIsland() {
         <NavigationMenuList>
           <NavigationMenuItem>
             <NavigationMenuLink asChild className={navigationMenuTriggerStyle({ className: "bg-background/20" })}>
-              <Link href="/about">About</Link>
+              <Link href="/writing">Writing</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>

@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, STIX_Two_Text } from "next/font/google";
 
 import { DynamicIsland } from "@/components/DynamicIsland";
 import { Providers } from "@/components/providers";
@@ -14,6 +14,13 @@ const fontSans = Geist({
 const fontMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
+});
+
+const stixTwoText = STIX_Two_Text({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-stix",
+  display: "swap",
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -34,7 +41,7 @@ export default function RootLayout({
   return (
     <ViewTransitions>
       <html lang="ko" suppressHydrationWarning>
-        <body className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}>
+        <body className={`${fontSans.variable} ${fontMono.variable} ${stixTwoText.variable} font-sans antialiased `}>
           <Providers>
             <div className="max-w-blog mx-auto pt-[50px]">{children}</div>
             <DynamicIsland />
