@@ -3,6 +3,7 @@ import { getSlugMetadata } from "@/constants/notes";
 import { slugParams } from "@/constants/params";
 import { SlugParams } from "@/constants/params.types";
 import { formatPostDate } from "@/lib/date";
+import { decodeURIS } from "@workspace/common/lib/uri";
 
 /** route group이 달라서 부모로부터 static param을 받을 수 없음 */
 export function generateStaticParams() {
@@ -25,7 +26,8 @@ export default async function Layout({
   params: Promise<SlugParams>;
 }>) {
   const { category, sub, slug } = await params;
-  const metadata = await getSlugMetadata(category, sub, slug);
+  const [decodedCategory, decodedSub, decodedSlug] = decodeURIS(category, sub, slug);
+  const metadata = await getSlugMetadata(decodedCategory, decodedSub, decodedSlug);
   const { createdAt, updatedAt } = metadata.other;
 
   return (
@@ -38,7 +40,7 @@ export default async function Layout({
       <aside className="hidden lg:block sticky top-[80px] left-3 border-y-2 w-[180px] h-fit">
         <dl className="border-b-[1px] border-muted px-[7px]">
           <dd className="py-[6px]">
-            <BreadCrumb category={category} sub={sub} />
+            <BreadCrumb category={decodedCategory} sub={decodedSub} />
           </dd>
         </dl>
         <dl className="flex gap-4 text-xs px-[7px] py-[9px]">
@@ -47,7 +49,7 @@ export default async function Layout({
         </dl>
       </aside>
       <article className="col-start-2 min-w-0">
-        <BreadCrumb className="lg:hidden text-muted-foreground mb-1" category={category} sub={sub} />
+        <BreadCrumb className="lg:hidden text-muted-foreground mb-1" category={decodedCategory} sub={decodedSub} />
         {children}
       </article>
     </section>

@@ -9,10 +9,10 @@ export const CONTENT_PATH = path.join(process.cwd(), "content");
 export const CATEGORIES: Category[] = await getFolderNames(CONTENT_PATH);
 
 // TODO: 비동기 효율 테스트
-/** 서브 카테고리 */
+/** 서브 카테고리 (이미 디코딩된 category를 받음) */
 export const getSubCategoriesByCategory = async (category: Category) => getFolderNames(path.join(CONTENT_PATH, category));
 
-/** 글 제목 (draft 제외) */
+/** 글 제목 (draft 제외, 이미 디코딩된 params를 받음) */
 export const getSlugsByCategoryAndSub = async (category: Category, sub: string) => {
   const slugs = await getFolderNames(path.join(CONTENT_PATH, category, sub));
 
@@ -34,9 +34,9 @@ export const getSlugsByCategoryAndSub = async (category: Category, sub: string) 
 };
 
 // TODO: metadata의 타입가드 및 불일치시 에러 던지기
-/** 글 정보 */
+/** 글 정보 (이미 디코딩된 params를 받음) */
 export const getSlugMetadata = async (category: Category, sub: string, slug: string): Promise<NoteMetadata> => {
-  const { metadata } = await import(`@/content/${decodeURIComponent(category)}/${decodeURIComponent(sub)}/${decodeURIComponent(slug)}/page.mdx`);
+  const { metadata } = await import(`@/content/${category}/${sub}/${slug}/page.mdx`);
   return metadata;
 };
 
