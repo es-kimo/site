@@ -1,11 +1,16 @@
 "use client";
 
+import { type Language } from "@/lib/language";
 import { cn } from "@workspace/ui/lib/utils";
 import { usePathname } from "next/navigation";
 import { IdleIsland } from "./idle";
 import { ReaderIsland } from "./Reader";
 
-export const DynamicIsland = () => {
+interface DynamicIslandProps {
+  language: Language;
+}
+
+export const DynamicIsland = ({ language }: DynamicIslandProps) => {
   const pathname = usePathname();
   const isReader = pathname.match(/^\/writing\/.+\/.+\/.+$/);
   const isIdle = !isReader;
@@ -78,7 +83,7 @@ export const DynamicIsland = () => {
         <div className={cn("absolute inset-0 [filter:url(#liquid-glass-filter)] backdrop-blur-[12px] saturate-[110%] brightness-[1.05]")}></div>
       </div>
 
-      {isIdle && <IdleIsland />}
+      {isIdle && <IdleIsland language={language} />}
       {isReader && <ReaderIsland />}
     </div>
   );
