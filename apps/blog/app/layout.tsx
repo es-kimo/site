@@ -60,7 +60,7 @@ export default async function RootLayout({
       <html lang={language} suppressHydrationWarning>
         <body className={`${fontSans.variable} ${fontMono.variable} ${stixTwoText.variable} ${nanumMyeongjo.variable} ${notoSansKR.variable} font-sans antialiased `}>
           <Providers>
-            <div className="max-w-blog mx-auto pt-[80px]">{children}</div>
+            <div className="max-w-blog mx-auto py-24">{children}</div>
             <DynamicIsland language={language} />
           </Providers>
         </body>

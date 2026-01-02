@@ -24,21 +24,24 @@ export default async function HomePage() {
   const t = content[language];
 
   return (
-    <div className="min-h-[70vh] flex items-center justify-center px-6">
+    <div className="flex items-center justify-center px-8">
       <div className="max-w-2xl">
         <article
           style={{ viewTransitionName: "home-content" }}
-          className={cn(language === "ko" ? "font-[family-name:var(--font-noto-sans-kr)] text-base" : "font-[family-name:var(--font-stix)] text-lg", "space-y-6 leading-relaxed text-foreground/90")}
+          className={cn(
+            language === "ko" ? "font-[family-name:var(--font-noto-sans-kr)] text-base" : "font-[family-name:var(--font-stix)] text-[17px]",
+            "space-y-6 leading-relaxed text-foreground/90"
+          )}
         >
           <p>{t.intro1}</p>
           <p>{t.intro2}</p>
 
-          <div className="pt-12 mt-4">
+          <div className="pt-4">
             <Link
               href="/Resume_v1.2.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-baseline gap-1.5 text-base text-foreground/80 hover:text-foreground transition-colors duration-200"
+              className="group inline-flex items-baseline gap-1.5 text-[17px] text-foreground/80 hover:text-foreground transition-colors duration-200"
             >
               <span className="relative">
                 {t.resumeLink}
