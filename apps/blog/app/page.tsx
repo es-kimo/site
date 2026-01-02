@@ -33,23 +33,22 @@ export default async function HomePage() {
             "space-y-6 leading-relaxed text-foreground/90"
           )}
         >
+          <h1 className="text-2xl font-bold font-[family-name:var(--font-stix)]">khryu.dev</h1>
           <p>{t.intro1}</p>
           <p>{t.intro2}</p>
 
-          <div className="pt-4">
-            <Link
-              href="/Resume_v1.2.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-baseline gap-1.5 text-[17px] text-foreground/80 hover:text-foreground transition-colors duration-200"
-            >
-              <span className="relative">
-                {t.resumeLink}
-                <span className="absolute -bottom-0.5 left-0 w-full h-px bg-foreground/20 group-hover:bg-foreground/40 transition-colors duration-200" />
-              </span>
-              <span className="text-foreground/40 group-hover:text-foreground/60 transition-all duration-200 group-hover:translate-x-0.5">→</span>
-            </Link>
-          </div>
+          <Link
+            href="/Resume_v1.2.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(language === "ko" ? "text-base" : "text-[17px]", "group inline-flex items-baseline gap-1.5 text-foreground/80 hover:text-foreground transition-colors duration-200")}
+          >
+            <span className="relative">
+              {t.resumeLink}
+              <span className="absolute -bottom-0.5 left-0 w-full h-px bg-foreground/20 group-hover:bg-foreground/40 transition-colors duration-200" />
+            </span>
+            <span className="text-foreground/40 group-hover:text-foreground/60 transition-all duration-200 group-hover:translate-x-0.5">→</span>
+          </Link>
         </article>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono, Nanum_Myeongjo, Noto_Sans_KR, STIX_Two_Text } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Sans_KR, STIX_Two_Text } from "next/font/google";
 
 import { DynamicIsland } from "@/components/DynamicIsland";
 import { Providers } from "@/components/providers";
@@ -21,13 +21,6 @@ const stixTwoText = STIX_Two_Text({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-stix",
-  display: "swap",
-});
-
-const nanumMyeongjo = Nanum_Myeongjo({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-nanum-myeongjo",
   display: "swap",
 });
 
@@ -58,9 +51,9 @@ export default async function RootLayout({
   return (
     <ViewTransitions>
       <html lang={language} suppressHydrationWarning>
-        <body className={`${fontSans.variable} ${fontMono.variable} ${stixTwoText.variable} ${nanumMyeongjo.variable} ${notoSansKR.variable} font-sans antialiased `}>
+        <body className={`${fontSans.variable} ${fontMono.variable} ${stixTwoText.variable} ${notoSansKR.variable} font-sans antialiased `}>
           <Providers>
-            <div className="max-w-blog mx-auto py-24">{children}</div>
+            <div className="max-w-blog mx-auto py-16">{children}</div>
             <DynamicIsland language={language} />
           </Providers>
         </body>

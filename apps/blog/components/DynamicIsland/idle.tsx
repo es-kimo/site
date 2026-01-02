@@ -10,12 +10,13 @@ import { ThemeChanger } from "../ThemeChanger";
 
 interface IdleIslandProps {
   language: Language;
+  showLogo?: boolean;
 }
 
-export function IdleIsland({ language }: IdleIslandProps) {
+export function IdleIsland({ language, showLogo = true }: IdleIslandProps) {
   return (
     <div className={cn("w-[calc(100vw-12px)] relative flex flex-row gap-2 justify-between py-1 px-2 transition-all duration-300 ease-in-out items-center max-h-[72px] overflow-visible rounded-full")}>
-      <Logo />
+      {showLogo && <Logo />}
       <div className="flex items-center gap-1">
         <LanguageToggle currentLanguage={language} />
         <ThemeChanger />
