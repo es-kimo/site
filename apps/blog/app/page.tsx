@@ -27,6 +27,7 @@ export default async function HomePage() {
     <div className="min-h-[70vh] flex items-center justify-center px-6">
       <div className="max-w-2xl">
         <article
+          style={{ viewTransitionName: "home-content" }}
           className={cn(language === "ko" ? "font-[family-name:var(--font-noto-sans-kr)] text-base" : "font-[family-name:var(--font-stix)] text-lg", "space-y-6 leading-relaxed text-foreground/90")}
         >
           <p>{t.intro1}</p>
