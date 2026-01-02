@@ -26,6 +26,7 @@ export default async function HomePage() {
   return (
     <div className="flex items-center justify-center px-8">
       <div className="max-w-2xl">
+        <h1 className="text-2xl font-bold font-[family-name:var(--font-stix)] mb-4">khryu.dev</h1>
         <article
           style={{ viewTransitionName: "home-content" }}
           className={cn(
@@ -33,7 +34,6 @@ export default async function HomePage() {
             "space-y-6 leading-relaxed text-foreground/90"
           )}
         >
-          <h1 className="text-2xl font-bold font-[family-name:var(--font-stix)]">khryu.dev</h1>
           <p>{t.intro1}</p>
           <p>{t.intro2}</p>
 
