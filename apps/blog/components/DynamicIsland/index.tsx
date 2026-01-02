@@ -1,17 +1,24 @@
 "use client";
 
+import { type Language } from "@/lib/language";
 import { cn } from "@workspace/ui/lib/utils";
 import { usePathname } from "next/navigation";
 import { IdleIsland } from "./idle";
+import { MainIsland } from "./main";
 import { ReaderIsland } from "./Reader";
 
-export const DynamicIsland = () => {
+interface DynamicIslandProps {
+  language: Language;
+}
+
+export const DynamicIsland = ({ language }: DynamicIslandProps) => {
   const pathname = usePathname();
   const isReader = pathname.match(/^\/writing\/.+\/.+\/.+$/);
-  const isIdle = !isReader;
+  const isMain = pathname === "/";
+  const isIdle = !isReader && !isMain;
 
   return (
-    <div className={cn("fixed top-1.5 max-w-[calc(100%-12px)] w-fit left-1/2 transform -translate-x-1/2 z-50 shadow-2xl dark:shadow-slate-700 rounded-md transition-all duration-300 ease-in-out")}>
+    <div className={cn("fixed top-1.5 max-w-[calc(100%-12px)] w-fit left-1/2 transform -translate-x-1/2 z-50 dark:shadow-slate-900 rounded-md transition-all duration-300 ease-in-out")}>
       <div className="absolute overflow-hidden w-full h-[48px] rounded-md">
         <div className={cn("absolute w-full h-full")}>
           <svg viewBox="0 0 2000 200">
@@ -78,8 +85,9 @@ export const DynamicIsland = () => {
         <div className={cn("absolute inset-0 [filter:url(#liquid-glass-filter)] backdrop-blur-[12px] saturate-[110%] brightness-[1.05]")}></div>
       </div>
 
-      {isIdle && <IdleIsland />}
+      {isIdle && <IdleIsland language={language} />}
       {isReader && <ReaderIsland />}
+      {isMain && <MainIsland language={language} />}
     </div>
   );
 };
