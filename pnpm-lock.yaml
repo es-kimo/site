@@ -31,10 +31,10 @@ importers:
         version: 3.1.0(acorn@8.14.0)
       '@mdx-js/react':
         specifier: ^3.1.0
-        version: 3.1.0(@types/react@18.3.0)(react@19.0.0)
+        version: 3.1.0(@types/react@19.2.7)(react@19.0.0)
       '@next/mdx':
         specifier: ^15.3.4
-        version: 15.3.4(@mdx-js/loader@3.1.0)(@mdx-js/react@3.1.0(@types/react@18.3.0)(react@19.0.0))
+        version: 15.3.4(@mdx-js/loader@3.1.0)(@mdx-js/react@3.1.0(@types/react@19.2.7)(react@19.0.0))
       '@types/mdx':
         specifier: ^2.0.13
         version: 2.0.13
@@ -58,7 +58,7 @@ importers:
         version: 16.0.10(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       next-mdx-remote-client:
         specifier: ^2.1.2
-        version: 2.1.2(@types/react@18.3.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(unified@11.0.5)
+        version: 2.1.2(@types/react@19.2.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(unified@11.0.5)
       next-themes:
         specifier: ^0.4.3
         version: 0.4.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -94,11 +94,11 @@ importers:
         specifier: ^1.5.5
         version: 1.5.5
       '@types/react':
-        specifier: 18.3.0
-        version: 18.3.0
+        specifier: ^19.0.0
+        version: 19.2.7
       '@types/react-dom':
-        specifier: 18.3.1
-        version: 18.3.1
+        specifier: ^19.0.0
+        version: 19.0.0
       '@types/uuid':
         specifier: ^10.0.0
         version: 10.0.0
@@ -3069,8 +3069,14 @@ packages:
   '@types/react-dom@18.3.1':
     resolution: {integrity: sha512-qW1Mfv8taImTthu4KoXgDfLuk4bydU6Q/TkADnDWWHwi4NX4BR+LWfTp2sVmTqRrsHvyDDTelgelxJ+SsejKKQ==}
 
+  '@types/react-dom@19.0.0':
+    resolution: {integrity: sha512-1KfiQKsH1o00p9m5ag12axHQSb3FOU9H20UTrujVSkNhuCrRHiQWFqgEnTNK5ZNfnzZv8UWrnXVqCmCF9fgY3w==}
+
   '@types/react@18.3.0':
     resolution: {integrity: sha512-DiUcKjzE6soLyln8NNZmyhcQjVv+WsUIFSqetMN0p8927OztKT4VTfFTqsbAi5oAGIcgOmOajlfBqyptDDjZRw==}
+
+  '@types/react@19.2.7':
+    resolution: {integrity: sha512-MWtvHrGZLFttgeEj28VXHxpmwYbor/ATPYbBfSFZEIRK0ecCFLl2Qo55z52Hss+UV9CRN7trSeq1zbgx7YDWWg==}
 
   '@types/through@0.0.33':
     resolution: {integrity: sha512-HsJ+z3QuETzP3cswwtzt2vEIiHBk/dCcHGhbmG5X3ecnwFD/lPrMpliGXxSCg03L9AhrdwA4Oz/qfspkDW+xGQ==}
@@ -3575,6 +3581,9 @@ packages:
 
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
+
+  csstype@3.2.3:
+    resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
 
   data-uri-to-buffer@2.0.2:
     resolution: {integrity: sha512-ND9qDTLc6diwj+Xe5cdAgVTbLVdXbtxTJRXRhli8Mowuaan+0EJOtdqJ0QCHNSSPyoXGx9HX2/VMnKeC34AChA==}
@@ -8137,6 +8146,12 @@ snapshots:
       '@types/react': 18.3.0
       react: 19.0.0
 
+  '@mdx-js/react@3.1.0(@types/react@19.2.7)(react@19.0.0)':
+    dependencies:
+      '@types/mdx': 2.0.13
+      '@types/react': 19.2.7
+      react: 19.0.0
+
   '@neondatabase/serverless@1.0.1':
     dependencies:
       '@types/node': 22.18.6
@@ -8161,12 +8176,12 @@ snapshots:
       '@mdx-js/loader': 3.1.0(acorn@8.14.0)
       '@mdx-js/react': 3.1.0(@types/react@18.3.0)(react@19.0.0)
 
-  '@next/mdx@15.3.4(@mdx-js/loader@3.1.0)(@mdx-js/react@3.1.0(@types/react@18.3.0)(react@19.0.0))':
+  '@next/mdx@15.3.4(@mdx-js/loader@3.1.0)(@mdx-js/react@3.1.0(@types/react@19.2.7)(react@19.0.0))':
     dependencies:
       source-map: 0.7.4
     optionalDependencies:
       '@mdx-js/loader': 3.1.0(acorn@8.14.0)
-      '@mdx-js/react': 3.1.0(@types/react@18.3.0)(react@19.0.0)
+      '@mdx-js/react': 3.1.0(@types/react@19.2.7)(react@19.0.0)
 
   '@next/swc-darwin-arm64@14.2.29':
     optional: true
@@ -9560,12 +9575,20 @@ snapshots:
 
   '@types/react-dom@18.3.1':
     dependencies:
-      '@types/react': 18.3.0
+      '@types/react': 19.2.7
+
+  '@types/react-dom@19.0.0':
+    dependencies:
+      '@types/react': 19.2.7
 
   '@types/react@18.3.0':
     dependencies:
       '@types/prop-types': 15.7.14
       csstype: 3.1.3
+
+  '@types/react@19.2.7':
+    dependencies:
+      csstype: 3.2.3
 
   '@types/through@0.0.33':
     dependencies:
@@ -10147,6 +10170,8 @@ snapshots:
   cssesc@3.0.0: {}
 
   csstype@3.1.3: {}
+
+  csstype@3.2.3: {}
 
   data-uri-to-buffer@2.0.2: {}
 
@@ -12040,11 +12065,11 @@ snapshots:
 
   netmask@2.0.2: {}
 
-  next-mdx-remote-client@2.1.2(@types/react@18.3.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(unified@11.0.5):
+  next-mdx-remote-client@2.1.2(@types/react@19.2.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(unified@11.0.5):
     dependencies:
       '@babel/code-frame': 7.27.1
       '@mdx-js/mdx': 3.1.0(acorn@8.14.0)
-      '@mdx-js/react': 3.1.0(@types/react@18.3.0)(react@19.0.0)
+      '@mdx-js/react': 3.1.0(@types/react@19.2.7)(react@19.0.0)
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
       remark-mdx-remove-esm: 1.2.0(unified@11.0.5)
