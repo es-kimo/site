@@ -96,7 +96,7 @@ export const DynamicIsland = ({ language }: DynamicIslandProps) => {
           <div className={cn("absolute inset-0 [filter:url(#liquid-glass-filter)] backdrop-blur-[12px] saturate-[110%] brightness-[1.05]")}></div>
         </div>
 
-        {isIdle && <IdleIsland language={language} />}
+        {isIdle && <IdleIsland />}
         {isReader && <ReaderIsland />}
         {isHome && <HomeIsland language={language} />}
       </div>

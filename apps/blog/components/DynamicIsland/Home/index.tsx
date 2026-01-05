@@ -1,10 +1,11 @@
+import { Logo } from "@/components/Logo";
 import { type Language } from "@/lib/language";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "@workspace/ui/components/navigation-menu";
 import { cn } from "@workspace/ui/lib/utils";
 import { Link } from "next-view-transitions";
+import { useContext, useEffect } from "react";
 import { LanguageToggle } from "../../LanguageToggle";
 import { ThemeChanger } from "../../ThemeChanger";
-import { useContext, useEffect } from "react";
 import { DynamicIslandContext } from "../contexts/context";
 
 export const HomeIsland = ({ language }: { language: Language }) => {
@@ -16,6 +17,7 @@ export const HomeIsland = ({ language }: { language: Language }) => {
 
   return (
     <div className={cn("w-full relative flex flex-row gap-2 justify-between transition-all duration-300 ease-in-out items-center max-h-[72px] overflow-visible rounded-full")}>
+      <Logo />
       <div className="flex items-center gap-1">
         <LanguageToggle currentLanguage={language} />
         <ThemeChanger />
