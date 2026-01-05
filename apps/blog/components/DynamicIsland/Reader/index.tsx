@@ -1,11 +1,17 @@
 import { ThemeChanger } from "@/components/ThemeChanger";
 import { cn } from "@workspace/ui/lib/utils";
 import { Minus, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { DEFAULT_SIZE_INDEX, FONT_SIZES } from "./constants";
+import { DynamicIslandContext } from "../contexts/context";
 
 export const ReaderIsland = () => {
   const [sizeIndex, setSizeIndex] = useState(DEFAULT_SIZE_INDEX);
+  const { setIslandWidth } = useContext(DynamicIslandContext);
+
+  useEffect(() => {
+    setIslandWidth(300);
+  }, [setIslandWidth]);
 
   useEffect(() => {
     // Apply font size to article content
@@ -37,7 +43,7 @@ export const ReaderIsland = () => {
   };
 
   return (
-    <div className="w-fit mx-auto bg-background/20 backdrop-blur-xl rounded-md px-4 py-1 flex items-center gap-3" aria-label="Font size control">
+    <div className="w-full mx-auto bg-background/20 backdrop-blur-xl rounded-md px-4 py-1 flex items-center gap-3" aria-label="Font size control">
       <button
         onClick={decreaseSize}
         disabled={sizeIndex === 0}

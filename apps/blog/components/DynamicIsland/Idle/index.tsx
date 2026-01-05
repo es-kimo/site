@@ -4,19 +4,26 @@ import { type Language } from "@/lib/language";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "@workspace/ui/components/navigation-menu";
 import { cn } from "@workspace/ui/lib/utils";
 import { Link } from "next-view-transitions";
-import { LanguageToggle } from "../LanguageToggle";
-import { Logo } from "../Logo";
-import { ThemeChanger } from "../ThemeChanger";
+import { useContext, useEffect } from "react";
+import { LanguageToggle } from "../../LanguageToggle";
+import { Logo } from "../../Logo";
+import { ThemeChanger } from "../../ThemeChanger";
+import { DynamicIslandContext } from "../contexts/context";
 
 interface IdleIslandProps {
   language: Language;
-  showLogo?: boolean;
 }
 
-export function IdleIsland({ language, showLogo = true }: IdleIslandProps) {
+export function IdleIsland({ language }: IdleIslandProps) {
+  const { setIslandWidth } = useContext(DynamicIslandContext);
+
+  useEffect(() => {
+    setIslandWidth(500);
+  }, [setIslandWidth]);
+
   return (
-    <div className={cn("w-[calc(100vw-12px)] relative flex flex-row gap-2 justify-between py-1 px-2 transition-all duration-300 ease-in-out items-center max-h-[72px] overflow-visible rounded-full")}>
-      {showLogo && <Logo />}
+    <div className={cn("w-full relative flex flex-row gap-2 justify-between transition-all duration-300 ease-in-out items-center max-h-[72px] overflow-visible rounded-full")}>
+      <Logo />
       <div className="flex items-center gap-1">
         <LanguageToggle currentLanguage={language} />
         <ThemeChanger />
