@@ -25,10 +25,10 @@ export const DynamicIsland = ({ language }: DynamicIslandProps) => {
     <DynamicIslandContext value={{ islandWidth, setIslandWidth, islandHeight, setIslandHeight }}>
       <div
         style={{
-          width: islandWidth > 0 ? `${islandWidth}px` : "calc(100vw - 12px)",
+          width: islandWidth > 0 ? `min(${islandWidth}px, calc(100vw - 12px))` : "calc(100vw - 12px)",
           transition: "width 300ms ease-in-out",
         }}
-        className="fixed top-1.5 max-w-blog left-1/2 transform -translate-x-1/2 z-50 dark:shadow-slate-900 rounded-md"
+        className="fixed top-1.5 max-w-[min(calc(100vw - 12px), var(--blog-max-w))] left-1/2 transform -translate-x-1/2 z-50 dark:shadow-slate-900 rounded-md"
       >
         <div className="absolute overflow-hidden w-full h-[40px] rounded-md">
           <div className={cn("absolute w-full h-full")}>
