@@ -1,17 +1,11 @@
 import { ThemeChanger } from "@/components/ThemeChanger";
 import { cn } from "@workspace/ui/lib/utils";
 import { Minus, Plus } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DEFAULT_SIZE_INDEX, FONT_SIZES } from "./constants";
-import { DynamicIslandContext } from "../contexts/context";
 
 export const ReaderIsland = () => {
   const [sizeIndex, setSizeIndex] = useState(DEFAULT_SIZE_INDEX);
-  const { setIslandWidth } = useContext(DynamicIslandContext);
-
-  useEffect(() => {
-    setIslandWidth(300);
-  }, [setIslandWidth]);
 
   useEffect(() => {
     // Apply font size to article content
