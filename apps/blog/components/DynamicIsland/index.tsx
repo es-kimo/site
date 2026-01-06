@@ -41,7 +41,6 @@ export const DynamicIsland = ({ language }: DynamicIslandProps) => {
       transition={{
         type: "spring",
         bounce: 0.35,
-        duration: 0.5,
       }}
       style={{
         borderRadius: 6,
@@ -49,7 +48,7 @@ export const DynamicIsland = ({ language }: DynamicIslandProps) => {
       }}
       className="shadow-lg fixed top-1.5 left-1/2 transform -translate-x-1/2 z-50 dark:shadow-slate-900 w-fit overflow-hidden"
     >
-      <div className="absolute overflow-hidden w-full h-[40px] rounded-md">
+      <div className="absolute overflow-hidden w-full h-full rounded-md">
         <div className={cn("absolute w-full h-full")}>
           <svg viewBox="0 0 2000 200">
             <defs>
@@ -59,9 +58,9 @@ export const DynamicIsland = ({ language }: DynamicIslandProps) => {
                   in="DISPLACEMENT_MAP"
                   type="matrix"
                   values="0.3 0.3 0.3 0 0
-                           0.3 0.3 0.3 0 0
-                           0.3 0.3 0.3 0 0
-                           0 0 0 1 0"
+                         0.3 0.3 0.3 0 0
+                         0.3 0.3 0.3 0 0
+                         0 0 0 1 0"
                   result="EDGE_INTENSITY"
                 ></feColorMatrix>
                 <feComponentTransfer in="EDGE_INTENSITY" result="EDGE_MASK">
@@ -73,9 +72,9 @@ export const DynamicIsland = ({ language }: DynamicIslandProps) => {
                   in="RED_DISPLACED"
                   type="matrix"
                   values="1 0 0 0 0
-                           0 0 0 0 0
-                           0 0 0 0 0
-                           0 0 0 1 0"
+                         0 0 0 0 0
+                         0 0 0 0 0
+                         0 0 0 1 0"
                   result="RED_CHANNEL"
                 ></feColorMatrix>
                 <feDisplacementMap in="SourceGraphic" in2="DISPLACEMENT_MAP" scale="-110.00000000000001" xChannelSelector="R" yChannelSelector="B" result="GREEN_DISPLACED"></feDisplacementMap>
@@ -83,9 +82,9 @@ export const DynamicIsland = ({ language }: DynamicIslandProps) => {
                   in="GREEN_DISPLACED"
                   type="matrix"
                   values="0 0 0 0 0
-                           0 1 0 0 0
-                           0 0 0 0 0
-                           0 0 0 1 0"
+                         0 1 0 0 0
+                         0 0 0 0 0
+                         0 0 0 1 0"
                   result="GREEN_CHANNEL"
                 ></feColorMatrix>
                 <feDisplacementMap in="SourceGraphic" in2="DISPLACEMENT_MAP" scale="-120" xChannelSelector="R" yChannelSelector="B" result="BLUE_DISPLACED"></feDisplacementMap>
@@ -93,9 +92,9 @@ export const DynamicIsland = ({ language }: DynamicIslandProps) => {
                   in="BLUE_DISPLACED"
                   type="matrix"
                   values="0 0 0 0 0
-                           0 0 0 0 0
-                           0 0 1 0 0
-                           0 0 0 1 0"
+                         0 0 0 0 0
+                         0 0 1 0 0
+                         0 0 0 1 0"
                   result="BLUE_CHANNEL"
                 ></feColorMatrix>
                 <feBlend in="GREEN_CHANNEL" in2="BLUE_CHANNEL" mode="screen" result="GB_COMBINED"></feBlend>
@@ -115,7 +114,7 @@ export const DynamicIsland = ({ language }: DynamicIslandProps) => {
         <div className={cn("absolute inset-0 [filter:url(#liquid-glass-filter)] backdrop-blur-[12px] saturate-[110%] brightness-[1.05]")}></div>
       </div>
 
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="popLayout">
         <motion.div
           key={view}
           initial={{
@@ -127,16 +126,20 @@ export const DynamicIsland = ({ language }: DynamicIslandProps) => {
             scale: 1,
             opacity: 1,
             filter: "blur(0px)",
+            transition: {
+              type: "spring",
+              bounce: 0.35,
+              delay: 0.05,
+            },
           }}
           exit={{
             scale: 0.9,
             opacity: 0,
             filter: "blur(5px)",
-          }}
-          transition={{
-            type: "spring",
-            bounce: 0.35,
-            duration: 0.3,
+            transition: {
+              type: "spring",
+              bounce: 0.35,
+            },
           }}
         >
           {content}
