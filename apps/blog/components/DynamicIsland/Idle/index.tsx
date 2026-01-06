@@ -1,8 +1,6 @@
 "use client";
 
-import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "@workspace/ui/components/navigation-menu";
 import { cn } from "@workspace/ui/lib/utils";
-import { Link } from "next-view-transitions";
 import { Logo } from "../../Logo";
 import { ThemeChanger } from "../../ThemeChanger";
 
@@ -13,15 +11,6 @@ export function IdleIsland() {
       <div className="flex items-center gap-1">
         <ThemeChanger />
       </div>
-      <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild className={navigationMenuTriggerStyle({ className: "bg-background/20" })}>
-              <Link href="/writing">Writing</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
     </div>
   );
 }

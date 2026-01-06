@@ -46,7 +46,7 @@ export const DynamicIsland = ({ language }: DynamicIslandProps) => {
         style={{
           borderRadius: 6,
         }}
-        className="shadow-lg dark:shadow-slate-900 overflow-hidden"
+        className="shadow-lg dark:shadow-slate-800 overflow-hidden"
       >
         <div className="absolute overflow-hidden w-full h-full rounded-md">
           <div className={cn("absolute w-full h-full")}>
