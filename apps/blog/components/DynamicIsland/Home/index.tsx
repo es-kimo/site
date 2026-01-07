@@ -10,8 +10,9 @@ export const HomeIsland = ({ language }: { language: Language }) => {
   return (
     <div
       className={cn(
-        "w-[calc(100vw-48px)] sm:w-[calc(100vw-128px)] relative flex flex-row gap-2 justify-between transition-all duration-300 ease-in-out items-center max-h-[72px] overflow-visible rounded-full"
+        "w-[calc(100vw-32px)] md:w-[calc(var(--blog-max-w) - 32px)] relative flex flex-row gap-2 justify-between transition-all duration-300 ease-in-out items-center max-h-[72px] overflow-visible rounded-full"
       )}
+      style={{ maxWidth: "min(calc(100vw - 12px), var(--blog-max-w))" }}
     >
       <Logo />
       <div className="flex items-center gap-1">
