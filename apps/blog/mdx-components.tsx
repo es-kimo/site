@@ -162,7 +162,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
           <div className="font-mono text-muted-foreground text-xs mb-1">{idArray.map((id) => `[${id}]`)}</div>
 
           {/* 내용 (들여쓰기) */}
-          <div className="pl-4 border-l-2 border-muted">
+          <div className="pl-4 border-l-2 border-muted break-words">
             {children}{" "}
             <a href={`#fnref-${primaryId}`} className="text-primary hover:underline text-xs ml-1" title="본문으로 돌아가기">
               ↩
