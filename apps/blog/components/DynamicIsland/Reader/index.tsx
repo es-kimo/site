@@ -12,6 +12,7 @@ export const ReaderIsland = () => {
     const currentSize = FONT_SIZES[sizeIndex];
     document.documentElement.style.setProperty("--article-font-size", `${currentSize?.value}px`);
     document.documentElement.style.setProperty("--article-scale", `${currentSize?.scale}`);
+    document.documentElement.style.setProperty("--article-line-height", `${currentSize?.lineHeight}`);
 
     // Save preference
     localStorage.setItem("reader-font-size", sizeIndex.toString());
