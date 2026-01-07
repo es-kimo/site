@@ -48,6 +48,15 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       );
     },
     p: ({ children }) => <p className="[&:not(:first-child)]:mt-7 tracking-wide">{children}</p>,
+    a: ({ children, href, ...props }) => (
+      <a
+        href={href}
+        {...props}
+        className="text-primary hover:text-primary/80 underline decoration-primary/30 hover:decoration-primary/60 underline-offset-2 transition-colors duration-200 font-medium"
+      >
+        {children}
+      </a>
+    ),
     blockquote: ({ children }) => <blockquote className="mt-7 border-l-2 pl-6 italic text-foreground/80">{children}</blockquote>,
     table: ({ children }) => (
       <div className="my-8 w-full overflow-y-auto">
@@ -151,8 +160,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     FootnoteRef({ ids, children, ...properties }) {
       // ids가 배열이면 그대로 사용, 아니면 배열로 변환
       const idArray = Array.isArray(ids) ? ids : [ids];
-      const primaryId = idArray[0];
-
       return (
         <div {...properties} className="text-sm leading-relaxed my-4">
           {/* 모든 id에 대한 숨겨진 앵커 포인트 생성 */}
@@ -164,12 +171,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
           <div className="font-mono text-muted-foreground text-xs mb-1">{idArray.map((id) => `[${id}]`)}</div>
 
           {/* 내용 (들여쓰기) */}
-          <div className="pl-4 border-l-2 border-muted/60 break-words text-foreground/80">
-            {children}{" "}
-            <a href={`#fnref-${primaryId}`} className="text-primary hover:underline text-xs ml-1" title="본문으로 돌아가기">
-              ↩
-            </a>
-          </div>
+          <div className="pl-4 border-l-2 border-muted/60 break-words text-foreground/80">{children} </div>
         </div>
       );
     },
