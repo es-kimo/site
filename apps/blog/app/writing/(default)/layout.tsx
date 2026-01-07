@@ -1,5 +1,11 @@
 import { CategoryNavigationTab } from "@/components/navigation-tab";
 
+export async function generateMetadata() {
+  return {
+    title: "Writing",
+  };
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{

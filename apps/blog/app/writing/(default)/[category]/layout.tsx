@@ -13,9 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<CategoryPar
   const { category } = await params;
   const [decodedCategory] = decodeURIS(category);
   return {
-    title: `${decodedCategory}`,
-    description: `${decodedCategory} 분야의 다양한 주제를 글로 다룹니다.`,
-    // TODO: og image
+    title: `Writing | ${decodedCategory}`,
   };
 }
 
