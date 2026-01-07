@@ -12,9 +12,9 @@ export const size = {
 export const contentType = "image/png";
 
 export default async function Image({ params }: { params: Promise<SlugParams> }) {
-  const { category, sub, slug } = await params;
-  const [decodedCategory, decodedSub, decodedSlug] = decodeURIS(category, sub, slug);
-  const { metadata } = await import(`@/content/${path.join(decodedCategory, decodedSub, decodedSlug)}/page.mdx`);
+  const { category, slug } = await params;
+  const [decodedCategory, decodedSlug] = decodeURIS(category, slug);
+  const { metadata } = await import(`@/content/${path.join(decodedCategory, decodedSlug)}/page.mdx`);
 
   return new ImageResponse(
     (
@@ -52,3 +52,4 @@ export default async function Image({ params }: { params: Promise<SlugParams> })
     }
   );
 }
+

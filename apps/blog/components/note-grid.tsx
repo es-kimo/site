@@ -4,7 +4,6 @@ import { AlertCircle } from "lucide-react";
 
 type NoteItem = {
   category: string;
-  sub: string;
   slug: string;
 };
 
@@ -28,9 +27,9 @@ export function NoteGrid({ notes }: NoteGridProps) {
         )}
 
         {/* TODO: sort by created date */}
-        {notes.map(({ category, sub, slug }) => (
-          <li key={`${category}-${sub}-${slug}`} className="w-full">
-            <NoteCard category={category} sub={sub} slug={slug} />
+        {notes.map(({ category, slug }) => (
+          <li key={`${category}-${slug}`} className="w-full">
+            <NoteCard category={category} slug={slug} />
           </li>
         ))}
       </ul>

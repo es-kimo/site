@@ -15,7 +15,7 @@ interface DynamicIslandProps {
 
 export const DynamicIsland = ({ language }: DynamicIslandProps) => {
   const pathname = usePathname();
-  const isReader = pathname.match(/^\/writing\/.+\/.+\/.+$/);
+  const isReader = pathname.match(/^\/writing\/.+\/.+$/);
   const isHome = pathname === "/";
 
   const view = useMemo(() => {

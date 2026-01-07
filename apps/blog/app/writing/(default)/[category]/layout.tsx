@@ -1,4 +1,3 @@
-import { SubCategoryNavigationTab } from "@/components/navigation-tab";
 import { categoryParams } from "@/constants/params";
 import { CategoryParams } from "@/constants/params.types";
 import { isCategory } from "@/lib/type-guards";
@@ -34,7 +33,6 @@ export default async function Layout({
       {isCategory(decodedCategory) ? (
         <>
           {/* <h2 className="font-bold text-3xl">{t(decodedCategory)}</h2> */}
-          <SubCategoryNavigationTab category={decodedCategory} />
           {children}
         </>
       ) : (
