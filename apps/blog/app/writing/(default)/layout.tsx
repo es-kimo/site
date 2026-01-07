@@ -6,7 +6,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="space-y-6 px-4">
+    <main className="space-y-6">
       <CategoryNavigationTab />
       {children}
     </main>

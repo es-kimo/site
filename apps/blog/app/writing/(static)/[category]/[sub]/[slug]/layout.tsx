@@ -35,21 +35,10 @@ export default async function Layout({
       style={{
         fontSize: "var(--article-font-size, 16px)",
       }}
-      className="grid grid-cols-[minmax(0.875rem,_1fr)_minmax(auto,_708px)_minmax(0.875rem,_1fr)] sm:grid-cols-[minmax(96px,_3fr)_minmax(auto,_708px)_minmax(96px,_1fr)] pt-6 pb-[10vh] sm:pt-[80px] sm:pb-[20vh] w-full transition-all"
+      className="w-full transition-all"
     >
-      <aside className="hidden lg:block sticky top-[80px] left-3 border-y-2 w-[180px] h-fit">
-        <dl className="border-b-[1px] border-muted px-[7px]">
-          <dd className="py-[6px]">
-            <BreadCrumb category={decodedCategory} sub={decodedSub} />
-          </dd>
-        </dl>
-        <dl className="flex gap-4 text-xs px-[7px] py-[9px]">
-          <dt className="text-muted-foreground">작성일</dt>
-          <dd>{formatPostDate(updatedAt ?? createdAt)}</dd>
-        </dl>
-      </aside>
       <article className="col-start-2 min-w-0">
-        <BreadCrumb className="lg:hidden text-muted-foreground mb-1" category={decodedCategory} sub={decodedSub} />
+        <p className="text-muted-foreground pt-2 text-xs font-semibold mb-1">{formatPostDate(updatedAt ?? createdAt, "korean")}</p>
         {children}
       </article>
     </section>
