@@ -30,8 +30,8 @@ export default async function HomePage() {
   const t = content[language];
 
   return (
-    <div className="flex items-center justify-center px-8">
-      <div className="max-w-2xl">
+    <div className="flex items-center justify-center sm:mt-16 px-4">
+      <div>
         <h1 className="text-2xl font-bold font-[family-name:var(--font-stix)] mb-4">khryu.dev</h1>
         <article
           style={{ viewTransitionName: "home-content" }}

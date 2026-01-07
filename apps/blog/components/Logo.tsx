@@ -105,7 +105,7 @@ export function Logo() {
             </defs>
 
             {/* 원본 텍스트 (currentColor, 항상 보임) */}
-            <text y="18" fontSize="16" fill="currentColor" fontWeight="500" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
+            <text y="18" fontSize="16" fill="currentColor" fontWeight="500" style={{ fontFamily: "STIX Two Text, system-ui, sans-serif" }}>
               {particleSystem.text.split("").map((char, i) => (
                 <tspan key={`original-${i}`} x={particleSystem.getCharX(i)}>
                   {char}
@@ -115,7 +115,7 @@ export function Logo() {
 
             {/* 그라데이션 텍스트 (위에 겹침) */}
             {gradientKey > 0 && (
-              <text key={gradientKey} y="18" fontSize="16" fill="url(#textGradient)" fontWeight="500" style={{ fontFamily: "Inter, system-ui, sans-serif" }} className="gradient-text active">
+              <text key={gradientKey} y="18" fontSize="16" fill="url(#textGradient)" fontWeight="500" style={{ fontFamily: "STIX Two Text, system-ui, sans-serif" }} className="gradient-text active">
                 {particleSystem.text.split("").map((char, i) => (
                   <tspan key={`gradient-${i}`} x={particleSystem.getCharX(i)}>
                     {char}

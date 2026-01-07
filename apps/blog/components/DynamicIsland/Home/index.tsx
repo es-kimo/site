@@ -1,22 +1,20 @@
-"use client";
-
+import { Logo } from "@/components/Logo";
 import { type Language } from "@/lib/language";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "@workspace/ui/components/navigation-menu";
 import { cn } from "@workspace/ui/lib/utils";
 import { Link } from "next-view-transitions";
-import { LanguageToggle } from "../LanguageToggle";
-import { Logo } from "../Logo";
-import { ThemeChanger } from "../ThemeChanger";
+import { LanguageToggle } from "../../LanguageToggle";
+import { ThemeChanger } from "../../ThemeChanger";
 
-interface IdleIslandProps {
-  language: Language;
-  showLogo?: boolean;
-}
-
-export function IdleIsland({ language, showLogo = true }: IdleIslandProps) {
+export const HomeIsland = ({ language }: { language: Language }) => {
   return (
-    <div className={cn("w-[calc(100vw-12px)] relative flex flex-row gap-2 justify-between py-1 px-2 transition-all duration-300 ease-in-out items-center max-h-[72px] overflow-visible rounded-full")}>
-      {showLogo && <Logo />}
+    <div
+      className={cn(
+        "w-[calc(100vw-32px)] md:w-[calc(var(--blog-max-w) - 32px)] relative flex flex-row gap-2 justify-between transition-all duration-300 ease-in-out items-center max-h-[72px] overflow-visible rounded-full"
+      )}
+      style={{ maxWidth: "min(calc(100vw - 12px), var(--blog-max-w))" }}
+    >
+      <Logo />
       <div className="flex items-center gap-1">
         <LanguageToggle currentLanguage={language} />
         <ThemeChanger />
@@ -32,4 +30,4 @@ export function IdleIsland({ language, showLogo = true }: IdleIslandProps) {
       </NavigationMenu>
     </div>
   );
-}
+};

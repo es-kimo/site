@@ -37,7 +37,7 @@ export const ReaderIsland = () => {
   };
 
   return (
-    <div className="w-fit mx-auto bg-background/20 backdrop-blur-xl rounded-md px-4 py-1 flex items-center gap-3" aria-label="Font size control">
+    <div className="w-full mx-auto bg-background/20 backdrop-blur-xl rounded-md px-4 py-1 flex items-center gap-3" aria-label="Font size control">
       <button
         onClick={decreaseSize}
         disabled={sizeIndex === 0}
