@@ -25,7 +25,7 @@ export default async function Image({ params }: { params: Promise<SlugParams> })
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
-          justifyContent: "center",
+          justifyContent: "flex-start",
           backgroundImage: `url(${process.env.NEXT_PUBLIC_BASE_URL}/og-bg.png)`,
         }}
       >
@@ -33,14 +33,14 @@ export default async function Image({ params }: { params: Promise<SlugParams> })
           style={{
             marginLeft: 220,
             marginRight: 220,
+            marginTop: 120,
             display: "flex",
-            fontSize: 130,
+            fontSize: 105,
             letterSpacing: "-0.05em",
             fontStyle: "normal",
             color: "white",
-            lineHeight: "120px",
+            lineHeight: "140px",
             whiteSpace: "pre-wrap",
-            transform: "translateY(-100%)",
           }}
         >
           {metadata.title}
@@ -52,4 +52,3 @@ export default async function Image({ params }: { params: Promise<SlugParams> })
     }
   );
 }
-
