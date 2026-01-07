@@ -3,9 +3,7 @@ import { Metadata } from "next";
 export type Category = string;
 
 export type Notes = {
-  [category: string]: {
-    [sub: string]: string[];
-  };
+  [category: string]: string[];
 };
 
 export type NoteMetadata = Partial<Metadata> & {
