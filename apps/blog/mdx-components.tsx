@@ -150,20 +150,19 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       // ids가 배열이면 그대로 사용, 아니면 배열로 변환
       const idArray = Array.isArray(ids) ? ids : [ids];
       const primaryId = idArray[0];
-      
+
       return (
-        <div {...properties} className="text-sm leading-relaxed my-3 pl-6 relative border-l-2 border-muted">
-          {/* 모든 id에 대한 앵커 포인트 생성 */}
-          {idArray.map((id, index) => (
-            <span 
-              key={id} 
-              id={`fn-${id}`} 
-              className={index === 0 ? "absolute -left-6 font-mono text-muted-foreground text-xs" : "absolute opacity-0 pointer-events-none"}
-            >
-              {index === 0 && `[${idArray.join(", ")}]`}
-            </span>
+        <div {...properties} className="text-sm leading-relaxed my-3">
+          {/* 모든 id에 대한 숨겨진 앵커 포인트 생성 */}
+          {idArray.map((id) => (
+            <span key={id} id={`fn-${id}`} className="absolute opacity-0 pointer-events-none" />
           ))}
-          <div className="inline">
+
+          {/* 번호 표시 (왼쪽 정렬) */}
+          <div className="font-mono text-muted-foreground text-xs mb-1">{idArray.map((id) => `[${id}]`)}</div>
+
+          {/* 내용 (들여쓰기) */}
+          <div className="pl-4 border-l-2 border-muted">
             {children}{" "}
             <a href={`#fnref-${primaryId}`} className="text-primary hover:underline text-xs ml-1" title="본문으로 돌아가기">
               ↩
