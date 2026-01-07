@@ -54,7 +54,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     pre(properties) {
       return <pre {...properties} className="border border-[var(--code-block-border)] rounded-[10px] p-4 bg-[var(--code-block-bg)] mt-6 overflow-x-auto"></pre>;
     },
-    Image: (props) => <Image {...(props as ImageProps)} className="w-4/5 mx-auto" />,
+    Image: (props) => <Image {...(props as ImageProps)} className="w-4/5 mx-auto my-6" />,
     Lead(properties) {
       return <p {...properties} className="text-xl text-muted-foreground"></p>;
     },
