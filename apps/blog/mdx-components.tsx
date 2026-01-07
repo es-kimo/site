@@ -137,6 +137,28 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </nav>
       );
     },
+    Footnote({ id, children, ...properties }) {
+      return (
+        <sup {...properties} id={`fnref-${id}`}>
+          <a href={`#fn-${id}`} className="text-primary hover:underline">
+            [{children || id}]
+          </a>
+        </sup>
+      );
+    },
+    FootnoteRef({ id, children, ...properties }) {
+      return (
+        <div {...properties} id={`fn-${id}`} className="text-sm leading-relaxed my-3 pl-6 relative border-l-2 border-muted">
+          <span className="absolute -left-6 font-mono text-muted-foreground text-xs">[{id}]</span>
+          <div className="inline">
+            {children}{" "}
+            <a href={`#fnref-${id}`} className="text-primary hover:underline text-xs ml-1" title="본문으로 돌아가기">
+              ↩
+            </a>
+          </div>
+        </div>
+      );
+    },
     ...components,
   };
 }
