@@ -18,7 +18,9 @@ export default function TheCarousel({ children, title, ...props }: { children: R
   const lightboxTitle = useMemo(() => {
     if (title) return title;
     const firstImage = Children.toArray(children).find((child) => isValidElement(child));
-    if (isValidElement(firstImage) && firstImage.props.alt) return firstImage.props.alt;
+    if (isValidElement(firstImage) && typeof firstImage.props === "object" && firstImage.props && "alt" in firstImage.props) {
+      return firstImage.props.alt as string;
+    }
     return "사진";
   }, [title, children]);
 
@@ -47,20 +49,22 @@ export default function TheCarousel({ children, title, ...props }: { children: R
     <>
       <Carousel className="w-4/6 sm:w-11/12 mx-auto" {...props}>
         <CarouselContent>
-          {Children.map(children, (child, index) =>
-            isValidElement(child) ? (
+          {Children.map(children, (child, index) => {
+            if (!isValidElement(child)) return null;
+            const props = child.props as Record<string, unknown>;
+            return (
               <CarouselItem key={index}>
                 {isValidElement(child) && {
                   ...child,
                   props: {
-                    ...child.props,
-                    className: cn(child.props.className, "cursor-zoom-in"),
+                    ...props,
+                    className: cn(props.className as string, "cursor-zoom-in"),
                     onClick: handleClick(index),
                   },
                 }}
               </CarouselItem>
-            ) : null
-          )}
+            );
+          })}
         </CarouselContent>
         <CarouselPrevious className="w-12 h-12 border-primary" />
         <CarouselNext className="w-12 h-12 border-primary" />
@@ -84,19 +88,21 @@ export default function TheCarousel({ children, title, ...props }: { children: R
             className="bg-transparent border-none"
           >
             <CarouselContent>
-              {Children.map(children, (child, i) =>
-                isValidElement(child) ? (
+              {Children.map(children, (child, i) => {
+                if (!isValidElement(child)) return null;
+                const props = child.props as Record<string, unknown>;
+                return (
                   <CarouselItem key={i}>
                     {isValidElement(child) && {
                       ...child,
                       props: {
-                        ...child.props,
+                        ...props,
                         className: "w-full max-h-[calc(100dvh-300px)] md:max-h-[calc(100dvh-240px)] object-contain",
                       },
                     }}
                   </CarouselItem>
-                ) : null
-              )}
+                );
+              })}
             </CarouselContent>
             {childLength > 1 && (
               <>
