@@ -1,0 +1,316 @@
+{
+  "id": "fe71ba2d-beba-4191-82d6-82565b92be28",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.blocks": {
+      "name": "blocks",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "parentId": {
+          "name": "parentId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "parentType": {
+          "name": "parentType",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "position": {
+          "name": "position",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "authorId": {
+          "name": "authorId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "inTrash": {
+          "name": "inTrash",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "hasChildren": {
+          "name": "hasChildren",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.files": {
+      "name": "files",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expiryTime": {
+          "name": "expiryTime",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "object": {
+          "name": "object",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "filename": {
+          "name": "filename",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contentType": {
+          "name": "contentType",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contentLength": {
+          "name": "contentLength",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pages": {
+      "name": "pages",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'draft'"
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "spaceId": {
+          "name": "spaceId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "parentId": {
+          "name": "parentId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "parentType": {
+          "name": "parentType",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "position": {
+          "name": "position",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "authorId": {
+          "name": "authorId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "version": {
+          "name": "version",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "inTrash": {
+          "name": "inTrash",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.versions": {
+      "name": "versions",
+      "schema": "",
+      "columns": {
+        "number": {
+          "name": "number",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "authorId": {
+          "name": "authorId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "message": {
+          "name": "message",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "minorEdit": {
+          "name": "minorEdit",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "contentTypeModified": {
+          "name": "contentTypeModified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "prevVersion": {
+          "name": "prevVersion",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "nextVersion": {
+          "name": "nextVersion",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

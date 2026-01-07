@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 99%;
+    --background: 0 0% 98.5%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -73,7 +73,7 @@
     @apply bg-background text-foreground;
   }
   :root {
-    --blog-max-w: 1142px;
+    --blog-max-w: 650px;
     --yjshd-max-w: 1440px;
     --header-h: 72px;
     --sub-header-h: 40px;
@@ -130,5 +130,42 @@
 
   code[data-line-numbers-max-digits="4"] > [data-line]::before {
     width: 2.25rem;
+  }
+
+  /* View Transitions - Language Toggle Animation */
+  ::view-transition-old(home-content),
+  ::view-transition-new(home-content) {
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  ::view-transition-old(home-content) {
+    animation-name: fade-out-scale;
+  }
+
+  ::view-transition-new(home-content) {
+    animation-name: fade-in-scale;
+  }
+
+  @keyframes fade-out-scale {
+    from {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.98);
+    }
+  }
+
+  @keyframes fade-in-scale {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 }

@@ -9,7 +9,7 @@ export const categoryParams: CategoryParams[] = CATEGORIES.map((category) => ({
 
 export const getSubParams = async (category: Category): Promise<SubParams[]> => (isCategory(category) ? (await getSubCategoriesByCategory(category)).map((sub) => ({ category, sub })) : []);
 
-export const slugParams: SlugParams[] = Object.entries(NOTES).reduce<{ category: string; sub: string; slug: string }[]>((acc, [category, subs]) => {
+export const slugParams: SlugParams[] = Object.entries(NOTES).reduce<SlugParams[]>((acc, [category, subs]) => {
   const subParams = Object.entries(subs).reduce<{ sub: string; slug: string }[]>((acc, [sub, slugs]) => {
     return [...acc, ...slugs.map((slug) => ({ sub, slug }))];
   }, []);

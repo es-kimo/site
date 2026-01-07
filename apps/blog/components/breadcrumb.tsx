@@ -1,4 +1,3 @@
-import { t } from "@/locales/translate";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@workspace/ui/components/breadcrumb";
 import { Link } from "next-view-transitions";
 
@@ -9,20 +8,20 @@ export const BreadCrumb = ({ className, category, sub, link = true }: { classNam
         <BreadcrumbItem>
           {link ? (
             <BreadcrumbLink asChild>
-              <Link href={`/${category}`}>{t(category)}</Link>
+              <Link href={`/writing/${category}`}>{category}</Link>
             </BreadcrumbLink>
           ) : (
-            t(category)
+            category
           )}
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
           {link ? (
             <BreadcrumbLink asChild>
-              <Link href={`/${category}/${sub}`}>{t(sub)}</Link>
+              <Link href={`/writing/${category}/${sub}`}>{sub}</Link>
             </BreadcrumbLink>
           ) : (
-            t(sub)
+            sub
           )}
         </BreadcrumbItem>
       </BreadcrumbList>

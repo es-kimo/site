@@ -1,0 +1,65 @@
+export const metadata = {
+  title: "Strobogrammatic Number II",
+  description: "Given an integer n, return all the strobogrammatic numbers of length n.",
+  keywords: ["strobogrammatic number", "algorithm", "recursion"],
+  alternate: {
+    canonical: "cs/algorithm/01",
+  },
+  other: {
+    status: "ready",
+    createdAt: "2025-11-14T23:00:00",
+  },
+};
+
+# A Clean, Symmetric Way to Generate Strobogrammatic Numbers
+
+## Intuition
+
+Strobogrammatic numbers are symmetric when rotated 180 degrees, so each valid number must be built from pairs such as 11, 88, 69, 96, 00, with a special case for the center when the length is odd (1, 8, 0). The key insight is that a strobogrammatic number of length n can be constructed by wrapping strobogrammatic pairs around all valid numbers of length n–2.
+
+## Approach
+
+Use recursion to build numbers from the inside out.
+
+- Base cases handle lengths 1 and 2 directly with known strobogrammatic sets.
+- For larger sizes, recursively generate all valid strobogrammatic numbers of length n–2, then wrap each of them with all valid strobogrammatic pairs.
+- After generating candidates, filter out numbers that start with '0' to avoid invalid leading zeros.
+
+This ensures all generated numbers are valid and symmetric under rotation.
+
+## Complexity
+
+- Time complexity:
+  Each recursion level generates approximately 5× more strings than the previous level.
+  The total number of strobogrammatic numbers of length n is `O(5^{n/2})`, so the time complexity is
+  `O(5^{n/2})`
+- Space complexity:
+  The recursion depth is `O(n)`, and the output list itself contains `O(5^{n/2})` strings.
+  Thus total space usage is
+  `O(5^{n/2})`
+
+## Code
+
+```javascript
+/**
+ * @param {number} n
+ * @return {string[]}
+ */
+var findStrobogrammatic = function (n) {
+  if (n === 1) return ["1", "8", "0"];
+
+  const size2 = ["11", "88", "69", "96", "00"];
+  function recursion(size) {
+    if (size === 1) return ["1", "8", "0"];
+    if (size === 2) return size2;
+
+    const prev = recursion(size - 2);
+    const curr = prev.flatMap((num) => {
+      return size2.map((add) => `${add[0]}${num}${add[1]}`);
+    });
+    return curr;
+  }
+
+  return recursion(n).filter((num) => !num.startsWith("0"));
+};
+```
