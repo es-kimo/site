@@ -146,13 +146,26 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </sup>
       );
     },
-    FootnoteRef({ id, children, ...properties }) {
+    FootnoteRef({ ids, children, ...properties }) {
+      // ids가 배열이면 그대로 사용, 아니면 배열로 변환
+      const idArray = Array.isArray(ids) ? ids : [ids];
+      const primaryId = idArray[0];
+      
       return (
-        <div {...properties} id={`fn-${id}`} className="text-sm leading-relaxed my-3 pl-6 relative border-l-2 border-muted">
-          <span className="absolute -left-6 font-mono text-muted-foreground text-xs">[{id}]</span>
+        <div {...properties} className="text-sm leading-relaxed my-3 pl-6 relative border-l-2 border-muted">
+          {/* 모든 id에 대한 앵커 포인트 생성 */}
+          {idArray.map((id, index) => (
+            <span 
+              key={id} 
+              id={`fn-${id}`} 
+              className={index === 0 ? "absolute -left-6 font-mono text-muted-foreground text-xs" : "absolute opacity-0 pointer-events-none"}
+            >
+              {index === 0 && `[${idArray.join(", ")}]`}
+            </span>
+          ))}
           <div className="inline">
             {children}{" "}
-            <a href={`#fnref-${id}`} className="text-primary hover:underline text-xs ml-1" title="본문으로 돌아가기">
+            <a href={`#fnref-${primaryId}`} className="text-primary hover:underline text-xs ml-1" title="본문으로 돌아가기">
               ↩
             </a>
           </div>
