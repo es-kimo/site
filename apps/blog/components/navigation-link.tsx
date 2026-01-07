@@ -10,12 +10,13 @@ export const restyledNavigationMenuTriggerStyle = () => cn(navigationMenuTrigger
 
 export function NavigationLink({ href, children, inclusiveActiveState }: { href: string; children: React.ReactNode; inclusiveActiveState?: boolean }) {
   const pathname = usePathname();
+  const decodedPathname = decodeURIComponent(pathname);
   const isActive = useMemo(() => {
     if (inclusiveActiveState) {
-      return pathname.startsWith(href);
+      return decodedPathname.startsWith(href);
     }
-    return href === pathname;
-  }, [href, pathname, inclusiveActiveState]);
+    return href === decodedPathname;
+  }, [href, decodedPathname, inclusiveActiveState]);
   const router = useTransitionRouter();
 
   return (
