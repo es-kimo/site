@@ -27,10 +27,11 @@ export default async function Layout({
     <section
       style={{
         fontSize: "var(--article-font-size, 16px)",
+        lineHeight: "var(--article-line-height, 1.6)",
       }}
       className="w-full transition-all"
     >
-      <article className="col-start-2 min-w-0">
+      <article className="col-start-2 min-w-0 max-w-[65ch] mx-auto px-4 text-foreground/90">
         <p className="text-muted-foreground pt-2 text-xs font-semibold mb-1">{formatPostDate(updatedAt ?? createdAt, "korean")}</p>
         {children}
       </article>
