@@ -32,10 +32,13 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
         <div className="absolute inset-0 bg-gradient-to-t from-white via-white/90 to-transparent" />
       </div>
 
-      <TheHeader params={params} />
+      {/* Fixed Header - DOM 플로우에서 제거 */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md">
+        <TheHeader params={params} />
+      </div>
 
       {/* Hero Section - Vercel Style */}
-      <section className="relative min-h-screen flex items-center justify-center px-6 py-32">
+      <section className="relative h-screen flex items-center justify-center px-6">
         <div className="max-w-6xl mx-auto w-full">
           <div className="text-center space-y-8">
             <div className="inline-flex items-center gap-2 px-3 py-1 border border-gray-200 rounded-full text-sm font-mono text-gray-600">
@@ -43,10 +46,10 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-600 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
               </span>
-              2025.01
+              2026
             </div>
 
-            <h1 className="text-5xl md:text-6xl lg:text-8xl font-bold tracking-tighter leading-none">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-none">
               더 나은 의료를
               <br />
               <span className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-600 bg-clip-text text-transparent">향한 도약</span>
@@ -72,7 +75,6 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
         </div>
 
         {/* Gradient orb */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-blue-500/10 via-purple-500/5 to-transparent rounded-full blur-3xl -z-10" />
       </section>
 
       {/* Doctor Section - 간소화 및 가독성 개선 */}
@@ -106,12 +108,7 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
               </Button>
             </div>
 
-            <div className="relative">
-              <div className="aspect-[3/4] relative border border-gray-200 rounded-lg overflow-hidden group">
-                <Image src="/doctor.png" alt="류동열 원장" fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-white/30 to-transparent" />
-              </div>
-            </div>
+            <Image src="/doctor.png" alt="류동열 원장" width={359} height={400} />
           </div>
         </div>
       </section>
