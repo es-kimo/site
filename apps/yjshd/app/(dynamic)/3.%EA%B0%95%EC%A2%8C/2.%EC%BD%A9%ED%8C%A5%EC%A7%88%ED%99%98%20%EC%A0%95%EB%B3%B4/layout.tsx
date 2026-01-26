@@ -15,7 +15,7 @@ export default async function Layout({
   children: React.ReactNode;
 }>) {
   const params = new Promise<SubCategoryParams>((resolve) => {
-    resolve({ category: "3.콩팥질환 강좌", subCategory: "2.콩팥질환 정보" });
+    resolve({ category: "3.강좌", subCategory: "2.콩팥질환 정보" });
   });
   return (
     <>
