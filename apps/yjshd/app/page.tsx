@@ -94,8 +94,8 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
             <div className="space-y-6 lg:sticky lg:top-32">
               <div>
                 <div className="text-sm font-mono text-gray-500 mb-3">의료진</div>
-                <h2 className="text-4xl font-bold mb-2">류동열 원장</h2>
-                <p className="text-base text-gray-600 leading-relaxed">25년여동안 수련의, 전문의, 교수, 연구자로 쌓은 지식과 경험을 바탕으로 여러분의 건강을 책임집니다.</p>
+                <h2 className="text-4xl font-bold mb-6">류동열 원장</h2>
+                <p className="text-base text-gray-600 leading-relaxed">25년여동안 수련의, 전문의, 교수, 연구자로 쌓은 지식과 경험을 바탕으로 정성을 다해 진료합니다.</p>
               </div>
 
               <div className="space-y-3">
@@ -172,7 +172,6 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
                     <div className="text-base font-bold text-gray-900 mb-2">혈액투석 치료</div>
                     <ul className="space-y-1.5 text-base text-gray-600">
                       <li>• 투석 전 혈관 관리</li>
-                      <li>• 체중관리 지원</li>
                       <li>• 정기 혈액검사</li>
                       <li>• 투석 적절도 검사</li>
                     </ul>
