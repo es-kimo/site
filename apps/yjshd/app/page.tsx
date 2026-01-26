@@ -41,42 +41,48 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
       {/* Hero Section - Vercel Style */}
       <section className="relative h-screen flex items-center justify-center px-6">
         <div className="max-w-6xl mx-auto w-full">
-          <div className="text-center space-y-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 border border-primary/20 bg-primary/5 rounded-full text-sm font-mono text-primary">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-              </span>
-              2026
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left: Text Content */}
+            <div className="text-center lg:text-left space-y-8">
+              <div className="inline-flex items-center gap-2 px-3 py-1 border border-primary/20 bg-primary/5 rounded-full text-sm font-mono text-primary">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                </span>
+                2026
+              </div>
+
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-none">
+                더 나은
+                <br />
+                의료 서비스를
+                <br />
+                <span className="bg-gradient-to-br from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">위한 노력</span>
+              </h1>
+
+              <p className="text-lg md:text-2xl text-gray-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                정상이 어디인지 누구도 알 수 없습니다.
+                <br />
+                어제보다 나은 내일을 위해 혁신하고,
+                <br />
+                오시는 한 분 한 분 정성을 다합니다.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start pt-8">
+                <ScrollButton targetId="doctor" variant="outline" className="border-gray-300 text-gray-900 hover:bg-gray-100 h-12 px-6 font-medium">
+                  의료진
+                </ScrollButton>
+                <ScrollButton targetId="services" variant="default" className="bg-primary text-primary-foreground hover:bg-primary/90 h-12 px-6 font-medium">
+                  진료 안내
+                </ScrollButton>
+                <ScrollButton targetId="location" variant="outline" className="border-gray-300 text-gray-900 hover:bg-gray-100 h-12 px-6 font-medium">
+                  방문 안내
+                </ScrollButton>
+              </div>
             </div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-none">
-              더 나은
-              <br />
-              의료 서비스를
-              <br />
-              <span className="bg-gradient-to-br from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">위한 노력</span>
-            </h1>
-
-            <p className="text-lg md:text-2xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              정상이 어디인지 누구도 알 수 없습니다.
-              <br />
-              어제보다 나은 내일을 위해 혁신하고,
-              <br />
-              오시는 한 분 한 분 정성을 다합니다.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-3 justify-center pt-8">
-              <ScrollButton targetId="doctor" variant="outline" className="border-gray-300 text-gray-900 hover:bg-gray-100 h-12 px-6 font-medium">
-                의료진
-              </ScrollButton>
-              <ScrollButton targetId="services" variant="default" className="bg-primary text-primary-foreground hover:bg-primary/90 h-12 px-6 font-medium">
-                진료 안내
-              </ScrollButton>
-              <ScrollButton targetId="location" variant="outline" className="border-gray-300 text-gray-900 hover:bg-gray-100 h-12 px-6 font-medium">
-                방문 안내
-              </ScrollButton>
-            </div>
+            {/* Right: Mission Image (Desktop only) */}
+            <Image src="/mission.png" alt="연세정성내과 미션" width={400} height={400} className="hidden lg:inline" />
           </div>
         </div>
       </section>
