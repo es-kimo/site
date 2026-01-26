@@ -1,10 +1,10 @@
 import { TheHeader } from "@/components/TheHeader";
 import { SubCategoryParams } from "@workspace/common/structure/params.types";
 import { Button } from "@workspace/ui/components/button";
-import { ArrowRight, Phone, MapPin, Clock } from "lucide-react";
+import { ArrowRight, Clock, MapPin, Phone } from "lucide-react";
+import { Metadata } from "next";
 import { Link } from "next-view-transitions";
 import Image from "next/image";
-import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "연세정성내과",
@@ -46,7 +46,7 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
               2025.01
             </div>
 
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-none">
+            <h1 className="text-5xl md:text-6xl lg:text-8xl font-bold tracking-tighter leading-none">
               더 나은 의료를
               <br />
               <span className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-600 bg-clip-text text-transparent">향한 도약</span>
@@ -75,50 +75,26 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-blue-500/10 via-purple-500/5 to-transparent rounded-full blur-3xl -z-10" />
       </section>
 
-      {/* Stats Section - Vercel Style */}
+      {/* Doctor Section - 간소화 및 가독성 개선 */}
       <section className="border-t border-gray-200">
         <div className="max-w-6xl mx-auto px-6 py-20">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-gray-200">
-            {[
-              { value: "25+", label: "경력 연수" },
-              { value: "1:1", label: "맞춤 진료" },
-              { value: "24/7", label: "상담 가능" },
-              { value: "100%", label: "환자 중심" },
-            ].map((stat, i) => (
-              <div key={i} className="bg-white p-8 text-center group hover:bg-gray-50 transition-colors">
-                <div className="text-4xl md:text-5xl font-bold font-mono mb-2 group-hover:text-gray-900 transition-colors">{stat.value}</div>
-                <div className="text-sm text-gray-500 font-mono tracking-wider">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Doctor Section - Vercel Style */}
-      <section className="border-t border-gray-200">
-        <div className="max-w-6xl mx-auto px-6 py-32">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="space-y-8 lg:sticky lg:top-32">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            <div className="space-y-6 lg:sticky lg:top-32">
               <div>
-                <div className="text-sm font-mono text-gray-500 tracking-wider mb-4">의료진</div>
-                <h2 className="text-5xl md:text-7xl font-bold tracking-tight leading-none mb-6">류동열 원장</h2>
-                <div className="h-px w-16 bg-gray-300 mb-6" />
+                <div className="text-sm font-mono text-gray-500 mb-3">의료진</div>
+                <h2 className="text-4xl font-bold mb-2">류동열 원장</h2>
+                <p className="text-gray-600 leading-relaxed">25년여동안 수련의, 전문의, 교수, 연구자로 쌓은 지식과 경험을 바탕으로 여러분의 건강을 책임집니다.</p>
               </div>
 
-              <div className="space-y-6">
-                <div className="border border-gray-200 p-6 rounded-lg hover:border-gray-300 transition-colors">
-                  <div className="text-sm font-mono text-gray-500 mb-2">학력</div>
-                  <div className="text-lg">연세대학교 의과대학 졸업</div>
+              <div className="space-y-3">
+                <div className="flex gap-3">
+                  <div className="text-sm font-mono text-gray-500 w-12">학력</div>
+                  <div className="text-sm">연세대학교 의과대학 졸업</div>
                 </div>
 
-                <div className="border border-gray-200 p-6 rounded-lg hover:border-gray-300 transition-colors">
-                  <div className="text-sm font-mono text-gray-500 mb-2">경력</div>
-                  <div className="text-lg">전 이화여자대학교 의과대학 교수</div>
-                </div>
-
-                <div className="border border-gray-200 p-6 rounded-lg hover:border-gray-300 transition-colors">
-                  <div className="text-sm font-mono text-gray-500 mb-2">소개</div>
-                  <div className="text-lg text-gray-600 leading-relaxed">25년여동안 수련의, 전문의, 교수, 연구자로 쌓은 지식과 경험을 바탕으로 여러분의 건강을 책임집니다.</div>
+                <div className="flex gap-3">
+                  <div className="text-sm font-mono text-gray-500 w-12">경력</div>
+                  <div className="text-sm">전 이화여자대학교 의과대학 교수</div>
                 </div>
               </div>
 
@@ -140,61 +116,42 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
         </div>
       </section>
 
-      {/* Services Section - Vercel Style */}
+      {/* Services Section - 간소화 및 집중도 향상 */}
       <section className="border-t border-gray-200">
-        <div className="max-w-6xl mx-auto px-6 py-32">
-          <div className="mb-20">
-            <div className="text-sm font-mono text-gray-500 tracking-wider mb-4">진료</div>
-            <h2 className="text-5xl md:text-7xl font-bold tracking-tight leading-none">진료 안내</h2>
+        <div className="max-w-6xl mx-auto px-6 py-20">
+          <div className="mb-12">
+            <div className="text-sm font-mono text-gray-500 mb-3">진료</div>
+            <h2 className="text-4xl font-bold">진료 안내</h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-px bg-gray-200">
+          <div className="grid md:grid-cols-2 gap-8">
             {/* 외래 진료 */}
-            <div className="bg-white p-10 group hover:bg-gray-50 transition-colors">
-              <div className="space-y-8">
+            <div className="border border-gray-200 rounded-lg p-8 hover:border-gray-900 hover:shadow-lg transition-all duration-300">
+              <div className="space-y-6">
                 <div>
-                  <div className="text-sm font-mono text-gray-500 tracking-wider mb-4">01</div>
-                  <h3 className="text-3xl font-bold mb-4">외래 진료</h3>
-                  <div className="h-px w-12 bg-gray-300" />
+                  <h3 className="text-2xl font-bold mb-3">외래 진료</h3>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-4">
                   <div>
-                    <div className="text-sm font-mono text-gray-500 mb-3">일반내과</div>
-                    <ul className="space-y-2 text-gray-600">
-                      <li className="flex items-start gap-3">
-                        <span className="text-gray-900 mt-1">→</span>
-                        <span>급만성 내과질환 진료</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="text-gray-900 mt-1">→</span>
-                        <span>만성질환 관리</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="text-gray-900 mt-1">→</span>
-                        <span>예방접종 및 영양치료</span>
-                      </li>
+                    <div className="text-sm font-bold text-gray-900 mb-2">일반내과</div>
+                    <ul className="space-y-1 text-sm text-gray-600">
+                      <li>• 급만성 내과질환 진료</li>
+                      <li>• 만성질환 관리</li>
+                      <li>• 예방접종 및 영양치료</li>
                     </ul>
                   </div>
 
-                  <div className="h-px bg-gray-200" />
-
                   <div>
-                    <div className="text-sm font-mono text-gray-500 mb-3">콩팥 건강검진</div>
-                    <ul className="space-y-2 text-gray-600">
-                      <li className="flex items-start gap-3">
-                        <span className="text-gray-900 mt-1">→</span>
-                        <span>만성콩팥병 조기 발견</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="text-gray-900 mt-1">→</span>
-                        <span>단계별 맞춤형 치료</span>
-                      </li>
+                    <div className="text-sm font-bold text-gray-900 mb-2">콩팥 건강검진</div>
+                    <ul className="space-y-1 text-sm text-gray-600">
+                      <li>• 만성콩팥병 조기 발견</li>
+                      <li>• 단계별 맞춤형 치료</li>
                     </ul>
                   </div>
                 </div>
 
-                <Button variant="ghost" className="text-gray-900 hover:bg-gray-100 w-full justify-between group" asChild>
+                <Button variant="ghost" className="text-gray-900 hover:bg-gray-100 w-full justify-between group mt-4" asChild>
                   <Link href="/1.소개/2.진료 안내">
                     자세히 보기
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -204,44 +161,30 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
             </div>
 
             {/* 인공신장실 */}
-            <div className="bg-white p-10 group hover:bg-gray-50 transition-colors">
-              <div className="space-y-8">
+            <div className="border border-gray-200 rounded-lg p-8 hover:border-gray-900 hover:shadow-lg transition-all duration-300">
+              <div className="space-y-6">
                 <div>
-                  <div className="text-sm font-mono text-gray-500 tracking-wider mb-4">02</div>
-                  <h3 className="text-3xl font-bold mb-4">인공신장실</h3>
-                  <div className="h-px w-12 bg-gray-300" />
+                  <h3 className="text-2xl font-bold mb-3">인공신장실</h3>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-4">
                   <div>
-                    <div className="text-sm font-mono text-gray-500 mb-3">혈액투석 치료</div>
-                    <ul className="space-y-2 text-gray-600">
-                      <li className="flex items-start gap-3">
-                        <span className="text-gray-900 mt-1">→</span>
-                        <span>투석 전 혈관 관리</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="text-gray-900 mt-1">→</span>
-                        <span>체중관리 지원</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="text-gray-900 mt-1">→</span>
-                        <span>정기 혈액검사</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="text-gray-900 mt-1">→</span>
-                        <span>투석 적절도 검사</span>
-                      </li>
+                    <div className="text-sm font-bold text-gray-900 mb-2">혈액투석 치료</div>
+                    <ul className="space-y-1 text-sm text-gray-600">
+                      <li>• 투석 전 혈관 관리</li>
+                      <li>• 체중관리 지원</li>
+                      <li>• 정기 혈액검사</li>
+                      <li>• 투석 적절도 검사</li>
                     </ul>
                   </div>
 
-                  <div className="border border-gray-300 p-4 rounded">
-                    <div className="text-sm font-mono text-gray-500 mb-2">야간 투석</div>
-                    <div className="text-gray-900">월 · 수 · 금 야간 투석 운영</div>
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded">
+                    <div className="text-sm font-bold text-gray-900 mb-1">야간 투석</div>
+                    <div className="text-sm text-gray-600">월 · 수 · 금 야간 투석 운영</div>
                   </div>
                 </div>
 
-                <Button variant="ghost" className="text-gray-900 hover:bg-gray-100 w-full justify-between group" asChild>
+                <Button variant="ghost" className="text-gray-900 hover:bg-gray-100 w-full justify-between group mt-4" asChild>
                   <Link href="/1.소개/2.진료 안내">
                     자세히 보기
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -253,22 +196,22 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
         </div>
       </section>
 
-      {/* Location Section - Vercel Style */}
+      {/* Location Section - 간소화 및 집중도 향상 */}
       <section className="border-t border-gray-200">
-        <div className="max-w-6xl mx-auto px-6 py-32">
-          <div className="mb-20">
-            <div className="text-sm font-mono text-gray-500 tracking-wider mb-4">위치 및 시간</div>
-            <h2 className="text-5xl md:text-7xl font-bold tracking-tight leading-none">방문 안내</h2>
+        <div className="max-w-6xl mx-auto px-6 py-20">
+          <div className="mb-12">
+            <div className="text-sm font-mono text-gray-500 mb-3">위치 및 시간</div>
+            <h2 className="text-4xl font-bold">방문 안내</h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-px bg-gray-200">
+          <div className="grid md:grid-cols-3 gap-6">
             {/* Location */}
-            <div className="bg-white p-8 group hover:bg-gray-50 transition-colors">
-              <MapPin className="w-8 h-8 mb-6 text-gray-500" />
-              <div className="space-y-4">
+            <div className="border border-gray-200 rounded-lg p-6 hover:border-gray-900 hover:shadow-lg transition-all duration-300">
+              <MapPin className="w-6 h-6 mb-4 text-gray-500" />
+              <div className="space-y-3">
                 <div>
-                  <div className="text-sm font-mono text-gray-500 mb-2">주소</div>
-                  <div className="text-lg leading-relaxed">
+                  <div className="text-sm font-bold text-gray-900 mb-2">주소</div>
+                  <div className="text-sm leading-relaxed text-gray-600">
                     강서구청 바로 앞<br />
                     횡단보도 건너편
                     <br />
@@ -285,12 +228,12 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
             </div>
 
             {/* Phone */}
-            <div className="bg-white p-8 group hover:bg-gray-50 transition-colors">
-              <Phone className="w-8 h-8 mb-6 text-gray-500" />
-              <div className="space-y-4">
+            <div className="border border-gray-200 rounded-lg p-6 hover:border-gray-900 hover:shadow-lg transition-all duration-300">
+              <Phone className="w-6 h-6 mb-4 text-gray-500" />
+              <div className="space-y-3">
                 <div>
-                  <div className="text-sm font-mono text-gray-500 mb-2">연락처</div>
-                  <a href="tel:0226922990" className="text-2xl font-mono hover:text-gray-700 transition-colors">
+                  <div className="text-sm font-bold text-gray-900 mb-2">연락처</div>
+                  <a href="tel:0226922990" className="text-xl font-mono hover:text-gray-700 transition-colors">
                     02-2692-2990
                   </a>
                 </div>
@@ -304,11 +247,11 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
             </div>
 
             {/* Hours */}
-            <div className="bg-white p-8 group hover:bg-gray-50 transition-colors">
-              <Clock className="w-8 h-8 mb-6 text-gray-500" />
-              <div className="space-y-4">
+            <div className="border border-gray-200 rounded-lg p-6 hover:border-gray-900 hover:shadow-lg transition-all duration-300">
+              <Clock className="w-6 h-6 mb-4 text-gray-500" />
+              <div className="space-y-3">
                 <div>
-                  <div className="text-sm font-mono text-gray-500 mb-3">진료시간</div>
+                  <div className="text-sm font-bold text-gray-900 mb-3">진료시간</div>
                   <div className="space-y-2 text-sm font-mono">
                     <div className="flex justify-between">
                       <span className="text-gray-500">월·화·수·금</span>
@@ -328,6 +271,14 @@ export default function Page({ params }: { params: Promise<SubCategoryParams> })
           </div>
         </div>
       </section>
+
+      {/* Floating Action Button - 스크롤 없이 빠른 접근 */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
+        <a href="tel:0226922990" className="group flex items-center gap-3 bg-gray-900 text-white px-5 py-3 rounded-full shadow-lg hover:shadow-xl hover:bg-gray-800 transition-all duration-300">
+          <Phone className="w-5 h-5" />
+          <span className="font-medium text-sm">전화 상담</span>
+        </a>
+      </div>
     </div>
   );
 }
