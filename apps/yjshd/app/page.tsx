@@ -1,10 +1,11 @@
 import { TheHeader } from "@/components/TheHeader";
+import { ScrollButton } from "@/components/ScrollButton";
 import { SubCategoryParams } from "@workspace/common/structure/params.types";
 import { Button } from "@workspace/ui/components/button";
-import { ExternalLink } from "lucide-react";
+import { ArrowRight, Clock, MapPin, Phone } from "lucide-react";
+import { Metadata } from "next";
 import { Link } from "next-view-transitions";
 import Image from "next/image";
-import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "연세정성내과",
@@ -25,50 +26,252 @@ export const metadata: Metadata = {
 
 export default function Page({ params }: { params: Promise<SubCategoryParams> }) {
   return (
-    <div className="flex flex-col gap-8 lg:gap-16 relative">
-      {/* Background */}
-      <div className="fixed inset-0 -z-50">
-        {/* 1) 라벤더→스카이블루→화이트 라디얼 그라데이션 */}
-        <div className="absolute top-[72px] inset-0 bg-[radial-gradient(circle_at_center,#fb9bd6_0%,#7A8BFF_50%,#00E5FF_100%)] opacity-20" />
-        {/* 2) 위쪽 화이트 페이드 인→중앙 투명→아래 살짝 다크 페이드 아웃 */}
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.8)_0%,rgba(255,255,255,0.8)_80%,rgba(0,0,0,0.02)_100%)]" />
+    <div className="flex flex-col bg-white text-gray-900">
+      {/* Vercel-style grid background */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[size:4rem_4rem]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/90 to-transparent" />
       </div>
 
-      <TheHeader params={params} />
+      {/* Fixed Header - DOM 플로우에서 제거 */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md">
+        <TheHeader params={params} />
+      </div>
 
-      <main className="flex flex-col gap-8 lg:gap-16 w-fit mx-auto px-4">
-        <div>
-          <div className="text-2xl lg:text-4xl">
-            <p className="font-bold">더 나은 의료 서비스를 향한 도약</p>
-            <h2>연세정성내과의 발돋움 2025</h2>
+      {/* Hero Section - Vercel Style */}
+      <section className="relative h-screen flex items-center justify-center px-6">
+        <div className="max-w-6xl mx-auto w-full">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left: Text Content */}
+            <div className="text-center lg:text-left space-y-8">
+              <div className="inline-flex items-center gap-2 px-3 py-1 border border-primary/20 bg-primary/5 rounded-full text-sm font-mono text-primary">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                </span>
+                2026
+              </div>
+
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tighter leading-none">
+                더 나은
+                <br />
+                의료 서비스를
+                <br />
+                <span className="bg-gradient-to-br from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">위한 노력</span>
+              </h1>
+
+              <p className="text-lg md:text-2xl text-gray-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                정상이 어디인지 누구도 알 수 없습니다.
+                <br />
+                어제보다 나은 내일을 위해 혁신하고,
+                <br />
+                오시는 한 분 한 분 정성을 다합니다.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start pt-8">
+                <ScrollButton targetId="doctor" variant="outline" className="border-gray-300 text-gray-900 hover:bg-gray-100 h-12 px-6 font-medium">
+                  의료진
+                </ScrollButton>
+                <ScrollButton targetId="services" variant="default" className="bg-primary text-primary-foreground hover:bg-primary/90 h-12 px-6 font-medium">
+                  진료 안내
+                </ScrollButton>
+                <ScrollButton targetId="location" variant="outline" className="border-gray-300 text-gray-900 hover:bg-gray-100 h-12 px-6 font-medium">
+                  방문 안내
+                </ScrollButton>
+              </div>
+            </div>
+
+            {/* Right: Mission Image (Desktop only) */}
+            <Image src="/mission.png" alt="연세정성내과 미션" width={400} height={400} className="hidden lg:inline" />
           </div>
         </div>
+      </section>
 
-        <div className="flex flex-col lg:flex-row lg:justify-between gap-8 lg:gap-36">
-          <div>
-            <p className="mb-5 lg:text-xl lg:leading-10 text-muted-foreground opacity-0 animate-fade-in-up">
-              정상이 어디인지 누구도 알 수 없습니다.
-              <br />
-              어제보다 나은 내일을 위해
-              <br />
-              오늘 혁신하고
-              <br />
-              오시는 한 분 한 분 정성을 다합니다.
-            </p>
+      {/* Doctor Section - 간소화 및 가독성 개선 */}
+      <section id="doctor" className="border-t border-gray-200 scroll-mt-20">
+        <div className="max-w-6xl mx-auto px-6 py-20">
+          <div className="grid sm:grid-cols-2 gap-12 items-start">
+            <div className="space-y-6 lg:sticky lg:top-32">
+              <div>
+                <div className="text-sm font-mono text-gray-500 mb-3">의료진</div>
+                <h2 className="text-4xl font-bold mb-6">류동열 원장</h2>
+                <p className="text-base text-gray-600 leading-relaxed">25년여동안 수련의, 전문의, 교수, 연구자로 쌓은 지식과 경험을 바탕으로 정성을 다해 진료합니다.</p>
+              </div>
 
-            <Button variant="outline" className="opacity-0 animate-[fade-in-up_0.8s_ease-out_forwards_0.3s] w-full" asChild>
-              <Link href="/1.연세정성내과의 발돋움/1.2025 발돋움">
-                2025 발돋움 <ExternalLink />
+              <div className="space-y-3">
+                <div className="flex gap-3">
+                  <div className="text-base font-mono text-gray-500 w-12">학력</div>
+                  <div className="text-base">연세대학교 의과대학 졸업</div>
+                </div>
+
+                <div className="flex gap-3">
+                  <div className="text-base font-mono text-gray-500 w-12">경력</div>
+                  <div className="text-base">전 이화여자대학교 의과대학 교수</div>
+                </div>
+              </div>
+
+              <Button variant="ghost" className="text-primary hover:bg-primary/10 group" asChild>
+                <Link href="/1.소개/1.의료진 소개">
+                  전체 프로필 보기
+                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+            </div>
+
+            <Image src="/doctor.png" alt="류동열 원장" width={359} height={400} />
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section - 간소화 및 집중도 향상 */}
+      <section id="services" className="border-t border-gray-200 scroll-mt-20">
+        <div className="max-w-6xl mx-auto px-6 py-20">
+          <div className="mb-12">
+            <div className="text-sm font-mono text-gray-500 mb-3">진료</div>
+            <h2 className="text-4xl font-bold">진료 안내</h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* 외래 진료 */}
+            <div className="border border-gray-200 rounded-lg p-8 hover:border-primary hover:shadow-lg transition-all duration-300">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-2xl font-bold mb-3">외래 진료</h3>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <div className="text-base font-bold text-gray-900 mb-2">일반내과</div>
+                    <ul className="space-y-1.5 text-base text-gray-600">
+                      <li>• 급만성 내과질환 진료</li>
+                      <li>• 만성질환 관리</li>
+                      <li>• 예방접종 및 영양치료</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <div className="text-base font-bold text-gray-900 mb-2">콩팥 건강검진</div>
+                    <ul className="space-y-1.5 text-base text-gray-600">
+                      <li>• 만성콩팥병 조기 발견</li>
+                      <li>• 단계별 맞춤형 치료</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 인공신장실 */}
+            <div className="border border-gray-200 rounded-lg p-8 hover:border-primary hover:shadow-lg transition-all duration-300">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-2xl font-bold mb-3">인공신장실</h3>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <div className="text-base font-bold text-gray-900 mb-2">혈액투석 치료</div>
+                    <ul className="space-y-1.5 text-base text-gray-600">
+                      <li>• 투석 전 혈관 관리</li>
+                      <li>• 정기 혈액검사</li>
+                      <li>• 투석 적절도 검사</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-primary/10 border border-primary/20 p-4 rounded">
+                    <div className="text-base font-bold text-primary mb-1">야간 투석</div>
+                    <div className="text-base text-gray-600">월 · 수 · 금 야간 투석 운영</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 공통 자세히 보기 버튼 */}
+          <div className="flex justify-center mt-8">
+            <Button variant="ghost" className="text-primary hover:bg-primary/10 group" asChild>
+              <Link href="/1.소개/2.진료 안내">
+                전체 진료 안내 보기
+                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-2 overflow-auto">
-            <Image src={"/doctor.png"} alt="의사선생님" width={200} height={230} className="aspect-[200/230]" />
-            <Image src={"/mission.png"} alt="연세정성내과 미션과 비젼" width={200} height={230} className="aspect-[200/230]" />
+      {/* Location Section - 간소화 및 집중도 향상 */}
+      <section id="location" className="border-t border-gray-200 scroll-mt-20">
+        <div className="max-w-6xl mx-auto px-6 py-20">
+          <div className="mb-12">
+            <div className="text-sm font-mono text-gray-500 mb-3">위치 및 시간</div>
+            <h2 className="text-4xl font-bold">방문 안내</h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {/* Location */}
+            <div className="border border-gray-200 rounded-lg p-6 hover:border-primary hover:shadow-lg transition-all duration-300">
+              <MapPin className="w-6 h-6 mb-4 text-primary" />
+              <div className="space-y-3">
+                <div>
+                  <div className="text-sm font-bold text-gray-900 mb-2">주소</div>
+                  <div className="text-base leading-relaxed text-gray-600">
+                    서울시 강서구 화곡로 301 원풍빌딩 402호
+                    <br />
+                    (강서구청 맞은편)
+                  </div>
+                </div>
+                <Button variant="ghost" className="text-primary hover:bg-primary/10 p-0 h-auto font-mono text-sm group" asChild>
+                  <Link href="/1.소개/3.연세정성내과 소개">
+                    지도 보기
+                    <ArrowRight className="ml-2 w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+
+            {/* Phone */}
+            <div className="border border-gray-200 rounded-lg p-6 hover:border-primary hover:shadow-lg transition-all duration-300">
+              <Phone className="w-6 h-6 mb-4 text-primary" />
+              <div className="space-y-3">
+                <div>
+                  <div className="text-sm font-bold text-gray-900 mb-2">연락처</div>
+                  <a href="tel:0226922990" className="text-xl font-mono hover:text-gray-700 transition-colors">
+                    02-2692-2990
+                  </a>
+                </div>
+                <Button variant="ghost" className="text-primary hover:bg-primary/10 p-0 h-auto font-mono text-sm" asChild>
+                  <a href="tel:0226922990">
+                    전화하기
+                    <ArrowRight className="ml-2 w-3 h-3" />
+                  </a>
+                </Button>
+              </div>
+            </div>
+
+            {/* Hours */}
+            <div className="border border-gray-200 rounded-lg p-6 hover:border-primary hover:shadow-lg transition-all duration-300">
+              <Clock className="w-6 h-6 mb-4 text-primary" />
+              <div className="space-y-3">
+                <div>
+                  <div className="text-sm font-bold text-gray-900 mb-3">진료시간</div>
+                  <div className="space-y-2 text-base font-mono">
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">월·화·수·금</span>
+                      <span>09:00-18:00</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">목·토</span>
+                      <span>09:00-13:00</span>
+                    </div>
+                    <div className="pt-2 border-t border-gray-200">
+                      <div className="text-gray-500">점심시간 13:00-14:30</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </main>
+      </section>
     </div>
   );
 }

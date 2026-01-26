@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   publisher: "연세정성내과",
   category: "의료정보",
   alternates: {
-    canonical: `https://www.yonsei-jshd.com/${encodeURI("3.콩팥질환 강좌")}/${encodeURI(SUBCATEGORY)}`,
+    canonical: `https://www.yonsei-jshd.com/${encodeURI("3.강좌")}/${encodeURI(SUBCATEGORY)}`,
   },
 };
 
