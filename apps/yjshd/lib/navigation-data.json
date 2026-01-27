@@ -1,0 +1,426 @@
+{
+  "categories": [
+    {
+      "category": "1.소개",
+      "subCategories": [
+        {
+          "subCategory": "1.의료진 소개",
+          "hasSlug": false,
+          "headings": [
+            {
+              "value": "인사말씀",
+              "depth": 2,
+              "id": "인사말씀"
+            },
+            {
+              "value": "약력",
+              "depth": 2,
+              "id": "약력"
+            },
+            {
+              "value": "저서 안내",
+              "depth": 2,
+              "id": "저서-안내"
+            }
+          ]
+        },
+        {
+          "subCategory": "2.진료 안내",
+          "hasSlug": false,
+          "headings": [
+            {
+              "value": "외래 진료",
+              "depth": 2,
+              "id": "외래-진료"
+            },
+            {
+              "value": "인공신장실 진료",
+              "depth": 2,
+              "id": "인공신장실-진료"
+            },
+            {
+              "value": "비급여 진료비",
+              "depth": 2,
+              "id": "비급여-진료비"
+            },
+            {
+              "value": "야간 투석",
+              "depth": 2,
+              "id": "야간-투석"
+            }
+          ]
+        },
+        {
+          "subCategory": "3.연세정성내과 소개",
+          "hasSlug": false,
+          "headings": [
+            {
+              "value": "오시는길/진료시간",
+              "depth": 2,
+              "id": "오시는길/진료시간"
+            },
+            {
+              "value": "미션 • 비젼",
+              "depth": 2,
+              "id": "미션-•-비젼"
+            },
+            {
+              "value": "로고",
+              "depth": 2,
+              "id": "로고"
+            },
+            {
+              "value": "전경",
+              "depth": 2,
+              "id": "전경"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category": "2.글모음",
+      "subCategories": [
+        {
+          "subCategory": "1.2025 발돋움",
+          "hasSlug": false,
+          "headings": [
+            {
+              "value": "의료진과 환자가 오래 함께할 수 있는 병원",
+              "depth": 2,
+              "id": "의료진과-환자가-오래-함께할-수-있는-병원"
+            },
+            {
+              "value": "환자의 일상을 함께하는 병원",
+              "depth": 2,
+              "id": "환자의-일상을-함께하는-병원"
+            },
+            {
+              "value": "더 수준 높은 투석을 위한 정수 시스템 업그레이드",
+              "depth": 2,
+              "id": "더-수준-높은-투석을-위한-정수-시스템-업그레이드"
+            }
+          ]
+        },
+        {
+          "subCategory": "2.2022 발돋움",
+          "hasSlug": false,
+          "headings": [
+            {
+              "value": "일상 회복",
+              "depth": 2,
+              "id": "일상-회복"
+            },
+            {
+              "value": "기획의도",
+              "depth": 2,
+              "id": "기획의도"
+            },
+            {
+              "value": "우리의 다짐",
+              "depth": 2,
+              "id": "우리의-다짐"
+            },
+            {
+              "value": "인공신장실 소개",
+              "depth": 2,
+              "id": "인공신장실-소개"
+            }
+          ]
+        },
+        {
+          "subCategory": "3.새로운 장비 도입",
+          "hasSlug": false,
+          "headings": [
+            {
+              "value": "체수분 및 체성분 분석 장비 도입",
+              "depth": 2,
+              "id": "체수분-및-체성분-분석-장비-도입"
+            },
+            {
+              "value": "AI 분석장비 도입",
+              "depth": 2,
+              "id": "ai-분석장비-도입"
+            },
+            {
+              "value": "투석 중 운동장비 도입",
+              "depth": 2,
+              "id": "투석-중-운동장비-도입"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category": "3.강좌",
+      "subCategories": [
+        {
+          "subCategory": "1.동영상 강의",
+          "hasSlug": false,
+          "headings": [
+            {
+              "value": "혈액투석 강의",
+              "depth": 2,
+              "id": "혈액투석-강의"
+            },
+            {
+              "value": "만성콩팥병 강의",
+              "depth": 2,
+              "id": "만성콩팥병-강의"
+            }
+          ]
+        },
+        {
+          "subCategory": "2.콩팥질환 정보",
+          "hasSlug": true,
+          "headings": null
+        },
+        {
+          "subCategory": "3.혈액투석 1,2,3",
+          "hasSlug": true,
+          "headings": null
+        }
+      ]
+    },
+    {
+      "category": "4.게시판",
+      "subCategories": [
+        {
+          "subCategory": "10월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "11월 휴진 및 단축진료 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "11월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "12월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "1월 18일 (화) 외래진료시간 변경 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "1월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "2024년 10월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "2024년 12월 휴진 및 단축진료 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "2024년 2월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "2024년 3월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "2024년 4월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "2024년 5월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "2024년 6월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "2024년 8월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "2024년 9월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "2025년 10월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "2025년 12월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "2025년 3월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "2025년 6월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "2025년 8월 휴진 및 단축진료 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "2026년 1월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "2월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "3월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "4월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "5월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "6월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "7월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "8월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "9-10월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "9월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "NEJM에 발표된 모더나 백신 임상시험 연구 결과입니다",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "만성콩팥병 (투석 환자) 코로나19 예방접종",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "만성콩팥병 환자가 꼭 알아두어야 할 복지정보",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "백신 접종자와 미접종자가 안전하게 선택할 수 있는 활동에는 차이가 있습니다",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "비급여진료비 고지",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "비급여진료비 고지 (수정)",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "아나필락시스 관련 안내문",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "연세정성내과 카톡 채널 오픈했습니다",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "연세정성내과를 소개합니다",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "예방접종 후 이상반응에 대한 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "임시휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "진료시간 변경 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "추석연휴 및 10월 휴진 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "코로나19 예방접종 안내문",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "코로나19 예방접종 위탁의료기관의 접종 예약 및 시행 계획 안내",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "코로나19 예방접종 후 혈전증 발생에 대한 안내문",
+          "hasSlug": false,
+          "headings": []
+        },
+        {
+          "subCategory": "혈소판감소성 혈전증과 일반 혈전증의 비교",
+          "hasSlug": false,
+          "headings": []
+        }
+      ]
+    }
+  ]
+}

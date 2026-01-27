@@ -1,10 +1,8 @@
-import { getMdxContent } from "@/lib/content";
 import { PAGE_H1 } from "@/lib/metadata";
+import navigationData from "@/lib/navigation-data.json";
 import { removeNumbering } from "@workspace/common/lib/string-utils";
 import { decodeURIS } from "@workspace/common/lib/uri";
 import { DefaultParams } from "@workspace/common/structure/params.types";
-import { contentStructureMaps } from "@workspace/common/structure/structure";
-import { getSlugsByCategoryAndSubCategory } from "@workspace/common/structure/utils";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@workspace/ui/components/accordion";
 import { Button } from "@workspace/ui/components/button";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@workspace/ui/components/sheet";
@@ -16,14 +14,11 @@ interface AllCategoriesSheetProps {
 }
 
 export const AllCategoriesSheet = async ({ params }: AllCategoriesSheetProps) => {
-  const { categories, subCategoriesMap } = contentStructureMaps;
-
-  const categoriesWithSubCategories = categories.map((category) => {
-    const subCategories = subCategoriesMap.get(category) ?? [];
-    const hasSubCategory = !!subCategories.length && category !== "4.게시판";
+  const categoriesWithSubCategories = navigationData.categories.map((categoryData) => {
+    const hasSubCategory = !!categoryData.subCategories.length && categoryData.category !== "4.게시판";
     return {
-      category,
-      subCategories,
+      category: categoryData.category,
+      subCategories: categoryData.subCategories,
       hasSubCategory,
     };
   });
@@ -61,9 +56,9 @@ export const AllCategoriesSheet = async ({ params }: AllCategoriesSheetProps) =>
                 <AccordionItem value={category} key={`item-${idx}-${category}`}>
                   <AccordionTrigger className="text-base px-4">{removeNumbering(category)}</AccordionTrigger>
                   <AccordionContent className="flex flex-col">
-                    {subCategories.map(async (subCategory) => {
-                      const slug = await getSlugsByCategoryAndSubCategory(category, subCategory);
-                      if (slug.length > 0) {
+                    {subCategories.map((subCategoryData) => {
+                      const { subCategory, hasSlug, headings } = subCategoryData;
+                      if (hasSlug) {
                         return (
                           <SheetClose asChild key={subCategory}>
                             <Button asChild variant="ghost" className="ml-3 w-full text-sm [&.active]:text-accent-foreground [&.active]:bg-muted/50 justify-start">
@@ -73,7 +68,6 @@ export const AllCategoriesSheet = async ({ params }: AllCategoriesSheetProps) =>
                         );
                       }
 
-                      const { headings } = await getMdxContent({ category, subCategory });
                       return (
                         <SheetClose asChild key={subCategory}>
                           <ul className="ml-3">
@@ -86,19 +80,17 @@ export const AllCategoriesSheet = async ({ params }: AllCategoriesSheetProps) =>
                                 <Link href={`/${category}/${subCategory}`}>{removeNumbering(subCategory)}</Link>
                               </Button>
                             </li>
-                            {headings
-                              .filter((heading) => heading.depth === 2)
-                              .map((heading) => (
-                                <li key={heading.id}>
-                                  <SheetClose asChild>
-                                    <Button asChild variant="ghost" className="w-full text-sm text-neutral-400 [&.active]:text-accent-foreground [&.active]:bg-muted/50 justify-start">
-                                      <Link replace href={`/${category}/${subCategory}#${heading.id}`}>
-                                        <span className="ml-3">{heading.value}</span>
-                                      </Link>
-                                    </Button>
-                                  </SheetClose>
-                                </li>
-                              ))}
+                            {headings?.map((heading) => (
+                              <li key={heading.id}>
+                                <SheetClose asChild>
+                                  <Button asChild variant="ghost" className="w-full text-sm text-neutral-400 [&.active]:text-accent-foreground [&.active]:bg-muted/50 justify-start">
+                                    <Link replace href={`/${category}/${subCategory}#${heading.id}`}>
+                                      <span className="ml-3">{heading.value}</span>
+                                    </Link>
+                                  </Button>
+                                </SheetClose>
+                              </li>
+                            ))}
                           </ul>
                         </SheetClose>
                       );
