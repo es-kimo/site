@@ -9,7 +9,7 @@ import { getSlugsByCategoryAndSubCategory } from "@workspace/common/structure/ut
 import { Button } from "@workspace/ui/components/button";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger } from "@workspace/ui/components/navigation-menu";
 import { cn } from "@workspace/ui/lib/utils";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { Fragment, type HTMLAttributes } from "react";
 
 interface TheHeaderProps {

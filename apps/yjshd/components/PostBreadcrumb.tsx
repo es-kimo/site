@@ -1,7 +1,7 @@
 import { removeNumbering } from "@workspace/common/lib/string-utils";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@workspace/ui/components/breadcrumb";
 import { Skeleton } from "@workspace/ui/components/skeleton";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 
 export const PostBreadcrumb = ({ className, category, subCategory, isLink = true }: { className?: string; category?: string; subCategory?: string; isLink?: boolean }) => {
   const CategoryContent = () => {

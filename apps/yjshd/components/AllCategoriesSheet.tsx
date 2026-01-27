@@ -9,7 +9,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@w
 import { Button } from "@workspace/ui/components/button";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@workspace/ui/components/sheet";
 import { Menu } from "lucide-react";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 
 interface AllCategoriesSheetProps {
   params: Promise<DefaultParams>;

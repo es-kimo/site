@@ -1,6 +1,6 @@
 import { buttonVariants, type ButtonProps } from "@workspace/ui/components/button";
 import { cn } from "@workspace/ui/lib/utils";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 
 type PaginationLinkProps = {
   isActive?: boolean;
@@ -15,7 +15,7 @@ const PaginationLink = ({ className, isActive, size = "icon", ...props }: Pagina
         variant: isActive ? "outline" : "ghost",
         size,
       }),
-      className
+      className,
     )}
     scroll
     {...props}
