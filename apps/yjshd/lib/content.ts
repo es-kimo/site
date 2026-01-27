@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { cache } from "react";
 import { remarkExtractHeadings } from "@workspace/common/content/heading";
 import { remarkExtractContent } from "@workspace/common/content/content";
 import { compile } from "@mdx-js/mdx";
@@ -10,7 +11,7 @@ export type Heading = {
   id: string;
 };
 
-export async function getMdxContent({ category, subCategory, slug }: { category: string; subCategory: string; slug?: string }) {
+export const getMdxContent = cache(async ({ category, subCategory, slug }: { category: string; subCategory: string; slug?: string }) => {
   let filePath = "";
 
   if (slug) {
@@ -31,4 +32,4 @@ export async function getMdxContent({ category, subCategory, slug }: { category:
     headings: compiled.data.headings as Heading[],
     content: compiled.data.content as string,
   };
-}
+});
