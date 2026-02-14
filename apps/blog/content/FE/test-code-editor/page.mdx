@@ -1,0 +1,35 @@
+export const metadata = {
+  title: "test-code-editor",
+  other: {
+    status: "ready",
+    createdAt: "2026-02-14T23:00:00",
+  },
+};
+
+# test-code-editor
+
+<Playground
+  code={`import { useState } from 'react';
+
+export default function App() {
+  const [count, setCount] = useState(0);
+  return (
+    <button onClick={() => setCount(c => c + 1)}>
+      클릭: {count}
+    </button>
+  );
+}`}
+/>
+
+<Playground
+  showConsole
+  editorHeight={400}
+  code={`import Utils from './utils';
+export default function App() {
+  return <h1>{Utils.greet('World')}</h1>;
+}`}
+  files={{
+    "/utils.js": `const Utils = { greet: (name) => 'Hello, ' + name + '!' };
+export default Utils;`,
+  }}
+/>
