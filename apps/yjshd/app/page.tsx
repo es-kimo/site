@@ -4,7 +4,7 @@ import { SubCategoryParams } from "@workspace/common/structure/params.types";
 import { Button } from "@workspace/ui/components/button";
 import { ArrowRight, Clock, MapPin, Phone } from "lucide-react";
 import { Metadata } from "next";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import Image from "next/image";
 
 export const metadata: Metadata = {

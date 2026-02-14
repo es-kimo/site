@@ -1,6 +1,5 @@
 import Footer from "@/components/TheFooter";
 import "@workspace/ui/globals.css";
-import { ViewTransitions } from "next-view-transitions";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -27,13 +26,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ViewTransitions>
-      <html lang="en" suppressHydrationWarning>
-        <body className={`antialiased flex flex-col gap-8 justify-between min-h-dvh`}>
-          <div className="w-full max-w-yjshd mx-auto">{children}</div>
-          <Footer />
-        </body>
-      </html>
-    </ViewTransitions>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`antialiased flex flex-col gap-8 justify-between min-h-dvh`}>
+        <div className="w-full max-w-yjshd mx-auto">{children}</div>
+        <Footer />
+      </body>
+    </html>
   );
 }

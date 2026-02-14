@@ -1,15 +1,14 @@
 import { AllCategoriesSheet } from "@/components/AllCategoriesSheet";
-import { getMdxContent } from "@/lib/content";
 import { PAGE_H1 } from "@/lib/metadata";
+import navigationData from "@/lib/navigation-data.json";
 import { removeNumbering } from "@workspace/common/lib/string-utils";
 import { decodeURIS } from "@workspace/common/lib/uri";
 import { DefaultParams } from "@workspace/common/structure/params.types";
-import { categories, subCategoriesMap } from "@workspace/common/structure/structure";
-import { getSlugsByCategoryAndSubCategory } from "@workspace/common/structure/utils";
+import { categories } from "@workspace/common/structure/structure";
 import { Button } from "@workspace/ui/components/button";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger } from "@workspace/ui/components/navigation-menu";
 import { cn } from "@workspace/ui/lib/utils";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { Fragment, type HTMLAttributes } from "react";
 
 interface TheHeaderProps {
@@ -85,18 +84,9 @@ const StyledLink = ({ title, className, href, children, bold }: HTMLAttributes<H
   );
 };
 
-const Content = async ({ category, activeSubCategory, activeHeading }: { category: string; activeSubCategory?: string; activeHeading?: string }) => {
-  const subCategories = await Promise.all(
-    (subCategoriesMap.get(category) ?? []).map(async (subCategory) => {
-      const slugs = await getSlugsByCategoryAndSubCategory(category, subCategory);
-      const hasSlug = slugs && slugs.length > 0;
-      if (hasSlug) {
-        return { subCategory, hasSlug, headings: null };
-      }
-      const { headings } = await getMdxContent({ category, subCategory });
-      return { subCategory, hasSlug, headings: headings.filter((heading) => heading.depth === 2) };
-    }),
-  );
+const Content = ({ category, activeSubCategory, activeHeading }: { category: string; activeSubCategory?: string; activeHeading?: string }) => {
+  const categoryData = navigationData.categories.find((cat) => cat.category === category);
+  const subCategories = categoryData?.subCategories ?? [];
 
   return (
     <NavigationMenuContent>
@@ -108,7 +98,7 @@ const Content = async ({ category, activeSubCategory, activeHeading }: { categor
                 <StyledLink title={subCategory} href={`/${category}/${subCategory}`} className={cn(activeSubCategory === subCategory && "active")} bold />
               </div>
               <ul>
-                {headings.map((heading) => (
+                {headings?.map((heading) => (
                   <li key={heading.id}>
                     <StyledLink title={heading.value} href={`/${category}/${subCategory}#${heading.id}`} className={cn(activeHeading === heading.id && "active")} />
                   </li>

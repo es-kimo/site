@@ -4,7 +4,7 @@ import { formatPostDate } from "@workspace/common/lib/date";
 import { getSlugsByCategory } from "@workspace/common/structure/utils";
 import { Badge } from "@workspace/ui/components/badge";
 import { Metadata } from "next";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 
 const category = "4.게시판";
 const pageSize = 10;
@@ -33,7 +33,7 @@ export default async function BoardPage({ searchParams }: { searchParams: Promis
     slugs.map(async (slug) => {
       const meta = await getPostMetadata({ category, slug });
       return { ...meta, id: `${meta.other.createdAt}-${slug}`, slug };
-    })
+    }),
   ).then((l) => l.sort((a, b) => new Date(b.other.createdAt).getTime() - new Date(a.other.createdAt).getTime()));
 
   /* 공지 우선 */

@@ -8,7 +8,7 @@ import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@workspace/ui/components/card";
 import { ExternalLink } from "lucide-react";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({ params }: { params: Promise<CategoryParams> }) {
@@ -44,7 +44,7 @@ export default async function Page({ params }: { params: Promise<CategoryParams>
       }
       const { headings } = await getMdxContent({ category: decodedCategory, subCategory });
       return { subCategory, headings: headings.filter((heading) => heading.depth === 2) };
-    })
+    }),
   );
 
   if (!categorySet.has(decodedCategory)) {

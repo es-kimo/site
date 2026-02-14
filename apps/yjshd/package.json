@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "prebuild": "tsx lib/generate-nav-data.ts",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -25,7 +26,6 @@
     "framer-motion": "^12.19.1",
     "lucide-react": "0.456.0",
     "next": "^16.0.10",
-    "next-view-transitions": "^0.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
@@ -40,6 +40,7 @@
     "@workspace/typescript-config": "workspace:*",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
