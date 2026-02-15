@@ -102,7 +102,7 @@ program
       // 3. 서브메뉴 확인 및 선택
       const submenus = getSubMenus(projectPath, menu);
       // 콩팥질환 강좌 메뉴에서만 서브메뉴 사용
-      if (menu === "3.콩팥질환 강좌") {
+      if (menu === "3.강좌") {
         if (submenuArg) {
           // 서브메뉴가 지정된 경우
           submenu = submenuArg;
@@ -165,7 +165,7 @@ program
 
       // 콩팥질환정보 메뉴인 경우 카테고리 선택
       let category: string | undefined;
-      if (menu === "3.콩팥질환 강좌" && submenu === "2.콩팥질환 정보") {
+      if (menu === "3.강좌" && submenu === "2.콩팥질환 정보") {
         const categoryAnswer = await inquirer.prompt([
           {
             type: "list",

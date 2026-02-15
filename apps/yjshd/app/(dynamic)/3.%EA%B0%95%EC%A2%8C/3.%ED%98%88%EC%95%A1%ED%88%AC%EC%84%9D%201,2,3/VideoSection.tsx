@@ -60,7 +60,7 @@ export default function VideosSection({ page, videos }: VideosSectionProps) {
       </article>
 
       {/* 페이지네이션 컨트롤 */}
-      <Pagination currentPage={currentPage} totalPages={totalPages} baseUrl="/3.콩팥질환 강좌/3.혈액투석 1,2,3" className="mt-8" />
+      <Pagination currentPage={currentPage} totalPages={totalPages} baseUrl="/3.강좌/3.혈액투석 1,2,3" className="mt-8" />
     </div>
   );
 }

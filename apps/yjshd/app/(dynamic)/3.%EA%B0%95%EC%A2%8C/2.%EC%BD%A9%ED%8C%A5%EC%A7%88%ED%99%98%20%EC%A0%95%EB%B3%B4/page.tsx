@@ -6,7 +6,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@w
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@workspace/ui/components/tabs";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   publisher: "연세정성내과",
   category: "의료정보",
   alternates: {
-    canonical: `https://www.yonsei-jshd.com/${encodeURI("3.콩팥질환 강좌")}/${encodeURI("2.콩팥질환 정보")}`,
+    canonical: `https://www.yonsei-jshd.com/${encodeURI("3.강좌")}/${encodeURI("2.콩팥질환 정보")}`,
   },
 };
 
@@ -43,13 +43,13 @@ type Post = Awaited<ReturnType<typeof getPostMetadata>> &
   };
 
 export default async function KidneyPostsSample() {
-  const slugs = await getSlugsByCategoryAndSubCategory("3.콩팥질환 강좌", "2.콩팥질환 정보");
+  const slugs = await getSlugsByCategoryAndSubCategory("3.강좌", "2.콩팥질환 정보");
   const posts: Post[] = await Promise.all(
     slugs.map(async (slug) => {
-      const metadata = await getPostMetadata({ category: "3.콩팥질환 강좌", subCategory: "2.콩팥질환 정보", slug });
-      const content = await getMdxContent({ category: "3.콩팥질환 강좌", subCategory: "2.콩팥질환 정보", slug });
+      const metadata = await getPostMetadata({ category: "3.강좌", subCategory: "2.콩팥질환 정보", slug });
+      const content = await getMdxContent({ category: "3.강좌", subCategory: "2.콩팥질환 정보", slug });
       return { ...metadata, ...content, id: `${metadata.other.createdAt}-${slug}`, excerpt: content.content, slug };
-    })
+    }),
   ).then((posts) => posts.sort((a, b) => new Date(b.other.createdAt).getTime() - new Date(a.other.createdAt).getTime()));
   const categorizedPosts = posts.reduce(
     (acc, post) => {
@@ -62,7 +62,7 @@ export default async function KidneyPostsSample() {
       acc[post.category]?.push(post);
       return acc;
     },
-    {} as Record<string, typeof posts>
+    {} as Record<string, typeof posts>,
   );
 
   return (
@@ -106,7 +106,7 @@ const AccordionPosts = ({ posts = [] }: { posts?: Post[] }) => {
           <AccordionContent>
             <p className="mb-2 text-gray-700 line-clamp-2">{post.excerpt}</p>
             <Button variant="link" asChild className="flex">
-              <Link href={`/3.콩팥질환 강좌/2.콩팥질환 정보/${post.slug}`}>더보기 →</Link>
+              <Link href={`/3.강좌/2.콩팥질환 정보/${post.slug}`}>더보기 →</Link>
             </Button>
           </AccordionContent>
         </AccordionItem>
