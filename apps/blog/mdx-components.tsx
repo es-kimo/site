@@ -99,6 +99,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     pre(properties) {
       return <pre {...properties} className="border border-[var(--code-block-border)] rounded-[10px] p-4 bg-[var(--code-block-bg)] mt-8 overflow-x-auto"></pre>;
     },
+    hr(properties) {
+      return <hr {...properties} className="my-8 border-t" />;
+    },
     Image: (props) => <Image {...(props as ImageProps)} className="w-4/5 mx-auto my-8 rounded-lg" />,
     Lead(properties) {
       return <p {...properties} className="text-xl text-muted-foreground"></p>;
