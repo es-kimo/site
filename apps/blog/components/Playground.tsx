@@ -14,9 +14,11 @@ interface PlaygroundProps {
   showConsole?: boolean;
   /** 에디터 높이 */
   editorHeight?: number;
+  /** 프리뷰 높이 */
+  previewHeight?: number;
 }
 
-export function Playground({ code, files, template = "react", showConsole = false, editorHeight = 350 }: PlaygroundProps) {
+export function Playground({ code, files, template = "react", showConsole = false, editorHeight = 350, previewHeight = 150 }: PlaygroundProps) {
   const { resolvedTheme } = useTheme();
 
   const allFiles: Record<string, string> = {
@@ -39,10 +41,11 @@ export function Playground({ code, files, template = "react", showConsole = fals
           style={{
             borderRadius: 0,
             border: "none",
+            flexDirection: "column",
           }}
         >
-          <SandpackCodeEditor showLineNumbers showInlineErrors wrapContent style={{ height: editorHeight }} />
-          <SandpackPreview showOpenInCodeSandbox={false} showRefreshButton style={{ height: editorHeight }} />
+          <SandpackCodeEditor showLineNumbers showInlineErrors wrapContent style={{ height: editorHeight, flexGrow: 0, flexBasis: "auto" }} />
+          <SandpackPreview showOpenInCodeSandbox={false} showRefreshButton style={{ height: previewHeight, flexGrow: 0, flexBasis: "auto" }} />
         </SandpackLayout>
         {showConsole && (
           <SandpackConsole
