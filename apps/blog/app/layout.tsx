@@ -33,7 +33,7 @@ const notoSansKR = Noto_Sans_KR({
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "블로그",
+    title: "Kihyun Ryu",
     description: `웹 개발 분야의 다양한 주제를 글로 다룹니다.`,
     authors: [{ name: "Kihyun Ryu" }],
     // TODO: naver-site-verification
@@ -53,7 +53,7 @@ export default async function RootLayout({
       <html lang={language} suppressHydrationWarning>
         <body className={`${fontSans.variable} ${fontMono.variable} ${stixTwoText.variable} ${notoSansKR.variable} font-sans antialiased `}>
           <Providers>
-            <div className="max-w-blog mx-auto py-16">{children}</div>
+            <div className="max-w-blog mx-auto py-20 px-4">{children}</div>
             <DynamicIsland language={language} />
           </Providers>
         </body>

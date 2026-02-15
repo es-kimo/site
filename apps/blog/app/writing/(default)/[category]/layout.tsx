@@ -1,4 +1,3 @@
-import { SubCategoryNavigationTab } from "@/components/navigation-tab";
 import { categoryParams } from "@/constants/params";
 import { CategoryParams } from "@/constants/params.types";
 import { isCategory } from "@/lib/type-guards";
@@ -14,9 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<CategoryPar
   const { category } = await params;
   const [decodedCategory] = decodeURIS(category);
   return {
-    title: `${decodedCategory}`,
-    description: `${decodedCategory} 분야의 다양한 주제를 글로 다룹니다.`,
-    // TODO: og image
+    title: `Writing | ${decodedCategory}`,
   };
 }
 
@@ -34,7 +31,6 @@ export default async function Layout({
       {isCategory(decodedCategory) ? (
         <>
           {/* <h2 className="font-bold text-3xl">{t(decodedCategory)}</h2> */}
-          <SubCategoryNavigationTab category={decodedCategory} />
           {children}
         </>
       ) : (

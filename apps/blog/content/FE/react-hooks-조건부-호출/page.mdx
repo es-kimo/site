@@ -1,0 +1,322 @@
+export const metadata = {
+  title: "React 훅은 왜 조건부로 호출할 수 없을까?",
+  description: "React가 훅의 호출 순서에 상태를 매핑하는 설계를 선택한 이유와, 조건부 훅 호출이 금지되는 원리를 파헤칩니다.",
+  keywords: ["React", "hooks", "useState", "useEffect", "조건부 호출", "Rules of Hooks", "Concurrent Mode"],
+  alternate: {
+    canonical: "fe/react/hooks-conditional",
+  },
+  other: {
+    status: "ready",
+    createdAt: "2026-02-14T23:00:00",
+  },
+};
+
+# React 훅은 왜 조건부로 호출할 수 없을까?
+
+리액트로 처음 컴포넌트를 개발하다보면, 필요한 때만 리액트 훅을 호출하기 위해 다음과 같이 코드를 쓰고 싶었을 때가 있었습니다.
+
+<Playground
+  code={`import { useState } from 'react';
+import { useAutoSave } from './useAutoSave';
+
+export default function App() {
+    const [isEditing, setIsEditing] = useState(false);
+
+    // ❌ 편집 중일 때만 자동 저장하고 싶어서…
+    if (isEditing) {
+      useAutoSave('draft');
+    }
+
+    return <button onClick={() => setIsEditing(e => !e)}>토글</button>;
+}`}
+  files={{
+    "/useAutoSave.js": `import { useEffect } from 'react';
+
+export function useAutoSave(data) {
+    useEffect(() => { console.log('자동 저장:', data); }, [data]);
+}`,
+  }}
+/>
+
+혹은 이렇게요.
+
+```jsx
+export default function Profile({ userId }) {
+  // ❌ early return 뒤에 훅을 호출
+  if (!userId) return <p>유저를 선택해주세요</p>;
+
+  const [user, setUser] = useState(null);
+  useEffect(() => {/* fetch user... */}, [userId]);
+
+  return <p>{user?.name}</p>;
+}
+```
+
+하지만 이 코드들을 실행하면 다음과 같은 린트 경고를 마주하게 됩니다.
+
+> **React Hook "useState" is called conditionally. React Hooks must be called in the exact same order in every component render.**
+
+처음에는 "그냥 규칙이니까" 하고 넘기기 쉽습니다. 하지만 _왜_ 이런 제약이 존재하는지, 그 안에 어떤 설계 철학이 담겨 있는지를 이해하면 React의 동작 원리가 훨씬 선명해집니다. 오늘은 이 질문에 깊이 파고들어 봅니다.
+
+## 훅의 정체: 순서로 매핑되는 상태 슬롯
+
+React에서 `useState`를 여러 번 호출하면, React는 어떻게 각 호출이 어떤 state에 대응하는지 알 수 있을까요? 답은 **호출 순서**입니다. 구체적인 예시로 살펴보겠습니다.
+
+```jsx
+function Form() {
+  const [name, setName] = useState('Mary');         // 1번째 훅 호출
+  useEffect(function persistForm() {                // 2번째 훅 호출
+    localStorage.setItem('formData', name);
+  });
+  const [surname, setSurname] = useState('Poppins'); // 3번째 훅 호출
+  useEffect(function updateTitle() {                 // 4번째 훅 호출
+    document.title = name + ' ' + surname;
+  });
+}
+```
+
+React는 이 컴포넌트 인스턴스에 대해 내부적으로 **훅 노드의 단일 연결 리스트**를 유지합니다. 훅이 호출될 때마다 이 리스트의 노드를 순서대로 하나씩 소비하는 구조입니다. `name`이나 `surname` 같은 변수 이름은 React가 전혀 알지 못합니다. React가 아는 것은 오직 **"몇 번째로 호출되었는가"** 뿐입니다.
+
+첫 번째 렌더에서 React는 각 훅 호출을 만날 때마다 새로운 슬롯을 생성하고 초기값을 저장합니다.
+
+```
+첫 번째 렌더:
+  useState('Mary')     → 슬롯 #1 생성, 초기값 'Mary' 저장   → name
+  useEffect(persist)   → 슬롯 #2 생성, effect 등록
+  useState('Poppins')  → 슬롯 #3 생성, 초기값 'Poppins' 저장 → surname
+  useEffect(update)    → 슬롯 #4 생성, effect 등록
+```
+
+두 번째 렌더에서는 이미 만들어진 슬롯을 **같은 순서로** 다시 읽어옵니다. 이때 `useState`에 넘긴 초기값 인자는 무시되고, 이전 렌더에서 저장된 state가 반환됩니다.
+
+```
+두 번째 렌더:
+  useState('Mary')     → 슬롯 #1 읽기 (초기값 무시, 저장된 state 반환) → name
+  useEffect(persist)   → 슬롯 #2 읽기 (이전 effect와 비교, 교체)
+  useState('Poppins')  → 슬롯 #3 읽기 (초기값 무시, 저장된 state 반환) → surname
+  useEffect(update)    → 슬롯 #4 읽기 (이전 effect와 비교, 교체)
+```
+
+핵심은 **"이름"이 아니라 "순서"로 각 훅을 식별**한다는 것입니다. 별도의 키나 식별자 없이, 단순히 _몇 번째로 호출되었는가_ 만으로 이전 렌더의 상태를 정확히 찾아갑니다.
+
+이 모델은 놀라울 정도로 단순하고 빠릅니다. 하지만 한 가지 전제가 붙습니다.
+
+> **매 렌더마다 훅의 호출 개수와 순서가 반드시 동일해야 한다.**
+
+## 순서가 깨지면 무슨 일이 벌어질까요?
+
+위의 `Form` 예시에서, `persistForm` effect를 조건부로 호출하면 어떻게 될까요? 직접 실행해볼 수 있습니다.
+
+<Playground
+  code={`import { useState, useEffect } from 'react';
+
+// ⚠️ 이 코드는 의도적으로 Rules of Hooks를 위반합니다.
+// 실제 프로젝트에서는 절대 이렇게 작성하지 마세요!
+
+export default function App() {
+    const [name, setName] = useState('Mary');
+
+    // 🔴 조건부 훅 호출 — name이 비면 이 훅을 건너뜁니다
+    if (name !== '') {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useEffect(function persistForm() {
+            console.log('저장:', name);
+        });
+    }
+
+    const [surname, setSurname] = useState('Poppins');
+
+    return (
+        <div style={{ padding: 20 }}>
+            <p>name: {name}</p>
+            <p>surname: {surname}</p>
+            <input value={name} onChange={e => setName(e.target.value)} placeholder="name" />
+            <p style={{ color: "gray", fontSize: 12, marginTop: 12 }}>
+                name을 모두 지워보세요. 훅 순서가 깨지면서 에러가 발생합니다.
+            </p>
+        </div>
+    );
+}`} />
+
+`name`이 비어 있지 않은 동안은 훅이 3개 호출되어 정상 동작합니다. 하지만 `name`을 모두 지우는 순간, `persistForm` effect가 건너뛰어지면서 훅이 2개만 호출됩니다.
+
+```
+정상 렌더 (name = 'Mary'):
+  useState('Mary')       → 슬롯 #1 ✅ name
+  useEffect(persistForm) → 슬롯 #2 ✅ effect
+  useState('Poppins')    → 슬롯 #3 ✅ surname
+
+name을 지운 뒤 (name = ''):
+  useState('Mary')       → 슬롯 #1 ✅ name
+  useState('Poppins')    → 슬롯 #2 🔴 effect 슬롯을 surname으로 읽음!
+  // 슬롯 #3은 아예 소비되지 않음
+```
+
+React는 두 번째 훅 호출이 여전히 `useEffect`일 것이라고 기대하지만, 실제로는 `useState('Poppins')`가 들어옵니다. 이 시점부터 **모든 후속 훅이 한 칸씩 밀려서** 엉뚱한 슬롯을 읽게 됩니다.
+
+결과적으로:
+
+| 문제                     | 설명                                            |
+| ------------------------ | ----------------------------------------------- |
+| **state 교차 오염**      | 서로 다른 상태 값이 엉뚱한 슬롯에 매핑됩니다    |
+| **effect 클린업 불일치** | 생성되지 않은 effect에 대해 클린업이 실행됩니다 |
+| **ref/memo 뒤섞임**      | memoized 값이나 ref가 다른 훅의 것과 바뀝니다   |
+
+이런 버그는 즉시 드러나지 않을 수도 있어서, 나중에 발견되면 **재현하기 어려운 치명적 논리 오류**로 이어집니다.
+
+## "그럼 훅에 key를 붙이면 해결되지 않나요?"
+
+이건 누구나 한 번쯤 떠올리는 아이디어입니다. 각 훅에 고유한 식별자를 부여해서 순서에 의존하지 않게 만들면 되지 않을까요?
+
+React 팀도 분명 검토했을 이 설계를, 채택하지 않은 데에는 분명한 이유가 있습니다.
+
+### 1. 성능과 복잡도의 급증
+
+훅마다 key를 부여하고, 렌더마다 동적 그래프를 재정렬·재결합하려면 현재의 단순한 **순차 소비 모델**을 완전히 포기해야 합니다. 연결 리스트를 한 방향으로 순회하기만 하면 되는 지금과 달리, 매 렌더마다 해시맵 조회·그래프 비교가 필요해집니다. Reconciler의 복잡도와 런타임 비용이 크게 올라갑니다.
+
+### 2. 동시성 모델과의 충돌
+
+React 18부터 도입된 Concurrent Rendering, Interruptible Render, Strict Mode의 이중 호출 등 현대 React의 실행 모델은 **렌더가 중단되었다가 재개**될 수 있다는 전제 위에 서 있습니다. 훅 그래프를 동적으로 재배치하면서도 effect의 마운트/언마운트, state 보존을 부분 렌더·재시도 상황에서 일관되게 보장하는 건 극도로 어려운 문제입니다.
+
+### 3. 멘탈 모델의 단순함
+
+"Top-level에서, 동일한 순서로 호출한다"라는 규칙은 한 줄로 설명됩니다. 이 단순함이 **학습 비용을 낮추고, 디버깅을 예측 가능하게** 만듭니다. key 기반 동적 그래프를 허용하면 "어떤 key가 어떤 상태에 바인딩되었는가"를 추적해야 하는데, 이는 학습 곡선과 디버깅 비용을 크게 올립니다.
+
+> 결론적으로, **순차적 호출 인덱스에 상태를 매핑하는 현재 모델이 가장 빠르고 예측 가능**합니다.
+
+## 그러면 어떻게 해야 할까요?
+
+조건부 훅 호출이 금지되는 건 알겠는데, 실전에서 "특정 조건에서만 훅이 필요한" 상황은 분명 존재합니다. 이럴 때 쓸 수 있는 패턴들을 정리해보겠습니다.
+
+### 패턴 1: 컴포넌트 분리 + 조건부 렌더링
+
+훅을 사용하는 로직을 하위 컴포넌트로 분리하고, 상위에서 조건부로 **렌더링만** 분기합니다. 하위 컴포넌트는 마운트될 때 항상 훅이 호출되므로 규칙을 위반하지 않습니다.
+
+글 초반의 `useAutoSave` 예시를 다시 돌아봅시다. 이번에는 자동 저장이 필요한 부분을 `AutoSaveEditor`라는 별도 컴포넌트로 분리합니다.
+
+<Playground
+  previewHeight={100}
+  showConsole
+  code={`import { useState } from 'react';
+import AutoSaveEditor from './AutoSaveEditor';
+
+export default function App() {
+    const [isEditing, setIsEditing] = useState(false);
+
+    return (
+        <div style={{ padding: 20 }}>
+            <button onClick={() => setIsEditing(e => !e)}>
+                {isEditing ? "편집 종료" : "편집 시작"}
+            </button>
+            {isEditing && <AutoSaveEditor />}
+        </div>
+    );
+}`}
+  files={{
+    "/AutoSaveEditor.js": `import { useState } from 'react';
+import { useAutoSave } from './useAutoSave';
+
+export default function AutoSaveEditor() {
+    const [text, setText] = useState('');
+    useAutoSave(text);
+
+    return <input value={text} onChange={e => setText(e.target.value)} />;
+}`,
+    "/useAutoSave.js": `import { useEffect } from 'react';
+
+export function useAutoSave(data) {
+    useEffect(() => { console.log('자동 저장:', data); }, [data]);
+}`,
+  }}
+/>
+
+`AutoSaveEditor` 컴포넌트 안에서 `useAutoSave`는 **항상** 호출됩니다. 조건 분기는 상위 컴포넌트에서 `{isEditing && <AutoSaveEditor />}`로 처리할 뿐입니다.
+
+### 패턴 2: 훅은 항상 호출하되, 내부에서 조건 처리
+
+훅 자체는 매 렌더마다 호출하되, 훅 **내부 로직**에서 조건을 분기하면 됩니다.
+
+처음 예시의 `useAutoSave`를 다시 보겠습니다. 컴포넌트를 분리하는 대신, 훅은 항상 호출하되 내부에서 `enabled` 조건을 처리하도록 수정합니다.
+
+<Playground
+  previewHeight={100}
+  showConsole
+  code={`import { useState } from 'react';
+import { useAutoSave } from './useAutoSave';
+
+export default function App() {
+    const [isEditing, setIsEditing] = useState(false);
+    const [text, setText] = useState('');
+
+    // ✅ 훅은 항상 호출, 내부에서 조건 처리
+    useAutoSave(isEditing ? text : null);
+
+    return (
+        <div style={{ padding: 20 }}>
+            <button onClick={() => setIsEditing(e => !e)}>
+                {isEditing ? "편집 종료" : "편집 시작"}
+            </button>
+            {isEditing && (
+                <input value={text} onChange={e => setText(e.target.value)} />
+            )}
+        </div>
+    );
+}`}
+  files={{
+    "/useAutoSave.js": `import { useEffect } from 'react';
+
+export function useAutoSave(data) {
+    useEffect(() => {
+        if (data === null) return;
+        console.log('자동 저장:', data);
+    }, [data]);
+}`,
+  }}
+/>
+
+`useAutoSave`는 매 렌더마다 호출되지만, `data`가 `null`이면 내부에서 즉시 `return`합니다. 훅의 호출 순서는 유지하면서도 조건부 동작을 깔끔하게 구현할 수 있습니다.
+
+### 패턴 3: early return 전에 훅 배치
+
+컴포넌트에서 early return을 사용할 때는, **모든 훅 호출을 early return보다 위에** 배치해야 합니다.
+
+초반의 `Profile` 예시를 다시 봅니다. 훅을 early return 아래로 배치했던 코드를, 훅을 먼저 호출하도록 수정합니다.
+
+```jsx
+function Profile({ userId }) {
+  // ✅ 모든 훅은 early return 전에 호출
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchUser(userId).then((data) => {
+      setUser(data);
+      setLoading(false);
+    });
+  }, [userId]);
+
+  // early return은 훅 호출 이후에
+  if (loading) return <Spinner />;
+  if (!user) return <NotFound />;
+
+  return <div>{user.name}</div>;
+}
+```
+
+## 동시성과 Strict Mode에서의 의미
+
+React 18의 Strict Mode는 개발 환경에서 **렌더를 의도적으로 두 번 호출**해서 부작용을 검출합니다. 훅 호출 순서가 안정적이라는 전제가 있기에 이 이중 호출이 의미를 갖습니다. 만약 조건부 호출이 허용되었다면, 첫 번째 렌더와 두 번째 렌더에서 훅 순서가 달라질 수 있고, Strict Mode의 검증 자체가 무력화됩니다.
+
+Concurrent Rendering에서도 마찬가지입니다. React는 렌더를 중단했다가 나중에 재개하거나, 아예 폐기하고 다시 시작할 수 있습니다. 이 과정에서 훅의 순서가 보장되지 않으면, **어떤 상태가 어떤 슬롯에 있는지 알 수 없는** 상황이 발생합니다.
+
+결국 "훅은 항상 같은 순서로 호출되어야 한다"는 규칙은, React가 안전하게 렌더를 중단·재개·폐기할 수 있게 해주는 **contract**인 셈입니다.
+
+## 정리
+
+1. React는 **훅 호출 순서 = 상태 슬롯 매핑** 모델을 사용합니다.
+2. 이 모델은 빠르고 단순하지만, **조건부 훅 호출은 즉시 슬롯 불일치**를 일으키므로 금지됩니다.
+3. key 기반 식별 방식은 성능·동시성·멘탈 모델 측면에서 trade-off가 너무 큽니다.
+4. 해결책은 "**훅은 항상 호출하고, 조건은 렌더 분기 또는 훅 내부 로직으로 옮긴다**"는 것입니다.
+5. 이 규칙이 있기에 React는 Concurrent Mode와 Strict Mode에서도 **예측 가능하고 안전하게** 동작할 수 있습니다.
+
+처음에는 불편하게 느껴졌던 이 제약이, 사실은 React의 핵심 아키텍처를 지탱하는 가장 근본적인 약속이었습니다.

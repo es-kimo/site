@@ -1,4 +1,6 @@
+import { IconLogo } from "@/components/IconLogo";
 import { ThemeChanger } from "@/components/ThemeChanger";
+import { Button } from "@workspace/ui/components/button";
 import { cn } from "@workspace/ui/lib/utils";
 import { Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -12,6 +14,7 @@ export const ReaderIsland = () => {
     const currentSize = FONT_SIZES[sizeIndex];
     document.documentElement.style.setProperty("--article-font-size", `${currentSize?.value}px`);
     document.documentElement.style.setProperty("--article-scale", `${currentSize?.scale}`);
+    document.documentElement.style.setProperty("--article-line-height", `${currentSize?.lineHeight}`);
 
     // Save preference
     localStorage.setItem("reader-font-size", sizeIndex.toString());
@@ -37,19 +40,12 @@ export const ReaderIsland = () => {
   };
 
   return (
-    <div className="w-full mx-auto bg-background/20 backdrop-blur-xl rounded-md px-4 py-1 flex items-center gap-3" aria-label="Font size control">
-      <button
-        onClick={decreaseSize}
-        disabled={sizeIndex === 0}
-        className={cn(
-          "w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200",
-          "hover:bg-background/20 active:scale-95",
-          "disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
-        )}
-        aria-label="Decrease font size"
-      >
-        <Minus className="w-4 h-4" strokeWidth={2.5} />
-      </button>
+    <div className="w-full mx-auto bg-background/20 backdrop-blur-xl rounded-md px-2 py-1 flex items-center gap-3" aria-label="Font size control">
+      <IconLogo />
+
+      <Button variant="ghost" size="icon" onClick={decreaseSize} disabled={sizeIndex === 0} aria-label="Decrease font size">
+        <Minus strokeWidth={2.5} />
+      </Button>
 
       <div className="flex items-center gap-1.5 px-1">
         <span className="text-foreground/90 text-sm font-medium select-none" aria-hidden="true">
@@ -68,18 +64,9 @@ export const ReaderIsland = () => {
         </span>
       </div>
 
-      <button
-        onClick={increaseSize}
-        disabled={sizeIndex === FONT_SIZES.length - 1}
-        className={cn(
-          "w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200",
-          "hover:bg-background/20 active:scale-95",
-          "disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
-        )}
-        aria-label="Increase font size"
-      >
-        <Plus className="w-4 h-4" strokeWidth={2.5} />
-      </button>
+      <Button variant="ghost" size="icon" onClick={increaseSize} disabled={sizeIndex === FONT_SIZES.length - 1} aria-label="Increase font size">
+        <Plus strokeWidth={2.5} />
+      </Button>
 
       <ThemeChanger />
     </div>
