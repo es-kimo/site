@@ -1,0 +1,2 @@
+# MDX 콘텐츠 파일 내부의 코드 블록 들여쓰기 보존
+apps/blog/content/**/*.mdx
