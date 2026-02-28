@@ -23,6 +23,25 @@ export default async function Layout({
   const metadata = await getSlugMetadata(decodedCategory, decodedSlug);
   const { createdAt, updatedAt } = metadata.other;
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: metadata.title?.toString(),
+    description: metadata.description?.toString(),
+    datePublished: createdAt,
+    ...(updatedAt && { dateModified: updatedAt }),
+    author: {
+      "@type": "Person",
+      name: "Kihyun Ryu",
+      url: "https://khryu.dev",
+    },
+    publisher: {
+      "@type": "Person",
+      name: "Kihyun Ryu",
+    },
+    url: `https://khryu.dev/writing/${encodeURIComponent(decodedCategory)}/${encodeURIComponent(decodedSlug)}`,
+  };
+
   return (
     <section
       style={{
@@ -31,6 +50,7 @@ export default async function Layout({
       }}
       className="w-full transition-all"
     >
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <article className="col-start-2 min-w-0 max-w-[65ch] mx-auto text-foreground/90">
         <p className="text-muted-foreground pt-2 text-xs font-semibold mb-1">{formatPostDate(updatedAt ?? createdAt, "korean")}</p>
         {children}

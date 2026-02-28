@@ -1,0 +1,363 @@
+export const metadata = {
+  title: "React는 왜 렌더를 중단할 수 있어야 했을까?",
+  description: "React 18의 Concurrent Rendering이 등장한 배경과 Fiber, Scheduler의 역할, 그리고 이것이 Hooks 규칙 및 개발자 멘탈 모델과 어떻게 연결되는지 깊이 파헤칩니다.",
+  keywords: ["React", "Concurrent Rendering", "Fiber", "Scheduler", "startTransition", "useTransition", "useDeferredValue", "Suspense", "Hooks"],
+  alternate: {
+    canonical: "fe/react/concurrent-rendering",
+  },
+  other: {
+    status: "draft",
+    createdAt: "2026-02-15T12:00:00",
+  },
+};
+
+# React는 왜 렌더를 중단할 수 있어야 했을까?
+
+"렌더를 중단한다"는 말을 처음 듣는다면, 직관적으로 와닿지 않을 수 있습니다. 렌더란 `setState` 호출 후 컴포넌트를 다시 실행해서 UI를 그리는 과정인데, 그걸 왜 도중에 멈춰야 할까요?
+
+많은 개발자들이 다음과 같이 생각합니다.
+
+- `setState`를 호출하면 React가 즉시 렌더한다
+- 렌더는 동기적으로 한 번에 끝난다
+- 렌더를 중단한다는 건 무언가 잘못된 것이다
+
+하지만 React 18부터는 이 모든 전제가 달라졌습니다. 이 글에서는 **왜** 렌더가 중단 가능해야 했는지, **어떻게** 중단과 재개가 동작하는지, 그리고 이것이 [이전 글에서 다룬 Hooks 규칙](../FE/react-hooks-조건부-호출)과 어떻게 연결되는지를 살펴봅니다.
+
+## React 17까지의 모델: 동기 렌더링
+
+React 17 이하에서 렌더링은 단순한 흐름을 따릅니다.
+
+```
+setState → 렌더 시작 → 전체 트리 계산 → commit (DOM 반영)
+```
+
+렌더가 시작되면 중간에 멈출 방법이 없습니다. 컴포넌트 트리를 처음부터 끝까지 재귀적으로 순회하며 가상 DOM을 계산하고, 그 결과를 DOM에 반영합니다. 이 과정이 모두 **하나의 동기 작업**으로 실행됩니다.
+
+작은 트리에서는 문제가 없습니다. 하지만 트리가 커지면 이야기가 달라집니다. 다음 예시를 직접 실행해보겠습니다.
+
+<Playground
+  editorHeight={280}
+  previewHeight={200}
+  code={`import { useState } from 'react';
+
+function HeavyList({ query }) {
+    const items = Array.from({ length: 10000 }, (_, i) => \`아이템 #\${i + 1}\`);
+    const filtered = items.filter(item => item.includes(query));
+    return (
+        <ul style={{ height: 120, overflow: "auto", fontSize: 13 }}>
+            {filtered.slice(0, 100).map(item => <li key={item}>{item}</li>)}
+            {filtered.length > 100 && <li>... 외 {filtered.length - 100}건</li>}
+        </ul>
+    );
+}
+
+export default function App() {
+    const [query, setQuery] = useState('');
+    return (
+        <div style={{ padding: 16 }}>
+            <input
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                placeholder="검색어를 빠르게 입력해보세요"
+                style={{ width: "100%", padding: 8, fontSize: 14 }}
+            />
+            <HeavyList query={query} />
+        </div>
+    );
+}`}
+/>
+
+`query`가 바뀔 때마다 10,000개 아이템을 필터링합니다. 빠르게 타이핑해보면 입력이 버벅이는 걸 느낄 수 있습니다. 동기 렌더링 모델에서는 매 키 입력마다 전체 렌더가 완료될 때까지 브라우저가 다른 작업(화면 갱신, 입력 처리 등)을 할 수 없기 때문입니다.
+
+이것이 동기 렌더링의 근본적 한계입니다. **렌더가 길어지면 브라우저가 멈춥니다.**
+
+## Concurrent Rendering: 멈출 수 있는 렌더
+
+React 18에서 도입된 Concurrent Rendering은 흔히 "동시에 여러 렌더를 실행한다"고 오해됩니다. 하지만 정확한 의미는 다릅니다.
+
+> Concurrent Rendering은 렌더를 **쪼개서, 중간에 멈출 수 있게** 만드는 것입니다.
+
+핵심 개념을 정리하면:
+
+- 렌더는 **작업 단위(unit of work)** 로 쪼개진다
+- React는 스케줄러를 통해 각 업데이트의 **우선순위를 관리**한다
+- 더 중요한 업데이트가 들어오면 현재 렌더를 **중단(interrupt)** 할 수 있다
+- 중단된 렌더는 나중에 **재개하거나 폐기**된다
+
+즉, JavaScript 엔진의 멀티스레딩이 아닙니다. 여전히 싱글 스레드 위에서 동작하되, 작업을 잘게 쪼개서 **브라우저와 협력적으로 시간을 나눠 쓰는** 모델입니다.
+
+## Fiber: 렌더를 쪼갤 수 있는 구조
+
+Concurrent Rendering이 가능하려면, 렌더 작업을 잘게 나눌 수 있는 자료구조가 필요합니다. 이것이 바로 **Fiber**입니다.
+
+React 16 이전에는 컴포넌트 트리를 재귀적으로 순회했습니다. 재귀는 콜 스택에 의존하기 때문에 중간에 멈출 수 없습니다. 함수 호출이 쌓여 있는 콜 스택을 임의로 중단했다가 재개하는 건 불가능하기 때문입니다.
+
+Fiber는 이 문제를 해결합니다. 각 컴포넌트를 **Fiber 노드**라는 객체로 표현하고, 이 노드들을 연결 리스트로 엮어서 순회합니다. 재귀 대신 **반복(loop)** 으로 트리를 탐색하기 때문에, 루프의 매 반복마다 "계속 진행할지, 멈출지" 결정할 수 있습니다.
+
+대략적인 work loop의 구조는 다음과 같습니다.
+
+```js
+// 단순화한 코드입니다
+while (workInProgress !== null) {
+  performUnitOfWork(workInProgress);
+}
+```
+
+`workInProgress`는 현재 처리 중인 Fiber 노드를 가리킵니다. 하나의 Fiber를 처리하면 다음 Fiber로 넘어가고, 모든 Fiber를 처리하면 렌더가 완료됩니다.
+
+Concurrent 모드에서는 여기에 **양보(yield)** 조건이 추가됩니다.
+
+```js
+// 단순화한 코드입니다
+while (workInProgress !== null && !shouldYield()) {
+  performUnitOfWork(workInProgress);
+}
+```
+
+`shouldYield()`는 "지금까지 충분히 작업했으니 브라우저에 제어권을 돌려줘야 하는가?"를 판단합니다. 보통 5ms 정도의 시간 제한을 기준으로 합니다. 시간이 다 되면 루프를 빠져나오고, 브라우저가 화면을 갱신하거나 사용자 입력을 처리한 뒤 다시 돌아와 작업을 이어갑니다.
+
+이것이 가능한 이유는 Fiber가 **현재 작업 상태를 메모리에 보존**하기 때문입니다. 재귀 호출처럼 콜 스택에 의존하는 것이 아니라, 어디까지 처리했는지가 Fiber 노드 자체에 기록되어 있으므로 중단 후 정확히 같은 지점에서 재개할 수 있습니다.
+
+## "중단"과 "재개"의 실제 동작
+
+렌더의 중단과 재개가 구체적으로 어떻게 이루어지는지 정리하겠습니다.
+
+### 중단 (Interrupt)
+
+더 높은 우선순위의 업데이트가 발생하면, React는 현재 진행 중인 렌더를 중단합니다.
+
+예를 들어, 무거운 리스트를 렌더링하는 도중 사용자가 input에 타이핑을 하면:
+
+1. 리스트 렌더링은 낮은 우선순위로 진행 중
+2. 사용자 입력 이벤트가 발생 → 높은 우선순위 업데이트
+3. React는 현재 진행 중인 **workInProgress Fiber 트리를 폐기**
+4. 높은 우선순위 업데이트에 대한 **새로운 렌더를 시작**
+
+폐기된 렌더의 결과는 DOM에 전혀 반영되지 않습니다. 마치 그 렌더가 시작되지 않은 것처럼 버려집니다.
+
+### 재개 (Resume)
+
+중단 이후 React는 두 가지 전략을 사용합니다.
+
+1. **완전히 새로 시작**: 높은 우선순위 업데이트를 먼저 처리한 뒤, 낮은 우선순위 업데이트에 대해 렌더를 처음부터 다시 시작합니다.
+2. **이어서 진행**: 시간이 남아 있고 중단 사유가 해소되면, 기존 workInProgress를 이어서 처리합니다.
+
+여기서 핵심적인 원칙이 하나 있습니다.
+
+> **Render는 interruptible하지만, Commit은 atomic합니다.**
+
+렌더 단계에서는 얼마든지 중단·폐기·재시작이 가능하지만, DOM에 변경을 반영하는 commit 단계는 **한 번에 끊김 없이** 실행됩니다. 부분적으로 commit되는 일은 없습니다. 이 덕분에 사용자는 절반만 업데이트된 UI를 보는 일이 없습니다.
+
+정리하면:
+
+| 단계 | 특성 | 중단 가능 |
+|------|------|-----------|
+| **Render** | 가상 DOM 계산, Fiber 트리 구성 | ✅ 가능 |
+| **Commit** | 실제 DOM 반영, effect 실행 | ❌ 불가능 |
+
+## Hooks 규칙과의 연결
+
+여기서 [이전 글의 주제](../react-hooks-조건부-호출)와 만납니다. 왜 Hooks의 호출 순서 안정성이 Concurrent 모델에서 특히 중요할까요?
+
+Concurrent 환경에서는:
+
+- 동일한 컴포넌트가 **여러 번 렌더를 시도**할 수 있습니다
+- 첫 번째 렌더는 중단되어 **폐기**될 수 있습니다
+- Strict Mode에서는 의도적으로 **두 번 호출**됩니다
+
+만약 훅이 조건부로 호출된다면 어떻게 될까요?
+
+첫 번째 렌더 시도에서는 조건이 `true`여서 훅 3개가 호출되고, 이 렌더가 중단된 뒤 재시도에서는 조건이 `false`로 바뀌어 훅 2개만 호출될 수 있습니다. 이전 글에서 살펴본 것처럼 **슬롯 매핑이 무너지고 state가 손상**됩니다.
+
+```
+첫 번째 렌더 시도 (중단됨):
+  useState(A)    → 슬롯 #1
+  useEffect(fn)  → 슬롯 #2  ← 조건부 훅
+  useState(B)    → 슬롯 #3
+
+재시도 (조건 변경):
+  useState(A)    → 슬롯 #1 ✅
+  useState(B)    → 슬롯 #2 🔴 effect 슬롯을 state로 읽음!
+```
+
+동기 렌더링에서도 이 문제는 존재했지만, Concurrent 환경에서는 렌더가 여러 번 시도될 수 있기 때문에 문제가 **더 빈번하고 예측 불가능하게** 발생합니다.
+
+> **Hooks의 순서 안정성은 Concurrent 모델의 전제 조건입니다.**
+
+## 개발자는 이걸 어떻게 활용할까?
+
+Concurrent Rendering의 원리를 이해했으니, 이를 활용하는 API를 살펴보겠습니다.
+
+### startTransition
+
+가장 직접적인 활용입니다. 특정 상태 업데이트를 "긴급하지 않음"으로 표시할 수 있습니다.
+
+<Playground
+  editorHeight={380}
+  previewHeight={200}
+  code={`import { useState, startTransition } from 'react';
+
+function HeavyList({ query }) {
+    const items = Array.from({ length: 10000 }, (_, i) => \`아이템 #\${i + 1}\`);
+    const filtered = items.filter(item => item.includes(query));
+    return (
+        <ul style={{ height: 120, overflow: "auto", fontSize: 13 }}>
+            {filtered.slice(0, 100).map(item => <li key={item}>{item}</li>)}
+            {filtered.length > 100 && <li>... 외 {filtered.length - 100}건</li>}
+        </ul>
+    );
+}
+
+export default function App() {
+    const [input, setInput] = useState('');
+    const [query, setQuery] = useState('');
+
+    const handleChange = (e) => {
+        const value = e.target.value;
+        setInput(value);               // 긴급: 입력 즉시 반영
+        startTransition(() => {
+            setQuery(value);            // 비긴급: 리스트 필터링은 지연 가능
+        });
+    };
+
+    return (
+        <div style={{ padding: 16 }}>
+            <input
+                value={input}
+                onChange={handleChange}
+                placeholder="검색어를 빠르게 입력해보세요"
+                style={{ width: "100%", padding: 8, fontSize: 14 }}
+            />
+            <HeavyList query={query} />
+        </div>
+    );
+}`}
+/>
+
+이전 예시와 비교해보면, 타이핑이 훨씬 부드러워진 것을 느낄 수 있습니다. `setInput`은 긴급 업데이트로 즉시 반영되고, `setQuery`는 `startTransition`으로 감싸져 비긴급 업데이트가 됩니다. 리스트 필터링 렌더 도중 새로운 입력이 들어오면, React는 진행 중인 렌더를 중단하고 입력을 먼저 처리합니다.
+
+### useTransition
+
+`startTransition`에 pending 상태를 더한 훅입니다.
+
+```jsx
+import { useState, useTransition } from 'react';
+
+function App() {
+  const [input, setInput] = useState('');
+  const [query, setQuery] = useState('');
+  const [isPending, startTransition] = useTransition();
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setInput(value);
+    startTransition(() => {
+      setQuery(value);
+    });
+  };
+
+  return (
+    <div>
+      <input value={input} onChange={handleChange} />
+      {isPending && <p>검색 중...</p>}
+      <HeavyList query={query} />
+    </div>
+  );
+}
+```
+
+`isPending`은 transition이 진행 중인 동안 `true`가 됩니다. 이를 활용해 사용자에게 "아직 처리 중"이라는 피드백을 줄 수 있습니다.
+
+### useDeferredValue
+
+값 자체를 지연시키는 접근입니다.
+
+```jsx
+import { useState, useDeferredValue } from 'react';
+
+function App() {
+  const [query, setQuery] = useState('');
+  const deferredQuery = useDeferredValue(query);
+
+  return (
+    <div>
+      <input value={query} onChange={e => setQuery(e.target.value)} />
+      <HeavyList query={deferredQuery} />
+    </div>
+  );
+}
+```
+
+`query`가 바뀌면 `deferredQuery`는 잠시 이전 값을 유지합니다. input은 즉시 반응하고, 무거운 리스트 렌더링은 `deferredQuery`가 업데이트될 때 수행됩니다. `startTransition`과 유사한 효과를 더 선언적으로 달성합니다.
+
+### Suspense와의 연결
+
+Concurrent Rendering 없이는 Suspense도 불가능합니다. Suspense의 동작을 단계별로 보면:
+
+1. 컴포넌트가 렌더 중 아직 준비되지 않은 데이터에 접근
+2. **렌더가 중단**됨
+3. 가장 가까운 `<Suspense>` 경계의 `fallback`이 표시됨
+4. 데이터가 준비되면 **렌더가 재시작**됨
+
+```jsx
+<Suspense fallback={<Spinner />}>
+  <UserProfile />
+</Suspense>
+```
+
+"렌더를 중단하고 나중에 재시작한다"는 동작은 Concurrent Rendering의 핵심 능력 그 자체입니다. 동기 렌더링 모델에서는 렌더 도중에 멈추는 것 자체가 불가능했기 때문에, 이런 선언적 데이터 로딩 패턴은 구현할 수 없었습니다.
+
+## 개발자가 이해해야 할 세 가지 원칙
+
+지금까지 살펴본 내용을 세 가지 원칙으로 정리하겠습니다.
+
+### 1. 렌더는 "계산"일 뿐이다
+
+렌더 함수는 DOM을 변경하지 않습니다. 렌더는 "다음에 보여줄 UI의 스냅샷"을 계산하는 과정이며, **순수 함수 실행**이어야 합니다.
+
+> 렌더는 스냅샷 계산이며, 언제든지 버려질 수 있습니다.
+
+이 말은 Concurrent 환경에서 문자 그대로 사실입니다. React는 필요하면 렌더 결과를 폐기하고 처음부터 다시 계산합니다. 그래서 렌더 함수 안에서 side effect를 수행하면 안 됩니다. 폐기된 렌더에서 실행된 side effect는 되돌릴 수 없기 때문입니다.
+
+### 2. Side Effect는 Commit 이후에만
+
+`useEffect`가 존재하는 이유가 바로 이것입니다. 렌더 단계는 순수해야 합니다. DOM 조작, 네트워크 요청, 구독 등의 side effect는 **commit이 완료된 이후에** 실행되어야 합니다.
+
+```jsx
+function Component() {
+  // 🔴 렌더 중 side effect — 폐기된 렌더에서도 실행됨
+  fetch('/api/log');
+
+  // ✅ commit 이후에만 실행됨
+  useEffect(() => {
+    fetch('/api/log');
+  }, []);
+
+  return <div />;
+}
+```
+
+commit은 atomic하기 때문에, `useEffect`에서 실행되는 side effect는 실제로 DOM에 반영된 결과에 대해서만 동작합니다.
+
+### 3. React는 UI를 "협력적으로" 계산한다
+
+전통적인 동기 렌더링은 "독점적"이었습니다. 렌더가 끝날 때까지 브라우저의 모든 것이 멈춥니다. Concurrent Rendering은 이를 "협력적" 모델로 바꿉니다.
+
+- 긴 작업을 독점하지 않고, 적절한 시점에 브라우저에게 제어권을 돌려줍니다
+- 프레임 드랍을 방지하고 사용자 입력에 즉각 반응할 수 있습니다
+- 개발자는 `startTransition`, `useDeferredValue` 등으로 우선순위를 명시합니다
+
+이것은 JavaScript의 이벤트 루프 위에서 동작하는 **협력적 스케줄링(cooperative scheduling)** 입니다.
+
+## 정리
+
+1. React 17 이하에서 렌더는 **동기적으로 실행**되어 큰 트리에서 프레임 드랍을 유발했습니다.
+2. React 18의 Concurrent Rendering은 렌더를 **작업 단위로 쪼개 중단 가능**하게 만들었습니다.
+3. **Fiber**는 각 컴포넌트를 독립적인 노드로 표현하여 렌더의 중단과 재개를 가능하게 하는 자료구조입니다.
+4. **Render는 interruptible, Commit은 atomic**합니다. 부분 commit은 없습니다.
+5. Hooks의 **호출 순서 안정성**은 렌더가 여러 번 시도될 수 있는 Concurrent 모델의 전제 조건입니다.
+6. 개발자는 `startTransition`, `useTransition`, `useDeferredValue`로 **업데이트의 우선순위를 제어**할 수 있습니다.
+
+끝으로, React 18이 추구한 방향을 한 문장으로 요약하면 이렇습니다.
+
+> React는 UI를 빠르게 만드는 라이브러리가 아닙니다. UI를 **안전하게 지연시킬 수 있게** 만든 라이브러리입니다.
