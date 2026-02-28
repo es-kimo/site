@@ -50,7 +50,12 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       creator: "@ryurlah",
     },
-    // TODO: naver-site-verification
+    verification: {
+      google: "", // TODO: Google Search Console 인증 후 코드 입력
+      other: {
+        "naver-site-verification": "", // TODO: Naver Search Advisor 인증 후 코드 입력
+      },
+    },
   };
 }
 
