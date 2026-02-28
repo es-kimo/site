@@ -40,8 +40,17 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description: `웹 개발 분야의 다양한 주제를 글로 다룹니다.`,
     authors: [{ name: "Kihyun Ryu" }],
+    openGraph: {
+      type: "website",
+      locale: "ko_KR",
+      siteName: "Kihyun Ryu",
+      url: "https://khryu.dev",
+    },
+    twitter: {
+      card: "summary_large_image",
+      creator: "@ryurlah",
+    },
     // TODO: naver-site-verification
-    // TODO: og image
   };
 }
 
