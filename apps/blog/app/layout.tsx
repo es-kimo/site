@@ -51,9 +51,8 @@ export async function generateMetadata(): Promise<Metadata> {
       creator: "@ryurlah",
     },
     verification: {
-      google: "", // TODO: Google Search Console 인증 후 코드 입력
       other: {
-        "naver-site-verification": "", // TODO: Naver Search Advisor 인증 후 코드 입력
+        "naver-site-verification": "74db7e238d5a4ee7bb37c92d5824483a890c0d69", // TODO: Naver Search Advisor 인증 후 코드 입력
       },
     },
   };
