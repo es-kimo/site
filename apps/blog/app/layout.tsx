@@ -33,11 +33,28 @@ const notoSansKR = Noto_Sans_KR({
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "Kihyun Ryu",
+    metadataBase: new URL("https://khryu.dev"),
+    title: {
+      default: "Kihyun Ryu",
+      template: "%s | Kihyun Ryu",
+    },
     description: `웹 개발 분야의 다양한 주제를 글로 다룹니다.`,
     authors: [{ name: "Kihyun Ryu" }],
-    // TODO: naver-site-verification
-    // TODO: og image
+    openGraph: {
+      type: "website",
+      locale: "ko_KR",
+      siteName: "Kihyun Ryu",
+      url: "https://khryu.dev",
+    },
+    twitter: {
+      card: "summary_large_image",
+      creator: "@ryurlah",
+    },
+    verification: {
+      other: {
+        "naver-site-verification": "74db7e238d5a4ee7bb37c92d5824483a890c0d69", // TODO: Naver Search Advisor 인증 후 코드 입력
+      },
+    },
   };
 }
 
