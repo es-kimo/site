@@ -34,7 +34,10 @@ const notoSansKR = Noto_Sans_KR({
 export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL("https://khryu.dev"),
-    title: "Kihyun Ryu",
+    title: {
+      default: "Kihyun Ryu",
+      template: "%s | Kihyun Ryu",
+    },
     description: `웹 개발 분야의 다양한 주제를 글로 다룹니다.`,
     authors: [{ name: "Kihyun Ryu" }],
     // TODO: naver-site-verification
