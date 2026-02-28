@@ -15,7 +15,15 @@ export async function generateMetadata({ params }: { params: Promise<SlugParams>
 
   const metadata = await getSlugMetadata(decodedCategory, decodedSlug);
 
-  return { ...metadata, authors: [{ name: "Kihyun Ryu" }], creator: "Kihyun Ryu", publisher: "Kihyun Ryu" };
+  return {
+    ...metadata,
+    authors: [{ name: "Kihyun Ryu" }],
+    creator: "Kihyun Ryu",
+    publisher: "Kihyun Ryu",
+    alternates: {
+      canonical: `/writing/${encodeURIComponent(decodedCategory)}/${encodeURIComponent(decodedSlug)}`,
+    },
+  };
 }
 
 export default async function Page({ params }: { params: Promise<SlugParams> }) {
