@@ -10,6 +10,54 @@ export const metadata: Metadata = {
   description: "류기현 — Frontend Engineer",
 };
 
+// ── Utilities ──────────────────────────────────────────────────────────────
+
+/**
+ * 간단한 인라인 마크다운 파서
+ * 백틱(`code`), 볼드(**text**), 이탤릭(*text*)을 지원합니다.
+ */
+function parseInlineMarkdown(text: string): React.ReactNode[] {
+  const nodes: React.ReactNode[] = [];
+  let key = 0;
+
+  // 백틱(code), 볼드, 이탤릭을 순차적으로 파싱
+  // 볼드를 먼저 매칭하여 이탤릭과의 충돌 방지
+  const pattern = /(`[^`]+`)|\*\*([^*]+)\*\*|\*([^*]+)\*/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = pattern.exec(text)) !== null) {
+    // 매치 이전의 일반 텍스트
+    if (match.index > lastIndex) {
+      nodes.push(text.slice(lastIndex, match.index));
+    }
+
+    if (match[1]) {
+      // 백틱: `code`
+      nodes.push(
+        <code key={key++} className="px-1.5 py-0.5 rounded bg-muted text-[0.9em] font-mono">
+          {match[1].slice(1, -1)}
+        </code>,
+      );
+    } else if (match[2]) {
+      // 볼드: **text**
+      nodes.push(<strong key={key++}>{match[2]}</strong>);
+    } else if (match[3]) {
+      // 이탤릭: *text*
+      nodes.push(<em key={key++}>{match[3]}</em>);
+    }
+
+    lastIndex = pattern.lastIndex;
+  }
+
+  // 남은 텍스트
+  if (lastIndex < text.length) {
+    nodes.push(text.slice(lastIndex));
+  }
+
+  return nodes.length > 0 ? nodes : [text];
+}
+
 // ── UI Primitives ───────────────────────────────────────────────────────────
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -60,7 +108,7 @@ function BulletList({ items }: { items: string[] }) {
       {items.map((item, i) => (
         <li key={i} className="flex gap-2">
           <span className="text-muted-foreground select-none shrink-0">·</span>
-          <span>{item}</span>
+          <span>{parseInlineMarkdown(item)}</span>
         </li>
       ))}
     </ul>
@@ -81,7 +129,7 @@ function WorkProjectCard({ project }: { project: WorkProject }) {
           <Badge key={tech}>{tech}</Badge>
         ))}
       </div>
-      {project.description && <p className="text-sm text-foreground/80 mt-1.5">{project.description}</p>}
+      {project.description && <p className="text-sm text-foreground/80 mt-1.5">{parseInlineMarkdown(project.description)}</p>}
       <BulletList items={project.highlights} />
       {(project.commits || project.linesChanged) && (
         <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
@@ -102,7 +150,7 @@ function SideProjectCard({ project }: { project: SideProject }) {
         <span className="text-xs text-muted-foreground ml-auto">{project.teamSize}인</span>
       </div>
       {project.awardNote && <p className="text-xs text-amber-700 dark:text-amber-400 mt-0.5">*{project.awardNote}</p>}
-      <p className="text-sm text-foreground/80 mt-1">{project.description}</p>
+      <p className="text-sm text-foreground/80 mt-1">{parseInlineMarkdown(project.description)}</p>
       <BulletList items={project.highlights} />
     </div>
   );
@@ -188,7 +236,7 @@ export default async function ResumePage() {
               {data.interests.map((interest) => (
                 <div key={interest.name}>
                   <h3 className="text-sm font-medium">{interest.name}</h3>
-                  <p className="text-sm text-foreground/80 mt-0.5">{interest.description}</p>
+                  <p className="text-sm text-foreground/80 mt-0.5">{parseInlineMarkdown(interest.description)}</p>
                 </div>
               ))}
             </div>
