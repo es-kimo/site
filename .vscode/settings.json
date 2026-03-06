@@ -1,0 +1,5 @@
+{
+  "yaml.schemas": {
+    "packages/resume/resume.schema.json": "packages/resume/resume.yaml"
+  }
+}
