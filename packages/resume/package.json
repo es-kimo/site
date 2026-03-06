@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "generate": "tsx src/generate.ts"
+    "generate": "tsx src/generate.ts",
+    "pdf": "tsx src/generate-pdf.ts"
   },
   "exports": {
     ".": "./src/index.ts",
@@ -18,6 +19,7 @@
   "devDependencies": {
     "@types/node": "^22.13.8",
     "@workspace/typescript-config": "workspace:*",
+    "puppeteer": "^24.38.0",
     "tsx": "^4.19.0",
     "typescript": "latest"
   }

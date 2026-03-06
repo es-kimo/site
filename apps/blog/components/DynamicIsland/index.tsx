@@ -36,7 +36,7 @@ export const DynamicIsland = ({ language }: DynamicIslandProps) => {
   }, [view, language]);
 
   return (
-    <div className="fixed top-1.5 left-1/2 -translate-x-1/2 z-50 w-fit" style={{ maxWidth: "min(calc(100vw - 12px), var(--blog-max-w))" }}>
+    <div className="fixed top-1.5 left-1/2 -translate-x-1/2 z-50 w-fit" data-dynamic-island style={{ maxWidth: "min(calc(100vw - 12px), var(--blog-max-w))" }}>
       <motion.div
         layout
         transition={{

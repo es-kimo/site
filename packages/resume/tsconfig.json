@@ -1,6 +1,7 @@
 {
   "extends": "@workspace/typescript-config/base.json",
   "compilerOptions": {
+    "outDir": "dist/tsc",
     "baseUrl": ".",
     "paths": {
       "@workspace/resume/*": ["./src/*"]

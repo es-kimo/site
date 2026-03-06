@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="mb-10">
-      <h2 className="text-lg font-semibold mb-4 border-b border-border pb-2">{title}</h2>
+    <section className="mb-10 print:mb-6 print:break-inside-avoid">
+      <h2 className="text-lg font-semibold mb-4 border-b border-border pb-2 print:text-base print:mb-2 print:pb-1">{title}</h2>
       {children}
     </section>
   );
@@ -30,7 +30,7 @@ function DateRange({ start, end }: { start: string; end?: string }) {
 }
 
 function Badge({ children }: { children: React.ReactNode }) {
-  return <span className="inline-block text-xs px-2 py-0.5 rounded-md bg-muted text-muted-foreground mr-1.5 mb-1.5">{children}</span>;
+  return <span className="inline-block text-xs px-2 py-0.5 rounded-md bg-muted text-muted-foreground mr-1.5 mb-1.5 print:bg-gray-100 print:text-gray-700 print:px-1.5 print:py-0">{children}</span>;
 }
 
 function StatusBadge({ status }: { status: SideProject["status"] }) {
@@ -71,7 +71,7 @@ function BulletList({ items }: { items: string[] }) {
 
 function WorkProjectCard({ project }: { project: WorkProject }) {
   return (
-    <div className="mb-5 last:mb-0">
+    <div className="mb-5 last:mb-0 print:mb-3 print:break-inside-avoid">
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <h4 className="font-medium text-sm">{project.name}</h4>
         <span className="text-xs text-muted-foreground">{project.period}</span>
@@ -110,7 +110,7 @@ function SideProjectCard({ project }: { project: SideProject }) {
 
 function CaseStudyCard({ study }: { study: CaseStudy }) {
   return (
-    <div className="mb-8 last:mb-0">
+    <div className="mb-8 last:mb-0 print:mb-4 print:break-inside-avoid">
       <h3 className="font-medium text-sm">{study.title}</h3>
       <p className="text-xs text-muted-foreground mt-0.5">{study.project}</p>
 
@@ -150,10 +150,15 @@ export default async function ResumePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <article className={cn("max-w-2xl mx-auto", language === "ko" ? "font-[family-name:var(--font-noto-sans-kr)]" : "font-[family-name:var(--font-stix)]")}>
+      <article
+        className={cn(
+          "max-w-2xl mx-auto print:max-w-none print:mx-0 print:text-[11pt] print:leading-snug",
+          language === "ko" ? "font-[family-name:var(--font-noto-sans-kr)]" : "font-[family-name:var(--font-stix)]",
+        )}
+      >
         {/* ── Header ──────────────────────────────────────────────── */}
-        <header className="mb-10">
-          <h1 className="text-2xl font-bold">
+        <header className="mb-10 print:mb-6">
+          <h1 className="text-2xl font-bold print:text-xl">
             {data.basics.nameKo}
             <span className="text-muted-foreground font-normal ml-2 text-lg">{data.basics.name}</span>
           </h1>
@@ -170,6 +175,9 @@ export default async function ResumePage() {
                 {profile.network}
               </a>
             ))}
+            <a href="/resume.pdf" download className="hover:text-foreground transition-colors print:hidden">
+              PDF ↓
+            </a>
           </div>
         </header>
 
@@ -333,7 +341,7 @@ export default async function ResumePage() {
         )}
 
         {/* ── Footer ─────────────────────────────────────────────── */}
-        <footer className="text-xs text-muted-foreground border-t border-border pt-4 mt-10">
+        <footer className="text-xs text-muted-foreground border-t border-border pt-4 mt-10 print:mt-4 print:pt-2 print:text-gray-500">
           Last updated: {data.meta.lastModified} · v{data.meta.version}
         </footer>
       </article>
