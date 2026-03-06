@@ -77,46 +77,57 @@ work:
         - label: "MR Approvals"
           value: "64개"
     achievementSummary:
-      - "참여 프로젝트 기준, Commit 평균 기여도 40% 이상"
+      - "참여 프로젝트의 Commit 평균 기여도 40% 이상"
       - "라이브 배포 6건"
-      - "심전도 그래프 라이브러리의 테스트 커버리지 20% 달성"
+      - "심전도 그래프 라이브러리의 테스트 커버리지 20% 향상"
     projects:
+      - name: "고객지원 시스템"
+        period: "2025.07 ~ 2025.08, 2026.02 ~ 2026.03"
+        techStack:
+          - "React"
+          - "react-query"
+          - "zustand"
+        description: "고객이 카카오 채널을 통해 문의를 등록하고, CS 담당자가 문의에 답변할 수 있는 웹 어플리케이션"
+        highlights:
+          - "초기 버전(v1.0.0) 개발부터 참여하여, 프로젝트의 기술 스택과 아키텍처 설계에 주도적으로 기여"
+          - "개선 버전(v1.1.0)에서는, 기획 요구사항을 적극적으로 검토하여 개발 계획 수립 및 일정 산정"
+          - "직원용 Role Based Access Control 을 구현하면서 기획/Auth/BE 팀과 긴밀히 협업하여 사내 *조직관리 시스템*과 연결되는 시스템 구축"
+          - "고객용/직원용, 모바일용/데스크톱용 인터페이스를 하나의 레포 안에서 관리하기 위한 구조 설계"
+          - "빠른 모바일 웹 프로토타입 개발을 위해 Headless 라이브러리 리서치 및 공유 (Vaul - Drawer 컴포넌트)"
+        commits: "451 (65.3%)"
+        linesChanged: "49869 (62.4%)"
+
       - name: "판매관리 시스템"
         period: "2025.09 ~ 2025.12"
         techStack:
           - "React"
           - "react-query"
+          - "zustand"
           - "zod"
           - "react-hook-form"
         description: "회사의 자산, 매출, 거래처를 관리하는 사내 경영관리시스템"
         highlights:
-          - "대형 Form, Filter 관리 체계 구축"
-          - "요구사항 구현을 위한 최적의 라이브러리 리서치 및 공유 (Zod, react-hook-form)"
-          - "사내 컴포넌트 라이브러리(maiui)와 통합"
+          - "초기 버전(v1.0.0) 개발부터 참여하여, 프로젝트의 기술 스택과 아키텍처 설계에 주도적으로 기여"
+          - "총 8가지 종류의 Form Field 컴포넌트를 개발하여, 대형 Form과 Filter 관리하는 시스템 구축"
+          - "Form Field 컴포넌트는 사내 컴포넌트 라이브러리(maiui) 위에 react-hook-form 관리 로직을 래핑하고, 제네릭 지원을 통해 Type-safe한 인터페이스 제공"
+          - "대용량 스트리밍 파일 다운로드 로직 구현"
+          - "서버 부하를 줄이기 위해 zip 파일 암호화를 클라이언트 단에서 수행 (윈도우/맥 지원)"
+          - "변경이 잦은 개발 환경에서 끊김없는 코드 리뷰 경험을 위해 API 모킹 커버리지 90% 이상 유지"
         commits: "348 (34.6%)"
         linesChanged: "29843 (22.9%)"
 
-      - name: "CS App"
-        period: "2025.07 ~ 2025.08"
-        techStack:
-          - "React"
-          - "react-query"
-          - "zustand"
-        description: "제품을 사용하는 고객이 문의를 등록하고, CS 담당자가 문의에 답변할 수 있는 웹 어플리케이션"
-        highlights:
-          - "무한스크롤, 페이지네이션, 다중 필터 관리, 유저 인증 Flow, Sidebar·ImageLightbox 컴포넌트 구현"
-          - "웹 접근성을 고려한 Drawer 컴포넌트 headless library 리서치 및 공유 (Vaul)"
-          - "컴포넌트 개발 시간 단축 및 유지보수성 증대"
-        commits: "321 (66.9%)"
-        linesChanged: "37833 (63.2%)"
-
-      - name: "ECG-GRAPH Labeling Tool"
+      - name: "ECG-GRAPH Labeling Tool 개선"
         period: "2025.05 ~ 2025.07"
         techStack:
           - "React"
           - "Library"
-        description: "메디컬 팀에서 사용하는, 데이터 전처리용 심전도 그래프 라벨링 도구"
-        highlights: []
+        description: "심전도 그래프에 특정 지점을 표시하여 학습용 데이터를 생성하는 라벨링 도구"
+        highlights:
+          - "마이그레이션 버전(v0.0.1) 개발부터 참여하여, 추가 요구사항을 직접 명세화하면서 UI/UX 설계"
+          - "심전도 그래프의 구성 요소 등 도메인 지식 학습 수반"
+          - "대량의 점(Point)을 관리하면서, 리액트가 key를 활용한 렌더링 성능을 유지할 수 있도록 불필요한 계산을 찾아 데이터 구조 개선"
+          - "마우스 입력(Drag, Zoom, Hover, Click)과 키보드 입력이 복합적으로 사용되는 인터랙션 구현"
+          - "다양한 길이의 심전도 그래프를 한 가지 뷰포트 내에서 모두 처리할 수 있도록 Panning 기능을 개발하여 UX 개선"
         commits: "72 (44.5%)"
         linesChanged: "4190 (32.5%)"
 
@@ -125,8 +136,14 @@ work:
         techStack:
           - "React"
           - "Library"
-        description: "병원·검진센터 의료진이 사용하는, 심전도 그래프 내부의 ms·mv 측정 도구"
-        highlights: []
+        description: "심전도 그래프에 특정 지점을 표시하여 간격(시간, 진폭)을 측정하는 도구"
+        highlights:
+          - "태블릿 버전(v.0.0.15) 개발부터 참여하여, 기존 기능을 태블릿 환경에서 구동할 수 있도록 개선"
+          - "한 손가락 터치 입력을 세 가지 동작(점 찍기, 줌 이동하기, 정밀 측정하기)으로 구분지어 서로 간섭하지 않고 동작할 수 있도록 상태 흐름 및 계산 로직 설계"
+          - "측정점마다 이를 관리할 수 있는 툴팁을 렌더링하고, 측정점을 삭제, 방향전환, '캘리퍼'로 변환하는 기능 구현"
+          - "측정한 길이/높이를 줄자처럼 이동하며 비교할 수 있는 '캘리퍼' 요소를 이동, 삭제하는 기능 구현"
+          - "줌 인/아웃 비율에 따라 요소들의 크기를 결정하는 계산 로직 개발"
+          - "파형 근방의 유효한 터치 범위를 설정하여 사용자 입력이 의도한 요소에 정확히 반응하도록 UX 개선"
         commits: "121 (59.3%)"
         linesChanged: "8218 (38.9%)"
 
@@ -135,11 +152,13 @@ work:
         techStack:
           - "React"
           - "Library"
-        description: "병원의 온프레미스 환경에서 출력할 수 있는 심전도 분석 결과 레포트를 SVG로 제작"
+        description: "svg 기반 심전도 분석 결과 레포트"
         highlights:
-          - "SVG의 한계를 극복하기 위해, 레이아웃 간의 계층 관계를 정의하고 부모 요소와의 차이 Offset으로 레이아웃의 좌표 설정"
-        commits: ""
-        linesChanged: ""
+          - "동적인 데이터를 파라미터로 받아, 정적인 템플릿 위에 내용을 작성해 svg 형태의 레포트로 반환하는 함수 개발"
+          - "svg 레이어 간의 계층 관계를 정의하고, 부모 레이어 기준 Offset으로 레이어의 좌표를 계산하여 배치하는 시스템 구축"
+          - "병원/검진기관의 온프레미스 환경에서 응답속도 1s 이내로 유지"
+        commits: "20 (100%)"
+        linesChanged: "870"
 
       - name: "테스트 환경 구성"
         period: "2025.01 ~ 2025.03"
@@ -148,8 +167,8 @@ work:
           - "Vitest"
         description: ""
         highlights:
-          - "E2E 테스트에 관한 기술 리서치 및 1HOUR 세션 진행 → 회사 메인 제품에 Playwright 기반 테스트 환경 구성"
-          - "ECG-GRAPH 라이브러리의 Core 컴포넌트에 대해 Vitest 기반 Unit test 작성 (테스트 커버리지 0% → 20%)"
+          - "E2E 테스트에 관한 기술 리서치 및 퍼포먼스 테스트 → 팀내 공유 세션 진행"
+          - "ECG-GRAPH 라이브러리의 코어 컴포넌트에 대해 Vitest 기반 Unit test 작성"
         commits: ""
         linesChanged: ""
 
@@ -158,9 +177,10 @@ work:
         techStack:
           - "React"
           - "react-query"
-        description: "중증센터에서 환자에 관한 9가지 정보를 입력하면, AI가 예측한 중증도를 조회할 수 있는 웹 어플리케이션"
+        description: "중증센터에서 환자의 9가지 정보를 입력하면, AI가 예측한 중증도를 조회할 수 있는 웹 어플리케이션"
         highlights:
-          - "프로젝트 세팅, FE 개발, 확장 가능한 Form 아키텍처 설계"
+          - "소규모 국책과제로서 1인으로 모든 프론트엔드 개발을 맡아 수행"
+          - "사내 컴포넌트 라이브러리의 이전 버전 dependency 로 인해 발생하는 breaking changes 를 발견하고 적극적으로 해결"
         commits: "80 (81.6%)"
         linesChanged: "23524 (99.2%)"
 
