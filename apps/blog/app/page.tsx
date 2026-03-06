@@ -37,7 +37,7 @@ export default async function HomePage() {
           style={{ viewTransitionName: "home-content" }}
           className={cn(
             language === "ko" ? "font-[family-name:var(--font-noto-sans-kr)] text-base" : "font-[family-name:var(--font-stix)] text-[17px]",
-            "space-y-6 leading-relaxed text-foreground/90"
+            "space-y-6 leading-relaxed text-foreground/90",
           )}
         >
           <p>{t.intro1}</p>
@@ -46,11 +46,7 @@ export default async function HomePage() {
             {language === "ko" ? (
               <>
                 <InlineLink href="/writing">글</InlineLink>
-                이나{" "}
-                <InlineLink href="/Resume_v1.2.pdf" target="_blank" rel="noopener noreferrer">
-                  이력서
-                </InlineLink>
-                , 혹은{" "}
+                이나 <InlineLink href="/resume">이력서</InlineLink>, 혹은{" "}
                 <InlineLink href="https://x.com/ryurlah" target="_blank" rel="noopener noreferrer">
                   X
                 </InlineLink>
@@ -58,11 +54,7 @@ export default async function HomePage() {
               </>
             ) : (
               <>
-                You can read my <InlineLink href="/writing">writing</InlineLink> or{" "}
-                <InlineLink href="/Resume_v1.2.pdf" target="_blank" rel="noopener noreferrer">
-                  resume
-                </InlineLink>
-                , or{" "}
+                You can read my <InlineLink href="/writing">writing</InlineLink> or <InlineLink href="/resume">resume</InlineLink>, or{" "}
                 <InlineLink href="https://x.com/ryurlah" target="_blank" rel="noopener noreferrer">
                   follow me on X
                 </InlineLink>
