@@ -1,0 +1,280 @@
+# yaml-language-server: $schema=./resume.schema.json
+# =============================================================================
+# Resume Data — Single Source of Truth
+# =============================================================================
+# 이 파일 하나로 웹 이력서, PDF, Markdown, JSON-LD 등 모든 포맷을 생성합니다.
+# 수정 후 `pnpm resume:generate` 로 산출물을 빌드하세요.
+# =============================================================================
+
+basics:
+  name: "Kihyun Ryu"
+  nameKo: "류기현"
+  label: "프론트엔드 개발"
+  email: "khryu0610@gmail.com"
+  url: "https://khryu.dev"
+  summary: ""
+  profiles:
+    - network: "GitHub"
+      username: "es-kimo"
+      url: "https://github.com/es-kimo"
+    - network: "Blog"
+      username: "khryu.dev"
+      url: "https://khryu.dev"
+
+interests:
+  - name: "Automation, Tool Integration"
+    description: "이 이력서는 자동화 툴(Gitlab, Jira, Notion API)을 활용해 만들어졌습니다."
+  - name: "User Interaction, Animation"
+    description: "터치/펜슬/마우스 입력을 모두 지원하는 그래프 측정 도구를 개발하였습니다."
+
+education:
+  - institution: "연세대학교"
+    location: "서울"
+    area: "문과대학 중어중문학과"
+    startDate: "2018.03"
+    endDate: "2023.08"
+  - institution: "명덕외국어고등학교"
+    location: "서울"
+    area: "프랑스어과"
+    startDate: "2015.03"
+    endDate: "2018.02"
+
+training:
+  - institution: "SSAFY 삼성청년소프트웨어 아카데미"
+    location: "서울"
+    course: "비전공 Java반"
+    startDate: "2023.07"
+    endDate: "2024.06"
+  - institution: "멋쟁이사자처럼 웹 프론트엔드 스쿨"
+    location: "온라인"
+    course: "프론트엔드 중점 과정"
+    startDate: "2022.07"
+    endDate: "2023.01"
+
+qualifications:
+  design:
+    - "Figma"
+  collaboration:
+    - "Jira"
+    - "Notion"
+  certifications:
+    - "SQLD"
+  english:
+    - "OPIc IH"
+
+work:
+  - company: "메디컬에이아이"
+    location: "서울"
+    department: "소프트웨어그룹 FE팀"
+    position: "Frontend Engineer"
+    startDate: "2024.11"
+    endDate: ""
+    contributionMetrics:
+      period: "3개월 평균"
+      items:
+        - label: "Merged MR"
+          value: "27개"
+        - label: "MR Approvals"
+          value: "64개"
+    achievementSummary:
+      - "참여 프로젝트 기준, Commit 평균 기여도 40% 이상"
+      - "라이브 배포 6건"
+      - "심전도 그래프 라이브러리의 테스트 커버리지 20% 달성"
+    projects:
+      - name: "판매관리 시스템"
+        period: "2025.09 ~ 2025.12"
+        techStack:
+          - "React"
+          - "react-query"
+          - "zod"
+          - "react-hook-form"
+        description: "회사의 자산, 매출, 거래처를 관리하는 사내 경영관리시스템"
+        highlights:
+          - "대형 Form, Filter 관리 체계 구축"
+          - "요구사항 구현을 위한 최적의 라이브러리 리서치 및 공유 (Zod, react-hook-form)"
+          - "사내 컴포넌트 라이브러리(maiui)와 통합"
+        commits: "348 (34.6%)"
+        linesChanged: "29843 (22.9%)"
+
+      - name: "CS App"
+        period: "2025.07 ~ 2025.08"
+        techStack:
+          - "React"
+          - "react-query"
+          - "zustand"
+        description: "제품을 사용하는 고객이 문의를 등록하고, CS 담당자가 문의에 답변할 수 있는 웹 어플리케이션"
+        highlights:
+          - "무한스크롤, 페이지네이션, 다중 필터 관리, 유저 인증 Flow, Sidebar·ImageLightbox 컴포넌트 구현"
+          - "웹 접근성을 고려한 Drawer 컴포넌트 headless library 리서치 및 공유 (Vaul)"
+          - "컴포넌트 개발 시간 단축 및 유지보수성 증대"
+        commits: "321 (66.9%)"
+        linesChanged: "37833 (63.2%)"
+
+      - name: "ECG-GRAPH Labeling Tool"
+        period: "2025.05 ~ 2025.07"
+        techStack:
+          - "React"
+          - "Library"
+        description: "메디컬 팀에서 사용하는, 데이터 전처리용 심전도 그래프 라벨링 도구"
+        highlights: []
+        commits: "72 (44.5%)"
+        linesChanged: "4190 (32.5%)"
+
+      - name: "ECG-GRAPH Ruler for Tablet"
+        period: "2025.02 ~ 2025.04"
+        techStack:
+          - "React"
+          - "Library"
+        description: "병원·검진센터 의료진이 사용하는, 심전도 그래프 내부의 ms·mv 측정 도구"
+        highlights: []
+        commits: "121 (59.3%)"
+        linesChanged: "8218 (38.9%)"
+
+      - name: "ECG-GRAPH SVG Report Template"
+        period: "2025.01 ~ 2025.02"
+        techStack:
+          - "React"
+          - "Library"
+        description: "병원의 온프레미스 환경에서 출력할 수 있는 심전도 분석 결과 레포트를 SVG로 제작"
+        highlights:
+          - "SVG의 한계를 극복하기 위해, 레이아웃 간의 계층 관계를 정의하고 부모 요소와의 차이 Offset으로 레이아웃의 좌표 설정"
+        commits: ""
+        linesChanged: ""
+
+      - name: "테스트 환경 구성"
+        period: "2025.01 ~ 2025.03"
+        techStack:
+          - "Playwright"
+          - "Vitest"
+        description: ""
+        highlights:
+          - "E2E 테스트에 관한 기술 리서치 및 1HOUR 세션 진행 → 회사 메인 제품에 Playwright 기반 테스트 환경 구성"
+          - "ECG-GRAPH 라이브러리의 Core 컴포넌트에 대해 Vitest 기반 Unit test 작성 (테스트 커버리지 0% → 20%)"
+        commits: ""
+        linesChanged: ""
+
+      - name: "AiTiA EWS (Early Warning System)"
+        period: "2024.12 ~ 2025.01"
+        techStack:
+          - "React"
+          - "react-query"
+        description: "중증센터에서 환자에 관한 9가지 정보를 입력하면, AI가 예측한 중증도를 조회할 수 있는 웹 어플리케이션"
+        highlights:
+          - "프로젝트 세팅, FE 개발, 확장 가능한 Form 아키텍처 설계"
+        commits: "80 (81.6%)"
+        linesChanged: "23524 (99.2%)"
+
+sideProjects:
+  - name: "지도 API 컴포넌트화 라이브러리"
+    teamSize: 6
+    status: "awarded"
+    awardNote: "SSAFY 전국 지역 대상 발표(온라인)"
+    description: "카카오맵 API를 Vue.js의 컴포넌트로 치환한 오픈소스 NPM 패키지 라이브러리"
+    highlights:
+      - "패키지 빌드/배포, 컴포넌트 설계/개발, Docs 개발/작성, ESLint 커스텀 룰 개발"
+      - "라이브러리 로컬 테스트 환경 구성 방법 연구 → 1HOUR 세션 공유를 통해 팀 개발 프로세스의 일부로 정착"
+
+  - name: "음역대 기반 노래 추천 및 연습 서비스"
+    teamSize: 6
+    status: "awarded"
+    awardNote: ""
+    description: "사용자의 음역대 측정 + 노래방 탑100곡의 음역대 분석 → 비슷한 음역의 노래를 추천, 해당 노래를 연습할 수 있는 서비스"
+    highlights:
+      - "FE리드/일정관리/컨벤션수립, 프로젝트 기획/디자인, 시연/발표, useFetch 훅으로 통신 파이프 구축, 유저 Flow 관리"
+      - "웹 오디오/마이크 단에서 발생하는 버그(음원 싱크 어긋남, 음역 테스트 시 과부하) 원인을 분석하고, Workaround로 해결"
+
+  - name: "웹 2D 물고기 서바이벌 게임"
+    teamSize: 6
+    status: "completed"
+    awardNote: ""
+    description: "최대 16명이 동시에 플레이 할 수 있는 키보드 기반 물고기 서바이벌 게임"
+    highlights:
+      - "게임 맵 기획/디자인/개발, 캐릭터 진화 시스템 기획/디자인/개발"
+      - "외부 툴로 제작한 게임 맵 디자인을 JSON으로 변환하여 웹 환경에 Integration"
+
+  - name: "총학생회를 위한 투표 시스템"
+    teamSize: 2
+    status: "in-progress"
+    awardNote: ""
+    description: "투표/회의가 필요한 어느 집단에서나 사용할 수 있는 웹 어플리케이션"
+    highlights:
+      - "프로젝트 기획/디자인/FE개발"
+      - "@shadcn/ui 기반으로, 사용자 경험을 증진하는 UX/UI 연구 및 개발"
+      - "실시간 이벤트 (SSE) 및 Broadcast 핸들링"
+
+  - name: "정적 사이트 운영"
+    teamSize: 1
+    status: "in-progress"
+    awardNote: ""
+    description: "개인 사이트, 상용 사이트 기획/디자인/개발/배포"
+    highlights: []
+
+  - name: "개발 기록 로깅 자동화"
+    teamSize: 1
+    status: "in-progress"
+    awardNote: ""
+    description: "기여도/연봉협상/프로젝트 기술서 등에 활용되는 정량/정성적 지표들을 수집하는 Node.js 어플리케이션"
+    highlights:
+      - "Gitlab/Jira API를 통해 획득한 Issue/Merge Request 정보를 Notion DB에 저장"
+      - "Notion Database의 생태계를 활용함으로써, 다양한 View/필터링/손쉬운 Export 등 여러 장점을 취할 수 있음"
+      - "정량적 지표 및 내가 남긴 Discussion, Description 정보들을 LLM으로 가공해 새로운 정성 지표를 생성할 수 있음"
+
+caseStudies:
+  - title: '"내가 만든 기능이 사용자에게 실제로 도움이 될까?"'
+    project: "ECG-GRAPH Labeling Tool"
+    background:
+      - "메디컬 팀에서 사용하는, 데이터 전처리용 심전도 그래프 라벨링 도구 개발을 맡게 됨"
+      - "바닐라 자바스크립트로 구현되어있던 코드를 리액트로 마이그레이션하면서, 추가 기능을 구현하는 Job"
+      - "메디컬 팀에서 기본적인 요구사항을 전달해주고, 구체적인 기획/구현/개선을 직접할 수 있는 기회"
+      - "내가 만든 기능을 통해 사용자가 편리함을 느꼈으면 좋겠다는 바람을 가지고 착수"
+    execution:
+      - title: "실제 작업 루틴을 관찰하여 '불편함' 찾기"
+        details:
+          - "사용자의 반복되는 작업(드래그,호버,클릭) 사이에 불필요하게 많은 마우스 이동이 필요함"
+      - title: "툴팁 UI 제작 (Figma)"
+        details:
+          - "마우스 동선을 최소화하는 구조로 UI를 개편하여 Figma에 컴포넌트 제작"
+          - "Storybook 시각화를 통해 메디컬팀 피드백 과정을 편리하게 지원함"
+      - title: "툴팁 렌더링 좌표 계산 로직 개발"
+        details:
+          - "툴팁이 브라우저 사이즈에 의해 잘리는 현상이 발생할 때, 불필요한 마우스 휠/드래그 동작이 발생함"
+          - "사용자 입력 지점에 따라 툴팁 렌더링 위치를 계산하는 로직을 개발함으로써, 뷰포트 내부에서 모든 동작을 지원"
+    impact:
+      - "메디컬팀 피드백 기준 측정 소요 시간 ≈ 25% 단축"
+      - "반복 작업 피로도가 크게 줄었음"
+
+  - title: "멀티·싱글터치 충돌 해소 ― Zoom / Pan / 측정 / 정밀측정 / 드래깅 동시 제어"
+    project: "ECG-GRAPH Ruler for Tablet"
+    background:
+      - "태블릿 환경에선 모든 제스처가 손가락으로 이뤄지기 때문에, ECG 파형을 확대·이동(Zoom/Pan) 하려다 측정점(Ruler)이 찍히거나 반대로 측정이 끊기는 문제가 반복됨"
+      - "기존에는 심전도 그래프 10초 고정 스트립을 가정했는데, 요구사항을 30초까지 확대하면서 그래프를 양옆으로 움직이는 동작이 기존 Zoom·Pan 동작과 호환이 되어야 함"
+      - "병원·검진센터 의료진에게는 줌 스케일 조절과 정밀 거리 측정이 모두 필수이므로, 여러 기능이 충돌 없이 공존해야 했음"
+    execution:
+      - title: "단일 인터랙션 FSM 설계"
+        details:
+          - "React Context 기반 5-State Finite State Model (ZOOM / RULER / PRECISE_RULER / DRAGGING / IDLE)로 컴포넌트의 모든 입력 흐름을 통합"
+      - title: "30초 심전도 지원 - 복잡한 컴포넌트에 새로운 기능 추가 시 신중하게 접근"
+        details:
+          - "새로운 props를 추가하고 이를 기존 코드에 통합하면서, 정확한 순서로 옵셔널체이닝 연산자를 사용함으로써 기존 동작을 해치는 사이드 이펙트가 발생하지 않도록 조치"
+          - "브라우저 IntersectionObserver로 좌·우 끝 탐지하는 레이어만 추가해, d3 Zoom 이벤트 중첩 제거"
+      - title: "Draggable 요소의 이벤트 생명주기를 Hook으로 모듈화"
+        details:
+          - "드래그와 관련된 이벤트를 전역에 등록하고, 언마운트시 이벤트를 제거하는 라이프사이클을 관리"
+          - "새로운 Draggable 기능 추가 시 코드 재사용률 80% 이상"
+      - title: "테스트"
+        details:
+          - "Storybook 배포를 통해, iPad / Android Tablet 제스처 시나리오 20건 검증"
+    impact:
+      - "한 손 Pan·두 손 Zoom·측정·정밀측정이 서로 간섭 0건(Storybook 시나리오 20+회 테스트)"
+      - "DRY한 훅·컴포넌트 구조로 후속 유지보수 범위 대폭 감소"
+
+languages:
+  - language: "Korean"
+    fluency: "Native"
+  - language: "English"
+    fluency: "OPIc IH"
+
+meta:
+  version: "1.2.0"
+  lastModified: "2026-03-06"
+  canonical: "https://khryu.dev/resume"

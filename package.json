@@ -18,7 +18,8 @@
     "게시판": "pnpm mdx:yjshd create yjshd 4.게시판",
     "콩팥질환정보": "pnpm mdx:yjshd create yjshd '3.강좌' '2.콩팥질환 정보'",
     "게시": "pnpm yjshd:checkout && git add . && git commit -m 'post: 글 작성' && git push origin yjshd",
-    "게시:blog": "pnpm blog:checkout && git add . && git commit -m 'post: 글 작성' && git push origin blog"
+    "게시:blog": "pnpm blog:checkout && git add . && git commit -m 'post: 글 작성' && git push origin blog",
+    "resume:generate": "pnpm --filter @workspace/resume generate"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
