@@ -374,20 +374,6 @@ export default async function ResumePage() {
           </Section>
         )}
 
-        {/* ── Languages ──────────────────────────────────────────── */}
-        {data.languages.length > 0 && (
-          <Section title="Languages">
-            <div className="flex gap-6 text-sm">
-              {data.languages.map((lang) => (
-                <div key={lang.language}>
-                  <span className="font-medium">{lang.language}</span>
-                  <span className="text-muted-foreground ml-1.5">({lang.fluency})</span>
-                </div>
-              ))}
-            </div>
-          </Section>
-        )}
-
         {/* ── Footer ─────────────────────────────────────────────── */}
         <footer className="text-xs text-muted-foreground border-t border-border pt-4 mt-10 print:mt-4 print:pt-2 print:text-gray-500">
           Last updated: {data.meta.lastModified} · v{data.meta.version}

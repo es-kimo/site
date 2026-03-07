@@ -29,7 +29,6 @@ export function toJsonLd(data: ResumeData): Record<string, unknown> {
     description: data.basics.summary || data.basics.label,
     sameAs: data.basics.profiles.map((p) => p.url),
     knowsAbout: [...allTechKeywords],
-    knowsLanguage: data.languages.map((l) => l.language),
     alumniOf: [
       ...data.education.map((edu) => ({
         "@type": "EducationalOrganization",

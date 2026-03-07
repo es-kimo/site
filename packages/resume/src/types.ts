@@ -122,11 +122,6 @@ export interface CaseStudy {
 
 // ── Common ──────────────────────────────────────────────────────────────────
 
-export interface Language {
-  language: string;
-  fluency: string;
-}
-
 export interface Meta {
   version: string;
   lastModified: string;
@@ -144,6 +139,5 @@ export interface ResumeData {
   work: WorkExperience[];
   sideProjects: SideProject[];
   caseStudies: CaseStudy[];
-  languages: Language[];
   meta: Meta;
 }

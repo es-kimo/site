@@ -3,7 +3,7 @@
   "title": "Resume",
   "description": "이력서 데이터 스키마 — resume.yaml 작성 시 자동완성 및 검증에 사용됩니다.",
   "type": "object",
-  "required": ["basics", "interests", "education", "training", "qualifications", "work", "sideProjects", "caseStudies", "languages", "meta"],
+  "required": ["basics", "interests", "education", "training", "qualifications", "work", "sideProjects", "caseStudies", "meta"],
   "additionalProperties": false,
   "properties": {
     "basics": {
@@ -213,20 +213,6 @@
             "items": { "type": "string" },
             "description": "결과 (Impact) — 정량/정성적 성과"
           }
-        }
-      }
-    },
-
-    "languages": {
-      "description": "사용 언어",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["language", "fluency"],
-        "additionalProperties": false,
-        "properties": {
-          "language": { "type": "string", "description": "언어명 (예: Korean)" },
-          "fluency": { "type": "string", "description": "숙련도 (예: Native, OPIc IH)" }
         }
       }
     },
