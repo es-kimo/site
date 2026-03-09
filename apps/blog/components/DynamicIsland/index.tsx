@@ -1,6 +1,5 @@
 "use client";
 
-import { type Language } from "@/lib/language";
 import { cn } from "@workspace/ui/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
 import { usePathname } from "next/navigation";
@@ -10,11 +9,7 @@ import { IdleIsland } from "./Idle";
 import { ReaderIsland } from "./Reader";
 import { ResumeIsland } from "./Resume";
 
-interface DynamicIslandProps {
-  language: Language;
-}
-
-export const DynamicIsland = ({ language }: DynamicIslandProps) => {
+export const DynamicIsland = () => {
   const pathname = usePathname();
   const isReader = pathname.match(/^\/writing\/.+\/.+$/);
   const isHome = pathname === "/";
@@ -32,13 +27,13 @@ export const DynamicIsland = ({ language }: DynamicIslandProps) => {
       case "reader":
         return <ReaderIsland />;
       case "home":
-        return <HomeIsland language={language} />;
+        return <HomeIsland />;
       case "resume":
         return <ResumeIsland />;
       case "idle":
         return <IdleIsland />;
     }
-  }, [view, language]);
+  }, [view]);
 
   return (
     <div className="fixed top-1.5 left-1/2 -translate-x-1/2 z-50 w-fit" data-dynamic-island style={{ maxWidth: "min(calc(100vw - 12px), var(--blog-max-w))" }}>

@@ -1,4 +1,3 @@
-import { getLanguage } from "@/lib/language";
 import { getResumeData } from "@workspace/resume/data";
 import { toJsonLd } from "@workspace/resume/generators/json-ld";
 import type { FeaturedProject, KeyContribution, ResumeData, SideProject } from "@workspace/resume/types";
@@ -211,18 +210,12 @@ function SideProjectCard({ project }: { project: SideProject }) {
 export default async function ResumePage() {
   const data: ResumeData = getResumeData();
   const jsonLd = toJsonLd(data);
-  const language = await getLanguage();
 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <article
-        className={cn(
-          "max-w-2xl mx-auto print:max-w-none print:mx-0 print:text-[11pt] print:leading-snug",
-          language === "ko" ? "font-[family-name:var(--font-noto-sans-kr)]" : "font-[family-name:var(--font-stix)]",
-        )}
-      >
+      <article className={cn("max-w-2xl mx-auto print:max-w-none print:mx-0 print:text-[11pt] print:leading-snug", "font-[family-name:var(--font-noto-sans-kr)]")}>
         {/* ── Header ──────────────────────────────────────────────── */}
         <header className="mb-12 print:mb-6">
           <div className="flex items-baseline gap-3">
