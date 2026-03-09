@@ -273,9 +273,6 @@ export default async function ResumePage() {
                 {profile.network}
               </a>
             ))}
-            <a href="/resume.pdf" download className="hover:text-foreground transition-colors underline underline-offset-2 decoration-border hover:decoration-foreground print:hidden">
-              PDF ↓
-            </a>
           </div>
         </header>
 

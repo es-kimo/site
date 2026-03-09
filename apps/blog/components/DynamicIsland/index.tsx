@@ -8,6 +8,7 @@ import { useMemo } from "react";
 import { HomeIsland } from "./Home";
 import { IdleIsland } from "./Idle";
 import { ReaderIsland } from "./Reader";
+import { ResumeIsland } from "./Resume";
 
 interface DynamicIslandProps {
   language: Language;
@@ -17,12 +18,14 @@ export const DynamicIsland = ({ language }: DynamicIslandProps) => {
   const pathname = usePathname();
   const isReader = pathname.match(/^\/writing\/.+\/.+$/);
   const isHome = pathname === "/";
+  const isResume = pathname === "/resume";
 
   const view = useMemo(() => {
     if (isReader) return "reader";
     if (isHome) return "home";
+    if (isResume) return "resume";
     return "idle";
-  }, [isReader, isHome]);
+  }, [isReader, isHome, isResume]);
 
   const content = useMemo(() => {
     switch (view) {
@@ -30,6 +33,8 @@ export const DynamicIsland = ({ language }: DynamicIslandProps) => {
         return <ReaderIsland />;
       case "home":
         return <HomeIsland language={language} />;
+      case "resume":
+        return <ResumeIsland />;
       case "idle":
         return <IdleIsland />;
     }
