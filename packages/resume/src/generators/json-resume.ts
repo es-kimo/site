@@ -54,15 +54,6 @@ export function toJsonResume(data: ResumeData): Record<string, unknown> {
       status: p.status,
       awardNote: p.awardNote || undefined,
     })),
-    deepDives: data.deepDives.map((dd) => ({
-      title: dd.title,
-      project: dd.project,
-      problemStatement: dd.problemStatement,
-      background: dd.background,
-      execution: dd.execution,
-      impact: dd.impact,
-      skillsShown: dd.skillsShown,
-    })),
 
     meta: {
       canonical: data.basics.canonical,

@@ -104,7 +104,7 @@ export interface WorkProject {
   featured: boolean;
   techStack: string[];
   oneLiner: string;
-  keyContributions: KeyContribution[];
+  keyContributions?: KeyContribution[];
 }
 
 export interface WorkExperience {
@@ -139,17 +139,6 @@ export interface SideProject {
 export interface ExecutionStep {
   title: string;
   details: string[];
-}
-
-export interface DeepDive {
-  id: string;
-  title: string;
-  project: string;
-  problemStatement: string;
-  background: string[];
-  execution: ExecutionStep[];
-  impact: string[];
-  skillsShown: string[];
 }
 
 // ── Education & Training ────────────────────────────────────────────────────
@@ -188,7 +177,6 @@ export interface ResumeData {
   featuredProjects: FeaturedProject[];
   work: WorkExperience[];
   sideProjects: SideProject[];
-  deepDives: DeepDive[];
   education: Education[];
   training: Training[];
   meta: Meta;

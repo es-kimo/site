@@ -151,7 +151,7 @@ export function toMarkdown(data: ResumeData): string {
           lines.push("");
           lines.push(proj.oneLiner);
           lines.push("");
-          if (proj.keyContributions.length > 0) {
+          if (proj.keyContributions && proj.keyContributions.length > 0) {
             for (const kc of proj.keyContributions) {
               lines.push(`- **문제**: ${kc.problem}`);
               lines.push(`  **행동**: ${kc.action}`);
@@ -185,50 +185,6 @@ export function toMarkdown(data: ResumeData): string {
       lines.push("");
       lines.push(`*${proj.whyItMatters}*`);
       lines.push("");
-    }
-  }
-
-  // ── Deep Dives ────────────────────────────────────────────────────────────
-  if (data.deepDives.length > 0) {
-    lines.push("## 경험과 고민");
-    lines.push("");
-    for (const dd of data.deepDives) {
-      lines.push(`### ${dd.title}`);
-      lines.push("");
-      lines.push(`*${dd.project}*`);
-      lines.push("");
-      lines.push(dd.problemStatement);
-      lines.push("");
-
-      lines.push("**배경**");
-      lines.push("");
-      for (const b of dd.background) {
-        lines.push(`- ${b}`);
-      }
-      lines.push("");
-
-      lines.push("**실행**");
-      lines.push("");
-      for (const step of dd.execution) {
-        lines.push(`**${step.title}**`);
-        lines.push("");
-        for (const d of step.details) {
-          lines.push(`- ${d}`);
-        }
-        lines.push("");
-      }
-
-      lines.push("**결과**");
-      lines.push("");
-      for (const i of dd.impact) {
-        lines.push(`- ${i}`);
-      }
-      lines.push("");
-
-      if (dd.skillsShown.length > 0) {
-        lines.push(`역량: ${dd.skillsShown.join(", ")}`);
-        lines.push("");
-      }
     }
   }
 

@@ -11,11 +11,11 @@
 basics:
   name: "Kihyun Ryu"
   nameKo: "류기현"
-  label: "Frontend Engineer"
+  label: "Frontend Developer"
   email: "khryu0610@gmail.com"
   url: "https://khryu.dev"
   canonical: "https://khryu.dev/resume"
-  summary: "v1.0 단계의 신규 제품에서 프론트엔드 구조 설계와 구현을 맡았으며, ECG 그래프 기반 인터랙션과 type-safe UI abstraction에 강점이 있습니다."
+  summary: "v1.0 단계의 신규 제품에서 프론트엔드 구조 설계와 구현을 맡았으며, type-safe UI abstraction과 ECG 그래프 기반 인터랙션 구현에 강점이 있습니다."
   profiles:
     - network: "GitHub"
       username: "es-kimo"
@@ -27,33 +27,21 @@ basics:
 positioning:
   headline: "인터랙션 설계와 type-safe UI 시스템 구축에 강점이 있는 프론트엔드 엔지니어"
   targetRoles:
-    - "Frontend Engineer"
+    - "Frontend Developer"
     - "Frontend Platform Engineer"
   coreStrengths:
-    - id: "interaction-design"
-      title: "복합 입력 인터랙션 설계"
-      description: "ECG 그래프 위에서 터치·마우스·키보드 입력이 함께 동작하는 인터랙션 레이어를 설계하고 구현했습니다."
-      evidence:
-        - "Tablet 환경에서 한 손가락 터치를 점 생성, 줌/이동, 정밀 측정으로 구분하는 상태 흐름 설계"
-        - "d3-zoom과 커스텀 인터랙션 간 이벤트 충돌 해소"
     - id: "v1-architecture"
       title: "초기 제품 구조 설계"
       description: "신규 제품의 v1.0 단계에서 기술 스택, 구현 구조, 공통 패턴을 정하는 데 참여했습니다."
       evidence:
         - "고객지원 시스템 v1.0 초기 구조 설계 및 구현"
         - "판매관리 시스템 v1.0 기술 스택 및 구현 패턴 정착"
-    - id: "type-safe-ui"
-      title: "Type-safe UI abstraction"
-      description: "디자인 시스템 위에 타입 안정성과 재사용성을 갖춘 컴포넌트 레이어를 구축했습니다."
+    - id: "interaction-design"
+      title: "복합 입력 인터랙션 설계"
+      description: "ECG 그래프 위에서 터치·마우스·키보드 입력이 함께 동작하는 인터랙션 레이어를 설계하고 구현했습니다."
       evidence:
-        - "react-hook-form 래퍼 및 제네릭 Form Field 컴포넌트 설계"
-        - "대형 Form/Filter를 공통 패턴으로 추상화"
-    - id: "cross-functional"
-      title: "설계 단계 협업"
-      description: "기획, Auth, Backend 등 여러 팀과의 경계를 조율하며 개발 가능한 구조로 구체화했습니다."
-      evidence:
-        - "RBAC 요구사항과 조직관리 시스템 연동 방식 조율"
-        - "변경 요구사항 검토 및 일정 산정 참여"
+        - "Tablet 환경에서 한 손가락 터치를 점 생성, 줌/이동, 정밀 측정으로 구분하는 상태 흐름 설계"
+        - "d3-zoom과 커스텀 인터랙션 간 이벤트 충돌 해소"
 
 experienceSummary:
   totalExperience: "1+ year"
@@ -86,6 +74,7 @@ skills:
     - "Mock Service Worker"
   tooling:
     - "Vite"
+    - "Yarn"
     - "pnpm"
     - "GitLab CI/CD"
   design:
@@ -104,7 +93,7 @@ featuredProjects:
     company: "메디컬에이아이"
     period: "2025.09 ~ 2025.12"
     scope: "v1.0"
-    role: "Frontend Engineer"
+    role: "Frontend Developer"
     featured: true
     techStack:
       - "React"
@@ -119,7 +108,7 @@ featuredProjects:
       - "대형 Form/Filter 패턴 표준화"
       - "파일 다운로드 및 클라이언트 암호화 처리"
     keyContributions:
-      - problem: "대형 Form과 Filter 구현이 화면마다 반복될 가능성이 높았고, 검증/에러 처리 방식이 분산될 수 있었습니다."
+      - problem: "대형 Form과 Filter 구현이 화면마다 반복되었고, 검증/에러 처리 방식이 분산될 수 있었습니다."
         action: "사내 디자인 시스템 위에 react-hook-form 래퍼와 제네릭 Form Field 컴포넌트를 설계했습니다."
         result: "폼 구현의 재사용성과 타입 안정성을 높이고, 화면 간 검증/에러 처리 방식의 일관성을 확보했습니다."
         ownershipEvidence:
@@ -127,10 +116,10 @@ featuredProjects:
           - "Type-safe 인터페이스 제공"
       - problem: "대용량 파일 다운로드와 암호화 처리 과정에서 서버 부하와 운영 환경 차이를 고려해야 했습니다."
         action: "스트리밍 다운로드 로직을 구현하고, zip 파일 암호화를 클라이언트에서 수행하도록 설계했습니다."
-        result: "서버 부하를 일부 클라이언트로 분산하고, 윈도우/맥 환경 모두에서 동작하는 다운로드 흐름을 구현했습니다."
+        result: "서버 부하를 일부 클라이언트로 분산하고, 윈도우/맥에서 동작하는 다운로드 흐름을 구현했습니다."
         ownershipEvidence:
           - "대용량 스트리밍 파일 다운로드 로직 구현"
-          - "윈도우/맥 지원"
+          - "윈도우/맥 기본 압축풀기 기능 지원"
       - problem: "변경이 잦은 개발 환경에서 API 상태에 따라 프론트엔드 개발과 코드 리뷰가 자주 끊길 수 있었습니다."
         action: "API mocking coverage를 높은 수준으로 유지해 프론트엔드 검증 경로를 확보했습니다."
         result: "백엔드 변경과 무관하게 개발과 코드 리뷰를 이어갈 수 있는 환경을 유지했습니다."
@@ -146,7 +135,7 @@ featuredProjects:
     company: "메디컬에이아이"
     period: "2025.07 ~ 2025.08, 2026.02 ~ 2026.03"
     scope: "v1.0, v1.1"
-    role: "Frontend Engineer"
+    role: "Frontend Developer"
     featured: true
     techStack:
       - "React"
@@ -156,7 +145,7 @@ featuredProjects:
     oneLiner: "고객이 카카오 채널로 문의를 등록하고, CS 담당자가 답변할 수 있는 웹 애플리케이션"
     responsibilities:
       - "v1.0 초기 구조 설계 및 구현"
-      - "v1.1 개선 요구사항 검토 및 일정 산정 참여"
+      - "v1.1 개선 요구사항 검토 및 일정 산정"
       - "권한 체계와 멀티 인터페이스 구조 설계"
     keyContributions:
       - problem: "고객용/직원용, 모바일/데스크톱용 인터페이스를 하나의 제품 안에서 함께 관리해야 했습니다."
@@ -164,6 +153,7 @@ featuredProjects:
         result: "제품 변형을 별도 프로젝트로 분리하지 않고도 일관된 개발 구조를 유지할 수 있었습니다."
         ownershipEvidence:
           - "v1.0 단계부터 초기 구조 설계 참여"
+          - "모노레포 구조 설계"
       - problem: "직원용 기능에는 조직 정보 기반 접근 제어가 필요했고, 별도 조직관리 시스템과의 연동이 요구되었습니다."
         action: "RBAC를 구현하며 기획/Auth/Backend 팀과 권한 정책 및 조직관리 시스템 연동 방식을 조율했습니다."
         result: "조직 정보 기반 접근 제어가 가능한 직원용 기능 구조를 마련했습니다."
@@ -174,7 +164,7 @@ featuredProjects:
         result: "개선 요구사항을 우선순위와 구현 범위 중심으로 정리할 수 있었습니다."
       - problem: "빠른 모바일 프로토타이핑을 위한 적절한 UI 기반이 필요했습니다."
         action: "Headless UI 라이브러리를 검토하고 Vaul 기반 Drawer 도입 가능성을 리서치·공유했습니다."
-        result: "모바일 UI 프로토타입 제작 속도를 높일 수 있는 선택지를 팀에 제안했습니다."
+        result: "모바일 UI 프로토타입 제작 속도를 높이고, 동시에 탁월한 Drawer UX를 제공했습니다."
     collaboration:
       - "기획/Auth/Backend와 요구사항·권한 구조 조율"
       - "모바일/데스크톱 인터페이스 공통 구조 논의"
@@ -184,7 +174,7 @@ featuredProjects:
     company: "메디컬에이아이"
     period: "2025.02 ~ 2025.04"
     scope: "tablet adaptation"
-    role: "Frontend Engineer"
+    role: "Frontend Developer"
     featured: true
     techStack:
       - "React"
@@ -197,12 +187,13 @@ featuredProjects:
       - "측정 UI 및 캘리퍼 기능 구현"
     keyContributions:
       - problem: "태블릿에서는 모든 입력이 손가락 터치 하나로 시작되어, 점 생성 / 줌 이동 / 정밀 측정의 의도를 시작 시점에 구분할 수 없었습니다."
-        action: "한 손가락 터치를 점 생성, 줌/이동, 정밀 측정으로 구분하는 상태 흐름과 판별 로직을 설계했습니다."
+        action: "터치 시작 시 타이머(800ms)와 시작 좌표를 기록하고, 이후 이벤트의 시간·이동량으로 의도를 판별하는 구조를 설계했습니다."
         result: "서로 다른 동작이 간섭하지 않는 터치 기반 측정 경험을 구현했습니다."
         ownershipEvidence:
           - "시간 × 이동량 기반 제스처 판별 구조 설계"
+          - "임계값 튜닝"
       - problem: "d3-zoom이 자체 이벤트 시스템으로 핀치 줌과 팬을 처리하고 있어 커스텀 인터랙션과 충돌이 발생했습니다."
-        action: "상태 기반 filter와 zoom 처리 제어 로직을 설계해 d3와 커스텀 터치 로직 간 이벤트 충돌을 해소했습니다."
+        action: "d3-zoom filter에 현재 상태를 주입해 커스텀 인터랙션 중에는 d3가 이벤트를 소비하지 않도록 제어했습니다. 또한 정밀 측정 중 d3 View Point가 밀리는 문제를 발견해 측정 후 좌표를 기존 상태로 복원하여 충돌을 해소했습니다."
         result: "줌/팬과 정밀 측정 기능을 동시에 유지하면서도 입력 충돌을 줄였습니다."
         ownershipEvidence:
           - "d3-zoom filter에 현재 상태 주입"
@@ -223,8 +214,8 @@ featuredProjects:
 work:
   - company: "메디컬에이아이"
     location: "서울"
-    department: "소프트웨어그룹 FE팀"
-    position: "Frontend Engineer"
+    department: "소프트웨어그룹 프로덕트본부 FE팀"
+    position: "Frontend Developer"
     startDate: "2024.11"
     endDate: ""
     achievementSummary:
@@ -234,22 +225,16 @@ work:
       - id: "ecg-labeling"
         name: "ECG-GRAPH Labeling Tool 개선"
         period: "2025.05 ~ 2025.07"
-        role: "Frontend Engineer"
+        role: "Frontend Developer"
         featured: false
         techStack:
           - "React"
           - "TypeScript"
         oneLiner: "심전도 그래프에 특정 지점을 표시해 학습용 데이터를 생성하는 라벨링 도구"
         keyContributions:
-          - problem: "마이그레이션 과정에서 추가 요구사항이 계속 발생했고, 개발 가능한 동작 단위로 정리할 필요가 있었습니다."
-            action: "초기 단계부터 참여해 추가 요구사항을 개발 단위로 명세화하고 화면 동작을 설계했습니다."
-            result: "이후 구현 범위를 명확히 정리한 상태로 개발을 진행할 수 있었습니다."
-          - problem: "대량의 Point를 다루는 화면에서 불필요한 계산이 누적되면 렌더링 비용이 커질 수 있었습니다."
+          - problem: "여러 Point를 다루는 화면에서 불필요한 계산이 누적되면 렌더링 비용이 커질 수 있었습니다."
             action: "불필요한 계산을 줄여 React reconciliation 비용을 낮췄습니다."
             result: "대량 포인트를 다루는 상호작용 화면에서 성능 부담을 줄였습니다."
-          - problem: "Drag, Zoom, Hover, Click, Keyboard 입력이 함께 동작하면서 충돌 가능성이 있었습니다."
-            action: "마우스와 키보드 입력이 충돌 없이 동작하도록 인터랙션을 구현했습니다."
-            result: "라벨링 작업 흐름을 하나의 화면에서 자연스럽게 처리할 수 있었습니다."
           - problem: "길이가 다른 ECG 데이터를 동일한 뷰포트에서 다루기 어려웠습니다."
             action: "Panning 기능을 추가했습니다."
             result: "다양한 길이의 데이터를 하나의 뷰포트에서 탐색할 수 있도록 개선했습니다."
@@ -257,45 +242,33 @@ work:
       - id: "ecg-svg-report"
         name: "ECG-GRAPH SVG Report Template"
         period: "2025.01 ~ 2025.02"
-        role: "Frontend Engineer"
+        role: "Frontend Developer"
         featured: false
         techStack:
           - "React"
           - "TypeScript"
         oneLiner: "정적인 템플릿 위에 동적인 내용을 그려 SVG 형태의 리포트를 생성하는 기능"
-        keyContributions:
-          - problem: "정적인 레이아웃과 동적인 데이터를 함께 다뤄야 하는 보고서 생성 기능이 필요했습니다."
-            action: "정적 템플릿 위에 동적 데이터를 조합해 SVG 형태의 리포트를 생성하는 구조를 구현했습니다."
-            result: "웹 기반에서 활용 가능한 SVG 보고서 생성 기능을 제공했습니다."
 
       - id: "test-environment"
         name: "테스트 환경 구성"
         period: "2025.01 ~ 2025.03"
-        role: "Frontend Engineer"
+        role: "Frontend Developer"
         featured: false
         techStack:
           - "Playwright"
           - "Vitest"
         oneLiner: "E2E 테스트 리서치와 테스트 실행 기반 정비"
-        keyContributions:
-          - problem: "제품 품질 검증을 위해 테스트 도구와 실행 방식을 정리할 필요가 있었습니다."
-            action: "Playwright, Vitest 기반 테스트 환경을 검토하고 적용 가능한 방향을 리서치했습니다."
-            result: "E2E 및 단위 테스트 환경의 기초를 마련했습니다."
 
       - id: "aitia-ews"
         name: "AiTiA EWS (Early Warning System)"
         period: "2024.12 ~ 2025.01"
-        role: "Frontend Engineer"
+        role: "Frontend Developer"
         featured: false
         techStack:
           - "React"
           - "TypeScript"
           - "TanStack Query"
         oneLiner: "중증센터에서 환자 정보를 입력하면 AI가 예측한 중증도를 조회할 수 있는 웹 애플리케이션"
-        keyContributions:
-          - problem: "의료진이 환자 정보를 입력하고 결과를 빠르게 조회할 수 있는 화면이 필요했습니다."
-            action: "환자 정보 입력과 결과 조회 흐름을 갖춘 웹 화면을 구현했습니다."
-            result: "AI 예측 결과를 확인할 수 있는 제품 초기 화면을 제공했습니다."
 
 sideProjects:
   - id: "vue-kakao-map-lib"
@@ -313,88 +286,15 @@ sideProjects:
       - "라이브러리 로컬 테스트 환경 구성 방법을 연구하고 팀 세션으로 공유"
     whyItMatters: "오픈소스 패키지 설계, 배포, 문서화, 개발 프로세스 정착 경험을 보여주는 사례"
 
-  - id: "vocal-range-service"
-    name: "음역대 기반 노래 추천 및 연습 서비스"
-    teamSize: 6
-    status: "awarded"
-    awardNote: "SSAFY 전국 지역 대상 발표"
-    description: "사용자의 음역대를 측정하고 유사한 음역의 노래를 추천·연습할 수 있는 서비스"
-    keyContributions:
-      - "FE 리드, 일정 관리, 컨벤션 수립"
-      - "프로젝트 기획/디자인, 시연/발표"
-      - "useFetch 훅 기반 통신 파이프 구성, 사용자 Flow 관리"
-      - "웹 오디오/마이크 환경의 버그 원인을 분석하고 workaround 적용"
-    whyItMatters: "리드 경험과 사용자 흐름 설계, 브라우저 입력 환경 디버깅 역량을 보여주는 사례"
-
   - id: "voting-system"
     name: "총학생회를 위한 투표 시스템"
     teamSize: 2
-    status: "in-progress"
+    status: "completed"
     description: "투표/회의가 필요한 집단에서 사용할 수 있는 웹 애플리케이션"
     keyContributions:
-      - "프로젝트 기획/디자인/프론트엔드 개발"
-      - "@shadcn/ui 기반 UX/UI 실험"
       - "실시간 이벤트(SSE) 및 Broadcast 처리"
+      - "SSE 데이터와 실제 데이터 정합성 유지 로직 구현"
     whyItMatters: "실시간 상호작용과 의사결정 흐름 중심 제품에 대한 관심을 보여주는 프로젝트"
-
-  - id: "personal-sites"
-    name: "정적 사이트 운영"
-    teamSize: 1
-    status: "in-progress"
-    description: "개인 사이트 및 상용 사이트를 직접 기획·디자인·개발·배포"
-    keyContributions:
-      - "콘텐츠 구조 설계"
-      - "UI/브랜딩 방향 설계"
-      - "정적 사이트 개발 및 운영"
-    whyItMatters: "개인 브랜딩과 제품 감각을 보여주는 지속형 프로젝트"
-
-  - id: "career-logging-automation"
-    name: "개발 기록 로깅 자동화"
-    teamSize: 1
-    status: "in-progress"
-    description: "기여도, 연봉협상, 프로젝트 기술서에 활용할 정량·정성 지표를 수집하는 Node.js 애플리케이션"
-    keyContributions:
-      - "GitLab/Jira API로 획득한 Issue/MR 정보를 Notion DB에 저장"
-      - "Notion DB 기반 View/Filter/Export 구조 활용"
-      - "LLM을 활용한 정성 지표 생성 가능성 검토"
-    whyItMatters: "개발 기록의 구조화와 자동화에 대한 관심, 메타 생산성 관점을 보여주는 프로젝트"
-
-deepDives:
-  - id: "tablet-gesture-disambiguation"
-    title: "한 손가락 터치로 여러 동작을 구분하기 ― 탭·롱프레스·드래그·핀치를 충돌 없이"
-    project: "ECG-GRAPH Ruler for Tablet"
-    problemStatement: "태블릿에서는 모든 입력이 손가락 터치 하나에서 시작되고, 동시에 d3-zoom이 핀치 줌·팬을 처리하고 있어 커스텀 인터랙션과 이벤트 충돌이 발생했습니다."
-    background:
-      - "데스크톱에서는 클릭, Ctrl+드래그, 휠 등으로 동작을 쉽게 구분할 수 있지만 태블릿에서는 모든 입력이 터치 하나로 시작됩니다."
-      - "터치 시작 시점에는 사용자의 의도(점 생성 / 그래프 이동 / 정밀 측정)를 알 수 없었습니다."
-      - "줌/팬과 정밀 측정을 모두 포기할 수 없는 의료진 사용 환경이었습니다."
-    execution:
-      - title: "제스처 판별: 시간 × 이동량 기반 사후 분류"
-        details:
-          - "터치 시작 시 타이머(800ms)와 시작 좌표를 기록하고, 이후 이벤트의 시간·이동량으로 의도를 판별하는 구조를 설계했습니다."
-          - "10px 이상 이동 시 드래그(Zoom/Pan), 800ms 이상 홀드 시 정밀 측정, 두 번째 손가락 감지 시 즉시 줌, 그 외는 탭으로 분기했습니다."
-          - "iPad / Android 태블릿에서 직접 테스트하며 임계값을 튜닝했습니다."
-      - title: "d3-zoom 이벤트 충돌 해소"
-        details:
-          - "d3-zoom filter에 현재 상태를 주입해 커스텀 인터랙션 중에는 d3가 이벤트를 소비하지 않도록 제어했습니다."
-          - "정밀 측정 중 zoom 이벤트로 SVG 전체가 밀리는 문제를 발견하고, transform 적용을 제어하고 마지막 상태로 복원하는 방식으로 충돌을 줄였습니다."
-      - title: "파형 근방 hit testing으로 오입력 방지"
-        details:
-          - "터치 y좌표와 ECG 파형 데이터 y좌표 간 거리를 계산해 유효한 터치 범위를 제한했습니다."
-          - "정밀 측정 모드에서는 이 제한을 해제해 측정 목적에 맞는 입력 허용 범위를 분기했습니다."
-      - title: "드래그 라이프사이클 훅 모듈화"
-        details:
-          - "document capture 단계에서 pointermove/pointerup을 처리하도록 설계했습니다."
-          - "모바일 전용 래퍼 훅으로 드래그 시작/종료 시 상태를 일관되게 전환하도록 만들었습니다."
-          - "캘리퍼, 버튼 그룹 등 여러 Draggable 요소가 동일한 훅을 공유하도록 구성했습니다."
-    impact:
-      - "탭·롱프레스·드래그·핀치 간 간섭 0건 (iPad / Android Tablet 시나리오 20건 이상 검증)"
-      - "임계값 튜닝 후 의료진의 오입력 리포트 0건"
-    skillsShown:
-      - "Interaction Design"
-      - "State Modeling"
-      - "D3 Event Control"
-      - "UX Validation"
 
 education:
   - institution: "연세대학교"
@@ -416,8 +316,8 @@ training:
     endDate: "2023.01"
 
 meta:
-  version: "2.0.0-draft"
-  lastModified: "2026-03-09"
+  version: "2.0.0"
+  lastModified: "2026-03-10"
   notes:
     - "기존 highlights 중심 구조를 문제-행동-결과 중심 구조로 재설계"
     - "interests 대신 positioning/coreStrengths로 전환"

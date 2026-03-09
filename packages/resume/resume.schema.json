@@ -3,7 +3,7 @@
   "title": "Resume",
   "description": "이력서 데이터 스키마 — resume.yaml 작성 시 자동완성 및 검증에 사용됩니다.",
   "type": "object",
-  "required": ["basics", "positioning", "experienceSummary", "skills", "featuredProjects", "work", "sideProjects", "deepDives", "education", "training", "meta"],
+  "required": ["basics", "positioning", "experienceSummary", "skills", "featuredProjects", "work", "sideProjects", "education", "training", "meta"],
   "additionalProperties": false,
   "definitions": {
     "metric": {
@@ -204,7 +204,7 @@
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["id", "name", "period", "role", "featured", "techStack", "oneLiner", "keyContributions"],
+              "required": ["id", "name", "period", "role", "featured", "techStack", "oneLiner"],
               "additionalProperties": false,
               "properties": {
                 "id": { "type": "string", "description": "고유 식별자" },
@@ -251,42 +251,6 @@
           },
           "keyContributions": { "type": "array", "items": { "type": "string" }, "description": "주요 기여/성과" },
           "whyItMatters": { "type": "string", "description": "이 프로젝트가 중요한 이유" }
-        }
-      }
-    },
-
-    "deepDives": {
-      "description": "경험과 고민 — 문제 정의·실행·결과 형식의 딥다이브",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["id", "title", "project", "problemStatement", "background", "execution", "impact", "skillsShown"],
-        "additionalProperties": false,
-        "properties": {
-          "id": { "type": "string", "description": "고유 식별자 (featuredProject에서 참조)" },
-          "title": { "type": "string", "description": "딥다이브 제목" },
-          "project": { "type": "string", "description": "관련 프로젝트명" },
-          "problemStatement": { "type": "string", "description": "문제 요약 한 줄" },
-          "background": {
-            "type": "array",
-            "items": { "type": "string" },
-            "description": "배경 — 왜 이 문제를 풀게 되었는지"
-          },
-          "execution": {
-            "description": "실행 — 구체적인 접근 방법",
-            "type": "array",
-            "items": { "$ref": "#/definitions/executionStep" }
-          },
-          "impact": {
-            "type": "array",
-            "items": { "type": "string" },
-            "description": "결과 — 정량/정성적 성과"
-          },
-          "skillsShown": {
-            "type": "array",
-            "items": { "type": "string" },
-            "description": "이 사례에서 드러나는 역량 키워드"
-          }
         }
       }
     },
