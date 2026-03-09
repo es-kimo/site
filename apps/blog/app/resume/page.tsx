@@ -1,6 +1,6 @@
 import { getResumeData } from "@workspace/resume/data";
 import { toJsonLd } from "@workspace/resume/generators/json-ld";
-import type { ResumeData, WorkProject, SideProject, CaseStudy, ExecutionStep } from "@workspace/resume/types";
+import type { ResumeData, WorkProject, SideProject, DeepDive, ExecutionStep, FeaturedProject, KeyContribution } from "@workspace/resume/types";
 import type { Metadata } from "next";
 import { cn } from "@workspace/ui/lib/utils";
 import { getLanguage } from "@/lib/language";
@@ -117,6 +117,67 @@ function BulletList({ items }: { items: string[] }) {
 
 // ── Sub-components ──────────────────────────────────────────────────────────
 
+function KeyContributionItem({ contribution }: { contribution: KeyContribution }) {
+  return (
+    <div className="mb-3 last:mb-0">
+      <p className="text-sm text-foreground/80">
+        <span className="text-muted-foreground font-medium">문제:</span> {parseInlineMarkdown(contribution.problem)}
+      </p>
+      <p className="text-sm text-foreground/80">
+        <span className="text-muted-foreground font-medium">행동:</span> {parseInlineMarkdown(contribution.action)}
+      </p>
+      <p className="text-sm text-foreground/80">
+        <span className="text-muted-foreground font-medium">결과:</span> {parseInlineMarkdown(contribution.result)}
+      </p>
+      {contribution.ownershipEvidence && contribution.ownershipEvidence.length > 0 && (
+        <div className="mt-1 flex flex-wrap gap-1">
+          {contribution.ownershipEvidence.map((e, i) => (
+            <Badge key={i}>{e}</Badge>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FeaturedProjectCard({ project }: { project: FeaturedProject }) {
+  return (
+    <div className="mb-8 last:mb-0 print:mb-4 print:break-inside-avoid">
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <h3 className="text-base font-semibold">{project.name}</h3>
+        <span className="text-xs text-muted-foreground">{project.company}</span>
+      </div>
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mt-0.5">
+        <span className="text-sm text-foreground/80">{project.role}</span>
+        <span className="text-xs text-muted-foreground">
+          {project.period} · {project.scope}
+        </span>
+      </div>
+      <p className="text-sm text-foreground/80 mt-1.5">{parseInlineMarkdown(project.oneLiner)}</p>
+      <div className="mt-2">
+        {project.techStack.map((tech) => (
+          <Badge key={tech}>{tech}</Badge>
+        ))}
+      </div>
+      {project.responsibilities.length > 0 && <BulletList items={project.responsibilities} />}
+      {project.keyContributions.length > 0 && (
+        <div className="mt-3">
+          <p className="text-xs font-semibold text-muted-foreground mb-2">핵심 기여</p>
+          {project.keyContributions.map((kc, i) => (
+            <KeyContributionItem key={i} contribution={kc} />
+          ))}
+        </div>
+      )}
+      {project.collaboration && project.collaboration.length > 0 && (
+        <div className="mt-2">
+          <p className="text-xs font-semibold text-muted-foreground mb-1">협업</p>
+          <BulletList items={project.collaboration} />
+        </div>
+      )}
+    </div>
+  );
+}
+
 function WorkProjectCard({ project }: { project: WorkProject }) {
   return (
     <div className="mb-5 last:mb-0 print:mb-3 print:break-inside-avoid">
@@ -129,12 +190,12 @@ function WorkProjectCard({ project }: { project: WorkProject }) {
           <Badge key={tech}>{tech}</Badge>
         ))}
       </div>
-      {project.description && <p className="text-sm text-foreground/80 mt-1.5">{parseInlineMarkdown(project.description)}</p>}
-      <BulletList items={project.highlights} />
-      {(project.commits || project.linesChanged) && (
-        <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
-          {project.commits && <span>commits: {project.commits}</span>}
-          {project.linesChanged && <span>lines changed: {project.linesChanged}</span>}
+      <p className="text-sm text-foreground/80 mt-1.5">{parseInlineMarkdown(project.oneLiner)}</p>
+      {project.keyContributions.length > 0 && (
+        <div className="mt-2">
+          {project.keyContributions.map((kc, i) => (
+            <KeyContributionItem key={i} contribution={kc} />
+          ))}
         </div>
       )}
     </div>
@@ -151,25 +212,27 @@ function SideProjectCard({ project }: { project: SideProject }) {
       </div>
       {project.awardNote && <p className="text-xs text-amber-700 dark:text-amber-400 mt-0.5">*{project.awardNote}</p>}
       <p className="text-sm text-foreground/80 mt-1">{parseInlineMarkdown(project.description)}</p>
-      <BulletList items={project.highlights} />
+      <BulletList items={project.keyContributions} />
+      <p className="text-xs text-muted-foreground mt-1.5 italic">{project.whyItMatters}</p>
     </div>
   );
 }
 
-function CaseStudyCard({ study }: { study: CaseStudy }) {
+function DeepDiveCard({ study }: { study: DeepDive }) {
   return (
     <div className="mb-8 last:mb-0 print:mb-4 print:break-inside-avoid">
       <h3 className="font-medium text-sm">{study.title}</h3>
       <p className="text-xs text-muted-foreground mt-0.5">{study.project}</p>
+      <p className="text-sm text-foreground/80 mt-1">{parseInlineMarkdown(study.problemStatement)}</p>
 
       <div className="mt-3 space-y-3">
         <div>
-          <p className="text-xs font-semibold text-muted-foreground mb-1">배경 (Why)</p>
+          <p className="text-xs font-semibold text-muted-foreground mb-1">배경</p>
           <BulletList items={study.background} />
         </div>
 
         <div>
-          <p className="text-xs font-semibold text-muted-foreground mb-1">실행 (How)</p>
+          <p className="text-xs font-semibold text-muted-foreground mb-1">실행</p>
           {study.execution.map((step: ExecutionStep, i: number) => (
             <div key={i} className="mb-2 last:mb-0">
               <p className="text-sm font-medium text-foreground/90">{step.title}</p>
@@ -179,9 +242,17 @@ function CaseStudyCard({ study }: { study: CaseStudy }) {
         </div>
 
         <div>
-          <p className="text-xs font-semibold text-muted-foreground mb-1">결과 (Impact)</p>
+          <p className="text-xs font-semibold text-muted-foreground mb-1">결과</p>
           <BulletList items={study.impact} />
         </div>
+
+        {study.skillsShown.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {study.skillsShown.map((skill) => (
+              <Badge key={skill}>{skill}</Badge>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -229,19 +300,18 @@ export default async function ResumePage() {
           </div>
         </header>
 
-        {/* ── 관심 분야 ──────────────────────────────────────────── */}
-        {data.interests.length > 0 && (
-          <Section title="관심 분야">
-            <div className="space-y-2">
-              {data.interests.map((interest) => (
-                <div key={interest.name}>
-                  <h3 className="text-sm font-medium">{interest.name}</h3>
-                  <p className="text-sm text-foreground/80 mt-0.5">{parseInlineMarkdown(interest.description)}</p>
-                </div>
-              ))}
-            </div>
-          </Section>
-        )}
+        {/* ── 포지셔닝 ──────────────────────────────────────────── */}
+        <Section title="포지셔닝">
+          <p className="text-sm font-medium text-foreground/90 mb-2">{data.positioning.headline}</p>
+          <div className="space-y-2">
+            {data.positioning.coreStrengths.map((strength) => (
+              <div key={strength.id}>
+                <h3 className="text-sm font-medium">{strength.title}</h3>
+                <p className="text-sm text-foreground/80 mt-0.5">{parseInlineMarkdown(strength.description)}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
 
         {/* ── 학력사항 & 직무관련 경험 (2-column) ──────────────── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 mb-10">
@@ -282,18 +352,21 @@ export default async function ResumePage() {
           )}
         </div>
 
-        {/* ── 기타 / 자격 ────────────────────────────────────────── */}
+        {/* ── 기술 스택 ────────────────────────────────────────── */}
         {(() => {
-          const q = data.qualifications;
+          const sk = data.skills;
           const entries = [
-            q.design.length > 0 && { label: "디자인", value: q.design.join(", ") },
-            q.collaboration.length > 0 && { label: "협업", value: q.collaboration.join(", ") },
-            q.certifications.length > 0 && { label: "자격증", value: q.certifications.join(", ") },
-            q.english.length > 0 && { label: "영어", value: q.english.join(", ") },
+            sk.frontend.length > 0 && { label: "Frontend", value: sk.frontend.join(", ") },
+            sk.testing.length > 0 && { label: "Testing", value: sk.testing.join(", ") },
+            sk.tooling.length > 0 && { label: "Tooling", value: sk.tooling.join(", ") },
+            sk.design.length > 0 && { label: "디자인", value: sk.design.join(", ") },
+            sk.collaboration.length > 0 && { label: "협업", value: sk.collaboration.join(", ") },
+            sk.certifications.length > 0 && { label: "자격증", value: sk.certifications.join(", ") },
+            sk.english.length > 0 && { label: "영어", value: sk.english.join(", ") },
           ].filter(Boolean) as { label: string; value: string }[];
           if (entries.length === 0) return null;
           return (
-            <Section title="기타 / 자격">
+            <Section title="기술 스택">
               <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm">
                 {entries.map((e) => (
                   <span key={e.label}>
@@ -304,6 +377,15 @@ export default async function ResumePage() {
             </Section>
           );
         })()}
+
+        {/* ── 대표 프로젝트 ──────────────────────────────────── */}
+        {data.featuredProjects.length > 0 && (
+          <Section title="대표 프로젝트">
+            {data.featuredProjects.map((proj) => (
+              <FeaturedProjectCard key={proj.id} project={proj} />
+            ))}
+          </Section>
+        )}
 
         {/* ── 경력사항 ──────────────────────────────────────────── */}
         {data.work.length > 0 && (
@@ -331,9 +413,9 @@ export default async function ResumePage() {
                 {/* Projects */}
                 {job.projects.length > 0 && (
                   <div className="mt-5">
-                    <p className="text-xs font-semibold text-muted-foreground mb-3">참여 프로젝트</p>
+                    <p className="text-xs font-semibold text-muted-foreground mb-3">기타 프로젝트</p>
                     {job.projects.map((proj) => (
-                      <WorkProjectCard key={proj.name} project={proj} />
+                      <WorkProjectCard key={proj.id} project={proj} />
                     ))}
                   </div>
                 )}
@@ -346,16 +428,16 @@ export default async function ResumePage() {
         {data.sideProjects.length > 0 && (
           <Section title="사이드 프로젝트 경험">
             {data.sideProjects.map((proj) => (
-              <SideProjectCard key={proj.name} project={proj} />
+              <SideProjectCard key={proj.id} project={proj} />
             ))}
           </Section>
         )}
 
         {/* ── 경험과 고민 ──────────────────────────────────────── */}
-        {data.caseStudies.length > 0 && (
+        {data.deepDives.length > 0 && (
           <Section title="경험과 고민">
-            {data.caseStudies.map((cs) => (
-              <CaseStudyCard key={cs.title} study={cs} />
+            {data.deepDives.map((dd) => (
+              <DeepDiveCard key={dd.id} study={dd} />
             ))}
           </Section>
         )}

@@ -2,7 +2,7 @@ import type { ResumeData } from "../types.js";
 
 /**
  * ResumeData → JSON Resume 표준에 가깝게 변환합니다.
- * 표준에 없는 필드(caseStudies, training 등)는 커스텀 키로 포함합니다.
+ * 표준에 없는 필드(deepDives, training 등)는 커스텀 키로 포함합니다.
  * https://jsonresume.org/schema
  */
 export function toJsonResume(data: ResumeData): Record<string, unknown> {
@@ -27,15 +27,6 @@ export function toJsonResume(data: ResumeData): Record<string, unknown> {
       startDate: job.startDate,
       endDate: job.endDate || undefined,
       highlights: job.achievementSummary,
-      projects: job.projects.map((proj) => ({
-        name: proj.name,
-        period: proj.period,
-        techStack: proj.techStack,
-        description: proj.description,
-        highlights: proj.highlights,
-        commits: proj.commits || undefined,
-        linesChanged: proj.linesChanged || undefined,
-      })),
     })),
     education: data.education.map((edu) => ({
       institution: edu.institution,
@@ -43,6 +34,11 @@ export function toJsonResume(data: ResumeData): Record<string, unknown> {
       startDate: edu.startDate,
       endDate: edu.endDate || undefined,
     })),
+    skills: [
+      { name: "Frontend", keywords: data.skills.frontend },
+      { name: "Testing", keywords: data.skills.testing },
+      { name: "Tooling", keywords: data.skills.tooling },
+    ],
     // 표준 외 확장 필드
     training: data.training.map((t) => ({
       institution: t.institution,
@@ -50,28 +46,26 @@ export function toJsonResume(data: ResumeData): Record<string, unknown> {
       startDate: t.startDate,
       endDate: t.endDate || undefined,
     })),
-    interests: data.interests.map((i) => ({
-      name: i.name,
-      description: i.description,
-    })),
     projects: data.sideProjects.map((p) => ({
       name: p.name,
       description: p.description,
-      highlights: p.highlights,
+      highlights: p.keyContributions,
       teamSize: p.teamSize,
       status: p.status,
       awardNote: p.awardNote || undefined,
     })),
-    caseStudies: data.caseStudies.map((cs) => ({
-      title: cs.title,
-      project: cs.project,
-      background: cs.background,
-      execution: cs.execution,
-      impact: cs.impact,
+    deepDives: data.deepDives.map((dd) => ({
+      title: dd.title,
+      project: dd.project,
+      problemStatement: dd.problemStatement,
+      background: dd.background,
+      execution: dd.execution,
+      impact: dd.impact,
+      skillsShown: dd.skillsShown,
     })),
 
     meta: {
-      canonical: data.meta.canonical,
+      canonical: data.basics.canonical,
       version: data.meta.version,
       lastModified: data.meta.lastModified,
     },

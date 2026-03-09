@@ -8,6 +8,11 @@ import type { ResumeData } from "../types.js";
 export function toJsonLd(data: ResumeData): Record<string, unknown> {
   // 모든 기술 스택 키워드를 수집
   const allTechKeywords = new Set<string>();
+  for (const proj of data.featuredProjects) {
+    for (const tech of proj.techStack) {
+      allTechKeywords.add(tech);
+    }
+  }
   for (const job of data.work) {
     for (const proj of job.projects) {
       for (const tech of proj.techStack) {
@@ -15,8 +20,11 @@ export function toJsonLd(data: ResumeData): Record<string, unknown> {
       }
     }
   }
-  for (const d of data.qualifications.design) allTechKeywords.add(d);
-  for (const c of data.qualifications.collaboration) allTechKeywords.add(c);
+  for (const tech of data.skills.frontend) allTechKeywords.add(tech);
+  for (const tech of data.skills.testing) allTechKeywords.add(tech);
+  for (const tech of data.skills.tooling) allTechKeywords.add(tech);
+  for (const d of data.skills.design) allTechKeywords.add(d);
+  for (const c of data.skills.collaboration) allTechKeywords.add(c);
 
   return {
     "@context": "https://schema.org",
@@ -55,7 +63,7 @@ export function toJsonLd(data: ResumeData): Record<string, unknown> {
       startDate: job.startDate,
       ...(job.endDate ? { endDate: job.endDate } : {}),
     })),
-    hasCredential: data.qualifications.certifications.map((cert) => ({
+    hasCredential: data.skills.certifications.map((cert) => ({
       "@type": "EducationalOccupationalCredential",
       name: cert,
     })),
