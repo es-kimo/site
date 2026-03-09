@@ -320,6 +320,14 @@ export default async function ResumePage() {
                 </p>
                 <DateRange start={job.startDate} end={job.endDate} />
 
+                {/* Achievement summary */}
+                {job.achievementSummary.length > 0 && (
+                  <div className="mt-5 p-3 rounded-md bg-muted/50">
+                    <p className="text-xs font-semibold text-muted-foreground mb-1">주요 성과 요약</p>
+                    <BulletList items={job.achievementSummary} />
+                  </div>
+                )}
+
                 {/* Projects */}
                 {job.projects.length > 0 && (
                   <div className="mt-5">
@@ -327,14 +335,6 @@ export default async function ResumePage() {
                     {job.projects.map((proj) => (
                       <WorkProjectCard key={proj.name} project={proj} />
                     ))}
-                  </div>
-                )}
-
-                {/* Achievement summary */}
-                {job.achievementSummary.length > 0 && (
-                  <div className="mt-5 p-3 rounded-md bg-muted/50">
-                    <p className="text-xs font-semibold text-muted-foreground mb-1">주요 성과 요약</p>
-                    <BulletList items={job.achievementSummary} />
                   </div>
                 )}
               </div>
