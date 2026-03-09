@@ -1,7 +1,7 @@
 import { getLanguage } from "@/lib/language";
 import { getResumeData } from "@workspace/resume/data";
 import { toJsonLd } from "@workspace/resume/generators/json-ld";
-import type { FeaturedProject, KeyContribution, ResumeData, SideProject, WorkProject } from "@workspace/resume/types";
+import type { FeaturedProject, KeyContribution, ResumeData, SideProject } from "@workspace/resume/types";
 import { cn } from "@workspace/ui/lib/utils";
 import type { Metadata } from "next";
 
@@ -190,32 +190,6 @@ function FeaturedProjectCard({ project }: { project: FeaturedProject }) {
   );
 }
 
-function WorkProjectCard({ project }: { project: WorkProject }) {
-  return (
-    <div className="mb-6 last:mb-0 print:mb-3 ">
-      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <h4 className="text-sm font-semibold">{project.name}</h4>
-        <DateRange period={project.period} />
-      </div>
-      <div className="flex flex-wrap gap-1 mt-1.5">
-        {project.techStack.map((tech) => (
-          <Tag key={tech} variant="accent">
-            {tech}
-          </Tag>
-        ))}
-      </div>
-      <p className="text-sm text-foreground/75 mt-2 leading-relaxed">{parseInlineMarkdown(project.oneLiner)}</p>
-      {project.keyContributions && project.keyContributions.length > 0 && (
-        <div className="mt-3">
-          {project.keyContributions.map((kc, i) => (
-            <ContributionCard key={i} contribution={kc} index={i} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 function SideProjectCard({ project }: { project: SideProject }) {
   return (
     <div className="mb-6 last:mb-0 ">
@@ -319,42 +293,6 @@ export default async function ResumePage() {
             </div>
           </Section>
         )}
-
-        {/* ── 경력 사항 ──────────────────────────────────────────── */}
-        {/* {data.work.length > 0 && (
-          <Section title="경력 사항">
-            {data.work.map((job) => (
-              <div key={`${job.company}-${job.startDate}`} className="mb-8 last:mb-0">
-                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  <h3 className="text-[15px] font-semibold">{job.company}</h3>
-                  <span className="text-xs text-muted-foreground">{job.location}</span>
-                  <span className="ml-auto">
-                    <DateRange start={job.startDate} end={job.endDate} />
-                  </span>
-                </div>
-                <p className="text-sm text-muted-foreground mt-0.5">
-                  {job.department} · {job.position}
-                </p>
-
-                {job.achievementSummary.length > 0 && (
-                  <div className="mt-4 rounded-md bg-muted/40 p-3 print:bg-gray-50 print:p-2">
-                    <p className="text-xs font-semibold text-muted-foreground mb-1.5">성과 요약</p>
-                    <BulletList items={job.achievementSummary} />
-                  </div>
-                )}
-
-                {job.projects.length > 0 && (
-                  <div className="mt-6">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">참여 프로젝트</p>
-                    {job.projects.map((proj) => (
-                      <WorkProjectCard key={proj.id} project={proj} />
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </Section>
-        )} */}
 
         {/* ── 개인 프로젝트 ──────────────────────────────────── */}
         {data.sideProjects.length > 0 && (
