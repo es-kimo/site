@@ -76,8 +76,8 @@ export interface WorkProject {
   techStack: string[];
   description: string;
   highlights: string[];
-  commits: string;
-  linesChanged: string;
+  commits?: string;
+  linesChanged?: string;
 }
 
 export interface WorkExperience {
@@ -87,7 +87,7 @@ export interface WorkExperience {
   position: string;
   startDate: string;
   endDate: string;
-  contributionMetrics: ContributionMetrics;
+  contributionMetrics?: ContributionMetrics;
   achievementSummary: string[];
   projects: WorkProject[];
 }

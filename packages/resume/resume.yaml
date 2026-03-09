@@ -33,11 +33,6 @@ education:
     area: "문과대학 중어중문학과"
     startDate: "2018.03"
     endDate: "2023.08"
-  - institution: "명덕외국어고등학교"
-    location: "서울"
-    area: "프랑스어과"
-    startDate: "2015.03"
-    endDate: "2018.02"
 
 training:
   - institution: "SSAFY 삼성청년소프트웨어 아카데미"
@@ -69,15 +64,7 @@ work:
     position: "Frontend Engineer"
     startDate: "2024.11"
     endDate: ""
-    contributionMetrics:
-      period: "3개월 평균"
-      items:
-        - label: "Merged MR"
-          value: "27개"
-        - label: "MR Approvals"
-          value: "64개"
     achievementSummary:
-      - "참여 프로젝트의 Commit 평균 기여도 40% 이상"
       - "라이브 배포 6건"
       - "심전도 그래프 라이브러리의 테스트 커버리지 20% 향상"
     projects:
@@ -95,8 +82,6 @@ work:
           - "직원용 Role Based Access Control 을 구현하면서 기획/Auth/BE 팀과 긴밀히 협업하여 사내 *조직관리 시스템*과 연결되는 시스템 구축"
           - "고객용/직원용, 모바일용/데스크톱용 인터페이스를 하나의 레포 안에서 관리하기 위한 구조 설계"
           - "빠른 모바일 웹 프로토타입 개발을 위해 Headless 라이브러리 리서치 및 공유 (Vaul - Drawer 컴포넌트)"
-        commits: "451 (65.3%)"
-        linesChanged: "49869 (62.4%)"
 
       - name: "판매관리 시스템"
         period: "2025.09 ~ 2025.12"
@@ -115,8 +100,6 @@ work:
           - "대용량 스트리밍 파일 다운로드 로직 구현"
           - "서버 부하를 줄이기 위해 zip 파일 암호화를 클라이언트 단에서 수행 (윈도우/맥 지원)"
           - "변경이 잦은 개발 환경에서 끊김없는 코드 리뷰 경험을 위해 API 모킹 커버리지 90% 이상 유지"
-        commits: "348 (34.6%)"
-        linesChanged: "29843 (22.9%)"
 
       - name: "ECG-GRAPH Labeling Tool 개선"
         period: "2025.05 ~ 2025.07"
@@ -126,12 +109,9 @@ work:
         description: "심전도 그래프에 특정 지점을 표시하여 학습용 데이터를 생성하는 라벨링 도구"
         highlights:
           - "마이그레이션 버전(v0.0.1) 개발부터 참여하여, 추가 요구사항을 직접 명세화하면서 UI/UX 설계"
-          - "심전도 그래프의 구성 요소 등 도메인 지식 학습 수반"
-          - "대량의 점(Point)을 관리하면서, 리액트가 key를 활용한 렌더링 성능을 유지할 수 있도록 불필요한 계산 제거"
+          - "대량의 점(Point)을 관리하면서, React key 기반 reconciliation 성능을 유지할 수 있도록 불필요한 계산 제거"
           - "마우스 입력(Drag, Zoom, Hover, Click)과 키보드 입력이 복합적으로 사용되는 인터랙션 구현"
-          - "다양한 길이의 심전도 그래프를 한 가지 뷰포트 내에서 모두 처리할 수 있도록 Panning 기능을 개발하여 UX 개선"
-        commits: "72 (44.5%)"
-        linesChanged: "4190 (32.5%)"
+          - "다양한 길이의 데이터를 한 가지 뷰포트에서 처리할 수 있도록 Panning 기능을 개발하여 UX 개선"
 
       - name: "ECG-GRAPH Ruler for Tablet"
         period: "2025.02 ~ 2025.04"
@@ -147,8 +127,6 @@ work:
           - "측정한 길이/높이를 줄자처럼 이동하며 비교할 수 있는 '캘리퍼' 요소를 이동, 삭제하는 기능 구현"
           - "줌 인/아웃 비율에 따라 요소들의 크기를 결정하는 계산 로직 개발"
           - "파형 근방의 유효한 터치 범위를 설정하여 사용자 입력이 의도한 요소에 정확히 반응하도록 UX 개선"
-        commits: "121 (59.3%)"
-        linesChanged: "8218 (38.9%)"
 
       - name: "ECG-GRAPH SVG Report Template"
         period: "2025.01 ~ 2025.02"
@@ -159,9 +137,7 @@ work:
         highlights:
           - "동적인 데이터를 파라미터로 받아, 정적인 템플릿 위에 내용을 작성해 svg 형태의 레포트로 반환하는 함수 개발"
           - "svg 레이어 간의 계층 관계를 정의하고, 부모 레이어 기준 Offset으로 레이어의 좌표를 계산하여 배치하는 시스템 구축"
-          - "병원/검진기관의 온프레미스 환경에서 응답속도 1s 이내로 유지"
-        commits: "20 (100%)"
-        linesChanged: "870"
+          - "온프레미스 환경에서 응답속도 1s 이내로 유지"
 
       - name: "테스트 환경 구성"
         period: "2025.01 ~ 2025.03"
@@ -172,8 +148,6 @@ work:
         highlights:
           - "E2E 테스트에 관한 기술 리서치 및 퍼포먼스 테스트 → 팀내 공유 세션 진행"
           - "ECG-GRAPH 라이브러리의 코어 컴포넌트에 대해 Vitest 기반 Unit test 작성"
-        commits: ""
-        linesChanged: ""
 
       - name: "AiTiA EWS (Early Warning System)"
         period: "2024.12 ~ 2025.01"
@@ -185,8 +159,6 @@ work:
         highlights:
           - "소규모 국책과제로서 1인으로 모든 프론트엔드 개발을 맡아 수행"
           - "사내 컴포넌트 라이브러리의 이전 버전 dependency 로 인해 발생하는 breaking changes 를 발견하고 적극적으로 해결"
-        commits: "80 (81.6%)"
-        linesChanged: "23524 (99.2%)"
 
 sideProjects:
   - name: "지도 API 컴포넌트화 라이브러리"
@@ -206,15 +178,6 @@ sideProjects:
     highlights:
       - "FE리드/일정관리/컨벤션수립, 프로젝트 기획/디자인, 시연/발표, useFetch 훅으로 통신 파이프 구축, 유저 Flow 관리"
       - "웹 오디오/마이크 단에서 발생하는 버그(음원 싱크 어긋남, 음역 테스트 시 과부하) 원인을 분석하고, Workaround로 해결"
-
-  - name: "웹 2D 물고기 서바이벌 게임"
-    teamSize: 6
-    status: "completed"
-    awardNote: ""
-    description: "최대 16명이 동시에 플레이 할 수 있는 키보드 기반 물고기 서바이벌 게임"
-    highlights:
-      - "게임 맵 기획/디자인/개발, 캐릭터 진화 시스템 기획/디자인/개발"
-      - "외부 툴로 제작한 게임 맵 디자인을 JSON으로 변환하여 웹 환경에 Integration"
 
   - name: "총학생회를 위한 투표 시스템"
     teamSize: 2
@@ -274,6 +237,6 @@ caseStudies:
       - "임계값 튜닝 후 의료진의 오입력 리포트 0건"
 
 meta:
-  version: "1.3.0"
-  lastModified: "2026-03-07"
+  version: "1.3.1"
+  lastModified: "2026-03-09"
   canonical: "https://khryu.dev/resume"

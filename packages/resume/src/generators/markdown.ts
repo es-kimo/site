@@ -82,7 +82,7 @@ export function toMarkdown(data: ResumeData): string {
       lines.push("");
 
       // Contribution metrics
-      if (job.contributionMetrics.items.length > 0) {
+      if (job.contributionMetrics && job.contributionMetrics.items.length > 0) {
         lines.push(`**기여사항 (${job.contributionMetrics.period})**`);
         lines.push("");
         for (const m of job.contributionMetrics.items) {
@@ -185,16 +185,6 @@ export function toMarkdown(data: ResumeData): string {
       }
       lines.push("");
     }
-  }
-
-  // ── Languages ─────────────────────────────────────────────────────────────
-  if (data.languages.length > 0) {
-    lines.push("## Languages");
-    lines.push("");
-    for (const lang of data.languages) {
-      lines.push(`- ${lang.language} (${lang.fluency})`);
-    }
-    lines.push("");
   }
 
   return lines.join("\n").trim() + "\n";

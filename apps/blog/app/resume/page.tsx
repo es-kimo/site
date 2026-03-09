@@ -320,20 +320,6 @@ export default async function ResumePage() {
                 </p>
                 <DateRange start={job.startDate} end={job.endDate} />
 
-                {/* Contribution metrics */}
-                {job.contributionMetrics.items.length > 0 && (
-                  <div className="mt-3 p-3 rounded-md bg-muted/50">
-                    <p className="text-xs font-semibold text-muted-foreground mb-1">기여사항 ({job.contributionMetrics.period})</p>
-                    <div className="flex gap-6">
-                      {job.contributionMetrics.items.map((m) => (
-                        <div key={m.label} className="text-sm">
-                          <span className="text-muted-foreground">{m.label}:</span> <span className="font-medium">{m.value}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
                 {/* Projects */}
                 {job.projects.length > 0 && (
                   <div className="mt-5">

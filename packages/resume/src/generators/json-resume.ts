@@ -69,10 +69,7 @@ export function toJsonResume(data: ResumeData): Record<string, unknown> {
       execution: cs.execution,
       impact: cs.impact,
     })),
-    languages: data.languages.map((l) => ({
-      language: l.language,
-      fluency: l.fluency,
-    })),
+
     meta: {
       canonical: data.meta.canonical,
       version: data.meta.version,

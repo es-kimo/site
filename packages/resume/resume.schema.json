@@ -101,7 +101,7 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["company", "location", "department", "position", "startDate", "endDate", "contributionMetrics", "achievementSummary", "projects"],
+        "required": ["company", "location", "department", "position", "startDate", "endDate", "achievementSummary", "projects"],
         "additionalProperties": false,
         "properties": {
           "company": { "type": "string", "description": "회사명" },
@@ -141,7 +141,7 @@
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["name", "period", "techStack", "description", "highlights", "commits", "linesChanged"],
+              "required": ["name", "period", "techStack", "description", "highlights"],
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string", "description": "프로젝트명" },
