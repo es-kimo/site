@@ -169,3 +169,50 @@
     }
   }
 }
+
+/* ── Print ──────────────────────────────────────────────────────────────── */
+@media print {
+  /* Force light theme colors */
+  :root {
+    color-scheme: light !important;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 0 0 31%;
+    --border: 214.3 31.8% 91.4%;
+  }
+
+  /* Reset page layout */
+  body {
+    background: white !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Remove outer padding/container & DynamicIsland */
+  .max-w-blog {
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Hide non-print elements */
+  [data-dynamic-island],
+  nav,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Links — keep text, remove underline */
+  a {
+    text-decoration: none !important;
+    color: inherit !important;
+  }
+
+  /* Page margins */
+  @page {
+    size: A4;
+    margin: 15mm 18mm;
+  }
+}

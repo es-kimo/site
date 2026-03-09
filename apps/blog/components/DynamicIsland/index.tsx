@@ -1,6 +1,5 @@
 "use client";
 
-import { type Language } from "@/lib/language";
 import { cn } from "@workspace/ui/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
 import { usePathname } from "next/navigation";
@@ -8,35 +7,36 @@ import { useMemo } from "react";
 import { HomeIsland } from "./Home";
 import { IdleIsland } from "./Idle";
 import { ReaderIsland } from "./Reader";
+import { ResumeIsland } from "./Resume";
 
-interface DynamicIslandProps {
-  language: Language;
-}
-
-export const DynamicIsland = ({ language }: DynamicIslandProps) => {
+export const DynamicIsland = () => {
   const pathname = usePathname();
   const isReader = pathname.match(/^\/writing\/.+\/.+$/);
   const isHome = pathname === "/";
+  const isResume = pathname === "/resume";
 
   const view = useMemo(() => {
     if (isReader) return "reader";
     if (isHome) return "home";
+    if (isResume) return "resume";
     return "idle";
-  }, [isReader, isHome]);
+  }, [isReader, isHome, isResume]);
 
   const content = useMemo(() => {
     switch (view) {
       case "reader":
         return <ReaderIsland />;
       case "home":
-        return <HomeIsland language={language} />;
+        return <HomeIsland />;
+      case "resume":
+        return <ResumeIsland />;
       case "idle":
         return <IdleIsland />;
     }
-  }, [view, language]);
+  }, [view]);
 
   return (
-    <div className="fixed top-1.5 left-1/2 -translate-x-1/2 z-50 w-fit" style={{ maxWidth: "min(calc(100vw - 12px), var(--blog-max-w))" }}>
+    <div className="fixed top-1.5 left-1/2 -translate-x-1/2 z-50 w-fit" data-dynamic-island style={{ maxWidth: "min(calc(100vw - 12px), var(--blog-max-w))" }}>
       <motion.div
         layout
         transition={{
@@ -46,7 +46,7 @@ export const DynamicIsland = ({ language }: DynamicIslandProps) => {
         style={{
           borderRadius: 6,
         }}
-        className="shadow-lg dark:shadow-slate-800 overflow-hidden"
+        className="shadow-lg dark:shadow-slate-900 overflow-hidden"
       >
         <div className="absolute overflow-hidden w-full h-full rounded-md">
           <div className={cn("absolute w-full h-full")}>
