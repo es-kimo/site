@@ -2,38 +2,32 @@
 
 import { cn } from "@workspace/ui/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
-import { usePathname } from "next/navigation";
-import { useMemo } from "react";
+import { useSelectedLayoutSegments } from "next/navigation";
 import { HomeIsland } from "./Home";
 import { IdleIsland } from "./Idle";
 import { ReaderIsland } from "./Reader";
 import { ResumeIsland } from "./Resume";
 
+type View = "home" | "resume" | "reader" | "idle";
+
+function deriveView(segments: string[]): View {
+  const [domain] = segments;
+  if (!domain) return "home";
+  if (domain === "resume") return "resume";
+  if (domain === "writing" && segments[1] === "(post)") return "reader";
+  return "idle";
+}
+
+const viewComponents: Record<View, React.ReactNode> = {
+  home: <HomeIsland />,
+  resume: <ResumeIsland />,
+  reader: <ReaderIsland />,
+  idle: <IdleIsland />,
+};
+
 export const DynamicIsland = () => {
-  const pathname = usePathname();
-  const isReader = pathname.match(/^\/writing\/.+\/.+$/);
-  const isHome = pathname === "/";
-  const isResume = pathname === "/resume";
-
-  const view = useMemo(() => {
-    if (isReader) return "reader";
-    if (isHome) return "home";
-    if (isResume) return "resume";
-    return "idle";
-  }, [isReader, isHome, isResume]);
-
-  const content = useMemo(() => {
-    switch (view) {
-      case "reader":
-        return <ReaderIsland />;
-      case "home":
-        return <HomeIsland />;
-      case "resume":
-        return <ResumeIsland />;
-      case "idle":
-        return <IdleIsland />;
-    }
-  }, [view]);
+  const segments = useSelectedLayoutSegments();
+  const view = deriveView(segments);
 
   return (
     <div className="fixed top-1.5 left-1/2 -translate-x-1/2 z-50 w-fit" data-dynamic-island style={{ maxWidth: "min(calc(100vw - 12px), var(--blog-max-w))" }}>
@@ -142,7 +136,7 @@ export const DynamicIsland = () => {
               },
             }}
           >
-            {content}
+            {viewComponents[view]}
           </motion.div>
         </AnimatePresence>
       </motion.div>
