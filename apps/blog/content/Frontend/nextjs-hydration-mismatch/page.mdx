@@ -1,0 +1,298 @@
+export const metadata = {
+  title: '"use client"는 클라이언트 전용이 아닙니다',
+  description: 'Next.js에서 "use client" 지시어의 실제 의미와 클라이언트 컴포넌트가 서버에서도 실행되는 이유, Hydration Mismatch의 원리와 해결법을 분석합니다.',
+  keywords: ["Next.js", "use client", "hydration", "SSR", "React", "Server Components", "Client Components"],
+  alternate: {
+    canonical: "fe/nextjs/use-client-hydration",
+  },
+  other: {
+    status: "draft",
+    createdAt: "2026-03-10T12:00:00",
+  },
+};
+
+# "use client"는 클라이언트 전용이 아닙니다
+
+Next.js에서 `next-themes`를 사용해 다크 모드를 지원하는 컴포넌트를 만들 때, 다음과 같이 작성하는 것은 자연스럽습니다.
+
+```tsx
+"use client";
+
+import { useTheme } from "next-themes";
+
+export function ThemedCard() {
+  const { resolvedTheme } = useTheme();
+
+  return (
+    <div className={resolvedTheme === "dark" ? "card-dark" : "card-light"}>
+      현재 테마: {resolvedTheme}
+    </div>
+  );
+}
+```
+
+하지만 이 코드를 실행하면 브라우저 콘솔에 다음과 같은 경고가 나타납니다.
+
+> **A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up.**
+
+`"use client"`를 선언한 클라이언트 컴포넌트인데, "서버 HTML과 클라이언트 속성이 일치하지 않는다"니 직관에 반합니다. `"use client"`가 "이 컴포넌트는 클라이언트에서만 실행됩니다"라는 뜻이라면, 서버 HTML이 비교 대상이 될 이유가 없기 때문입니다.
+
+하지만 `"use client"`는 그런 뜻이 아닙니다.
+
+## Client Component는 서버에서도 실행됩니다
+
+많은 개발자가 `"use client"`를 "이 파일은 클라이언트에서만 실행하라"는 지시로 이해합니다. 하지만 실제 의미는 다릅니다.
+
+<Callout>
+`"use client"`는 Server Component와 Client Component의 **경계**를 선언합니다.
+</Callout>
+
+React Server Components 아키텍처에서 두 종류의 컴포넌트는 다음과 같이 다릅니다.
+
+|               | Server Component     | Client Component              |
+| ------------- | -------------------- | ----------------------------- |
+| **실행 환경** | 서버에서만 실행      | 서버와 클라이언트 **모두**에서 실행 |
+| **JS 번들**   | 포함되지 않음        | 포함됨                        |
+| **상태/Effect** | 불가               | 가능                          |
+| **브라우저 API** | 불가              | 가능 (hydration 이후)         |
+
+"서버에서만 실행되는" 것은 Server Component입니다. Client Component는 반대로, 서버에서 초기 HTML을 만드는 데 **함께 참여하고**, 이후 클라이언트에서 hydration을 거칩니다. `"use client"`는 "클라이언트 전용"이 아니라 "**클라이언트 번들에 포함되어 hydration 대상이 된다**"는 의미입니다.
+
+이 차이를 이해하면, hydration mismatch가 왜 발생하는지 자연스럽게 보이기 시작합니다.
+
+## Hydration: 정적 HTML을 인수인계받는 과정
+
+"Hydration은 정적 HTML에 이벤트 핸들러를 붙이는 것"이라는 설명을 흔히 볼 수 있습니다. 틀린 말은 아니지만, 핵심을 놓치고 있습니다. Hydration의 실제 과정을 위의 `ThemedCard`로 따라가 보겠습니다.
+
+### 서버: HTML 생성
+
+사용자가 페이지를 요청하면, 서버는 **전체** 컴포넌트 트리를 실행하여 HTML을 만듭니다. Client Component도 예외가 아닙니다.
+
+```
+서버 렌더링:
+  <Layout>              ← Server Component
+    <Page>              ← Server Component
+      <ThemedCard />    ← Client Component (서버에서도 실행됨!)
+```
+
+`ThemedCard` 안의 `useTheme()`은 서버에서도 호출됩니다. 하지만 서버에는 브라우저의 미디어 쿼리나 `localStorage`가 없으므로, `resolvedTheme`은 `undefined`가 됩니다.
+
+```tsx
+// 서버에서의 실행
+const { resolvedTheme } = useTheme(); // undefined
+
+resolvedTheme === "dark" ? "card-dark" : "card-light"
+// → "card-light"  (undefined !== "dark")
+```
+
+서버는 이 결과로 HTML을 만들어 전송합니다.
+
+```html
+<div class="card-light">현재 테마: </div>
+```
+
+사용자는 JavaScript가 로드되기 전에도 이 HTML을 볼 수 있습니다. 빈 화면 대신 콘텐츠가 바로 보인다는 것, 이것이 SSR의 존재 이유입니다.
+
+### 클라이언트: Hydration
+
+JavaScript 번들이 로드되면 React가 hydration을 시작합니다. 여기서 중요한 점은, React가 단순히 기존 DOM에 이벤트 핸들러만 붙이는 것이 **아니라는** 것입니다. React는 다음을 수행합니다.
+
+1. 컴포넌트를 **처음부터 다시 실행**한다
+2. 그 결과를 서버가 보낸 HTML과 **비교**한다
+3. 일치하면, 기존 DOM을 그대로 인수인계받아 인터랙티브하게 만든다
+
+핵심은 **2번**에 있습니다. React는 서버가 만든 DOM을 신뢰하지 않습니다. 직접 컴포넌트를 실행해서 결과를 검증하고, 일치하는 경우에만 기존 DOM을 "자신의 것"으로 받아들입니다.
+
+```tsx
+// 클라이언트 hydration 시 실행
+const { resolvedTheme } = useTheme(); // "dark" (시스템 다크 모드)
+
+resolvedTheme === "dark" ? "card-dark" : "card-light"
+// → "card-dark"
+```
+
+서버는 `"card-light"`로 HTML을 만들었는데, 클라이언트는 `"card-dark"`를 기대합니다. 이 검증 과정에서 불일치가 발견된 것, 이것이 Hydration Mismatch입니다.
+
+```
+서버:      resolvedTheme = undefined → className = "card-light"
+클라이언트: resolvedTheme = "dark"    → className = "card-dark"
+                                      → 불일치 ❌
+```
+
+## 하나의 prop이 트리 전체를 무너뜨리는 이유
+
+"className 하나가 다른 건 별것 아니지 않나?" 싶을 수 있습니다. 하지만 이 글의 출발점이 된 실제 사례는 그렇지 않았습니다.
+
+블로그에 Sandpack 기반 코드 에디터를 넣었을 때, `theme` prop 하나의 차이가 하위 트리 전체로 번졌습니다.
+
+```tsx
+<SandpackProvider
+  theme={resolvedTheme === "dark" ? "dark" : "light"}
+  // 서버: theme="light"  |  클라이언트: theme="dark"
+>
+```
+
+`theme` 하나가 다를 뿐인데, Sandpack 내부에서 다음과 같은 연쇄 불일치가 발생했습니다.
+
+```
+SandpackProvider  theme="light" vs "dark"
+  └─ SandpackThemeProvider
+       └─ FileTabs
+            └─ aria-controls="/App.js-_R_1eat...-tab-panel"   (서버)
+               aria-controls="/App.js-_R_5gma...-tab-panel"   (클라이언트)
+                 └─ id="/App.js-_R_1eat...-tab"               (서버)
+                    id="/App.js-_R_5gma...-tab"               (클라이언트)
+                      └─ CodeEditor의 aria-labelledby 불일치
+```
+
+왜 `theme` prop 차이가 `id`와 `aria-controls`까지 바꾸는 걸까요? Sandpack 내부에서 React의 `useId()` 훅이 사용되기 때문입니다. `theme`이 내부 렌더 분기에 영향을 미치면 컴포넌트 트리 구조가 달라지고, `useId()`가 생성하는 ID도 달라집니다. 이 ID를 참조하는 `aria-controls`, `aria-labelledby` 등의 접근성 속성까지 연쇄적으로 틀어집니다.
+
+하나의 prop 차이가 **컴포넌트 트리 전체의 정합성을 무너뜨릴 수 있다**는 점에서, hydration mismatch는 단순한 경고가 아닙니다.
+
+## "React가 알아서 고쳐주면 안 되나요?"
+
+자연스러운 질문입니다. 서버와 클라이언트의 결과가 다르면, React가 클라이언트 결과로 덮어쓰면 되지 않을까요?
+
+실제로 React 18까지는 그렇게 동작했습니다. Mismatch를 감지하면 경고를 출력하되, 클라이언트 결과로 조용히 패치했습니다. 하지만 React 19부터는 전략이 바뀌었습니다.
+
+> **This won't be patched up.**
+
+이제 React는 불일치를 감지해도 **서버 HTML을 그대로 두고 고치지 않습니다.** 왜 이렇게 바뀌었을까요?
+
+클라이언트 결과로 자동 교체하면 당장은 동작하는 것처럼 보입니다. 하지만 보이지 않는 곳에서 문제가 쌓입니다.
+
+- **성능 비용**: Mismatch 복구는 해당 서브트리를 처음부터 다시 렌더링하는 것과 같습니다. SSR로 절약한 시간을 고스란히 다시 잃게 됩니다.
+- **버그 은폐**: 조용히 패치되면 개발자는 mismatch가 있는지조차 모릅니다. SEO 크롤러가 잘못된 HTML을 인덱싱해도 눈에 띄지 않습니다.
+- **SSR 무효화**: 서버가 힘들여 만든 HTML을 클라이언트가 즉시 버리고 다시 만든다면, SSR이 존재할 이유가 반감됩니다.
+
+React 19의 "고치지 않겠다"는 선언은, mismatch를 **해결해야 할 버그로 격상시키는** 의도적인 설계 변경입니다.
+
+## 서버와 클라이언트의 첫 렌더를 일치시키기
+
+원리를 이해하면 해결 방향은 하나로 수렴합니다.
+
+> **서버와 클라이언트의 첫 번째 렌더 결과를 동일하게 만들고, 클라이언트 전용 값은 hydration 이후에 적용한다.**
+
+이를 구현하는 가장 기본적인 패턴이 **mounted 가드**입니다. 글 초반의 `ThemedCard`를 수정해보겠습니다.
+
+```tsx
+"use client";
+
+import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
+
+export function ThemedCard() {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) {
+    // 서버 HTML과 동일한 결과를 반환
+    return <div className="card-light" />;
+  }
+
+  return (
+    <div className={resolvedTheme === "dark" ? "card-dark" : "card-light"}>
+      현재 테마: {resolvedTheme}
+    </div>
+  );
+}
+```
+
+이 패턴이 동작하는 이유는 `useEffect`의 실행 시점에 있습니다.
+
+```
+서버:       useState(false) → mounted = false → fallback 렌더 → HTML 생성
+Hydration:  useState(false) → mounted = false → fallback 렌더 → 서버 HTML과 일치 ✅
+Effect 후:  setMounted(true) → mounted = true → 실제 테마 렌더 → DOM 업데이트
+```
+
+`useEffect`는 서버에서 실행되지 않습니다. 그리고 클라이언트의 hydration 렌더에서도 state의 초기값은 `false`입니다. 따라서 서버와 hydration의 결과가 정확히 일치합니다. Hydration이 완료된 후에 `useEffect`가 실행되어 `mounted`가 `true`로 바뀌면, 비로소 클라이언트 전용 값을 안전하게 사용할 수 있습니다.
+
+이것은 우연이 아닙니다. `useEffect`가 commit 이후에만 실행된다는 설계는, hydration이 완료된 후에만 side effect를 수행하겠다는 보장입니다. [React가 렌더를 "순수한 계산"으로 취급하고, side effect를 commit 이후로 미루는](../react-concurrent-rendering) 아키텍처와 정확히 같은 원리입니다.
+
+다음 Playground에서 이 패턴의 동작을 확인할 수 있습니다. 로드 직후 잠깐 fallback 상태가 보인 뒤 실제 테마로 전환되는 것을 관찰해보세요.
+
+<Playground
+  previewHeight={200}
+  code={`import { useState, useEffect } from 'react';
+
+export default function App() {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        // 서버에서는 실행되지 않습니다.
+        // hydration 완료 후에만 실행됩니다.
+        setMounted(true);
+    }, []);
+
+    // useTheme()의 동작을 시뮬레이션합니다.
+    // 서버: undefined / 클라이언트: 실제 테마
+    const resolvedTheme = mounted ? 'dark' : undefined;
+
+    return (
+        <div style={{ padding: 20, fontFamily: 'system-ui' }}>
+            <div style={{
+                padding: 20,
+                borderRadius: 12,
+                background: resolvedTheme === 'dark' ? '#1e1e2e' : '#f5f5f5',
+                color: resolvedTheme === 'dark' ? '#cdd6f4' : '#333',
+                border: resolvedTheme === 'dark'
+                    ? '1px solid #45475a'
+                    : '1px solid #e0e0e0',
+                transition: 'all 0.3s ease',
+            }}>
+                <p style={{ margin: 0, fontWeight: 600 }}>ThemedCard</p>
+                <p style={{ margin: '12px 0 4px', fontSize: 13, opacity: 0.8 }}>
+                    resolvedTheme: {String(resolvedTheme)}
+                </p>
+                <p style={{ margin: 0, fontSize: 13, opacity: 0.8 }}>
+                    className: {resolvedTheme === 'dark' ? 'card-dark' : 'card-light'}
+                </p>
+            </div>
+            <p style={{ fontSize: 12, color: '#888', marginTop: 16 }}>
+                {mounted
+                    ? '✅ useEffect 실행 후 — 실제 테마가 적용되었습니다.'
+                    : '⏳ 초기 렌더 — 서버 HTML과 동일한 fallback 상태입니다.'
+                }
+            </p>
+        </div>
+    );
+}`}
+/>
+
+### SSR 자체를 건너뛰기: next/dynamic
+
+컴포넌트의 초기 HTML이 SEO에 중요하지 않다면, SSR 자체를 건너뛰는 선택도 있습니다.
+
+```tsx
+import dynamic from "next/dynamic";
+
+const ThemedCard = dynamic(() => import("./ThemedCard"), {
+  ssr: false,
+  loading: () => <div className="card-light" />,
+});
+```
+
+서버 HTML에는 `loading` fallback만 포함되고, 컴포넌트는 클라이언트에서만 실행됩니다. SSR의 이점을 포기하는 것이므로 범위를 최소화하는 것이 좋습니다.
+
+### suppressHydrationWarning
+
+React의 `suppressHydrationWarning` prop은 경고를 **숨기는** 것이지, 불일치를 해결하는 것이 아닙니다. 타임스탬프처럼 본질적으로 서버/클라이언트 값이 다를 수밖에 없는 텍스트에만 사용해야 합니다.
+
+```tsx
+<time suppressHydrationWarning>
+  {new Date().toLocaleString()}
+</time>
+```
+
+이 prop은 해당 요소의 직접적인 텍스트/속성 차이만 무시합니다. 하위 트리의 구조적 불일치까지 해결해주지는 않습니다.
+
+## 정리
+
+1. `"use client"`는 "클라이언트에서만 실행하라"가 아니라 **Server/Client Component의 경계를 선언**하는 지시어입니다. Client Component는 서버에서도 실행됩니다.
+2. Hydration은 단순히 이벤트 핸들러를 붙이는 것이 아닙니다. React는 **컴포넌트를 다시 실행하고, 결과를 서버 HTML과 비교**합니다.
+3. 서버에 존재하지 않는 값(`useTheme`, `localStorage`, `window` 등)에 의존하면, 서버/클라이언트 결과가 달라져 mismatch가 발생합니다. 하나의 prop 차이가 하위 트리 전체로 번질 수 있습니다.
+4. React 19부터 mismatch는 자동으로 패치되지 않습니다. 서버가 보낸 잘못된 HTML이 화면에 **그대로 남을 수 있습니다.**
+5. 해결 원칙은 하나입니다. **첫 렌더를 서버와 클라이언트에서 동일하게 만들고, 클라이언트 전용 값은 `useEffect` 이후에 적용합니다.**
