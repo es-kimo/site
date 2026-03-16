@@ -15,7 +15,9 @@ export const HomeIsland = () => {
     >
       <div className="flex items-center">
         <IconLogo />
-        <Logo />
+        <div className="hidden sm:block">
+          <Logo />
+        </div>
       </div>
       <div className="flex items-center gap-1">
         <NavigationMenu>
