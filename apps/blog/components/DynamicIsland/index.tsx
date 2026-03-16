@@ -32,7 +32,7 @@ export const DynamicIsland = () => {
   return (
     <div className="fixed top-1.5 left-1/2 -translate-x-1/2 z-50 w-fit" data-dynamic-island style={{ maxWidth: "min(calc(100vw - 12px), var(--blog-max-w))" }}>
       <motion.div
-        layout
+        layout="size"
         transition={{
           type: "spring",
           bounce: 0.35,
