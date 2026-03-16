@@ -44,10 +44,10 @@ export function ThemedCard() {
 많은 개발자가 `"use client"`를 "이 파일은 클라이언트에서만 실행하라"는 지시로 이해합니다. 하지만 실제 의미는 다릅니다.
 
 <Callout>
-`"use client"`는 Server Component와 Client Component의 **경계**를 선언합니다.
+`"use client"`는 Server Component와 Client Component의 **경계**를 선언합니다.[^1]
 </Callout>
 
-React Server Components 아키텍처에서 두 종류의 컴포넌트는 다음과 같이 다릅니다.
+React Server Components 아키텍처에서 두 종류의 컴포넌트는 다음과 같이 다릅니다.[^2]
 
 |               | Server Component     | Client Component              |
 | ------------- | -------------------- | ----------------------------- |
@@ -56,7 +56,7 @@ React Server Components 아키텍처에서 두 종류의 컴포넌트는 다음�
 | **상태/Effect** | 불가               | 가능                          |
 | **브라우저 API** | 불가              | 가능 (hydration 이후)         |
 
-"서버에서만 실행되는" 것은 Server Component입니다. Client Component는 반대로, 서버에서 초기 HTML을 만드는 데 **함께 참여하고**, 이후 클라이언트에서 hydration을 거칩니다. `"use client"`는 "클라이언트 전용"이 아니라 "**클라이언트 번들에 포함되어 hydration 대상이 된다**"는 의미입니다.
+"서버에서만 실행되는" 것은 Server Component입니다. Client Component는 반대로, 서버에서 초기 HTML을 만드는 데 **함께 참여하고**, 이후 클라이언트에서 hydration을 거칩니다.[^3] `"use client"`는 "클라이언트 전용"이 아니라 "**클라이언트 번들에 포함되어 hydration 대상이 된다**"는 의미입니다.[^4]
 
 이 차이를 이해하면, hydration mismatch가 왜 발생하는지 자연스럽게 보이기 시작합니다.
 
@@ -66,7 +66,7 @@ React Server Components 아키텍처에서 두 종류의 컴포넌트는 다음�
 
 ### 서버: HTML 생성
 
-사용자가 페이지를 요청하면, 서버는 **전체** 컴포넌트 트리를 실행하여 HTML을 만듭니다. Client Component도 예외가 아닙니다.
+사용자가 페이지를 요청하면, 서버는 **전체** 컴포넌트 트리를 실행하여 HTML을 만듭니다. Client Component도 예외가 아닙니다.[^5]
 
 ```
 서버 렌더링:
@@ -95,13 +95,13 @@ resolvedTheme === "dark" ? "card-dark" : "card-light"
 
 ### 클라이언트: Hydration
 
-JavaScript 번들이 로드되면 React가 hydration을 시작합니다. 여기서 중요한 점은, React가 단순히 기존 DOM에 이벤트 핸들러만 붙이는 것이 **아니라는** 것입니다. React는 다음을 수행합니다.
+JavaScript 번들이 로드되면 React가 hydration을 시작합니다. 여기서 중요한 점은, React가 단순히 기존 DOM에 이벤트 핸들러만 붙이는 것이 **아니라는** 것입니다. React는 다음을 수행합니다.[^6]
 
 1. 컴포넌트를 **처음부터 다시 실행**한다
 2. 그 결과를 서버가 보낸 HTML과 **비교**한다
 3. 일치하면, 기존 DOM을 그대로 인수인계받아 인터랙티브하게 만든다
 
-핵심은 **2번**에 있습니다. React는 서버가 만든 DOM을 신뢰하지 않습니다. 직접 컴포넌트를 실행해서 결과를 검증하고, 일치하는 경우에만 기존 DOM을 "자신의 것"으로 받아들입니다.
+핵심은 **2번**에 있습니다. React는 서버가 만든 DOM을 신뢰하지 않습니다. 직접 컴포넌트를 실행해서 결과를 검증하고, 일치하는 경우에만 기존 DOM을 "자신의 것"으로 받아들입니다.[^7]
 
 ```tsx
 // 클라이언트 hydration 시 실행
@@ -111,7 +111,7 @@ resolvedTheme === "dark" ? "card-dark" : "card-light"
 // → "card-dark"
 ```
 
-서버는 `"card-light"`로 HTML을 만들었는데, 클라이언트는 `"card-dark"`를 기대합니다. 이 검증 과정에서 불일치가 발견된 것, 이것이 Hydration Mismatch입니다.
+서버는 `"card-light"`로 HTML을 만들었는데, 클라이언트는 `"card-dark"`를 기대합니다. 이 검증 과정에서 불일치가 발견된 것, 이것이 Hydration Mismatch입니다.[^8]
 
 ```
 서버:      resolvedTheme = undefined → className = "card-light"
@@ -145,7 +145,7 @@ SandpackProvider  theme="light" vs "dark"
                       └─ CodeEditor의 aria-labelledby 불일치
 ```
 
-왜 `theme` prop 차이가 `id`와 `aria-controls`까지 바꾸는 걸까요? Sandpack 내부에서 React의 `useId()` 훅이 사용되기 때문입니다. `theme`이 내부 렌더 분기에 영향을 미치면 컴포넌트 트리 구조가 달라지고, `useId()`가 생성하는 ID도 달라집니다. 이 ID를 참조하는 `aria-controls`, `aria-labelledby` 등의 접근성 속성까지 연쇄적으로 틀어집니다.
+왜 `theme` prop 차이가 `id`와 `aria-controls`까지 바꾸는 걸까요? Sandpack 내부에서 React의 `useId()` 훅이 사용되기 때문입니다. `useId()`는 fiber 트리에서의 위치에 기반하여 고유 ID를 생성합니다.[^9] `theme`이 내부 렌더 분기에 영향을 미치면 컴포넌트 트리 구조가 달라지고, `useId()`가 생성하는 ID도 달라집니다.[^10] 이 ID를 참조하는 `aria-controls`, `aria-labelledby` 등의 접근성 속성까지 연쇄적으로 틀어집니다.
 
 하나의 prop 차이가 **컴포넌트 트리 전체의 정합성을 무너뜨릴 수 있다**는 점에서, hydration mismatch는 단순한 경고가 아닙니다.
 
@@ -153,19 +153,21 @@ SandpackProvider  theme="light" vs "dark"
 
 자연스러운 질문입니다. 서버와 클라이언트의 결과가 다르면, React가 클라이언트 결과로 덮어쓰면 되지 않을까요?
 
-실제로 React 18까지는 그렇게 동작했습니다. Mismatch를 감지하면 경고를 출력하되, 클라이언트 결과로 조용히 패치했습니다. 하지만 React 19부터는 전략이 바뀌었습니다.
+React 18 이전의 레거시 `hydrate` API에서는 텍스트 콘텐츠의 차이를 패치할 수 있었지만, 속성 차이가 패치된다는 보장은 없었습니다.[^11] React 19에서는 mismatch 처리 전략이 두 갈래로 나뉩니다.
+
+**속성 수준 불일치** (className, aria-controls 등): React는 불일치를 감지해도 서버 HTML을 그대로 두고 고치지 않습니다.[^12]
 
 > **This won't be patched up.**
 
-이제 React는 불일치를 감지해도 **서버 HTML을 그대로 두고 고치지 않습니다.** 왜 이렇게 바뀌었을까요?
+**구조적 불일치** (요소 자체가 다른 경우): React는 해당 서브트리를 클라이언트에서 완전히 다시 렌더링합니다.[^13]
 
-클라이언트 결과로 자동 교체하면 당장은 동작하는 것처럼 보입니다. 하지만 보이지 않는 곳에서 문제가 쌓입니다.
+어느 쪽이든, mismatch를 방치하면 문제가 쌓입니다.
 
-- **성능 비용**: Mismatch 복구는 해당 서브트리를 처음부터 다시 렌더링하는 것과 같습니다. SSR로 절약한 시간을 고스란히 다시 잃게 됩니다.
-- **버그 은폐**: 조용히 패치되면 개발자는 mismatch가 있는지조차 모릅니다. SEO 크롤러가 잘못된 HTML을 인덱싱해도 눈에 띄지 않습니다.
+- **성능 비용**: 구조적 불일치 시 해당 서브트리를 처음부터 다시 렌더링합니다. SSR로 절약한 시간을 고스란히 다시 잃게 됩니다.
+- **버그 은폐**: 속성 불일치 시 서버가 보낸 잘못된 HTML이 화면에 그대로 남습니다. SEO 크롤러가 잘못된 HTML을 인덱싱해도 눈에 띄지 않습니다.
 - **SSR 무효화**: 서버가 힘들여 만든 HTML을 클라이언트가 즉시 버리고 다시 만든다면, SSR이 존재할 이유가 반감됩니다.
 
-React 19의 "고치지 않겠다"는 선언은, mismatch를 **해결해야 할 버그로 격상시키는** 의도적인 설계 변경입니다.
+React 공식 문서는 이를 명확히 합니다. "React는 일부 hydration 오류에서 복구하지만, 이를 다른 버그처럼 수정해야 한다."[^14]
 
 ## 서버와 클라이언트의 첫 렌더를 일치시키기
 
@@ -200,7 +202,7 @@ export function ThemedCard() {
 }
 ```
 
-이 패턴이 동작하는 이유는 `useEffect`의 실행 시점에 있습니다.
+이 패턴이 동작하는 이유는 `useEffect`의 실행 시점에 있습니다.[^15]
 
 ```
 서버:       useState(false) → mounted = false → fallback 렌더 → HTML 생성
@@ -264,7 +266,7 @@ export default function App() {
 
 ### SSR 자체를 건너뛰기: next/dynamic
 
-컴포넌트의 초기 HTML이 SEO에 중요하지 않다면, SSR 자체를 건너뛰는 선택도 있습니다.
+컴포넌트의 초기 HTML이 SEO에 중요하지 않다면, SSR 자체를 건너뛰는 선택도 있습니다.[^16]
 
 ```tsx
 import dynamic from "next/dynamic";
@@ -279,7 +281,7 @@ const ThemedCard = dynamic(() => import("./ThemedCard"), {
 
 ### suppressHydrationWarning
 
-React의 `suppressHydrationWarning` prop은 경고를 **숨기는** 것이지, 불일치를 해결하는 것이 아닙니다. 타임스탬프처럼 본질적으로 서버/클라이언트 값이 다를 수밖에 없는 텍스트에만 사용해야 합니다.
+React의 `suppressHydrationWarning` prop은 경고를 **숨기는** 것이지, 불일치를 해결하는 것이 아닙니다.[^17] 타임스탬프처럼 본질적으로 서버/클라이언트 값이 다를 수밖에 없는 텍스트에만 사용해야 합니다.
 
 ```tsx
 <time suppressHydrationWarning>
@@ -287,12 +289,31 @@ React의 `suppressHydrationWarning` prop은 경고를 **숨기는** 것이지, �
 </time>
 ```
 
-이 prop은 해당 요소의 직접적인 텍스트/속성 차이만 무시합니다. 하위 트리의 구조적 불일치까지 해결해주지는 않습니다.
+이 prop은 해당 요소의 직접적인 텍스트/속성 차이만 무시합니다. 하위 트리의 구조적 불일치까지 해결해주지는 않습니다.[^18]
 
 ## 정리
 
-1. `"use client"`는 "클라이언트에서만 실행하라"가 아니라 **Server/Client Component의 경계를 선언**하는 지시어입니다. Client Component는 서버에서도 실행됩니다.
-2. Hydration은 단순히 이벤트 핸들러를 붙이는 것이 아닙니다. React는 **컴포넌트를 다시 실행하고, 결과를 서버 HTML과 비교**합니다.
-3. 서버에 존재하지 않는 값(`useTheme`, `localStorage`, `window` 등)에 의존하면, 서버/클라이언트 결과가 달라져 mismatch가 발생합니다. 하나의 prop 차이가 하위 트리 전체로 번질 수 있습니다.
-4. React 19부터 mismatch는 자동으로 패치되지 않습니다. 서버가 보낸 잘못된 HTML이 화면에 **그대로 남을 수 있습니다.**
-5. 해결 원칙은 하나입니다. **첫 렌더를 서버와 클라이언트에서 동일하게 만들고, 클라이언트 전용 값은 `useEffect` 이후에 적용합니다.**
+1. `"use client"`는 "클라이언트에서만 실행하라"가 아니라 **Server/Client Component의 경계를 선언**하는 지시어입니다.[^1] Client Component는 서버에서도 실행됩니다.[^3]
+2. Hydration은 단순히 이벤트 핸들러를 붙이는 것이 아닙니다. React는 **컴포넌트를 다시 실행하고, 결과를 서버 HTML과 비교**합니다.[^6]
+3. 서버에 존재하지 않는 값(`useTheme`, `localStorage`, `window` 등)에 의존하면, 서버/클라이언트 결과가 달라져 mismatch가 발생합니다.[^8] 하나의 prop 차이가 하위 트리 전체로 번질 수 있습니다.[^9]
+4. React 19에서 속성 수준의 mismatch는 자동으로 패치되지 않습니다.[^12] 서버가 보낸 잘못된 HTML이 화면에 **그대로 남을 수 있습니다.**
+5. 해결 원칙은 하나입니다. **첫 렌더를 서버와 클라이언트에서 동일하게 만들고, 클라이언트 전용 값은 `useEffect` 이후에 적용합니다.**[^15]
+
+[^1]: Next.js 공식 문서: `"use client"` is used to declare a boundary between the Server and Client module graphs (trees). — [Server and Client Components](https://nextjs.org/docs/app/getting-started/server-and-client-components)
+[^2]: React 공식 문서의 `'use client'` 레퍼런스. 컴포넌트 정의가 `'use client'` 지시어가 있는 모듈에 있으면 Client Component로, 그렇지 않으면 Server Component로 취급된다. — [use client – React](https://react.dev/reference/rsc/use-client)
+[^3]: Next.js 공식 문서: Server Components are rendered into a special data format called the React Server Component Payload (RSC Payload). **Client Components and the RSC Payload are used to pre-render HTML.** — [Server and Client Components](https://nextjs.org/docs/app/getting-started/server-and-client-components)
+[^4]: React 공식 문서: `'use client'`가 모듈 의존성 트리를 분할(segment)하여 해당 모듈과 모든 전이 의존성을 Client 모듈로 표시한다. — [use client – React](https://react.dev/reference/rsc/use-client)
+[^5]: Next.js GitHub Discussion #54114: "Client components are rendered during any form of SSR, not just during pre-rendering." — [Client Components Rendering on Client Side or Server Side](https://github.com/vercel/next.js/discussions/54114)
+[^6]: React 공식 문서 `hydrateRoot`: The React tree you pass to hydrateRoot needs to produce **the same output** as it did on the server. — [hydrateRoot – React](https://react.dev/reference/react-dom/client/hydrateRoot)
+[^7]: React 공식 문서 `hydrateRoot`: `hydrateRoot()` expects the rendered content to be **identical** with the server-rendered content. You should treat mismatches as bugs and fix them. — [hydrateRoot – React](https://react.dev/reference/react-dom/client/hydrateRoot)
+[^8]: React 공식 문서: hydration mismatch의 대표적 원인으로 `typeof window !== 'undefined'` 분기, `Date.now()`, `Math.random()` 등 서버/클라이언트 환경 차이를 명시한다. — [hydrateRoot – React](https://react.dev/reference/react-dom/client/hydrateRoot)
+[^9]: `useId()`는 fiber 트리에서의 위치에 기반하여 고유 ID를 생성한다. 트리 구조가 달라지면 생성되는 ID도 달라진다. — [How does useId() work internally in React?](https://jser.dev/2023-04-25-how-does-useid-work/)
+[^10]: React 18 릴리스 노트: `useId`는 client와 server 모두에서 고유 ID를 생성하면서 hydration mismatch를 방지하기 위해 도입되었다. — [React v18.0 – React Blog](https://react.dev/blog/2022/03/29/react-v18)
+[^11]: React 18 레거시 `hydrate` 문서: React can patch up differences in text content, but you should treat mismatches as bugs and fix them. **There are no guarantees that attribute differences will be patched up** in case of mismatches. — [hydrate – React (18)](https://18.react.dev/reference/react-dom/hydrate)
+[^12]: React 19의 속성 수준 mismatch 경고 메시지: "A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. **This won't be patched up.**" — [React v19 – React Blog](https://react.dev/blog/2024/12/05/react-19), [Radix UI Issue #3700](https://github.com/radix-ui/primitives/issues/3700)
+[^13]: React 19의 구조적 mismatch 에러 (Error #418): "Hydration failed because the server rendered HTML didn't match the client. As a result **this tree will be regenerated on the client.**" — [React Error #418](https://react.dev/errors/418)
+[^14]: React 공식 문서 `hydrateRoot`: React recovers from some hydration errors, but **you must fix them like other bugs**. — [hydrateRoot – React](https://react.dev/reference/react-dom/client/hydrateRoot)
+[^15]: React 공식 문서의 two-pass rendering 권장 패턴: `useState(false)` + `useEffect(() => setIsClient(true), [])`로 서버/클라이언트 첫 렌더를 일치시킨 뒤 Effect 이후에 클라이언트 전용 값을 적용한다. — [hydrateRoot – React](https://react.dev/reference/react-dom/client/hydrateRoot)
+[^16]: Next.js 공식 문서: `next/dynamic`의 `ssr: false` 옵션으로 특정 컴포넌트의 사전 렌더링을 비활성화하여 hydration mismatch를 방지할 수 있다. — [Text content does not match server-rendered HTML](https://nextjs.org/docs/messages/react-hydration-error)
+[^17]: React 공식 문서: `suppressHydrationWarning`을 true로 설정하면 React는 해당 요소의 속성과 콘텐츠 불일치에 대해 경고하지 않는다. **It only works one level deep, and is intended to be used as an escape hatch.** — [Common components – React](https://react.dev/reference/react-dom/components/common)
+[^18]: React 공식 문서 `hydrateRoot`: Unless it's text content, React still won't attempt to patch it up, so it may remain inconsistent until future updates. — [hydrateRoot – React](https://react.dev/reference/react-dom/client/hydrateRoot)
