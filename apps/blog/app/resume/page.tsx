@@ -114,7 +114,7 @@ function ContributionCard({ contribution, index }: { contribution: KeyContributi
       <p className="text-sm font-medium text-foreground/85 mt-1 leading-relaxed">
         <span className="text-muted-foreground">✓</span> {parseInlineMarkdown(contribution.result)}
       </p>
-      {contribution.ownershipEvidence && contribution.ownershipEvidence.length > 0 && (
+      {/* {contribution.ownershipEvidence && contribution.ownershipEvidence.length > 0 && (
         <div className="mt-1.5 flex flex-wrap gap-1">
           {contribution.ownershipEvidence.map((e, i) => (
             <Tag key={i} variant="accent">
@@ -131,7 +131,7 @@ function ContributionCard({ contribution, index }: { contribution: KeyContributi
             </span>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 }
@@ -289,7 +289,7 @@ export default async function ResumePage() {
 
         {/* ── 개인 프로젝트 ──────────────────────────────────── */}
         {data.sideProjects.length > 0 && (
-          <Section title="개인 프로젝트">
+          <Section title="개인 프로젝트" className="print:break-inside-avoid">
             {data.sideProjects.map((proj) => (
               <SideProjectCard key={proj.id} project={proj} />
             ))}

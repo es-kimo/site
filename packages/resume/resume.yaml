@@ -52,6 +52,8 @@ experienceSummary:
       value: "+20%p"
     - label: "API mocking coverage"
       value: "90%+"
+    - label: "디자인 시스템 영향 분석 대상 레포"
+      value: "12개"
   focusAreas:
     - "User Interaction"
     - "Frontend Architecture"
@@ -88,6 +90,31 @@ skills:
     - "OPIc IM2"
 
 featuredProjects:
+  - id: "modal-impact-radar"
+    name: "Modal Impact Radar"
+    company: "메디컬에이아이"
+    period: "2026.03"
+    scope: "internal tool"
+    role: "Frontend Developer"
+    featured: true
+    techStack:
+      - "React"
+      - "TypeScript"
+      - "Vite"
+      - "Node.js"
+    oneLiner: "디자인 시스템 Modal 컴포넌트 변경 시 12개 프로덕트의 영향 범위를 자동 수집·분류하여 리뷰하는 대시보드"
+    responsibilities:
+      - "12개 레포 소스 자동 수집 및 모달 사용처 분석 파이프라인 구축"
+      - "위험도·도달 난이도·진입 경로 분류 기준 설계"
+      - "리뷰 및 셀프 QA용 대시보드 구현"
+    keyContributions:
+      - problem: "디자인 시스템의 Modal 컴포넌트를 변경할 때, 12개 프로덕트에 퍼져 있는 사용처의 영향 범위를 파악하기 어려웠습니다."
+        action: "레포별 소스를 자동 수집하고, 모달 사용처를 분석하여 커스텀 유형·위험도·도달 난이도를 분류하는 파이프라인과 대시보드를 구축했습니다."
+        result: "변경 전 영향 범위를 한눈에 파악할 수 있게 되어, 리뷰와 셀프 QA에 활용할 수 있는 기반을 마련했습니다."
+      - problem: "LLM에게 '모달을 찾아달라'고만 지시하면 레포마다 추출 기준이 달라지고, useModal 훅을 래핑한 커스텀 훅(useAlert, useConfirm 등)을 통한 간접 사용은 누락되기 쉬웠습니다."
+        action: "15개 필드 스키마, useModal 훅 체인 추적 규칙, 위험도·도달 난이도 분류 기준을 정의한 분석 프롬프트를 설계하고, 첫 레포 결과를 품질 체크리스트로 검증한 뒤 나머지에 적용했습니다."
+        result: "12개 레포에서 일관된 기준으로 모달 사용처를 추출할 수 있었고, confidence 필드로 불확실한 항목을 별도 관리하는 구조를 만들었습니다."
+
   - id: "mai-sales"
     name: "판매관리 시스템"
     company: "메디컬에이아이"
@@ -316,8 +343,8 @@ training:
     endDate: "2023.01"
 
 meta:
-  version: "2.0.0"
-  lastModified: "2026-03-10"
+  version: "2.1.0"
+  lastModified: "2026-03-18"
   notes:
     - "기존 highlights 중심 구조를 문제-행동-결과 중심 구조로 재설계"
     - "interests 대신 positioning/coreStrengths로 전환"
