@@ -1,44 +1,38 @@
 "use client";
 
-import { type Language } from "@/lib/language";
 import { cn } from "@workspace/ui/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
-import { usePathname } from "next/navigation";
-import { useMemo } from "react";
+import { useSelectedLayoutSegments } from "next/navigation";
 import { HomeIsland } from "./Home";
 import { IdleIsland } from "./Idle";
 import { ReaderIsland } from "./Reader";
+import { ResumeIsland } from "./Resume";
 
-interface DynamicIslandProps {
-  language: Language;
+type View = "home" | "resume" | "reader" | "idle";
+
+function deriveView(segments: string[]): View {
+  const [domain] = segments;
+  if (!domain) return "home";
+  if (domain === "resume") return "resume";
+  if (domain === "writing" && segments[1] === "(post)") return "reader";
+  return "idle";
 }
 
-export const DynamicIsland = ({ language }: DynamicIslandProps) => {
-  const pathname = usePathname();
-  const isReader = pathname.match(/^\/writing\/.+\/.+$/);
-  const isHome = pathname === "/";
+const viewComponents: Record<View, React.ReactNode> = {
+  home: <HomeIsland />,
+  resume: <ResumeIsland />,
+  reader: <ReaderIsland />,
+  idle: <IdleIsland />,
+};
 
-  const view = useMemo(() => {
-    if (isReader) return "reader";
-    if (isHome) return "home";
-    return "idle";
-  }, [isReader, isHome]);
-
-  const content = useMemo(() => {
-    switch (view) {
-      case "reader":
-        return <ReaderIsland />;
-      case "home":
-        return <HomeIsland language={language} />;
-      case "idle":
-        return <IdleIsland />;
-    }
-  }, [view, language]);
+export const DynamicIsland = () => {
+  const segments = useSelectedLayoutSegments();
+  const view = deriveView(segments);
 
   return (
-    <div className="fixed top-1.5 left-1/2 -translate-x-1/2 z-50 w-fit" style={{ maxWidth: "min(calc(100vw - 12px), var(--blog-max-w))" }}>
+    <div className="fixed top-1.5 left-1/2 -translate-x-1/2 z-50 w-fit" data-dynamic-island style={{ maxWidth: "min(calc(100vw - 12px), var(--blog-max-w))" }}>
       <motion.div
-        layout
+        layout="size"
         transition={{
           type: "spring",
           bounce: 0.35,
@@ -46,7 +40,7 @@ export const DynamicIsland = ({ language }: DynamicIslandProps) => {
         style={{
           borderRadius: 6,
         }}
-        className="shadow-lg dark:shadow-slate-800 overflow-hidden"
+        className="shadow-lg dark:shadow-slate-900 overflow-hidden"
       >
         <div className="absolute overflow-hidden w-full h-full rounded-md">
           <div className={cn("absolute w-full h-full")}>
@@ -142,7 +136,7 @@ export const DynamicIsland = ({ language }: DynamicIslandProps) => {
               },
             }}
           >
-            {content}
+            {viewComponents[view]}
           </motion.div>
         </AnimatePresence>
       </motion.div>

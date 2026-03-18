@@ -1,0 +1,26 @@
+{
+  "name": "@workspace/resume",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "generate": "tsx src/generate.ts",
+    "pdf": "tsx src/generate-pdf.ts"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./data": "./src/data/index.ts",
+    "./types": "./src/types.ts",
+    "./generators/*": "./src/generators/*.ts"
+  },
+  "dependencies": {
+    "yaml": "^2.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.8",
+    "@workspace/typescript-config": "workspace:*",
+    "puppeteer": "^24.38.0",
+    "tsx": "^4.19.0",
+    "typescript": "latest"
+  }
+}

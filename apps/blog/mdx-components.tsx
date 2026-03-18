@@ -123,6 +123,14 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </div>
       );
     },
+    AIAssisted(properties) {
+      return (
+        <div {...properties} className="mt-6 mb-8 rounded-lg px-4 py-3 bg-muted/40 border border-border/50 text-sm text-muted-foreground flex items-start gap-2">
+          <span className="shrink-0">🤖</span>
+          <span>이 글의 주제와 흐름은 작성자의 생각이며, 본문 작성에 AI의 도움을 받았습니다.</span>
+        </div>
+      );
+    },
     PostDate({ children, ...properties }) {
       return (
         <div {...properties} className="text-muted-foreground pt-2 text-xs lg:hidden">

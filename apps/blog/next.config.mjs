@@ -3,7 +3,7 @@ import createMDX from "@next/mdx";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ["mdx", "ts", "tsx"],
-  transpilePackages: ["@workspace/ui"],
+  transpilePackages: ["@workspace/ui", "@workspace/resume"],
   images: {
     remotePatterns: [
       process.env.NODE_ENV === "development"

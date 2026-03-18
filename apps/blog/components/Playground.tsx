@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { SandpackProvider, SandpackLayout, SandpackCodeEditor, SandpackPreview, SandpackConsole } from "@codesandbox/sandpack-react";
 import { useTheme } from "next-themes";
 
@@ -20,11 +21,17 @@ interface PlaygroundProps {
 
 export function Playground({ code, files, template = "react", showConsole = false, editorHeight = 350, previewHeight = 150 }: PlaygroundProps) {
   const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const allFiles: Record<string, string> = {
     "/App.js": code,
     ...files,
   };
+
+  if (!mounted) {
+    return <div className="my-8 rounded-lg overflow-hidden border border-border shadow-sm" style={{ height: editorHeight + previewHeight }} />;
+  }
 
   return (
     <div className="my-8 rounded-lg overflow-hidden border border-border shadow-sm">
