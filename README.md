@@ -1,66 +1,37 @@
-# Modern Monorepo Template
+# site
 
-A modern, type-safe monorepo template powered by Turborepo and shadcn/ui, designed for building scalable web applications.
+개인 블로그 등 웹사이트를 관리하는 모노레포입니다.
 
-## 🌟 Features
+## Apps
 
-- 📦 Monorepo structure with Turborepo
-- 🎨 Shared UI components with shadcn/ui
-- 🔒 Type-safe with TypeScript
-- 🎯 Next.js applications
-- 🛠 Shared configurations (ESLint, TypeScript, Tailwind)
+### blog
 
-## 📁 Project Structure
+프론트엔드 기술 블로그입니다. MDX로 글을 작성하고, Sandpack 기반의 인터랙티브 코드 플레이그라운드를 지원합니다.
 
-```
-├── apps/
-│   ├── blog/          # Blog application
-│   └── yjshd/         # Web application
-└── packages/
-    ├── ui/            # Shared UI components
-    ├── common/        # Common utilities
-    └── mdx-cli/       # MDX tooling
-```
+- https://khryu.dev
 
-## 🚀 Getting Started
+### yjshd
 
-1. **Setup**
+웹사이트입니다. CLI를 통해 콘텐츠를 작성·게시할 수 있도록 만들었습니다.
 
-   ```bash
-   pnpm install
-   ```
+## Packages
 
-2. **Development**
+| 패키지              | 설명                                                                |
+| ------------------- | ------------------------------------------------------------------- |
+| `ui`                | Radix UI 기반 공유 컴포넌트 라이브러리                              |
+| `common`            | 두 앱에서 공통으로 사용하는 유틸리티                                |
+| `mdx-cli`           | MDX 콘텐츠 생성 CLI. 인터랙티브 프롬프트로 글 작성을 안내           |
+| `resume`            | YAML로 작성한 이력서를 Markdown, JSON Resume, JSON-LD 포맷으로 변환 |
+| `eslint-config`     | 공유 ESLint 설정                                                    |
+| `typescript-config` | 공유 TypeScript 설정                                                |
 
-   ```bash
-   pnpm dev
-   ```
-
-3. **Build**
-   ```bash
-   pnpm build
-   ```
-
-## 💅 UI Components
-
-This template uses shadcn/ui for beautiful, accessible components. Add new components to your app:
+## Setup
 
 ```bash
-pnpm dlx shadcn@latest add button -c apps/[app-name]
+pnpm install
+pnpm dev
 ```
 
-Import components in your app:
-
-```tsx
-import { Button } from "@workspace/ui/components/ui/button";
-```
-
-## 📦 Package Management
-
-- `@workspace/ui`: Shared UI components
-- `@workspace/common`: Common utilities and helpers
-- `@workspace/mdx-cli`: MDX processing tools
-
-## 📄 License
+## License
 
 MIT
