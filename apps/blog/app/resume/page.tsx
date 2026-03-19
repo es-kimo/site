@@ -194,6 +194,16 @@ function SideProjectCard({ project }: { project: SideProject }) {
     <div className="mb-6 last:mb-0 ">
       <div className="flex items-center gap-2">
         <h3 className="text-sm font-semibold">{project.name}</h3>
+        {project.repoUrl && (
+          <a
+            href={project.repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2 decoration-border hover:decoration-foreground"
+          >
+            GitHub
+          </a>
+        )}
         <StatusBadge status={project.status} />
         <span className="text-xs text-muted-foreground ml-auto tabular-nums">{project.teamSize}인</span>
       </div>

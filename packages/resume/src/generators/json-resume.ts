@@ -53,6 +53,7 @@ export function toJsonResume(data: ResumeData): Record<string, unknown> {
       teamSize: p.teamSize,
       status: p.status,
       awardNote: p.awardNote || undefined,
+      url: p.repoUrl || undefined,
     })),
 
     meta: {

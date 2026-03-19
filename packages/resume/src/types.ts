@@ -128,6 +128,7 @@ export interface SideProject {
   teamSize: number;
   status: ProjectStatus;
   awardNote?: string;
+  repoUrl?: string;
   description: string;
   metrics?: Metric[];
   keyContributions: string[];

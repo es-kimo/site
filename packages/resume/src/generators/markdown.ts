@@ -171,7 +171,8 @@ export function toMarkdown(data: ResumeData): string {
     for (const proj of data.sideProjects) {
       const statusLabel = proj.status === "awarded" ? "수상" : proj.status === "in-progress" ? "진행중" : "";
       const badge = statusLabel ? ` (${statusLabel})` : "";
-      lines.push(`### ${proj.name}${badge} — ${proj.teamSize}인`);
+      const nameWithLink = proj.repoUrl ? `[${proj.name}](${proj.repoUrl})` : proj.name;
+      lines.push(`### ${nameWithLink}${badge} — ${proj.teamSize}인`);
       lines.push("");
       if (proj.awardNote) {
         lines.push(`*${proj.awardNote}*`);

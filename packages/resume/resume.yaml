@@ -177,7 +177,7 @@ featuredProjects:
     keyContributions:
       - problem: "고객용/직원용, 모바일/데스크톱용 인터페이스를 하나의 제품 안에서 함께 관리해야 했습니다."
         action: "하나의 레포에서 여러 인터페이스를 관리할 수 있도록 공통 구조와 분리 기준을 설계했습니다."
-        result: "제품 변형을 별도 프로젝트로 분리하지 않고도 일관된 개발 구조를 유지할 수 있었습니다."
+        result: "공통 로직과 UI를 공유하면서도 인터페이스별 차이를 격리할 수 있어, 변경사항이 한 곳에만 반영되는 구조를 확보했습니다."
         ownershipEvidence:
           - "v1.0 단계부터 초기 구조 설계 참여"
           - "모노레포 구조 설계"
@@ -303,6 +303,7 @@ sideProjects:
     teamSize: 6
     status: "awarded"
     awardNote: "SSAFY 전국 지역 대상 발표"
+    repoUrl: "https://github.com/beautiful-source/vue3-kakao-maps"
     description: "카카오맵 API를 Vue.js 컴포넌트로 추상화한 오픈소스 NPM 패키지 라이브러리"
     metrics:
       - label: "누적 다운로드"
@@ -317,10 +318,11 @@ sideProjects:
     name: "총학생회를 위한 투표 시스템"
     teamSize: 2
     status: "completed"
+    repoUrl: "https://github.com/vottega/client"
     description: "투표/회의가 필요한 집단에서 사용할 수 있는 웹 애플리케이션"
     keyContributions:
-      - "실시간 이벤트(SSE) 및 Broadcast 처리"
-      - "SSE 데이터와 실제 데이터 정합성 유지 로직 구현"
+      - "실시간 이벤트(SSE) 핸들링"
+      - "SSE 데이터와 실제 데이터 정합성 유지 로직을 timestamp 기반으로 구현"
     whyItMatters: "실시간 상호작용과 의사결정 흐름 중심 제품에 대한 관심을 보여주는 프로젝트"
 
 education:
@@ -343,8 +345,8 @@ training:
     endDate: "2023.01"
 
 meta:
-  version: "2.1.0"
-  lastModified: "2026-03-18"
+  version: "2.1.1"
+  lastModified: "2026-03-19"
   notes:
     - "기존 highlights 중심 구조를 문제-행동-결과 중심 구조로 재설계"
     - "interests 대신 positioning/coreStrengths로 전환"

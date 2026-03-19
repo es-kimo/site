@@ -243,6 +243,7 @@
             "description": "awarded=수상, completed=완료, in-progress=진행중"
           },
           "awardNote": { "type": "string", "description": "수상 내역 상세" },
+          "repoUrl": { "type": "string", "format": "uri", "description": "프로젝트 저장소 URL" },
           "description": { "type": "string", "description": "프로젝트 설명" },
           "metrics": {
             "type": "array",
