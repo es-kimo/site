@@ -68,6 +68,7 @@ export interface Skills {
 // ── Key Contributions (공용) ────────────────────────────────────────────────
 
 export interface KeyContribution {
+  title?: string;
   problem: string;
   action: string;
   result: string;

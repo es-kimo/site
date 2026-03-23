@@ -20,6 +20,7 @@
       "required": ["problem", "action", "result"],
       "additionalProperties": false,
       "properties": {
+        "title": { "type": "string", "description": "한 줄 요약 제목" },
         "problem": { "type": "string", "description": "문제 상황" },
         "action": { "type": "string", "description": "수행한 행동" },
         "result": { "type": "string", "description": "결과" },

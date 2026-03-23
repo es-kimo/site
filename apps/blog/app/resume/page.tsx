@@ -107,6 +107,7 @@ function ContributionCard({ contribution, index }: { contribution: KeyContributi
       <span className="absolute -left-[9px] top-0.5 w-4 h-4 rounded-full bg-background border-2 border-muted-foreground/25 text-[8px] flex items-center justify-center text-muted-foreground font-mono print:border-gray-300">
         {index + 1}
       </span>
+      {contribution.title && <p className="text-sm font-semibold text-foreground/90 mb-1">{contribution.title}</p>}
       <p className="text-sm text-foreground/80 leading-relaxed">{parseInlineMarkdown(contribution.problem)}</p>
       <p className="text-sm text-foreground/90 mt-1 leading-relaxed">
         <span className="text-muted-foreground">→</span> {parseInlineMarkdown(contribution.action)}

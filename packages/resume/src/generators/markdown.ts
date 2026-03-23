@@ -95,7 +95,8 @@ export function toMarkdown(data: ResumeData): string {
         lines.push("**핵심 기여**");
         lines.push("");
         for (const kc of proj.keyContributions) {
-          lines.push(`- **문제**: ${kc.problem}`);
+          const prefix = kc.title ? `- **${kc.title}**\n  ` : `- `;
+          lines.push(`${prefix}**문제**: ${kc.problem}`);
           lines.push(`  **행동**: ${kc.action}`);
           lines.push(`  **결과**: ${kc.result}`);
           if (kc.ownershipEvidence && kc.ownershipEvidence.length > 0) {
@@ -153,7 +154,8 @@ export function toMarkdown(data: ResumeData): string {
           lines.push("");
           if (proj.keyContributions && proj.keyContributions.length > 0) {
             for (const kc of proj.keyContributions) {
-              lines.push(`- **문제**: ${kc.problem}`);
+              const prefix = kc.title ? `- **${kc.title}**\n  ` : `- `;
+              lines.push(`${prefix}**문제**: ${kc.problem}`);
               lines.push(`  **행동**: ${kc.action}`);
               lines.push(`  **결과**: ${kc.result}`);
             }
