@@ -183,3 +183,46 @@ export interface ResumeData {
   training: Training[];
   meta: Meta;
 }
+
+// ── Interview Stories ───────────────────────────────────────────────────────
+
+export interface AlternativeConsidered {
+  approach: string;
+  whyNotViable: string;
+}
+
+export interface TechnicalStep {
+  title: string;
+  insight: string;
+  code?: string;
+  layerBehavior?: Record<string, string>;
+}
+
+export interface TechnicalDeepDive {
+  title: string;
+  summary: string;
+  steps: TechnicalStep[];
+}
+
+export interface InterviewQuestion {
+  q: string;
+  conclusion: string;
+  reason?: string;
+  example?: string;
+  retrospective?: string;
+}
+
+export interface InterviewStory {
+  id: string;
+  tags: string[];
+  relatedProject: string;
+  title: string;
+  questions: InterviewQuestion[];
+  ownership: string[];
+  technicalDeepDives?: TechnicalDeepDive[];
+  alternativesConsidered?: AlternativeConsidered[];
+}
+
+export interface InterviewStoriesData {
+  stories: InterviewStory[];
+}
