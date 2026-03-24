@@ -226,6 +226,21 @@ work:
             result: "줌 기능과의 결합도 없이 다양한 길이의 데이터를 수평 탐색·라벨링할 수 있게 되었습니다."
 
 sideProjects:
+  - id: "voting-system"
+    name: "실시간 의결 투표 플랫폼"
+    teamSize: 2
+    status: "completed"
+    repoUrl: "https://github.com/vottega/client"
+    description: "의사정족수·의결정족수를 지원하는 실시간 투표 시스템의 프론트엔드 전체 담당"
+    keyContributions:
+      - problem: "SSE 이벤트와 REST 응답이 공존하는 환경에서, 오래된 SSE 이벤트가 최신 REST 결과를 덮어쓰는 race condition이 있었습니다."
+        action: "이벤트 수신 시점과 캐시 기록 시점에서 각각 타임스탬프를 비교하는 2단계 검증을 설계하여, 오래된 이벤트가 최신 데이터를 덮어쓰지 못하도록 했습니다."
+        result: "4개 이벤트 핸들러에 일관 적용하여 SSE와 REST 간 데이터 충돌을 차단했습니다."
+      - problem: "탭 비활성화 시 SSE 연결이 끊기며, 그 사이 발생한 이벤트가 유실되었습니다."
+        action: "초기 연결과 재연결을 구분하여, 재연결 시에만 서버 데이터를 다시 조회해 유실 구간을 복구하는 구조를 설계했습니다."
+        result: "커넥션 상태를 아는 계층이 캐시 복구를 트리거하는 구조로, refetchOnWindowFocus 대비 불필요한 요청 없이 정합성을 유지했습니다."
+    whyItMatters: "SSE와 REST가 공존하는 환경에서의 데이터 정합성 설계와, 실시간 서비스의 커넥션 관리 경험을 보여주는 사례"
+
   - id: "vue-kakao-map-lib"
     name: "지도 API 컴포넌트화 라이브러리"
     teamSize: 6
@@ -243,17 +258,6 @@ sideProjects:
         action: "기존 도구(vite-plugin-dts)와 교체한 도구(vue-tsc)의 빌드 산출물을 비교하여, .d.ts 가독성 차이가 실제 타입 추론에 영향이 없는 것을 확인하고, 기존 도구가 경로 별칭을 자동 해소해 파이프라인이 더 단순해진다는 것을 검증했습니다."
         result: "도구 선택의 판단 기준을 '산출물 가독성'에서 '파이프라인 단순성과 소비자 영향'으로 전환하는 계기가 되었습니다."
     whyItMatters: "명령형 SDK를 선언적 컴포넌트로 래핑하는 설계와, 빌드 파이프라인 진단·개선 경험을 보여주는 사례"
-
-  - id: "voting-system"
-    name: "총학생회를 위한 투표 시스템"
-    teamSize: 2
-    status: "completed"
-    repoUrl: "https://github.com/vottega/client"
-    description: "투표/회의가 필요한 집단에서 사용할 수 있는 웹 애플리케이션"
-    keyContributions:
-      - "실시간 이벤트(SSE) 핸들링"
-      - "SSE 데이터와 실제 데이터 정합성 유지 로직을 timestamp 기반으로 구현"
-    whyItMatters: "실시간 상호작용과 의사결정 흐름 중심 제품에 대한 관심을 보여주는 프로젝트"
 
 education:
   - institution: "연세대학교"
