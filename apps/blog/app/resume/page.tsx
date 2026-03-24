@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { getResumeData } from "@workspace/resume/data";
 import { toJsonLd } from "@workspace/resume/generators/json-ld";
 import type { FeaturedProject, KeyContribution, ResumeData, SideProject, WorkProject } from "@workspace/resume/types";
@@ -265,7 +266,16 @@ export default async function ResumePage() {
             <h1 className="text-2xl font-bold tracking-tight print:text-xl">{data.basics.nameKo}</h1>
             <span className="text-lg text-muted-foreground font-normal">{data.basics.label}</span>
           </div>
-          {data.basics.summary && <p className="mt-4 text-sm leading-relaxed text-foreground/80">{data.basics.summary}</p>}
+          {data.basics.summary && (
+            <p className="mt-4 text-sm leading-relaxed text-foreground/80">
+              {data.basics.summary.split("\n").map((line, i, arr) => (
+                <Fragment key={i}>
+                  {line}
+                  {i < arr.length - 1 && <br />}
+                </Fragment>
+              ))}
+            </p>
+          )}
           <div className="flex flex-wrap gap-x-3 gap-y-1 mt-4 text-sm">
             {data.basics.email && (
               <a href={`mailto:${data.basics.email}`} className="text-foreground/60 hover:text-foreground transition-colors inline-flex items-center gap-1">
@@ -327,7 +337,7 @@ export default async function ResumePage() {
 
         {/* ── 참여 프로젝트 ──────────────────────────────────── */}
         {data.work.some((job) => job.projects.length > 0) && (
-          <Section title="참여 프로젝트" className="print:break-inside-avoid">
+          <Section title="참여 프로젝트">
             {data.work
               .filter((job) => job.projects.length > 0)
               .flatMap((job) => job.projects)

@@ -15,7 +15,7 @@ basics:
   email: "khryu0610@gmail.com"
   url: "https://khryu.dev"
   canonical: "https://khryu.dev/resume"
-  summary: "v1.0 단계의 신규 제품에서 프론트엔드 구조 설계와 구현을 맡았으며, type-safe UI abstraction과 ECG 그래프 기반 인터랙션 구현에 강점이 있습니다."
+  summary: "복잡한 인터랙션 레이어를 상태 흐름 중심으로 설계하고 구현했습니다.\n개인 작업에 머무르지 않고, 팀 차원의 문제를 함께 해결하려고 합니다."
   profiles:
     - network: "GitHub"
       username: "es-kimo"
@@ -30,18 +30,18 @@ positioning:
     - "Frontend Developer"
     - "Frontend Platform Engineer"
   coreStrengths:
+    - id: "interaction-design"
+      title: "복합 입력 인터랙션 설계"
+      description: "심전도 그래프 위에서 터치·마우스·키보드 입력이 함께 동작하는 인터랙션 레이어를 설계하고 구현했습니다."
+      evidence:
+        - "Tablet 환경에서 한 손가락 터치를 점 생성, 줌/이동, 정밀 측정으로 구분하는 상태 흐름 설계"
+        - "d3-zoom과 커스텀 인터랙션 간 이벤트 충돌 해소"
     - id: "v1-architecture"
       title: "초기 제품 구조 설계"
       description: "신규 제품의 v1.0 단계에서 기술 스택, 구현 구조, 공통 패턴을 정하는 데 참여했습니다."
       evidence:
         - "판매관리 시스템 v1.0 기술 스택 및 구현 패턴 정착"
         - "고객지원 시스템 v1.0 구조 설계 → v1.1 개발 오너로 일정 관리까지 주도"
-    - id: "interaction-design"
-      title: "복합 입력 인터랙션 설계"
-      description: "ECG 그래프 위에서 터치·마우스·키보드 입력이 함께 동작하는 인터랙션 레이어를 설계하고 구현했습니다."
-      evidence:
-        - "Tablet 환경에서 한 손가락 터치를 점 생성, 줌/이동, 정밀 측정으로 구분하는 상태 흐름 설계"
-        - "d3-zoom과 커스텀 인터랙션 간 이벤트 충돌 해소"
 
 experienceSummary:
   totalExperience: "1+ year"
