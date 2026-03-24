@@ -225,37 +225,6 @@ work:
             action: "d3-zoom 대신 IntersectionObserver로 경계를 감지하는 PanGroup을 설계하여, 줌 이벤트와의 중첩 없이 독립적으로 동작하는 Panning을 구현했습니다."
             result: "줌 기능과의 결합도 없이 다양한 길이의 데이터를 수평 탐색·라벨링할 수 있게 되었습니다."
 
-      - id: "ecg-svg-report"
-        name: "ECG-GRAPH SVG Report Template"
-        period: "2025.01 ~ 2025.02"
-        role: "Frontend Developer"
-        featured: false
-        techStack:
-          - "React"
-          - "TypeScript"
-        oneLiner: "정적인 템플릿 위에 동적인 내용을 그려 SVG 형태의 리포트를 생성하는 기능"
-
-      - id: "test-environment"
-        name: "테스트 환경 구성"
-        period: "2025.01 ~ 2025.03"
-        role: "Frontend Developer"
-        featured: false
-        techStack:
-          - "Playwright"
-          - "Vitest"
-        oneLiner: "E2E 테스트 리서치와 테스트 실행 기반 정비"
-
-      - id: "aitia-ews"
-        name: "AiTiA EWS (Early Warning System)"
-        period: "2024.12 ~ 2025.01"
-        role: "Frontend Developer"
-        featured: false
-        techStack:
-          - "React"
-          - "TypeScript"
-          - "TanStack Query"
-        oneLiner: "중증센터에서 환자 정보를 입력하면 AI가 예측한 중증도를 조회할 수 있는 웹 애플리케이션"
-
 sideProjects:
   - id: "vue-kakao-map-lib"
     name: "지도 API 컴포넌트화 라이브러리"
