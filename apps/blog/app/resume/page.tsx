@@ -327,7 +327,7 @@ export default async function ResumePage() {
 
         {/* ── 참여 프로젝트 ──────────────────────────────────── */}
         {data.work.some((job) => job.projects.length > 0) && (
-          <Section title="참여 프로젝트">
+          <Section title="참여 프로젝트" className="print:break-inside-avoid">
             {data.work
               .filter((job) => job.projects.length > 0)
               .flatMap((job) => job.projects)
