@@ -229,8 +229,7 @@ sideProjects:
   - id: "vue-kakao-map-lib"
     name: "지도 API 컴포넌트화 라이브러리"
     teamSize: 6
-    status: "awarded"
-    awardNote: "SSAFY 전국 지역 대상 발표"
+    status: "completed"
     repoUrl: "https://github.com/beautiful-source/vue3-kakao-maps"
     description: "카카오맵 API를 Vue.js 컴포넌트로 추상화한 오픈소스 NPM 패키지 라이브러리"
     metrics:

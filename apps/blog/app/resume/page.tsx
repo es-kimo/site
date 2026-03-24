@@ -222,9 +222,10 @@ function SideProjectCard({ project }: { project: SideProject }) {
             href={project.repoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2 decoration-border hover:decoration-foreground"
+            className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors inline-flex items-baseline"
           >
-            GitHub
+            <span className="underline underline-offset-2">GitHub</span>
+            <span className="text-[8px] -translate-y-1.5 ml-px">↗</span>
           </a>
         )}
         <StatusBadge status={project.status} />
@@ -265,21 +266,16 @@ export default async function ResumePage() {
             <span className="text-lg text-muted-foreground font-normal">{data.basics.label}</span>
           </div>
           {data.basics.summary && <p className="mt-4 text-sm leading-relaxed text-foreground/80">{data.basics.summary}</p>}
-          <div className="flex flex-wrap gap-x-3 gap-y-1 mt-4 text-sm text-muted-foreground">
+          <div className="flex flex-wrap gap-x-3 gap-y-1 mt-4 text-sm">
             {data.basics.email && (
-              <a href={`mailto:${data.basics.email}`} className="hover:text-foreground transition-colors underline underline-offset-2 decoration-border hover:decoration-foreground">
-                {data.basics.email}
+              <a href={`mailto:${data.basics.email}`} className="text-foreground/60 hover:text-foreground transition-colors inline-flex items-center gap-1">
+                <span className="underline underline-offset-2 decoration-foreground/20 hover:decoration-foreground">{data.basics.email}</span>
               </a>
             )}
             {data.basics.profiles.map((profile) => (
-              <a
-                key={profile.network}
-                href={profile.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-foreground transition-colors underline underline-offset-2 decoration-border hover:decoration-foreground"
-              >
-                {profile.network}
+              <a key={profile.network} href={profile.url} target="_blank" rel="noopener noreferrer" className="text-foreground/60 hover:text-foreground transition-colors inline-flex items-baseline">
+                <span className="underline underline-offset-2 decoration-foreground/20 hover:decoration-foreground">{profile.network}</span>
+                <span className="text-[8px] -translate-y-1.5 ml-px">↗</span>
               </a>
             ))}
           </div>
