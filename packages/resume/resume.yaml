@@ -160,48 +160,6 @@ featuredProjects:
         action: "15개 필드 스키마, useModal 훅 체인 추적 규칙, 위험도·도달 난이도 분류 기준을 정의한 분석 프롬프트를 설계하고, 첫 레포 결과를 품질 체크리스트로 검증한 뒤 나머지에 적용했습니다."
         result: "12개 레포에서 일관된 기준으로 모달 사용처를 추출할 수 있었고, confidence 필드로 불확실한 항목을 별도 관리하는 구조를 만들었습니다."
 
-  - id: "mai-sales"
-    name: "판매관리 시스템"
-    company: "메디컬에이아이"
-    period: "2025.09 ~ 2025.12"
-    scope: "v1.0"
-    role: "Frontend Developer"
-    featured: true
-    techStack:
-      - "React"
-      - "TypeScript"
-      - "TanStack Query"
-      - "Zustand"
-      - "Zod"
-      - "React Hook Form"
-    oneLiner: "회사의 자산, 매출, 거래처를 관리하는 사내 경영관리 시스템"
-    responsibilities:
-      - "v1.0 초기 개발 참여"
-      - "대형 Form/Filter 패턴 표준화"
-      - "파일 다운로드 및 클라이언트 암호화 처리"
-    keyContributions:
-      - problem: "대형 Form과 Filter 구현이 화면마다 반복되었고, 검증/에러 처리 방식이 분산될 수 있었습니다."
-        action: "사내 디자인 시스템 위에 react-hook-form 래퍼와 제네릭 Form Field 컴포넌트를 설계했습니다."
-        result: "폼 구현의 재사용성과 타입 안정성을 높이고, 화면 간 검증/에러 처리 방식의 일관성을 확보했습니다."
-        ownershipEvidence:
-          - "사내 디자인 시스템(maiui) 기반으로 Form abstraction 설계"
-          - "Type-safe 인터페이스 제공"
-      - problem: "대용량 파일 다운로드와 암호화 처리 과정에서 서버 부하와 운영 환경 차이를 고려해야 했습니다."
-        action: "스트리밍 다운로드 로직을 구현하고, zip 파일 암호화를 클라이언트에서 수행하도록 설계했습니다."
-        result: "서버 부하를 일부 클라이언트로 분산하고, 윈도우/맥에서 동작하는 다운로드 흐름을 구현했습니다."
-        ownershipEvidence:
-          - "대용량 스트리밍 파일 다운로드 로직 구현"
-          - "윈도우/맥 기본 압축풀기 기능 지원"
-      - problem: "변경이 잦은 개발 환경에서 API 상태에 따라 프론트엔드 개발과 코드 리뷰가 자주 끊길 수 있었습니다."
-        action: "API mocking coverage를 높은 수준으로 유지해 프론트엔드 검증 경로를 확보했습니다."
-        result: "백엔드 변경과 무관하게 개발과 코드 리뷰를 이어갈 수 있는 환경을 유지했습니다."
-        metrics:
-          - label: "API mocking coverage"
-            value: "90%+"
-    collaboration:
-      - "기획/백엔드와 요구사항 조율"
-      - "디자인 시스템 레이어와 제품 코드 간 경계 설계"
-
   - id: "mai-cs"
     name: "고객지원 시스템"
     company: "메디컬에이아이"
@@ -252,6 +210,27 @@ work:
       - "프로덕션 배포 6건 참여"
       - "심전도 그래프 라이브러리 테스트 커버리지 20%p 향상"
     projects:
+      - id: "mai-sales"
+        name: "판매관리 시스템"
+        period: "2025.09 ~ 2025.12"
+        role: "Frontend Developer"
+        featured: false
+        techStack:
+          - "React"
+          - "TypeScript"
+          - "TanStack Query"
+          - "Zustand"
+          - "Zod"
+          - "React Hook Form"
+        oneLiner: "회사의 자산, 매출, 거래처를 관리하는 사내 경영관리 시스템"
+        keyContributions:
+          - problem: "대형 Form/Filter 구현이 화면마다 반복되었고, 검증·에러 처리 방식이 분산될 수 있었습니다."
+            action: "디자인 시스템 위에 react-hook-form 래퍼와 제네릭 Form Field 컴포넌트를 설계했습니다."
+            result: "폼 구현의 재사용성과 타입 안정성을 높이고, 화면 간 검증·에러 처리의 일관성을 확보했습니다."
+          - problem: "대용량 파일 다운로드 시 서버 부하와 운영 환경(윈도우/맥) 차이를 고려해야 했습니다."
+            action: "스트리밍 다운로드와 클라이언트 사이드 zip 암호화를 설계했습니다."
+            result: "서버 부하를 분산하고, 양쪽 OS에서 동작하는 다운로드 흐름을 구현했습니다."
+
       - id: "ecg-labeling"
         name: "ECG-GRAPH Labeling Tool 개선"
         period: "2025.05 ~ 2025.07"

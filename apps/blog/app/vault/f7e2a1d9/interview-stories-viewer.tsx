@@ -1,6 +1,6 @@
 "use client";
 
-import type { InterviewStory, InterviewQuestion, AlternativeConsidered, TechnicalStep } from "@workspace/resume/types";
+import type { InterviewStory, InterviewQuestion, AlternativeConsidered, TechnicalStep, BranchQuestion, QuestionBranch } from "@workspace/resume/types";
 import { Badge } from "@workspace/ui/components/badge";
 import { Input } from "@workspace/ui/components/input";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@workspace/ui/components/accordion";
@@ -51,6 +51,10 @@ function getAllProjects(stories: InterviewStory[]): string[] {
   return [...set].sort();
 }
 
+function matchesBranchQuestion(bq: BranchQuestion, q: string): boolean {
+  return bq.q.toLowerCase().includes(q) || bq.answer.toLowerCase().includes(q) || (bq.followUps?.some((f) => matchesBranchQuestion(f, q)) ?? false);
+}
+
 function matchesSearch(story: InterviewStory, query: string): boolean {
   const q = query.toLowerCase();
   return (
@@ -64,8 +68,22 @@ function matchesSearch(story: InterviewStory, query: string): boolean {
         (qn.example?.toLowerCase().includes(q) ?? false) ||
         (qn.retrospective?.toLowerCase().includes(q) ?? false),
     ) ||
+    (story.entryQuestion?.answer.toLowerCase().includes(q) ?? false) ||
+    (story.branches?.some((b) => b.questions.some((bq) => matchesBranchQuestion(bq, q))) ?? false) ||
     story.ownership.some((o) => o.toLowerCase().includes(q))
   );
+}
+
+function countBranchQuestions(bq: BranchQuestion): number {
+  return 1 + (bq.followUps?.reduce((sum, f) => sum + countBranchQuestions(f), 0) ?? 0);
+}
+
+function countStoryQuestions(story: InterviewStory): number {
+  if (story.branches) {
+    const branchCount = story.branches.reduce((sum, b) => sum + b.questions.reduce((s, bq) => s + countBranchQuestions(bq), 0), 0);
+    return (story.entryQuestion ? 1 : 0) + branchCount;
+  }
+  return story.questions.length;
 }
 
 // ── View Mode ───────────────────────────────────────────────────────────────
@@ -92,6 +110,44 @@ function QuestionCard({ question }: { question: InterviewQuestion }) {
         {question.example && <AnswerField label="사례" content={question.example} />}
         {question.retrospective && <AnswerField label="회고" content={question.retrospective} />}
       </div>
+    </div>
+  );
+}
+
+function BranchQuestionCard({ question, depth = 0 }: { question: BranchQuestion; depth?: number }) {
+  return (
+    <div className={depth > 0 ? "ml-4" : ""}>
+      <div className="space-y-2.5">
+        <h4 className="text-sm font-semibold flex items-center gap-1.5">
+          {depth > 0 && <span className="text-muted-foreground">↳</span>}
+          Q. &ldquo;{question.q}&rdquo;
+        </h4>
+        <div className="border-l-2 border-primary/40 pl-4">
+          <div className="text-sm leading-relaxed">
+            <InlineMarkdown text={question.answer.trim()} />
+          </div>
+        </div>
+      </div>
+      {question.followUps && question.followUps.length > 0 && (
+        <div className="mt-4 space-y-4">
+          {question.followUps.map((fu) => (
+            <BranchQuestionCard key={fu.id} question={fu} depth={depth + 1} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function BranchSection({ branch }: { branch: QuestionBranch }) {
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded">{branch.trigger}</span>
+      </div>
+      {branch.questions.map((bq) => (
+        <BranchQuestionCard key={bq.id} question={bq} />
+      ))}
     </div>
   );
 }
@@ -142,7 +198,7 @@ function StoryCard({ story }: { story: InterviewStory }) {
         <div className="flex flex-col items-start gap-1.5 text-left">
           <span className="text-sm font-semibold leading-snug">{story.title}</span>
           <div className="flex flex-wrap gap-1">
-            <span className="text-xs text-muted-foreground mr-1">{story.questions.length}개 Q&amp;A</span>
+            <span className="text-xs text-muted-foreground mr-1">{countStoryQuestions(story)}개 Q&amp;A</span>
             {story.tags.map((tag) => (
               <Badge key={tag} variant="secondary" className="text-[10px] px-1.5 py-0">
                 {tag}
@@ -153,11 +209,29 @@ function StoryCard({ story }: { story: InterviewStory }) {
       </AccordionTrigger>
       <AccordionContent className="space-y-8 pt-2">
         {/* Questions — primary content */}
-        <div className="space-y-6">
-          {story.questions.map((question, i) => (
-            <QuestionCard key={i} question={question} />
-          ))}
-        </div>
+        {story.entryQuestion || story.branches ? (
+          <div className="space-y-8">
+            {/* Entry question */}
+            {story.entryQuestion && (
+              <div className="space-y-2.5">
+                <h4 className="text-sm font-semibold">Q. &ldquo;{story.entryQuestion.q}&rdquo;</h4>
+                <div className="border-l-2 border-primary/40 pl-4">
+                  <div className="text-sm leading-relaxed">
+                    <InlineMarkdown text={story.entryQuestion.answer.trim()} />
+                  </div>
+                </div>
+              </div>
+            )}
+            {/* Branches */}
+            {story.branches?.map((branch) => <BranchSection key={branch.id} branch={branch} />)}
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {story.questions.map((question, i) => (
+              <QuestionCard key={i} question={question} />
+            ))}
+          </div>
+        )}
 
         {/* Ownership */}
         <div>
@@ -234,7 +308,7 @@ export function InterviewStoriesViewer({ stories }: { stories: InterviewStory[] 
     return map;
   }, [filtered]);
 
-  const totalQuestions = useMemo(() => stories.reduce((sum, s) => sum + s.questions.length, 0), [stories]);
+  const totalQuestions = useMemo(() => stories.reduce((sum, s) => sum + countStoryQuestions(s), 0), [stories]);
 
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) => {

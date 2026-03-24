@@ -212,12 +212,36 @@ export interface InterviewQuestion {
   retrospective?: string;
 }
 
+// ── Branch‑style questions (tree structure) ─────────────────────────────────
+
+export interface BranchQuestion {
+  id: string;
+  q: string;
+  answer: string;
+  followUps?: BranchQuestion[];
+}
+
+export interface QuestionBranch {
+  id: string;
+  trigger: string;
+  questions: BranchQuestion[];
+}
+
+export interface EntryQuestion {
+  q: string;
+  answer: string;
+}
+
 export interface InterviewStory {
   id: string;
   tags: string[];
   relatedProject: string;
   title: string;
+  /** Flat Q&A list (legacy / simple stories) */
   questions: InterviewQuestion[];
+  /** Tree-structured entry point + branches (new format) */
+  entryQuestion?: EntryQuestion;
+  branches?: QuestionBranch[];
   ownership: string[];
   technicalDeepDives?: TechnicalDeepDive[];
   alternativesConsidered?: AlternativeConsidered[];

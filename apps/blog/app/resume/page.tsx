@@ -1,6 +1,6 @@
 import { getResumeData } from "@workspace/resume/data";
 import { toJsonLd } from "@workspace/resume/generators/json-ld";
-import type { FeaturedProject, KeyContribution, ResumeData, SideProject } from "@workspace/resume/types";
+import type { FeaturedProject, KeyContribution, ResumeData, SideProject, WorkProject } from "@workspace/resume/types";
 import { cn } from "@workspace/ui/lib/utils";
 import type { Metadata } from "next";
 
@@ -190,6 +190,28 @@ function FeaturedProjectCard({ project }: { project: FeaturedProject }) {
   );
 }
 
+function WorkProjectCard({ project }: { project: WorkProject }) {
+  return (
+    <div className="mb-6 last:mb-0">
+      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+        <h3 className="text-sm font-semibold">{project.name}</h3>
+        <span className="text-xs text-muted-foreground tabular-nums">{project.period}</span>
+      </div>
+      <p className="text-sm text-foreground/65 mt-1 leading-relaxed">{project.oneLiner}</p>
+      {project.keyContributions && project.keyContributions.length > 0 && (
+        <ul className="mt-1.5 space-y-0.5">
+          {project.keyContributions.map((kc, i) => (
+            <li key={i} className="flex gap-1.5 text-xs text-foreground/55 leading-relaxed">
+              <span className="text-muted-foreground select-none shrink-0">·</span>
+              <span>{parseInlineMarkdown(kc.action)}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 function SideProjectCard({ project }: { project: SideProject }) {
   return (
     <div className="mb-6 last:mb-0 ">
@@ -295,6 +317,18 @@ export default async function ResumePage() {
                 <FeaturedProjectCard key={proj.id} project={proj} />
               ))}
             </div>
+          </Section>
+        )}
+
+        {/* ── 참여 프로젝트 ──────────────────────────────────── */}
+        {data.work.some((job) => job.projects.length > 0) && (
+          <Section title="참여 프로젝트">
+            {data.work
+              .filter((job) => job.projects.length > 0)
+              .flatMap((job) => job.projects)
+              .map((proj) => (
+                <WorkProjectCard key={proj.id} project={proj} />
+              ))}
           </Section>
         )}
 
