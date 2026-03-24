@@ -198,11 +198,11 @@ function WorkProjectCard({ project }: { project: WorkProject }) {
         <h3 className="text-sm font-semibold">{project.name}</h3>
         <span className="text-xs text-muted-foreground tabular-nums">{project.period}</span>
       </div>
-      <p className="text-sm text-foreground/65 mt-1 leading-relaxed">{project.oneLiner}</p>
+      <p className="text-sm text-foreground/80 mt-1 leading-relaxed">{project.oneLiner}</p>
       {project.keyContributions && project.keyContributions.length > 0 && (
         <ul className="mt-1.5 space-y-0.5">
           {project.keyContributions.map((kc, i) => (
-            <li key={i} className="flex gap-1.5 text-xs text-foreground/55 leading-relaxed">
+            <li key={i} className="flex gap-1.5 text-xs text-foreground/70 leading-relaxed">
               <span className="text-muted-foreground select-none shrink-0">·</span>
               <span>{parseInlineMarkdown(kc.action)}</span>
             </li>
@@ -233,11 +233,11 @@ function SideProjectCard({ project }: { project: SideProject }) {
         <span className="text-xs text-muted-foreground ml-auto tabular-nums">{project.teamSize}인</span>
       </div>
       {project.awardNote && <p className="text-xs text-amber-700 dark:text-amber-400 mt-0.5 font-medium">{project.awardNote}</p>}
-      <p className="text-sm text-foreground/75 mt-1.5 leading-relaxed">{parseInlineMarkdown(project.description)}</p>
+      <p className="text-sm text-foreground/80 mt-1.5 leading-relaxed">{parseInlineMarkdown(project.description)}</p>
       {project.keyContributions.length > 0 && (
         <ul className="mt-1.5 space-y-0.5">
           {project.keyContributions.map((kc, i) => (
-            <li key={i} className="flex gap-1.5 text-xs text-foreground/55 leading-relaxed">
+            <li key={i} className="flex gap-1.5 text-xs text-foreground/70 leading-relaxed">
               <span className="text-muted-foreground select-none shrink-0">·</span>
               <span>{parseInlineMarkdown(typeof kc === "string" ? kc : kc.action)}</span>
             </li>
@@ -327,7 +327,7 @@ export default async function ResumePage() {
         {/* ── 대표 프로젝트 ──────────────────────────────────── */}
         {data.featuredProjects.length > 0 && (
           <Section title="대표 프로젝트">
-            <div className="space-y-6">
+            <div className="space-y-8">
               {data.featuredProjects.map((proj) => (
                 <FeaturedProjectCard key={proj.id} project={proj} />
               ))}
@@ -337,7 +337,7 @@ export default async function ResumePage() {
 
         {/* ── 참여 프로젝트 ──────────────────────────────────── */}
         {data.work.some((job) => job.projects.length > 0) && (
-          <Section title="참여 프로젝트">
+          <Section title="참여 프로젝트" className="print:break-inside-avoid">
             {data.work
               .filter((job) => job.projects.length > 0)
               .flatMap((job) => job.projects)
@@ -356,82 +356,81 @@ export default async function ResumePage() {
           </Section>
         )}
 
-        {/* ── 학력 & 교육 (2-column) ──────────────────────────── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8 mb-12 print:mb-6 print:break-inside-avoid">
-          {data.education.length > 0 && (
-            <div>
-              <h2 className="text-[15px] font-semibold tracking-tight mb-4 pb-2 border-b border-border print:text-sm print:mb-3 print:pb-1">학력</h2>
-              <div className="space-y-4">
-                {data.education.map((edu) => (
-                  <div key={`${edu.institution}-${edu.startDate}`}>
-                    <div className="flex items-baseline justify-between gap-2">
-                      <h3 className="text-sm font-semibold">{edu.institution}</h3>
-                      <span className="text-xs text-muted-foreground">{edu.location}</span>
+        {/* ── 마지막 페이지 래퍼 (인쇄 시 footer를 하단 고정) ── */}
+        <div className="print:flex print:flex-col print:min-h-[100vh] print:break-before-page">
+          {/* ── 학력 & 교육 (2-column) ──────────────────────────── */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8 mb-12 print:mb-6 print:break-inside-avoid">
+            {data.education.length > 0 && (
+              <div>
+                <h2 className="text-[15px] font-semibold tracking-tight mb-4 pb-2 border-b border-border print:text-sm print:mb-3 print:pb-1">학력</h2>
+                <div className="space-y-4">
+                  {data.education.map((edu) => (
+                    <div key={`${edu.institution}-${edu.startDate}`}>
+                      <div className="flex items-baseline justify-between gap-2">
+                        <h3 className="text-sm font-semibold">{edu.institution}</h3>
+                        <span className="text-xs text-muted-foreground">{edu.location}</span>
+                      </div>
+                      <p className="text-sm text-foreground/75 mt-0.5">{edu.area}</p>
+                      <DateRange start={edu.startDate} end={edu.endDate} />
                     </div>
-                    <p className="text-sm text-foreground/75 mt-0.5">{edu.area}</p>
-                    <DateRange start={edu.startDate} end={edu.endDate} />
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {data.training.length > 0 && (
-            <div>
-              <h2 className="text-[15px] font-semibold tracking-tight mb-4 pb-2 border-b border-border print:text-sm print:mb-3 print:pb-1">교육</h2>
-              <div className="space-y-4">
-                {data.training.map((t) => (
-                  <div key={`${t.institution}-${t.startDate}`}>
-                    <div className="flex items-baseline justify-between gap-2">
-                      <h3 className="text-sm font-semibold">{t.institution}</h3>
-                      <span className="text-xs text-muted-foreground">{t.location}</span>
+            {data.training.length > 0 && (
+              <div>
+                <h2 className="text-[15px] font-semibold tracking-tight mb-4 pb-2 border-b border-border print:text-sm print:mb-3 print:pb-1">교육</h2>
+                <div className="space-y-4">
+                  {data.training.map((t) => (
+                    <div key={`${t.institution}-${t.startDate}`}>
+                      <div className="flex items-baseline justify-between gap-2">
+                        <h3 className="text-sm font-semibold">{t.institution}</h3>
+                        <span className="text-xs text-muted-foreground">{t.location}</span>
+                      </div>
+                      <p className="text-sm text-foreground/75 mt-0.5">{t.course}</p>
+                      <DateRange start={t.startDate} end={t.endDate} />
                     </div>
-                    <p className="text-sm text-foreground/75 mt-0.5">{t.course}</p>
-                    <DateRange start={t.startDate} end={t.endDate} />
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
+
+          {/* ── 기술 ─────────────────────────────────────────────── */}
+          {(() => {
+            const sk = data.skills;
+            const groups = [
+              { label: "데이터베이스", items: sk.certifications },
+              { label: "영어", items: sk.english },
+            ].filter((g) => g.items.length > 0);
+            if (groups.length === 0) return null;
+            return (
+              <Section title="자격증">
+                <div className="space-y-2">
+                  {groups.map((g) => (
+                    <div key={g.label} className="flex items-baseline gap-3 text-sm">
+                      <span className="text-muted-foreground text-xs w-20 shrink-0 text-right">{g.label}</span>
+                      <div className="flex flex-wrap gap-1">
+                        {g.items.map((item) => (
+                          <Tag key={item} variant="accent">
+                            {item}
+                          </Tag>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Section>
+            );
+          })()}
+
+          {/* ── Footer ─────────────────────────────────────────────── */}
+          <footer className="text-xs text-muted-foreground border-t border-border pt-4 mt-12 print:mt-auto print:pt-2 print:text-gray-500 tabular-nums">
+            Last updated: {data.meta.lastModified} · v{data.meta.version}
+          </footer>
         </div>
-
-        {/* ── 기술 ─────────────────────────────────────────────── */}
-        {(() => {
-          const sk = data.skills;
-          const groups = [
-            { label: "Frontend", items: sk.frontend },
-            { label: "Testing", items: sk.testing },
-            { label: "Tooling", items: sk.tooling },
-            { label: "디자인", items: sk.design },
-            { label: "협업", items: sk.collaboration },
-            { label: "자격증", items: sk.certifications },
-            { label: "영어", items: sk.english },
-          ].filter((g) => g.items.length > 0);
-          if (groups.length === 0) return null;
-          return (
-            <Section title="기술">
-              <div className="space-y-2">
-                {groups.map((g) => (
-                  <div key={g.label} className="flex items-baseline gap-3 text-sm">
-                    <span className="text-muted-foreground text-xs w-16 shrink-0 text-right">{g.label}</span>
-                    <div className="flex flex-wrap gap-1">
-                      {g.items.map((item) => (
-                        <Tag key={item} variant="accent">
-                          {item}
-                        </Tag>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Section>
-          );
-        })()}
-
-        {/* ── Footer ─────────────────────────────────────────────── */}
-        <footer className="text-xs text-muted-foreground border-t border-border pt-4 mt-12 print:mt-4 print:pt-2 print:text-gray-500 tabular-nums">
-          Last updated: {data.meta.lastModified} · v{data.meta.version}
-        </footer>
+        {/* 마지막 페이지 래퍼 끝 */}
       </article>
     </>
   );

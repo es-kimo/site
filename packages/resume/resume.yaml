@@ -281,8 +281,8 @@ training:
     endDate: "2023.01"
 
 meta:
-  version: "2.1.1"
-  lastModified: "2026-03-19"
+  version: "2.2.0"
+  lastModified: "2026-03-24"
   notes:
     - "기존 highlights 중심 구조를 문제-행동-결과 중심 구조로 재설계"
     - "interests 대신 positioning/coreStrengths로 전환"
