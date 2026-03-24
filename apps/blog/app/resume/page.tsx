@@ -202,7 +202,7 @@ function WorkProjectCard({ project }: { project: WorkProject }) {
       {project.keyContributions && project.keyContributions.length > 0 && (
         <ul className="mt-1.5 space-y-0.5">
           {project.keyContributions.map((kc, i) => (
-            <li key={i} className="flex gap-1.5 text-xs text-foreground/70 leading-relaxed">
+            <li key={i} className="flex gap-1.5 text-sm text-foreground/70 leading-relaxed">
               <span className="text-muted-foreground select-none shrink-0">·</span>
               <span>{parseInlineMarkdown(kc.action)}</span>
             </li>
@@ -237,7 +237,7 @@ function SideProjectCard({ project }: { project: SideProject }) {
       {project.keyContributions.length > 0 && (
         <ul className="mt-1.5 space-y-0.5">
           {project.keyContributions.map((kc, i) => (
-            <li key={i} className="flex gap-1.5 text-xs text-foreground/70 leading-relaxed">
+            <li key={i} className="flex gap-1.5 text-sm text-foreground/70 leading-relaxed">
               <span className="text-muted-foreground select-none shrink-0">·</span>
               <span>{parseInlineMarkdown(typeof kc === "string" ? kc : kc.action)}</span>
             </li>
