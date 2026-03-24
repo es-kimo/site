@@ -221,12 +221,9 @@ work:
           - "TypeScript"
         oneLiner: "심전도 그래프에 특정 지점을 표시해 학습용 데이터를 생성하는 라벨링 도구"
         keyContributions:
-          - problem: "여러 Point를 다루는 화면에서 불필요한 계산이 누적되면 렌더링 비용이 커질 수 있었습니다."
-            action: "불필요한 계산을 줄여 React reconciliation 비용을 낮췄습니다."
-            result: "대량 포인트를 다루는 상호작용 화면에서 성능 부담을 줄였습니다."
-          - problem: "길이가 다른 ECG 데이터를 동일한 뷰포트에서 다루기 어려웠습니다."
-            action: "Panning 기능을 추가했습니다."
-            result: "다양한 길이의 데이터를 하나의 뷰포트에서 탐색할 수 있도록 개선했습니다."
+          - problem: "리드마다 데이터 길이가 달라, 10초를 초과하는 데이터가 고정 뷰포트 밖으로 잘려 라벨링할 수 없었습니다."
+            action: "d3-zoom 대신 IntersectionObserver로 경계를 감지하는 PanGroup을 설계하여, 줌 이벤트와의 중첩 없이 독립적으로 동작하는 Panning을 구현했습니다."
+            result: "줌 기능과의 결합도 없이 다양한 길이의 데이터를 수평 탐색·라벨링할 수 있게 되었습니다."
 
       - id: "ecg-svg-report"
         name: "ECG-GRAPH SVG Report Template"
