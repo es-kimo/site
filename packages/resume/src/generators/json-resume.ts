@@ -49,7 +49,7 @@ export function toJsonResume(data: ResumeData): Record<string, unknown> {
     projects: data.sideProjects.map((p) => ({
       name: p.name,
       description: p.description,
-      highlights: p.keyContributions,
+      highlights: p.keyContributions.map((c) => (typeof c === "string" ? c : `${c.problem} → ${c.action} → ${c.result}`)),
       teamSize: p.teamSize,
       status: p.status,
       awardNote: p.awardNote || undefined,

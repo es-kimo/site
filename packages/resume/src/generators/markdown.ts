@@ -183,7 +183,14 @@ export function toMarkdown(data: ResumeData): string {
       lines.push(proj.description);
       lines.push("");
       for (const h of proj.keyContributions) {
-        lines.push(`- ${h}`);
+        if (typeof h === "string") {
+          lines.push(`- ${h}`);
+        } else {
+          const prefix = h.title ? `- **${h.title}**\n  ` : `- `;
+          lines.push(`${prefix}**문제**: ${h.problem}`);
+          lines.push(`  **행동**: ${h.action}`);
+          lines.push(`  **결과**: ${h.result}`);
+        }
       }
       lines.push("");
       lines.push(`*${proj.whyItMatters}*`);

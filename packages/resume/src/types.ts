@@ -132,7 +132,7 @@ export interface SideProject {
   repoUrl?: string;
   description: string;
   metrics?: Metric[];
-  keyContributions: string[];
+  keyContributions: (string | KeyContribution)[];
   whyItMatters: string;
 }
 

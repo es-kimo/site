@@ -232,7 +232,16 @@ function SideProjectCard({ project }: { project: SideProject }) {
       </div>
       {project.awardNote && <p className="text-xs text-amber-700 dark:text-amber-400 mt-0.5 font-medium">{project.awardNote}</p>}
       <p className="text-sm text-foreground/75 mt-1.5 leading-relaxed">{parseInlineMarkdown(project.description)}</p>
-      <BulletList items={project.keyContributions} className="mt-2" />
+      {project.keyContributions.length > 0 && (
+        <ul className="mt-1.5 space-y-0.5">
+          {project.keyContributions.map((kc, i) => (
+            <li key={i} className="flex gap-1.5 text-xs text-foreground/55 leading-relaxed">
+              <span className="text-muted-foreground select-none shrink-0">·</span>
+              <span>{parseInlineMarkdown(typeof kc === "string" ? kc : kc.action)}</span>
+            </li>
+          ))}
+        </ul>
+      )}
       {project.whyItMatters && <p className="text-xs text-muted-foreground mt-2 italic leading-relaxed">{project.whyItMatters}</p>}
     </div>
   );

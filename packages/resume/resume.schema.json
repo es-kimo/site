@@ -251,7 +251,13 @@
             "items": { "$ref": "#/definitions/metric" },
             "description": "정량 지표"
           },
-          "keyContributions": { "type": "array", "items": { "type": "string" }, "description": "주요 기여/성과" },
+          "keyContributions": {
+            "type": "array",
+            "items": {
+              "oneOf": [{ "type": "string" }, { "$ref": "#/definitions/keyContribution" }]
+            },
+            "description": "주요 기여/성과 (문자열 또는 문제·행동·결과 객체)"
+          },
           "whyItMatters": { "type": "string", "description": "이 프로젝트가 중요한 이유" }
         }
       }
