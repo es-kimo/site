@@ -15,7 +15,7 @@ export const metadata = {
     canonical: "fe/frontend/why-functional-components",
   },
   other: {
-    status: "draft",
+    // status: "draft",
     createdAt: "2026-03-28T12:00:00",
   },
 };
@@ -160,6 +160,27 @@ function Profile() {
 3. 새 함수 본문으로 컴포넌트를 다시 호출한다
 
 상태 저장소(Fiber)와 렌더 로직(함수 본문)이 **처음부터 분리되어 있기 때문에**, 함수만 교체하면 됩니다. 인스턴스의 프로토타입을 조작하거나, lifecycle 메서드의 재실행 여부를 판단하는 복잡한 작업이 필요 없습니다.
+
+다만 이 방식에는 중요한 전제가 하나 있습니다. Fiber에 저장된 hook 상태는 **호출 순서로 매핑**되기 때문에, 코드 수정 전후로 훅의 순서와 개수가 동일해야 합니다.
+
+```jsx
+// 수정 전
+function Profile() {
+  const [editing, setEditing] = useState(true);   // 슬롯 #1
+  const [name, setName] = useState('홍길동');       // 슬롯 #2
+  return <div>{name}</div>;
+}
+
+// 수정 후 — useState 하나를 제거
+function Profile() {
+  const [name, setName] = useState('홍길동');       // 슬롯 #1 ← 기존 editing 값이 매핑됨
+  return <div>{name}</div>;
+}
+```
+
+훅이 추가되거나 제거되면 기존 Fiber의 hook 리스트와 새 함수의 호출 순서가 어긋납니다. Fast Refresh는 이런 경우를 감지하면 상태 보존을 포기하고 컴포넌트를 처음부터 다시 마운트합니다.
+
+이 제약의 근원은 React가 훅을 이름이 아니라 호출 순서로 식별하는 설계에 있습니다. [이전 글](../Frontend/react-hooks-조건부-호출)에서 다룬 "훅을 조건부로 호출할 수 없는 이유"와 정확히 같은 원리입니다. 런타임에서 렌더마다 훅 순서가 같아야 하듯, 핫 리로딩에서도 코드 수정 전후로 훅 순서가 같아야 합니다. 함수형 컴포넌트가 핫 리로딩에 유리한 구조인 것은 맞지만, 그 이점은 이 규칙 위에서만 성립합니다.
 
 이것이 React 팀이 Fast Refresh를 함수형 컴포넌트 기준으로 설계한 배경입니다. 실제로 Fast Refresh에서 클래스형 컴포넌트를 수정하면 상태가 보존되지 않고 컴포넌트가 완전히 다시 마운트됩니다. 이는 기술적 한계라기보다, 클래스형 모델의 구조적 특성에서 오는 필연적 결과입니다.
 
