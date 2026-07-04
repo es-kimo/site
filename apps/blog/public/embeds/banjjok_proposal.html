@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>반쪽 — 말이 통해야 완성되는 게임</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#232B33; --sub:#5B6670; --faint:#8A939B;
+    --paper:#FFFFFF; --soft:#F4F6F7; --line:#E3E7EA;
+    --blue:#2C5FA8; --blue-bg:#EAF1FA; --blue-deep:#1E4377;
+    --orange:#D9752E; --orange-bg:#FBEFE2; --orange-deep:#9A4E17;
+    --ok:#3E7C4F; --ok-bg:#EAF3EC;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:"Pretendard Variable",Pretendard,-apple-system,sans-serif;
+    color:var(--ink); background:var(--paper);
+    font-size:16.5px; line-height:1.85; word-break:keep-all;
+  }
+  .page{max-width:760px;margin:0 auto;padding:0 28px;}
+  h1,h2{font-family:"Gowun Batang",serif;font-weight:700;letter-spacing:-0.01em;}
+  h2{font-size:25px;margin-bottom:20px;line-height:1.5;}
+  section{padding:64px 0;border-top:1px solid var(--line);}
+  p{color:var(--ink);}
+  p + p{margin-top:14px;}
+  .muted{color:var(--sub);}
+  em{font-style:normal;box-shadow:inset 0 -9px 0 var(--orange-bg);}
+  em.b{box-shadow:inset 0 -9px 0 var(--blue-bg);}
+
+  /* 표지 */
+  header{padding:96px 0 72px;text-align:center;}
+  .halves{display:inline-flex;margin-bottom:28px;}
+  .half{
+    width:88px;height:112px;display:flex;align-items:center;justify-content:center;
+    font-family:"Gowun Batang",serif;font-weight:700;font-size:44px;color:#fff;
+  }
+  .half.a{background:var(--blue);border-radius:16px 4px 4px 16px;transform:rotate(-2.5deg) translateX(3px);}
+  .half.b{background:var(--orange);border-radius:4px 16px 16px 4px;transform:rotate(2.5deg) translateX(-3px);}
+  header h1{font-size:34px;line-height:1.55;margin-bottom:14px;}
+  header .tagline{font-size:17px;color:var(--sub);}
+  .doc-label{
+    display:inline-block;font-size:12.5px;letter-spacing:0.14em;color:var(--faint);
+    border:1px solid var(--line);border-radius:999px;padding:5px 16px;margin-bottom:40px;
+  }
+
+  /* 태블릿 목업 공통 */
+  .tab{
+    background:#fff;border:1.5px solid #C9CFD4;border-radius:18px;
+    padding:10px;width:100%;max-width:300px;
+  }
+  .tab .scr{background:var(--soft);border-radius:10px;padding:14px;min-height:190px;}
+  .role{
+    display:inline-block;font-size:11.5px;font-weight:600;padding:3px 11px;border-radius:999px;margin-bottom:12px;
+  }
+  .role.a{background:var(--blue-bg);color:var(--blue-deep);}
+  .role.b{background:var(--orange-bg);color:var(--orange-deep);}
+
+  /* 캐릭터 */
+  .kid{display:flex;flex-direction:column;align-items:center;gap:2px;}
+  .hat{width:46px;height:17px;border-radius:9px 9px 3px 3px;background:#D64545;}
+  .face{width:36px;height:36px;border-radius:50%;background:#F6E3C8;border:1px solid #E8D2B2;}
+  .shirt{width:48px;height:32px;border-radius:7px;background:#5A9E4B;}
+  .shirt.empty{background:transparent;border:2px dashed #B7BfC6;}
+
+  /* 단어 칩 · 선택 버튼 */
+  .chip{
+    display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);
+    border-radius:999px;padding:7px 15px;font-size:14px;font-weight:500;color:var(--ink);
+  }
+  .spk{width:15px;height:15px;flex:none;fill:var(--blue);}
+  .opt{
+    display:flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--line);
+    border-radius:8px;padding:6px 8px;font-size:12.5px;color:var(--ink);
+  }
+  .opt.on{border:2px solid var(--orange);}
+  .sw{width:12px;height:12px;border-radius:3px;flex:none;}
+
+  /* 단계 구성 */
+  .step{display:flex;gap:36px;align-items:center;margin-top:44px;}
+  .step .txt{flex:1;min-width:0;}
+  .step .fig{flex:none;width:300px;display:flex;justify-content:center;}
+  .stepnum{
+    font-family:"Gowun Batang",serif;font-size:14px;font-weight:700;color:var(--faint);
+    letter-spacing:0.18em;margin-bottom:8px;
+  }
+  .step h3{font-size:18.5px;font-weight:700;margin-bottom:8px;}
+  .step p{font-size:15.5px;color:var(--sub);}
+
+  /* 마주 보는 두 화면 */
+  .facing{display:flex;align-items:stretch;gap:0;margin:44px 0 10px;}
+  .facing .side{flex:1;display:flex;flex-direction:column;align-items:center;gap:12px;}
+  .facing .wall{
+    flex:none;width:64px;display:flex;align-items:center;justify-content:center;position:relative;
+  }
+  .facing .wall::before{
+    content:"";position:absolute;top:8px;bottom:8px;left:50%;border-left:2px dashed #C9CFD4;
+  }
+  .facing .wall span{
+    position:relative;background:var(--paper);color:var(--faint);font-size:12px;
+    writing-mode:vertical-rl;letter-spacing:0.28em;padding:10px 0;
+  }
+  .cap{font-size:13px;color:var(--faint);text-align:center;}
+
+  /* 완성 비교 */
+  .reveal{
+    background:var(--ok-bg);border-radius:16px;padding:26px 20px;text-align:center;margin-top:20px;
+  }
+  .reveal .pair{display:flex;justify-content:center;gap:44px;margin-bottom:14px;}
+  .reveal .pair .kid p{font-size:12px;color:var(--sub);margin-top:8px;}
+  .reveal .msg{font-family:"Gowun Batang",serif;font-size:19px;font-weight:700;color:var(--ok);}
+
+  /* 5분 타임라인 */
+  .mins{margin-top:34px;border-left:2px solid var(--line);padding-left:26px;}
+  .min{position:relative;padding-bottom:26px;}
+  .min:last-child{padding-bottom:0;}
+  .min::before{
+    content:"";position:absolute;left:-33px;top:7px;width:12px;height:12px;border-radius:50%;
+    background:var(--paper);border:2.5px solid var(--blue);
+  }
+  .min b{font-size:15.5px;font-weight:700;display:block;margin-bottom:2px;}
+  .min p{font-size:15px;color:var(--sub);}
+
+  /* 부담 없음 카드 */
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:34px;}
+  .card{background:var(--soft);border-radius:14px;padding:22px 24px;}
+  .card b{display:block;font-size:16px;margin-bottom:6px;}
+  .card p{font-size:14.5px;color:var(--sub);line-height:1.75;}
+
+  /* 마무리 */
+  .closing{text-align:center;padding:80px 0 40px;}
+  .closing p.big{
+    font-family:"Gowun Batang",serif;font-size:21px;line-height:2;font-weight:700;max-width:520px;margin:0 auto 30px;
+  }
+  .contact{font-size:14px;color:var(--faint);line-height:2;}
+  footer{padding:24px 0 60px;text-align:center;font-size:12.5px;color:var(--faint);}
+
+  @media (max-width:640px){
+    .step{flex-direction:column;gap:20px;}
+    .step .fig{width:100%;}
+    .facing{flex-direction:column;gap:18px;}
+    .facing .wall{width:100%;height:44px;}
+    .facing .wall::before{border-left:none;border-top:2px dashed #C9CFD4;left:8px;right:8px;top:50%;}
+    .facing .wall span{writing-mode:horizontal-tb;padding:0 12px;}
+    .cards{grid-template-columns:1fr;}
+    header h1{font-size:28px;}
+  }
+  @media print{
+    body{font-size:14px;}
+    section{padding:36px 0;page-break-inside:avoid;}
+    header{padding:48px 0 36px;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="doc-label">앱 소개서</div><br>
+  <div class="halves" aria-hidden="true">
+    <div class="half a">반</div><div class="half b">쪽</div>
+  </div>
+  <h1>말이 통해야<br>완성되는 게임</h1>
+  <p class="tagline">태블릿 두 대로 하는 교실 영어 짝 놀이, 「반쪽」</p>
+</header>
+
+<section>
+  <h2>아이들에게는 영어를 말할 이유가 없습니다</h2>
+  <p>아이들은 영어를 배웁니다. 단어를 외우고, 문제를 풀고, 시험을 칩니다. 그런데 정작 <em class="b">내 말이 상대에게 가 닿는 경험</em>은 교실에서 좀처럼 일어나지 않습니다. 말할 이유가 없기 때문입니다.</p>
+  <p>언어는 필요할 때 가장 빨리 늡니다. 「반쪽」은 그 필요를 놀이로 만듭니다. 규칙은 한 문장입니다. <em>말로 설명해서, 친구와 똑같은 그림을 완성하면 이깁니다.</em> 그러려면 영어로 말해야 하고, 귀 기울여 들어야 합니다. 아이들에게 그것은 공부가 아니라, 이기고 싶은 게임입니다.</p>
+</section>
+
+<section>
+  <h2>게임 한 판은 이렇게 흘러갑니다</h2>
+  <p class="muted">두 아이가 각자 태블릿을 들고 마주 앉습니다. 기기를 연결하거나 짝을 등록하는 과정은 없습니다.</p>
+
+  <div class="step">
+    <div class="txt">
+      <div class="stepnum">첫째</div>
+      <h3>같은 놀이 카드를 고릅니다</h3>
+      <p>두 아이가 각자의 화면에서 같은 카드를 고르면 놀이가 시작됩니다. 한 아이에게는 설명하는 사람의 화면이, 다른 아이에게는 만드는 사람의 화면이 열립니다.</p>
+    </div>
+    <div class="fig">
+      <div class="tab"><div class="scr" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;">
+        <p style="font-size:13px;color:var(--sub);">오늘의 놀이 카드</p>
+        <div style="display:flex;gap:10px;">
+          <div style="width:56px;height:72px;background:#fff;border:2px solid var(--blue);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;"><span style="font-size:20px;color:var(--blue);">★</span><span style="font-size:12px;font-weight:600;">별 7</span></div>
+          <div style="width:56px;height:72px;background:#fff;border:1px solid var(--line);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;"><span style="font-size:20px;color:var(--faint);">☾</span><span style="font-size:12px;color:var(--sub);">달 2</span></div>
+          <div style="width:56px;height:72px;background:#fff;border:1px solid var(--line);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;"><span style="font-size:20px;color:var(--faint);">☁</span><span style="font-size:12px;color:var(--sub);">구름 4</span></div>
+        </div>
+        <p style="font-size:12px;color:var(--faint);">짝과 같은 카드를 고르세요</p>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="facing">
+    <div class="side">
+      <div class="tab"><div class="scr">
+        <span class="role a">설명하는 사람</span>
+        <div style="display:flex;align-items:center;gap:18px;">
+          <div class="kid"><div class="hat"></div><div class="face"></div><div class="shirt"></div></div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="chip"><svg class="spk" viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/></svg>red hat</div>
+            <div class="chip"><svg class="spk" viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/></svg>green shirt</div>
+          </div>
+        </div>
+      </div></div>
+      <p class="cap">목표 모습과 영어 단서가 보입니다.<br>스피커를 누르면 발음을 들려줍니다.</p>
+    </div>
+    <div class="wall"><span>서로의 화면은 보이지 않습니다</span></div>
+    <div class="side">
+      <div class="tab"><div class="scr">
+        <span class="role b">만드는 사람</span>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div class="kid"><div class="hat"></div><div class="face"></div><div class="shirt empty"></div></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:1;">
+            <div class="opt on"><span class="sw" style="background:#D64545;"></span>hat</div>
+            <div class="opt"><span class="sw" style="background:#3E6FC2;"></span>hat</div>
+            <div class="opt"><span class="sw" style="background:#5A9E4B;"></span>shirt</div>
+            <div class="opt"><span class="sw" style="background:#C75D9B;"></span>shirt</div>
+          </div>
+        </div>
+      </div></div>
+      <p class="cap">친구의 말만 듣고 재료를 고릅니다.<br>되묻는 것도 놀이의 일부입니다.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="txt">
+      <div class="stepnum">둘째</div>
+      <h3>말이 오가야 그림이 완성됩니다</h3>
+      <p>설명하는 아이는 영어 단서를 소리 내어 말합니다. 영어가 서툴러도 괜찮습니다. 발음을 들려주는 스피커가 곁에 있으니, 따라 말하면 됩니다. 만드는 아이는 친구의 말에 귀를 기울여 재료를 고릅니다. "Red? 빨간색?" — 되묻고 확인하는 사이, 말은 도구가 됩니다.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="txt">
+      <div class="stepnum">셋째</div>
+      <h3>완성 버튼을 누르는 순간</h3>
+      <p>두 화면의 그림이 나란히 놓입니다. 같으면, 내 말이 통한 것입니다. 다르면 함께 웃고, 어디가 달랐는지 찾아보고, 역할을 바꿔 다시 합니다. 틀려도 잃는 것은 없습니다.</p>
+    </div>
+    <div class="fig">
+      <div style="width:100%;max-width:300px;">
+        <div class="reveal">
+          <div class="pair">
+            <div class="kid"><div class="hat"></div><div class="face"></div><div class="shirt"></div><p>목표</p></div>
+            <div class="kid"><div class="hat"></div><div class="face"></div><div class="shirt"></div><p>완성</p></div>
+          </div>
+          <p class="msg">말이 통했어요!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>수업 다섯 분이면 충분합니다</h2>
+  <p>준비물은 짝과 태블릿뿐입니다. 영어 수업의 도입 활동으로, 아침 활동으로, 단원을 마친 뒤의 복습으로 — 교사의 준비 없이 끼워 넣을 수 있습니다.</p>
+  <div class="mins">
+    <div class="min"><b>1분 — 앱을 켜고 카드를 고릅니다</b><p>짝과 같은 카드를 고르는 것이 준비의 전부입니다.</p></div>
+    <div class="min"><b>2분 — 첫 판</b><p>한 아이가 설명하고, 한 아이가 만듭니다.</p></div>
+    <div class="min"><b>2분 — 역할을 바꿔 한 판 더</b><p>말하던 아이는 듣고, 듣던 아이는 말합니다. 다섯 분 동안 모든 아이가 말하기와 듣기를 한 번씩 지나갑니다.</p></div>
+  </div>
+  <p style="margin-top:30px;">어휘는 초등 영어 교육과정의 기본 어휘 안에서만 씁니다. 색, 사물, 위치를 나타내는 낱말들 — 교과서에서 배운 말이 놀이에서 쓰이는 말이 되도록 했습니다.</p>
+</section>
+
+<section>
+  <h2>선생님의 부담을 덜어냈습니다</h2>
+  <p class="muted">교실에 새 도구를 들이는 일이 얼마나 번거로운지 압니다. 그래서 처음부터 덜어내며 만들었습니다.</p>
+  <div class="cards">
+    <div class="card"><b>로그인이 없습니다</b><p>계정도, 비밀번호도 만들지 않습니다. 설치하고 열면 바로 놀이입니다.</p></div>
+    <div class="card"><b>아무것도 수집하지 않습니다</b><p>서버가 없습니다. 아이들의 이름도, 기록도, 그 무엇도 기기 밖으로 나가지 않습니다.</p></div>
+    <div class="card"><b>인터넷이 없어도 됩니다</b><p>모든 놀이가 기기 안에서 돌아갑니다. 교실 와이파이가 느려도 놀이는 끊기지 않습니다.</p></div>
+    <div class="card"><b>기기를 가리지 않습니다</b><p>아이패드와 갤럭시탭이 섞여 있어도 괜찮습니다. 놀이 카드만 같으면 됩니다.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>배움은 놀이 뒤에 숨어 있습니다</h2>
+  <p>내가 아는 것을 상대가 모를 때, 말은 비로소 쓸모를 얻습니다. 언어 교육에서는 이런 방식을 <em class="b">정보 틈 메우기 활동</em>이라 부르며 오랫동안 써 왔습니다. 「반쪽」은 그 검증된 방식을 아이들의 손 위로 옮긴 것입니다.</p>
+  <p>설명하는 아이는 말하기를, 만드는 아이는 듣기를 연습합니다. 역할을 바꾸면 반대가 됩니다. 그러나 아이들이 느끼는 것은 연습이 아니라, 내 말이 통했을 때의 기쁨입니다. 그 기쁨이 다음 판을 하고 싶게 만들고, 다음 판이 다시 말을 하게 만듭니다.</p>
+</section>
+
+<div class="closing">
+  <p class="big">언어가 벽이 되지 않는 세계로 가는 첫걸음은,<br>교실의 두 아이가 말을 주고받아<br>하나의 그림을 완성해 보는 일이라 믿습니다.</p>
+  <p class="contact">
+    만든 사람 · ______<br>
+    문의 · ______@______
+  </p>
+</div>
+
+<footer>「반쪽」 소개서 · 2026</footer>
+
+</div>
+</body>
+</html>

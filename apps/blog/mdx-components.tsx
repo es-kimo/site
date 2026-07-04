@@ -1,3 +1,4 @@
+import { EmbedIframe } from "@/components/EmbedIframe";
 import { Playground } from "@/components/Playground";
 import { formatPostDate } from "@/lib/date";
 import type { MDXComponents } from "mdx/types";
@@ -187,6 +188,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </div>
       );
     },
+    EmbedIframe,
     Playground,
     ...components,
   };
