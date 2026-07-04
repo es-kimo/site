@@ -50,15 +50,23 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       );
     },
     p: ({ children }) => <p className="[&:not(:first-child)]:mt-7 tracking-wide">{children}</p>,
-    a: ({ children, href, ...props }) => (
-      <a
-        href={href}
-        {...props}
-        className="text-primary hover:text-primary/80 underline decoration-primary/30 hover:decoration-primary/60 underline-offset-2 transition-colors duration-200 font-medium"
-      >
-        {children}
-      </a>
-    ),
+    a: ({ children, href, ...props }) => {
+      const shouldOpenInNewTab = typeof href === "string" && href.startsWith("/embeds/");
+      const target = props.target ?? (shouldOpenInNewTab ? "_blank" : undefined);
+      const rel = target === "_blank" ? (props.rel ?? "noopener noreferrer") : props.rel;
+
+      return (
+        <a
+          href={href}
+          {...props}
+          target={target}
+          rel={rel}
+          className="text-primary hover:text-primary/80 underline decoration-primary/30 hover:decoration-primary/60 underline-offset-2 transition-colors duration-200 font-medium"
+        >
+          {children}
+        </a>
+      );
+    },
     blockquote: ({ children }) => <blockquote className="mt-7 border-l-2 pl-6 italic text-foreground/80">{children}</blockquote>,
     table: ({ children }) => (
       <div className="my-8 w-full overflow-y-auto">
