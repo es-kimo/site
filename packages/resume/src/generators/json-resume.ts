@@ -26,7 +26,7 @@ export function toJsonResume(data: ResumeData): Record<string, unknown> {
       position: job.position,
       startDate: job.startDate,
       endDate: job.endDate || undefined,
-      highlights: job.achievementSummary,
+      highlights: job.projects.map((p) => p.oneLiner),
     })),
     education: data.education.map((edu) => ({
       institution: edu.institution,
@@ -48,13 +48,16 @@ export function toJsonResume(data: ResumeData): Record<string, unknown> {
     })),
     projects: data.sideProjects.map((p) => ({
       name: p.name,
-      description: p.description,
-      highlights: p.keyContributions.map((c) => (typeof c === "string" ? c : `${c.problem} → ${c.action} → ${c.result}`)),
+      description: p.oneLiner,
+      highlights: p.keyContributions.map((c) => `${c.problem} → ${c.decision} → ${c.result}`),
       teamSize: p.teamSize,
       status: p.status,
-      awardNote: p.awardNote || undefined,
+      role: p.role,
+      keywords: p.techStack,
       url: p.repoUrl || undefined,
     })),
+    certificates: data.certifications.map((c) => ({ name: c.name })),
+    languages: data.languages.map((l) => ({ language: l.name, fluency: l.level })),
 
     meta: {
       canonical: data.basics.canonical,

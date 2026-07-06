@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { getResumeData } from "@workspace/resume/data";
 import { toJsonLd } from "@workspace/resume/generators/json-ld";
-import type { FeaturedProject, KeyContribution, ResumeData, SideProject, WorkProject } from "@workspace/resume/types";
+import type { KeyContribution, ResumeData, SideProject, WorkProject } from "@workspace/resume/types";
 import { cn } from "@workspace/ui/lib/utils";
 import type { Metadata } from "next";
 
@@ -47,8 +47,8 @@ function parseInlineMarkdown(text: string): React.ReactNode[] {
 
 function Section({ title, children, className: cls }: { title: string; children: React.ReactNode; className?: string }) {
   return (
-    <section className={cn("mb-12 print:mb-6", cls)}>
-      <h2 className="text-[15px] font-semibold tracking-tight mb-5 pb-2 border-b border-border print:text-sm print:mb-3 print:pb-1">{title}</h2>
+    <section className={cn("mb-12 print:mb-12", cls)}>
+      <h2 className="text-[19px] font-bold tracking-tight mb-5 pb-2 border-b border-border print:text-[16px] print:mb-3 print:pb-1">{title}</h2>
       {children}
     </section>
   );
@@ -86,136 +86,114 @@ function StatusBadge({ status }: { status: SideProject["status"] }) {
   return <span className={cn("text-[11px] px-1.5 py-0.5 rounded font-medium", c.className)}>{c.label}</span>;
 }
 
-function BulletList({ items, className: cls }: { items: string[]; className?: string }) {
-  if (items.length === 0) return null;
+type ContributionIconKind = "problem" | "decision" | "result";
+
+function ContributionIcon({ kind, className: cls }: { kind: ContributionIconKind; className?: string }) {
+  const iconMap: Record<ContributionIconKind, { d: string; fill: string }> = {
+    problem: {
+      d: "M7.99992 1.33337C11.6818 1.33337 14.6666 4.31814 14.6666 8.00004C14.6666 11.6819 11.6818 14.6667 7.99992 14.6667C4.31802 14.6667 1.33325 11.6819 1.33325 8.00004C1.33325 4.31814 4.31802 1.33337 7.99992 1.33337ZM7.99992 7.00004C7.70537 7.00004 7.46672 7.23869 7.46672 7.53324V10.4668C7.46672 10.7614 7.70537 11 7.99992 11C8.29441 11 8.53312 10.7613 8.53312 10.4668V7.53324C8.53312 7.23873 8.29441 7.00011 7.99992 7.00004ZM7.99992 4.93363C7.70537 4.93364 7.46672 5.17229 7.46672 5.46684C7.46678 5.76133 7.70541 6.00004 7.99992 6.00004C8.29443 6.00004 8.53306 5.76134 8.53312 5.46684C8.53312 5.17229 8.29447 4.93363 7.99992 4.93363Z",
+      fill: "#4088FF",
+    },
+    decision: {
+      d: "M7.99992 1.33337C11.6818 1.33337 14.6666 4.31814 14.6666 8.00004C14.6666 11.6819 11.6818 14.6667 7.99992 14.6667C4.31802 14.6667 1.33325 11.6819 1.33325 8.00004C1.33325 4.31814 4.31802 1.33337 7.99992 1.33337ZM10.7226 6.10225C10.5212 5.88744 10.1836 5.87627 9.96867 6.07751L7.1451 8.72465L6.04354 7.62309C5.83528 7.41492 5.49789 7.41492 5.28963 7.62309C5.08145 7.83138 5.08138 8.1694 5.28963 8.37764L6.75643 9.84379C6.95991 10.0471 7.28801 10.0528 7.49797 9.85616L10.6978 6.85616C10.9126 6.6548 10.9237 6.31716 10.7226 6.10225Z",
+      fill: "#26A554",
+    },
+    result: {
+      d: "M7.99992 1.33337C11.6818 1.33337 14.6666 4.31814 14.6666 8.00004C14.6666 11.6819 11.6818 14.6667 7.99992 14.6667C4.31802 14.6667 1.33325 11.6819 1.33325 8.00004C1.33325 4.31814 4.31802 1.33337 7.99992 1.33337ZM10.7226 6.10225C10.5212 5.88744 10.1836 5.87627 9.96867 6.07751L7.1451 8.72465L6.04354 7.62309C5.83528 7.41492 5.49789 7.41492 5.28963 7.62309C5.08145 7.83138 5.08138 8.1694 5.28963 8.37764L6.75643 9.84379C6.95991 10.0471 7.28801 10.0528 7.49797 9.85616L10.6978 6.85616C10.9126 6.6548 10.9237 6.31716 10.7226 6.10225Z",
+      fill: "#515761",
+    },
+  };
+
+  const icon = iconMap[kind];
+
   return (
-    <ul className={cn("space-y-0.5 text-sm text-foreground/75 leading-relaxed", cls)}>
-      {items.map((item, i) => (
-        <li key={i} className="flex gap-1.5">
-          <span className="text-muted-foreground select-none shrink-0">·</span>
-          <span>{parseInlineMarkdown(item)}</span>
-        </li>
-      ))}
-    </ul>
+    <svg className={cn("w-4 h-4 shrink-0", cls)} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path fillRule="evenodd" clipRule="evenodd" d={icon.d} fill={icon.fill} />
+    </svg>
   );
 }
 
 // ── Sub-components ──────────────────────────────────────────────────────────
 
-function ContributionCard({ contribution, index }: { contribution: KeyContribution; index: number }) {
+function CompactContributionCard({ contribution }: { contribution: KeyContribution }) {
   return (
-    <div className="relative pl-4 border-l-2 border-muted-foreground/15 mb-4 last:mb-0 print:mb-2">
-      <span className="absolute -left-[9px] top-0.5 w-4 h-4 rounded-full bg-background border-2 border-muted-foreground/25 text-[8px] flex items-center justify-center text-muted-foreground font-mono print:border-gray-300">
-        {index + 1}
-      </span>
-      {contribution.title && <p className="text-sm font-semibold text-foreground/90 mb-1">{contribution.title}</p>}
-      <p className="text-sm text-foreground/80 leading-relaxed">{parseInlineMarkdown(contribution.problem)}</p>
-      <p className="text-sm text-foreground/90 mt-1 leading-relaxed">
-        <span className="text-muted-foreground">→</span> {parseInlineMarkdown(contribution.action)}
-      </p>
-      <p className="text-sm font-medium text-foreground/85 mt-1 leading-relaxed">
-        <span className="text-muted-foreground">✓</span> {parseInlineMarkdown(contribution.result)}
-      </p>
-      {/* {contribution.ownershipEvidence && contribution.ownershipEvidence.length > 0 && (
-        <div className="mt-1.5 flex flex-wrap gap-1">
-          {contribution.ownershipEvidence.map((e, i) => (
-            <Tag key={i} variant="accent">
-              {e}
-            </Tag>
-          ))}
+    <div className="rounded-none border-l-2 border-border/60 pl-3 py-1 break-inside-avoid">
+      {contribution.title && <p className="text-[13px] font-semibold text-foreground/90 mb-2">{contribution.title}</p>}
+      <div className="space-y-2">
+        <div className="grid grid-cols-[16px_1fr] gap-2 items-start">
+          <ContributionIcon kind="problem" className="mt-0.5" />
+          <p className="text-[13px] text-foreground/75 leading-relaxed">{parseInlineMarkdown(contribution.problem)}</p>
         </div>
-      )}
-      {contribution.metrics && contribution.metrics.length > 0 && (
-        <div className="mt-1.5 flex flex-wrap gap-3">
-          {contribution.metrics.map((m, i) => (
-            <span key={i} className="text-xs text-muted-foreground">
-              {m.label} <span className="font-semibold text-foreground/80">{m.value}</span>
-            </span>
-          ))}
+        <div className="grid grid-cols-[16px_1fr] gap-2 items-start">
+          <ContributionIcon kind="decision" className="mt-0.5" />
+          <p className="text-[13px] text-foreground/90 leading-relaxed font-medium">{parseInlineMarkdown(contribution.decision)}</p>
         </div>
-      )} */}
+        <div className="grid grid-cols-[16px_1fr] gap-2 items-start">
+          <ContributionIcon kind="result" className="mt-0.5" />
+          <p className="text-[13px] text-foreground/80 leading-relaxed">{parseInlineMarkdown(contribution.result)}</p>
+        </div>
+      </div>
     </div>
   );
 }
 
-function FeaturedProjectCard({ project }: { project: FeaturedProject }) {
+function FeaturedProjectCard({ project, company }: { project: WorkProject; company: string }) {
+  const contributions = project.keyContributions ?? [];
+
   return (
-    <div className="mb-8 last:mb-0 print:mb-5  rounded-lg border border-border/60 p-5 print:p-3 print:border-gray-200">
+    <div className="mb-6 last:mb-0 break-inside-avoid">
       {/* Header */}
       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-        <h3 className="text-[15px] font-semibold">{project.name}</h3>
-        <span className="text-xs text-muted-foreground">{project.company}</span>
+        <h3 className="text-sm font-semibold">{project.name}</h3>
+        <span className="text-xs text-muted-foreground">{company}</span>
         <span className="ml-auto">
           <DateRange period={project.period} />
         </span>
       </div>
-      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1">
-        <span className="text-xs text-muted-foreground">
-          {project.role} · {project.scope}
-        </span>
-      </div>
 
       {/* Description */}
-      <p className="text-sm text-foreground/75 mt-3 leading-relaxed">{parseInlineMarkdown(project.oneLiner)}</p>
-
-      {/* Tech */}
-      <div className="flex flex-wrap gap-1 mt-3">
-        {project.techStack.map((tech) => (
-          <Tag key={tech} variant="accent">
-            {tech}
-          </Tag>
-        ))}
-      </div>
-
-      {/* Responsibilities */}
-      {project.responsibilities.length > 0 && <BulletList items={project.responsibilities} className="mt-3" />}
+      <p className="text-sm text-foreground/80 mt-1 leading-relaxed">{parseInlineMarkdown(project.oneLiner)}</p>
 
       {/* Key Contributions */}
-      {project.keyContributions.length > 0 && (
-        <div className="mt-5">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">주요 기여</p>
-          {project.keyContributions.map((kc, i) => (
-            <ContributionCard key={i} contribution={kc} index={i} />
+      {contributions.length > 0 && (
+        <div className="mt-3 space-y-2">
+          <p className="text-[11px] font-semibold text-muted-foreground">핵심 기여</p>
+          {contributions.map((kc, i) => (
+            <CompactContributionCard key={i} contribution={kc} />
           ))}
         </div>
       )}
-
-      {/* Collaboration */}
-      {/* {project.collaboration && project.collaboration.length > 0 && (
-        <div className="mt-4 pt-3 border-t border-border/40">
-          <p className="text-xs font-semibold text-muted-foreground mb-1.5">협업 방식</p>
-          <BulletList items={project.collaboration} />
-        </div>
-      )} */}
     </div>
   );
 }
 
 function WorkProjectCard({ project }: { project: WorkProject }) {
+  const contributions = project.keyContributions ?? [];
+
   return (
-    <div className="mb-6 last:mb-0">
+    <div className="mb-6 last:mb-0 break-inside-avoid">
       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
         <h3 className="text-sm font-semibold">{project.name}</h3>
-        <span className="text-xs text-muted-foreground tabular-nums">{project.period}</span>
+        <span className="ml-auto text-xs text-muted-foreground tabular-nums">{project.period}</span>
       </div>
       <p className="text-sm text-foreground/80 mt-1 leading-relaxed">{project.oneLiner}</p>
-      {project.keyContributions && project.keyContributions.length > 0 && (
-        <ul className="mt-1.5 space-y-0.5">
-          {project.keyContributions.map((kc, i) => (
-            <li key={i} className="flex gap-1.5 text-sm text-foreground/70 leading-relaxed">
-              <span className="text-muted-foreground select-none shrink-0">·</span>
-              <span>{parseInlineMarkdown(kc.action)}</span>
-            </li>
+      {contributions.length > 0 && (
+        <div className="mt-3 space-y-2">
+          <p className="text-[11px] font-semibold text-muted-foreground">핵심 기여</p>
+          {contributions.map((kc, i) => (
+            <CompactContributionCard key={i} contribution={kc} />
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );
 }
 
 function SideProjectCard({ project }: { project: SideProject }) {
+  const contributions = project.keyContributions ?? [];
+
   return (
-    <div className="mb-6 last:mb-0 ">
+    <div className="mb-6 last:mb-0 break-inside-avoid">
       <div className="flex items-center gap-2">
         <h3 className="text-sm font-semibold">{project.name}</h3>
         {project.repoUrl && (
@@ -232,19 +210,15 @@ function SideProjectCard({ project }: { project: SideProject }) {
         <StatusBadge status={project.status} />
         <span className="text-xs text-muted-foreground ml-auto tabular-nums">{project.teamSize}인</span>
       </div>
-      {project.awardNote && <p className="text-xs text-amber-700 dark:text-amber-400 mt-0.5 font-medium">{project.awardNote}</p>}
-      <p className="text-sm text-foreground/80 mt-1.5 leading-relaxed">{parseInlineMarkdown(project.description)}</p>
-      {project.keyContributions.length > 0 && (
-        <ul className="mt-1.5 space-y-0.5">
-          {project.keyContributions.map((kc, i) => (
-            <li key={i} className="flex gap-1.5 text-sm text-foreground/70 leading-relaxed">
-              <span className="text-muted-foreground select-none shrink-0">·</span>
-              <span>{parseInlineMarkdown(typeof kc === "string" ? kc : kc.action)}</span>
-            </li>
+      <p className="text-sm text-foreground/80 mt-1.5 leading-relaxed">{parseInlineMarkdown(project.oneLiner)}</p>
+      {contributions.length > 0 && (
+        <div className="mt-3 space-y-2">
+          <p className="text-[11px] font-semibold text-muted-foreground">핵심 기여</p>
+          {contributions.map((kc, i) => (
+            <CompactContributionCard key={i} contribution={kc} />
           ))}
-        </ul>
+        </div>
       )}
-      {project.whyItMatters && <p className="text-xs text-muted-foreground mt-2 italic leading-relaxed">{project.whyItMatters}</p>}
     </div>
   );
 }
@@ -254,6 +228,15 @@ function SideProjectCard({ project }: { project: SideProject }) {
 export default async function ResumePage() {
   const data: ResumeData = getResumeData();
   const jsonLd = toJsonLd(data);
+  const featuredProjects = data.work.flatMap((job) =>
+    job.projects
+      .filter((project) => project.featured)
+      .map((project) => ({
+        company: job.company,
+        project,
+      })),
+  );
+  const otherProjects = data.work.flatMap((job) => job.projects.filter((project) => !project.featured));
 
   return (
     <>
@@ -311,45 +294,29 @@ export default async function ResumePage() {
           </Section>
         )}
 
-        {/* ── 핵심 역량 ──────────────────────────────────────────── */}
-        <Section title="핵심 역량">
-          {/* <p className="text-sm text-foreground/80 mb-4 leading-relaxed">{data.positioning.headline}</p> */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {data.positioning.coreStrengths.map((strength) => (
-              <div key={strength.id} className="rounded-md bg-muted/40 p-3 print:bg-gray-50 print:p-2">
-                <h3 className="text-sm font-semibold">{strength.title}</h3>
-                <p className="text-xs text-foreground/70 mt-1 leading-relaxed">{parseInlineMarkdown(strength.description)}</p>
-              </div>
-            ))}
-          </div>
-        </Section>
-
         {/* ── 대표 프로젝트 ──────────────────────────────────── */}
-        {data.featuredProjects.length > 0 && (
+        {featuredProjects.length > 0 && (
           <Section title="대표 프로젝트">
             <div className="space-y-8">
-              {data.featuredProjects.map((proj) => (
-                <FeaturedProjectCard key={proj.id} project={proj} />
+              {featuredProjects.map(({ project, company }) => (
+                <FeaturedProjectCard key={project.id} project={project} company={company} />
               ))}
             </div>
           </Section>
         )}
 
         {/* ── 참여 프로젝트 ──────────────────────────────────── */}
-        {data.work.some((job) => job.projects.length > 0) && (
-          <Section title="참여 프로젝트" className="print:break-inside-avoid">
-            {data.work
-              .filter((job) => job.projects.length > 0)
-              .flatMap((job) => job.projects)
-              .map((proj) => (
-                <WorkProjectCard key={proj.id} project={proj} />
-              ))}
+        {otherProjects.length > 0 && (
+          <Section title="참여 프로젝트">
+            {otherProjects.map((proj) => (
+              <WorkProjectCard key={proj.id} project={proj} />
+            ))}
           </Section>
         )}
 
         {/* ── 개인 프로젝트 ──────────────────────────────────── */}
         {data.sideProjects.length > 0 && (
-          <Section title="개인 프로젝트" className="print:break-inside-avoid">
+          <Section title="개인 프로젝트">
             {data.sideProjects.map((proj) => (
               <SideProjectCard key={proj.id} project={proj} />
             ))}
@@ -362,7 +329,7 @@ export default async function ResumePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8 mb-12 print:mb-6 print:break-inside-avoid">
             {data.education.length > 0 && (
               <div>
-                <h2 className="text-[15px] font-semibold tracking-tight mb-4 pb-2 border-b border-border print:text-sm print:mb-3 print:pb-1">학력</h2>
+                <h2 className="text-[19px] font-bold tracking-tight mb-4 pb-2 border-b border-border print:text-[16px] print:mb-3 print:pb-1">학력</h2>
                 <div className="space-y-4">
                   {data.education.map((edu) => (
                     <div key={`${edu.institution}-${edu.startDate}`}>
@@ -380,7 +347,7 @@ export default async function ResumePage() {
 
             {data.training.length > 0 && (
               <div>
-                <h2 className="text-[15px] font-semibold tracking-tight mb-4 pb-2 border-b border-border print:text-sm print:mb-3 print:pb-1">교육</h2>
+                <h2 className="text-[19px] font-bold tracking-tight mb-4 pb-2 border-b border-border print:text-[16px] print:mb-3 print:pb-1">교육</h2>
                 <div className="space-y-4">
                   {data.training.map((t) => (
                     <div key={`${t.institution}-${t.startDate}`}>
@@ -399,14 +366,13 @@ export default async function ResumePage() {
 
           {/* ── 기술 ─────────────────────────────────────────────── */}
           {(() => {
-            const sk = data.skills;
             const groups = [
-              { label: "데이터베이스", items: sk.certifications },
-              { label: "영어", items: sk.english },
+              { label: "자격증", items: data.certifications.map((c) => c.name) },
+              { label: "언어", items: data.languages.map((l) => `${l.name} (${l.level})`) },
             ].filter((g) => g.items.length > 0);
             if (groups.length === 0) return null;
             return (
-              <Section title="자격증">
+              <Section title="자격 및 언어">
                 <div className="space-y-2">
                   {groups.map((g) => (
                     <div key={g.label} className="flex items-baseline gap-3 text-sm">

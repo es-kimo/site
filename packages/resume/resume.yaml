@@ -1,12 +1,4 @@
 # yaml-language-server: $schema=./resume.schema.json
-# =============================================================================
-# Resume Data — Hiring-Oriented Draft Schema
-# =============================================================================
-# 목적:
-# - 채용 담당자가 1~2분 안에 강점을 파악할 수 있도록 구조화
-# - "무엇을 했다"보다 "왜 뽑아야 하는가"가 드러나도록 재설계
-# - 대표 역량 / 대표 프로젝트 / 문제-행동-결과 / 오너십 근거를 분리
-# =============================================================================
 
 basics:
   name: "Kihyun Ryu"
@@ -15,7 +7,7 @@ basics:
   email: "khryu0610@gmail.com"
   url: "https://khryu.dev"
   canonical: "https://khryu.dev/resume"
-  summary: "복잡한 인터랙션 레이어를 상태 흐름 중심으로 설계하고 구현했습니다.\n개인 작업에 머무르지 않고, 팀 차원의 문제를 함께 해결하려고 합니다."
+  summary: "책임이 분명한 설계를 지향합니다. 심전도 그래프 위의 복잡한 인터랙션 사이에 책임이 뒤섞이지 않도록 레이어를 분리했습니다.\n코드 리뷰에 맥락을 더해줄 방법을 고민합니다. 글로써 작업의 배경이나 코드 한 줄의 근거를 설명할 수 있고, 자동화 도구를 사용해 작업의 변경 범위를 시각화했습니다."
   profiles:
     - network: "GitHub"
       username: "es-kimo"
@@ -25,40 +17,10 @@ basics:
       url: "https://khryu.dev"
 
 positioning:
-  headline: "인터랙션 설계와 type-safe UI 시스템 구축에 강점이 있는 프론트엔드 엔지니어"
+  headline: "복잡한 조작과 공통 UI 변경을 안정적으로 다루는 프론트엔드 개발자"
   targetRoles:
     - "Frontend Developer"
     - "Frontend Platform Engineer"
-  coreStrengths:
-    - id: "interaction-design"
-      title: "복합 입력 인터랙션 설계"
-      description: "심전도 그래프 위에서 터치·마우스·키보드 입력이 함께 동작하는 인터랙션 레이어를 설계하고 구현했습니다."
-      evidence:
-        - "Tablet 환경에서 한 손가락 터치를 점 생성, 줌/이동, 정밀 측정으로 구분하는 상태 흐름 설계"
-        - "d3-zoom과 커스텀 인터랙션 간 이벤트 충돌 해소"
-    - id: "v1-architecture"
-      title: "초기 제품 구조 설계"
-      description: "신규 제품의 v1.0 단계에서 기술 스택, 구현 구조, 공통 패턴을 정하는 데 참여했습니다."
-      evidence:
-        - "판매관리 시스템 v1.0 기술 스택 및 구현 패턴 정착"
-        - "고객지원 시스템 v1.0 구조 설계 → v1.1 개발 오너로 일정 관리까지 주도"
-
-experienceSummary:
-  totalExperience: "1+ year"
-  notableMetrics:
-    - label: "프로덕션 배포"
-      value: "6건"
-    - label: "ECG 그래프 라이브러리 테스트 커버리지"
-      value: "+20%p"
-    - label: "API mocking coverage"
-      value: "90%+"
-    - label: "디자인 시스템 영향 분석 대상 레포"
-      value: "12개"
-  focusAreas:
-    - "User Interaction"
-    - "Frontend Architecture"
-    - "Design Systems"
-    - "Type-safe Forms"
 
 skills:
   frontend:
@@ -84,83 +46,6 @@ skills:
   collaboration:
     - "Jira"
     - "Notion"
-  certifications:
-    - "SQLD"
-  english:
-    - "OPIc IM2"
-
-featuredProjects:
-  - id: "ecg-ruler-tablet"
-    name: "ECG-GRAPH Ruler for Tablet"
-    company: "메디컬에이아이"
-    period: "2025.02 ~ 2025.04"
-    scope: "tablet adaptation"
-    role: "Frontend Developer"
-    featured: true
-    techStack:
-      - "React"
-      - "TypeScript"
-      - "D3"
-    oneLiner: "태블릿 환경에서 줌·드래그·정밀측정 간 터치 충돌을 해소한 심전도(ECG) 그래프 측정 도구"
-    responsibilities:
-      - "태블릿 환경에 맞는 심전도 측정 인터랙션 설계 및 구현"
-      - "터치 제스처 충돌 해소를 위한 상태·이벤트 구조 재설계"
-    keyContributions:
-      - title: "터치 의도를 즉시 판정하지 않는 지연 평가 설계"
-        problem: "데스크톱에서는 마우스와 키보드로 줌과 측정을 구분할 수 있었지만, 태블릿에서는 줌·측정·정밀측정이 모두 한 손가락 터치였습니다. 터치 시작만으로는 사용자의 의도를 알 수 없었습니다."
-        action: "터치 시작 시 의도를 즉시 결정하지 않고, 후속 이벤트에서 홀드 시간(800ms)·이동량·터치 수를 기준으로 의도를 판별하는 상태 흐름을 설계했습니다."
-        result: "단일 터치 입력에서도 줌·측정·정밀측정 의도를 높은 정확도로 구분하여 오작동을 줄였습니다."
-        ownershipEvidence:
-          - "시간 × 이동량 기반 지연 판별 구조 설계"
-          - "임계값 튜닝을 통한 판별 정확도 조정"
-      - title: "여러 기능 레이어가 공유하는 상태를 '트랜잭션'처럼 관리"
-        problem: "줌 레이어와 측정 레이어가 같은 pointer 이벤트를 동시에 수신하는 구조에서, 한쪽이 활성인 동안 다른 쪽이 반응하면 화면이 의도치 않게 움직이거나 측정이 끊기는 문제가 있었습니다."
-        action: "5개 상태(Ruler, Zoom, PreciseMeasurement, ButtonDragging, RulerOff)를 갖는 Ref 기반 공유 제어 상태를 도입하고, 줌·측정 레이어 양쪽이 이 상태를 읽어 자기 동작의 실행 여부를 결정하도록 전환했습니다. 드래그처럼 짧은 행동은 진입 시 이전 상태를 저장하고 종료 시 복원하는 트랜잭션 방식으로 분리했습니다."
-        result: "여러 인터랙션 레이어가 같은 이벤트를 두고 경쟁하는 환경에서도, 각 행동이 서로를 침범하지 않는 구조를 만들었습니다."
-        ownershipEvidence:
-          - "PC의 단방향 상태 알림을 양방향 상태 공유 구조로 재설계"
-          - "5개 상태 × 4개 핸들러의 전이 규칙 정의"
-          - "드래그 구간의 상태 저장·복원을 통한 트랜잭션 격리 설계"
-      - title: "플랫폼별 인터랙션 정책을 분리한 드래그 훅 설계"
-        problem: "태블릿 특성 상 드래그 가능한 요소가 늘어나면서, 드래그 자체의 메커니즘과 '드래그 중 다른 인터랙션을 어떻게 제어할 것인가'라는 플랫폼별(데스크톱·태블릿) 로직이 뒤섞일 수 있었습니다."
-        action: "드래그 메커니즘만 다루는 base 훅과, 모바일 고유 로직(상태 전환, 드래그 가능 여부 판단)을 주입하는 mobile 래퍼로 분리했습니다."
-        result: "데스크톱 환경에서는 base 훅을 그대로, 태블릿에서는 mobile 래퍼를 통해 동일한 드래그 요소를 다른 인터랙션 정책으로 동작시킬 수 있는 구조를 만들었습니다."
-        ownershipEvidence:
-          - "드래그 메커니즘과 인터랙션 정책의 관심사 분리 설계"
-          - "정책 주입 인터페이스(checkDraggable, 핸들러 래핑) 설계"
-    metrics:
-      - label: "시나리오 검증"
-        value: "iPad / Android Tablet 기준 20개 이상 인터랙션 케이스 수동 검증"
-      - label: "운영 이슈"
-        value: "오입력 관련 리포트 0건"
-    deepDiveRef: "tablet-gesture-disambiguation"
-
-  - id: "modal-impact-radar"
-    name: "Modal Impact Radar"
-    company: "메디컬에이아이"
-    period: "2026.03"
-    scope: "internal tool"
-    role: "Frontend Developer"
-    featured: true
-    techStack:
-      - "React"
-      - "TypeScript"
-      - "Vite"
-      - "Node.js"
-    oneLiner: "디자인 시스템 Modal 변경의 영향 범위를 12개 프로덕트에서 자동 수집하고, 위험도 기반으로 리뷰 우선순위를 제공하는 분석 도구"
-    responsibilities:
-      - "12개 레포 소스 자동 수집 및 모달 사용처 분석 파이프라인 구축"
-      - "위험도·도달 난이도·진입 경로 분류 기준 설계"
-      - "리뷰 및 셀프 QA용 대시보드 구현"
-    keyContributions:
-      - title: "팀의 문제 정의와 해결방안 제시"
-        problem: "디자인 시스템의 Modal 컴포넌트를 변경할 때, 12개 프로덕트에 퍼져 있는 사용처의 영향 범위를 파악하기 어려웠습니다."
-        action: "레포별 소스를 자동 수집하고, 모달 사용처를 분석하여 커스텀 유형·위험도·진입 난이도를 분류하는 파이프라인과 대시보드를 구축했습니다."
-        result: "변경 전 영향 범위를 한눈에 파악할 수 있게 되어, 리뷰와 셀프 QA에 활용할 수 있는 기반을 마련했습니다."
-      - title: "AI의 일관된 분석을 위한 프롬프트 설계"
-        problem: "LLM에게 '모달을 찾아달라'고만 지시하면 레포마다 추출 기준이 달라지고, useModal 훅을 래핑한 커스텀 훅(useAlert, useConfirm 등)을 통한 간접 사용은 누락되기 쉬웠습니다."
-        action: "15개 필드 스키마, useModal 훅 체인 추적 규칙, 위험도·진입 난이도 분류 기준을 정의한 분석 프롬프트를 설계하고, 첫 레포 결과를 품질 체크리스트로 검증한 뒤 나머지에 적용했습니다."
-        result: "12개 레포에서 일관된 기준으로 모달 사용처를 추출할 수 있었고, confidence 필드로 불확실한 항목을 별도 관리하는 구조를 만들었습니다."
 
 work:
   - company: "메디컬에이아이"
@@ -169,28 +54,76 @@ work:
     position: "Frontend Developer"
     startDate: "2024.11"
     endDate: ""
-    achievementSummary:
-      - "프로덕션 배포 6건 참여"
-      - "심전도 그래프 라이브러리 테스트 커버리지 20%p 향상"
     projects:
+      - id: "ecg-ruler-tablet"
+        name: "ECG-GRAPH Ruler for Tablet"
+        period: "2025.02 ~ 2025.04"
+        role: "Frontend Developer"
+        featured: true
+        techStack:
+          - "React"
+          - "TypeScript"
+          - "D3"
+        oneLiner: "태블릿 환경에서 확대, 이동, 정밀 측정이 서로 방해하지 않게 터치 조작을 판별하고 제어한 ECG 그래프 측정 도구"
+        keyContributions:
+          - title: "터치 의도를 즉시 판별하지 않는 지연 평가 설계"
+            problem: "데스크톱에서는 마우스와 키보드로 확대와 측정을 구분할 수 있었지만, 태블릿에서는 확대, 이동, 측정이 모두 손가락 터치로 시작되었습니다."
+            decision: "손가락이 화면에 닿은 순간 바로 기능을 정하지 않고, 800ms 유지 여부, 이동 거리, 터치 개수를 보고 사용자의 의도를 나중에 판단하도록 했습니다."
+            result: "단일 터치 입력에서도 줌·측정·정밀측정 의도를 높은 정확도로 구분하여 오작동을 줄였습니다."
+
+          - title: "여러 기능 레이어가 공유하는 상태를 '트랜잭션'처럼 관리"
+            problem: "확대 기능과 측정 기능이 같은 pointer 이벤트를 동시에 받으면서, 한쪽이 동작하는 동안 다른 기능이 끼어들어 화면이 흔들리거나 측정이 끊기는 문제가 있었습니다."
+            decision: "5개 상태(Ruler, Zoom, PreciseMeasurement, ButtonDragging, RulerOff)를 갖는 Ref 기반 공유 제어 상태를 도입하고, 줌·측정 레이어 양쪽이 이 상태를 읽어 자기 동작의 실행 여부를 결정하도록 했습니다. 드래그처럼 짧은 행동은 진입 시 이전 상태를 저장하고 종료 시 복원하는 트랜잭션 방식으로 분리했습니다."
+            result: "여러 인터랙션 레이어가 같은 이벤트를 두고 경쟁하는 환경에서도, 각 행동이 서로를 방해하지 않는 구조를 만들었습니다."
+
+          - title: "드래그 동작과 태블릿 전용 정책 분리"
+            problem: "태블릿 특성 상 드래그 가능한 요소가 늘어나면서, 드래그 자체의 메커니즘과 '드래그 중 다른 인터랙션을 어떻게 제어할 것인가'라는 플랫폼별(데스크톱·태블릿) 로직이 뒤섞일 수 있었습니다."
+            decision: "드래그의 기본 동작은 공통 훅으로 분리하고, 태블릿에서 필요한 상태 전환과 실행 조건은 별도 래퍼에서 주입하도록 나눴습니다."
+            result: "같은 드래그 요소를 데스크톱과 태블릿에서 서로 다른 기준으로 재사용할 수 있게 되었습니다."
+
+      - id: "maiui-3"
+        name: "MAIUI 3.0"
+        period: "2026.04 ~ 현재"
+        role: "Frontend Developer"
+        featured: true
+        techStack:
+          - "React"
+          - "TypeScript"
+          - "Radix"
+          - "Node.js"
+        oneLiner: "사내 컴포넌트 라이브러리의 메이저 버전 개편"
+        keyContributions:
+          - title: "컴포넌트 스펙 문서화로 팀 내부 소통 비용 감소"
+            problem: "기존 버전에서는 컴포넌트마다 스펙 해석과 코드 스타일이 달라서 잦은 마이너 업데이트가 필요했습니다."
+            decision: "개발 규칙을 Git으로 관리해서 AI가 일관된 코드 초안을 생성하는 게 중요하다고 생각했습니다. 파일럿 컴포넌트를 만들며 폴더 구조, 스토리 작성 방식, 테스트 기준, 리뷰 기준을 문서로 정리했습니다."
+            result: "2명의 개발자가 동일한 수준의 컴포넌트를 작성해냈고, 리뷰가 설계와 사용성 검토에 더 집중될 수 있게 했습니다."
+
+          - title: "디자인 토큰 변경 이력 관리로 팀 간 소통 비용 감소"
+            problem: "디자인 토큰 변경은 디자인 담당자에게 의존해, 소통 부재 시 실제 디자인과 코드가 불일치할 가능성이 있었습니다."
+            decision: "Git 변경 이력을 바탕으로 토큰의 추가, 수정, 삭제 내역을 Storybook changelog에서 확인할 수 있게하고, 크로스 체크를 협업 프로세스로 정착시켰습니다."
+            result: "디자인 토큰 변경 내역을 디자이너도 직접 확인할 수 있게 되었고, 디자인과 개발 사이의 소통 비용을 줄였습니다."
+
+          - title: "컴포넌트 사용처 수집 도구로 마이그레이션 비용 감소"
+            problem: "프로덕트 단에서 교체해야할 컴포넌트가 산재했고, 리뷰에 오랜 시간이 걸릴 것으로 예상했습니다."
+            decision: "레포별 소스를 자동으로 모으고, 각 사용처를 유형과 위험도에 따라 나누는 대시보드를 만들었습니다."
+            result: "해당 결과를 코드 리뷰어 뿐만 아니라 디자인 QA에 활용하여 리뷰 시간을 단축하였습니다."
+
       - id: "mai-cs"
         name: "고객지원 시스템"
         period: "2025.07 ~ 2025.08, 2026.02 ~ 2026.03"
-        role: "Frontend Developer (v1.1 개발 오너)"
+        role: "Frontend Developer"
         featured: false
         techStack:
           - "React"
           - "TypeScript"
           - "TanStack Query"
           - "Zustand"
-        oneLiner: "v1.1 개발 오너로서 기획 검토·백로그 구조화·일정 관리까지 주도한 고객지원 웹 어플리케이션"
+        oneLiner: "고객지원 시스템 v1.1 개발 리드"
         keyContributions:
-          - problem: "v1.1 개발 오너를 맡아 기획 전체를 백로그로 전환하고 일정을 산정해야 했습니다."
-            action: "기획을 백로그로 구조화하고, 플래닝 포커로 스토리 포인트를 산정하며, 티켓별 소요시간과 병목을 기록했습니다."
-            result: "산정 일정 내에 개발을 완료하고, 병목 기록으로 지연 시 대응 방향을 빠르게 판단할 수 있었습니다."
-          - problem: "직원용 기능에 부서·직급 기반 접근 제어가 필요했습니다."
-            action: "판매관리 시스템에서 쌓은 권한 체계 이해를 바탕으로 기획을 검토하고, 기획/Auth/Backend 팀과 정책을 조율했습니다."
-            result: "이전 프로젝트 경험을 레버리지하여 기획 검토를 가속화하고, 팀 내 권한 관련 답변자 역할을 맡았습니다."
+          - title: "프로젝트 리드"
+            problem: "v1.1은 기획서만 있고 개발 단위와 일정 근거가 부족한 상태에서 시작되었습니다."
+            decision: "기획서를 백로그와 티켓으로 나누고, 플래닝 포커로 작업 규모를 산정했습니다. 티켓별 소요 시간과 막힌 지점도 함께 기록했습니다."
+            result: "사내 컴포넌트 라이브러리에서 발견된 문제를 해결하는 것이 주요 병목 지점으로 확인해, 팀이 반복적으로 겪는 문제를 정의하고 해결했습니다."
 
       - id: "mai-sales"
         name: "판매관리 시스템"
@@ -204,62 +137,52 @@ work:
           - "Zustand"
           - "Zod"
           - "React Hook Form"
-        oneLiner: "회사의 자산, 매출, 거래처를 관리하는 사내 경영관리 시스템"
+        oneLiner: "회사의 자산, 매출, 거래처 정보를 관리하는 사내 시스템"
         keyContributions:
-          - problem: "대형 Form/Filter 구현이 화면마다 반복되었고, 검증·에러 처리 방식이 분산될 수 있었습니다."
-            action: "디자인 시스템 위에 react-hook-form 래퍼와 제네릭 Form Field 컴포넌트를 설계했습니다."
-            result: "폼 구현의 재사용성과 타입 안정성을 높이고, 화면 간 검증·에러 처리의 일관성을 확보했습니다."
-          - problem: "대용량 파일 다운로드 시 서버 부하와 운영 환경(윈도우/맥) 차이를 고려해야 했습니다."
-            action: "스트리밍 다운로드와 클라이언트 사이드 zip 암호화를 설계했습니다."
-            result: "서버 부하를 분산하고, 양쪽 OS에서 동작하는 다운로드 흐름을 구현했습니다."
-
-      - id: "ecg-labeling"
-        name: "ECG-GRAPH Labeling Tool 개선"
-        period: "2025.05 ~ 2025.07"
-        role: "Frontend Developer"
-        featured: false
-        techStack:
-          - "React"
-          - "TypeScript"
-        oneLiner: "심전도 그래프에 특정 지점을 표시해 학습용 데이터를 생성하는 라벨링 도구"
-        keyContributions:
-          - problem: "리드마다 데이터 길이가 달라, 10초를 초과하는 데이터가 고정 뷰포트 밖으로 잘려 라벨링할 수 없었습니다."
-            action: "d3-zoom 대신 IntersectionObserver로 경계를 감지하는 PanGroup을 설계하여, 줌 이벤트와의 중첩 없이 독립적으로 동작하는 Panning을 구현했습니다."
-            result: "줌 기능과의 결합도 없이 다양한 길이의 데이터를 수평 탐색·라벨링할 수 있게 되었습니다."
+          - title: "대용량 파일 다운로드 처리"
+            problem: "대용량 파일 압축의 책임 소재, 운영체제별 다운로드 차이, 사이버 보안 정책을 함께 고려해야 했습니다."
+            decision: "스트리밍 다운로드로 전환해 네트워크 부담을 줄이고, 압축·암호화 연산을 서버(1:N)에서 클라이언트(1:1)로 분산해 동시 다운로드 구간의 서버 병목을 줄였습니다."
+            result: "동일 동시 요청 조건의 부하 테스트에서 서버 CPU/메모리 피크와 타임아웃 비율을 낮췄고, 지연 네트워크 환경에서도 다운로드 완료 안정성을 높였습니다."
 
 sideProjects:
   - id: "voting-system"
     name: "실시간 의결 투표 플랫폼"
     teamSize: 2
+    role: "Frontend Developer"
     status: "completed"
     repoUrl: "https://github.com/vottega/client"
-    description: "의사정족수·의결정족수를 지원하는 실시간 투표 시스템의 프론트엔드 전체 담당"
+    techStack:
+      - "React"
+      - "TypeScript"
+      - "SSE"
+    oneLiner: "의사정족수와 의결정족수를 지원하는 실시간 투표 시스템"
     keyContributions:
-      - problem: "SSE 이벤트와 REST 응답이 공존하는 환경에서, 오래된 SSE 이벤트가 최신 REST 결과를 덮어쓰는 race condition이 있었습니다."
-        action: "이벤트 수신 시점과 캐시 기록 시점에서 각각 타임스탬프를 비교하는 2단계 검증을 설계하여, 오래된 이벤트가 최신 데이터를 덮어쓰지 못하도록 했습니다."
-        result: "4개 이벤트 핸들러에 일관 적용하여 SSE와 REST 간 데이터 충돌을 차단했습니다."
-      - problem: "탭 비활성화 시 SSE 연결이 끊기며, 그 사이 발생한 이벤트가 유실되었습니다."
-        action: "초기 연결과 재연결을 구분하여, 재연결 시에만 서버 데이터를 다시 조회해 유실 구간을 복구하는 구조를 설계했습니다."
-        result: "커넥션 상태를 아는 계층이 캐시 복구를 트리거하는 구조로, refetchOnWindowFocus 대비 불필요한 요청 없이 정합성을 유지했습니다."
-    whyItMatters: "SSE와 REST가 공존하는 환경에서의 데이터 정합성 설계와, 실시간 서비스의 커넥션 관리 경험을 보여주는 사례"
+      - title: "SSE와 REST 사이의 데이터 덮어쓰기 방지"
+        problem: "SSE 이벤트와 REST 응답이 함께 쓰이는 환경에서, 늦게 도착한 오래된 이벤트가 최신 데이터를 덮어쓰는 문제가 있었습니다."
+        decision: "이벤트를 받은 시점과 캐시에 반영하는 시점에 각각 시간을 비교해, 오래된 이벤트가 최신 상태를 덮어쓰지 못하게 했습니다."
+        result: "SSE와 REST가 함께 동작하는 환경에서도 데이터가 어긋나지 않도록 처리했습니다."
+
+      - title: "SSE 재연결 시 유실 구간 복구"
+        problem: "탭 비활성화 등으로 SSE 연결이 끊기면, 그 사이 발생한 이벤트를 놓칠 수 있었습니다."
+        decision: "초기 연결과 재연결을 구분하고, 실제로 연결이 끊겼던 경우에만 서버 데이터를 다시 조회하도록 했습니다."
+        result: "불필요한 재요청을 줄이면서도 실시간 데이터의 정합성을 유지했습니다."
 
   - id: "vue-kakao-map-lib"
     name: "지도 API 컴포넌트화 라이브러리"
     teamSize: 6
+    role: "Frontend Developer"
     status: "completed"
     repoUrl: "https://github.com/beautiful-source/vue3-kakao-maps"
-    description: "카카오맵 API를 Vue.js 컴포넌트로 추상화한 오픈소스 NPM 패키지 라이브러리"
-    metrics:
-      - label: "누적 다운로드"
-        value: "13,000+"
+    techStack:
+      - "Vue"
+      - "TypeScript"
+      - "Vite"
+    oneLiner: "카카오맵 API를 Vue 컴포넌트로 사용할 수 있게 만든 오픈소스 라이브러리"
     keyContributions:
-      - problem: "빌드 결과물(.d.ts)에서 `@/` 절대경로가 resolve되지 않아, 소비자 프로젝트에서 타입이 `any`로 fallback되는 문제가 발생했습니다."
-        action: "빌드 산출물(.d.ts)에서 절대경로가 남아있는 문제를 발견하고, 타입 정의 파일에 한정한 ESLint 룰로 재발을 방지했습니다."
-        result: "소비자가 별도 설정 없이 정확한 타입 추론을 받을 수 있게 되었습니다."
-      - problem: "d.ts 생성 도구(vite-plugin-dts)의 산출물 품질에 의문이 생겨 vue-tsc 직접 실행으로 전환했으나, 경로 별칭 미해소·빌드 2단계 분리 등 부가 비용이 발생했습니다."
-        action: "기존 도구(vite-plugin-dts)와 교체한 도구(vue-tsc)의 빌드 산출물을 비교하여, .d.ts 가독성 차이가 실제 타입 추론에 영향이 없는 것을 확인하고, 기존 도구가 경로 별칭을 자동 해소해 파이프라인이 더 단순해진다는 것을 검증했습니다."
-        result: "도구 선택의 판단 기준을 '산출물 가독성'에서 '파이프라인 단순성과 소비자 영향'으로 전환하는 계기가 되었습니다."
-    whyItMatters: "명령형 SDK를 선언적 컴포넌트로 래핑하는 설계와, 빌드 파이프라인 진단·개선 경험을 보여주는 사례"
+      - title: "빌드 산출물 검증과 테스트 환경 표준화"
+        problem: "6인의 개발자가 각기 다른 스타일의 코드를 작성하고, 테스트를 누락하는 경우가 있었습니다. 또한 라이브러리는 내부 구현이 잘 동작해도, 빌드 산출물이 소비자 프로젝트에서 제대로 해석되지 않으면 배포 후 문제가 발생할 수 있었습니다."
+        decision: "커스텀 Lint 룰을 개발해 빌드된 파일에 절대 경로가 남는 문제를 방지하고, 로컬 테스트 환경을 단순화해서 팀 세션을 소집해 공유했습니다."
+        result: "배포 전에 산출물 문제를 확인할 수 있는 기준이 생겼고, 팀원들이 적은 노력으로 같은 환경에서 기능을 구현하고 검증할 수 있게 했습니다."
 
 education:
   - institution: "연세대학교"
@@ -280,10 +203,13 @@ training:
     startDate: "2022.07"
     endDate: "2023.01"
 
+certifications:
+  - name: "SQLD"
+
+languages:
+  - name: "English"
+    level: "OPIc IM2"
+
 meta:
-  version: "2.2.0"
-  lastModified: "2026-03-24"
-  notes:
-    - "기존 highlights 중심 구조를 문제-행동-결과 중심 구조로 재설계"
-    - "interests 대신 positioning/coreStrengths로 전환"
-    - "featuredProjects와 deepDives를 통해 대표 경험을 전면 배치"
+  version: "3.0.0"
+  lastModified: "2026-07-05"

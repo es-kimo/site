@@ -32,28 +32,6 @@ export function toMarkdown(data: ResumeData): string {
   lines.push("");
   lines.push(data.positioning.headline);
   lines.push("");
-  if (data.positioning.coreStrengths.length > 0) {
-    for (const strength of data.positioning.coreStrengths) {
-      lines.push(`- **${strength.title}**: ${strength.description}`);
-    }
-    lines.push("");
-  }
-
-  // ── Experience Summary ────────────────────────────────────────────────────
-  lines.push("## 경력 요약");
-  lines.push("");
-  lines.push(`총 경력: ${data.experienceSummary.totalExperience}`);
-  lines.push("");
-  if (data.experienceSummary.notableMetrics.length > 0) {
-    for (const m of data.experienceSummary.notableMetrics) {
-      lines.push(`- ${m.label}: ${m.value}`);
-    }
-    lines.push("");
-  }
-  if (data.experienceSummary.focusAreas.length > 0) {
-    lines.push(`집중 영역: ${data.experienceSummary.focusAreas.join(", ")}`);
-    lines.push("");
-  }
 
   // ── Skills ────────────────────────────────────────────────────────────────
   const s = data.skills;
@@ -64,58 +42,36 @@ export function toMarkdown(data: ResumeData): string {
   if (s.tooling.length > 0) lines.push(`- Tooling: ${s.tooling.join(", ")}`);
   if (s.design.length > 0) lines.push(`- Design: ${s.design.join(", ")}`);
   if (s.collaboration.length > 0) lines.push(`- Collaboration: ${s.collaboration.join(", ")}`);
-  if (s.certifications.length > 0) lines.push(`- 자격증: ${s.certifications.join(", ")}`);
-  if (s.english.length > 0) lines.push(`- 영어: ${s.english.join(", ")}`);
   lines.push("");
 
   // ── Featured Projects ─────────────────────────────────────────────────────
-  if (data.featuredProjects.length > 0) {
+  const featuredProjects = data.work.flatMap((job) => job.projects.filter((p) => p.featured).map((p) => ({ ...p, company: job.company })));
+  if (featuredProjects.length > 0) {
     lines.push("## 대표 프로젝트");
     lines.push("");
-    for (const proj of data.featuredProjects) {
+    for (const proj of featuredProjects) {
+      const contributions = proj.keyContributions ?? [];
+
       lines.push(`### ${proj.name}`);
       lines.push("");
-      lines.push(`*${proj.company}* · ${proj.role} · *${proj.period}* · ${proj.scope}`);
+      lines.push(`*${proj.company}* · ${proj.role} · *${proj.period}*`);
       lines.push("");
       lines.push(proj.oneLiner);
       lines.push("");
       lines.push(`기술 스택: ${proj.techStack.join(", ")}`);
       lines.push("");
 
-      if (proj.responsibilities.length > 0) {
-        lines.push("**담당 업무**");
-        lines.push("");
-        for (const r of proj.responsibilities) {
-          lines.push(`- ${r}`);
-        }
-        lines.push("");
-      }
-
-      if (proj.keyContributions.length > 0) {
+      if (contributions.length > 0) {
         lines.push("**핵심 기여**");
         lines.push("");
-        for (const kc of proj.keyContributions) {
+        for (const kc of contributions) {
           const prefix = kc.title ? `- **${kc.title}**\n  ` : `- `;
           lines.push(`${prefix}**문제**: ${kc.problem}`);
-          lines.push(`  **행동**: ${kc.action}`);
+          lines.push(`  **판단**: ${kc.decision}`);
           lines.push(`  **결과**: ${kc.result}`);
           if (kc.ownershipEvidence && kc.ownershipEvidence.length > 0) {
             lines.push(`  오너십 근거: ${kc.ownershipEvidence.join(", ")}`);
           }
-          if (kc.metrics && kc.metrics.length > 0) {
-            for (const m of kc.metrics) {
-              lines.push(`  ${m.label}: ${m.value}`);
-            }
-          }
-        }
-        lines.push("");
-      }
-
-      if (proj.collaboration && proj.collaboration.length > 0) {
-        lines.push("**협업**");
-        lines.push("");
-        for (const c of proj.collaboration) {
-          lines.push(`- ${c}`);
         }
         lines.push("");
       }
@@ -133,15 +89,6 @@ export function toMarkdown(data: ResumeData): string {
       lines.push(`${job.department} · ${job.position} · *${period}*`);
       lines.push("");
 
-      if (job.achievementSummary.length > 0) {
-        lines.push("**주요 성과 요약**");
-        lines.push("");
-        for (const a of job.achievementSummary) {
-          lines.push(`- ${a}`);
-        }
-        lines.push("");
-      }
-
       if (job.projects.length > 0) {
         lines.push("**기타 프로젝트**");
         lines.push("");
@@ -156,7 +103,7 @@ export function toMarkdown(data: ResumeData): string {
             for (const kc of proj.keyContributions) {
               const prefix = kc.title ? `- **${kc.title}**\n  ` : `- `;
               lines.push(`${prefix}**문제**: ${kc.problem}`);
-              lines.push(`  **행동**: ${kc.action}`);
+              lines.push(`  **판단**: ${kc.decision}`);
               lines.push(`  **결과**: ${kc.result}`);
             }
             lines.push("");
@@ -176,26 +123,37 @@ export function toMarkdown(data: ResumeData): string {
       const nameWithLink = proj.repoUrl ? `[${proj.name}](${proj.repoUrl})` : proj.name;
       lines.push(`### ${nameWithLink}${badge} — ${proj.teamSize}인`);
       lines.push("");
-      if (proj.awardNote) {
-        lines.push(`*${proj.awardNote}*`);
-        lines.push("");
-      }
-      lines.push(proj.description);
+      lines.push(`${proj.oneLiner} (${proj.role})`);
+      lines.push("");
+      lines.push(`기술 스택: ${proj.techStack.join(", ")}`);
       lines.push("");
       for (const h of proj.keyContributions) {
-        if (typeof h === "string") {
-          lines.push(`- ${h}`);
-        } else {
-          const prefix = h.title ? `- **${h.title}**\n  ` : `- `;
-          lines.push(`${prefix}**문제**: ${h.problem}`);
-          lines.push(`  **행동**: ${h.action}`);
-          lines.push(`  **결과**: ${h.result}`);
-        }
+        const prefix = h.title ? `- **${h.title}**\n  ` : `- `;
+        lines.push(`${prefix}**문제**: ${h.problem}`);
+        lines.push(`  **판단**: ${h.decision}`);
+        lines.push(`  **결과**: ${h.result}`);
       }
       lines.push("");
-      lines.push(`*${proj.whyItMatters}*`);
-      lines.push("");
     }
+  }
+
+  // ── Certifications & Languages ────────────────────────────────────────────
+  if (data.certifications.length > 0) {
+    lines.push("## 자격증");
+    lines.push("");
+    for (const cert of data.certifications) {
+      lines.push(`- ${cert.name}`);
+    }
+    lines.push("");
+  }
+
+  if (data.languages.length > 0) {
+    lines.push("## 언어");
+    lines.push("");
+    for (const lang of data.languages) {
+      lines.push(`- ${lang.name}: ${lang.level}`);
+    }
+    lines.push("");
   }
 
   // ── Education ─────────────────────────────────────────────────────────────

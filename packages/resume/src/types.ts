@@ -1,9 +1,7 @@
 // =============================================================================
 // Resume Type Definitions
 // =============================================================================
-// 채용 담당자 시선의 "증거 중심 구조"로 재설계한 타입입니다.
-// positioning / featuredProjects / keyContributions / deepDives 등
-// 강점-대표작-문제·행동·결과-깊이 있는 사례 흐름을 반영합니다.
+// resume.yaml 구조를 기준으로 관리되는 타입입니다.
 // =============================================================================
 
 // ── Basics ──────────────────────────────────────────────────────────────────
@@ -27,30 +25,9 @@ export interface Basics {
 
 // ── Positioning ─────────────────────────────────────────────────────────────
 
-export interface CoreStrength {
-  id: string;
-  title: string;
-  description: string;
-  evidence: string[];
-}
-
 export interface Positioning {
   headline: string;
   targetRoles: string[];
-  coreStrengths: CoreStrength[];
-}
-
-// ── Experience Summary ──────────────────────────────────────────────────────
-
-export interface Metric {
-  label: string;
-  value: string;
-}
-
-export interface ExperienceSummary {
-  totalExperience: string;
-  notableMetrics: Metric[];
-  focusAreas: string[];
 }
 
 // ── Skills ──────────────────────────────────────────────────────────────────
@@ -61,8 +38,6 @@ export interface Skills {
   tooling: string[];
   design: string[];
   collaboration: string[];
-  certifications: string[];
-  english: string[];
 }
 
 // ── Key Contributions (공용) ────────────────────────────────────────────────
@@ -70,29 +45,9 @@ export interface Skills {
 export interface KeyContribution {
   title?: string;
   problem: string;
-  action: string;
+  decision: string;
   result: string;
   ownershipEvidence?: string[];
-  metrics?: Metric[];
-}
-
-// ── Featured Projects ───────────────────────────────────────────────────────
-
-export interface FeaturedProject {
-  id: string;
-  name: string;
-  company: string;
-  period: string;
-  scope: string;
-  role: string;
-  featured: boolean;
-  techStack: string[];
-  oneLiner: string;
-  responsibilities: string[];
-  keyContributions: KeyContribution[];
-  collaboration?: string[];
-  metrics?: Metric[];
-  deepDiveRef?: string;
 }
 
 // ── Work Experience (회사 경력) ─────────────────────────────────────────────
@@ -115,7 +70,6 @@ export interface WorkExperience {
   position: string;
   startDate: string;
   endDate: string;
-  achievementSummary: string[];
   projects: WorkProject[];
 }
 
@@ -127,13 +81,12 @@ export interface SideProject {
   id: string;
   name: string;
   teamSize: number;
+  role: string;
   status: ProjectStatus;
-  awardNote?: string;
   repoUrl?: string;
-  description: string;
-  metrics?: Metric[];
-  keyContributions: (string | KeyContribution)[];
-  whyItMatters: string;
+  techStack: string[];
+  oneLiner: string;
+  keyContributions: KeyContribution[];
 }
 
 // ── Deep Dives (경험과 고민) ────────────────────────────────────────────────
@@ -166,7 +119,15 @@ export interface Training {
 export interface Meta {
   version: string;
   lastModified: string;
-  notes: string[];
+}
+
+export interface Certification {
+  name: string;
+}
+
+export interface Language {
+  name: string;
+  level: string;
 }
 
 // ── Root ────────────────────────────────────────────────────────────────────
@@ -174,13 +135,13 @@ export interface Meta {
 export interface ResumeData {
   basics: Basics;
   positioning: Positioning;
-  experienceSummary: ExperienceSummary;
   skills: Skills;
-  featuredProjects: FeaturedProject[];
   work: WorkExperience[];
   sideProjects: SideProject[];
   education: Education[];
   training: Training[];
+  certifications: Certification[];
+  languages: Language[];
   meta: Meta;
 }
 
