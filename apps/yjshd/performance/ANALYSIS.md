@@ -1,6 +1,66 @@
 # yjshd 페이지 로딩 성능 병목 분석
 
 > 분석일: 2026-01-27
+> 재점검: 2026-08-10
+
+---
+
+## 📌 2026-08-10 재점검 결과
+
+아래 1월 분석 중 일부는 **이미 해결되었고, 일부는 사실과 달랐습니다.** 현재 상태는 다음과 같습니다.
+
+| 1월 지적 항목                    | 현재 상태                                                                  |
+| -------------------------------- | -------------------------------------------------------------------------- |
+| `getMdxContent` 캐싱 없음        | ✅ 해결됨 — `lib/content.ts`가 React `cache()`로 감싸져 있음                |
+| TheHeader에서 MDX 반복 컴파일    | ✅ 해결됨 — `lib/navigation-data.json`을 prebuild로 생성해 import           |
+| AllCategoriesSheet 동일 문제     | ✅ 해결됨 — 위와 동일                                                       |
+| `generateStaticParams()` 미적용  | ✅ 이번에 해결 — 7개 → **167개** 페이지 프리렌더                            |
+| 게시판 메타데이터 매 요청 import | ⬜ 미해결 — 47개 글을 여전히 요청마다 동적 import                           |
+| structure.ts top-level await     | ⬜ 미해결                                                                   |
+
+### 1월 분석이 놓쳤던 것
+
+**1. 웹폰트 18개 URL이 전부 404였습니다.**
+
+`packages/ui/src/styles/fonts.css`가 구글이 폐기한 legacy early-access(`/ea/`) 경로를 참조했습니다.
+6개 weight × 3개 포맷 = 18개 요청이 모두 404. 즉 사이트는 한 번도 Noto Sans KR로 렌더링된 적이 없고,
+줄곧 시스템 폰트로 폴백되고 있었습니다. 게다가 `globals.css`가 `@import url("fonts.css")`로 불러서
+`HTML → globals.css → fonts.css → 폰트` 요청 체인이 한 단계 더 깊었고, preconnect도 없었습니다.
+
+→ `fonts.css` 삭제, `@import` 제거로 해결. 웹폰트 도입 여부는 [README.md](./README.md)의 측정 비교 참고.
+
+**2. `fontFamily`가 어디에도 정의되어 있지 않았습니다.**
+
+blog 앱은 `next/font/google`로 `--font-noto-sans-kr` 변수를 만들지만,
+tailwind 설정에 `fontFamily` 매핑이 없어 그 변수를 **아무도 소비하지 않았습니다.**
+blog 역시 실제로는 시스템 폰트로 렌더링되고 있었습니다.
+
+**3. `dynamicParams = false`가 무의미하게 걸려 있었습니다.**
+
+`generateStaticParams` 없이 `dynamicParams = false`만 export되어 있어 아무 효과가 없었습니다.
+`packages/common/src/structure/params.ts`에 `categoryParams` / `subCategoryParams` / `slugParams`가
+완성된 채로 **어디에서도 쓰이지 않고** 있었습니다.
+
+**4. `(dynamic)` 라우트와의 경로 충돌.**
+
+`generateStaticParams`를 그냥 붙이면 `/4.게시판`, `/3.강좌/2.콩팥질환 정보` 등
+`app/(dynamic)`의 전용 페이지와 경로가 겹쳐 `ENOENT: content/3.강좌/2.콩팥질환 정보/page.mdx`로
+빌드가 실패합니다. `lib/static-params.ts`가 `app/(dynamic)`을 훑어 해당 경로를 제외합니다.
+목록을 하드코딩하지 않으므로 `(dynamic)`에 페이지를 추가해도 빌드가 깨지지 않습니다.
+
+### 남은 과제 (영향도 순)
+
+1. **콘텐츠 이미지 160MB / 131장** (평균 1.2MB, 최대 3.5MB) — 리사이즈 + 사전 webp 변환 필요.
+   `public/`도 `drawing.png` 2.7MB, `clinic-marker.png` 2.4MB로 과대합니다.
+2. **LCP 이미지에 `priority` 없음** — 홈의 `mission.png`가 `loading="lazy"`,
+   `/1.소개/3.연세정성내과 소개`는 이미지 84장이 전부 lazy입니다.
+3. **YouTube 임베드가 lazy 없이 로드** — `<Video>` 하나가 서드파티 1,080KB를 끌어옵니다
+   (youtube / doubleclick / ytimg). `loading="lazy"` 또는 파사드 패턴 권장.
+4. **게시판 47개 글 메타데이터를 매 요청 동적 import** — Next 16 `cacheComponents` + `use cache`로
+   정적 셸 분리 가능. (16.0.10에서 `cacheComponents`, `cacheLife`, `useCache` 지원 확인함)
+5. **`metadataBase` 미설정** — OG 이미지가 `localhost:3000`으로 해석됩니다 (빌드 경고).
+
+---
 
 ## 요약
 

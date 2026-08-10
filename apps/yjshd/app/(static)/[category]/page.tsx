@@ -2,6 +2,7 @@ import { TheHeader } from "@/components/TheHeader";
 import { getMdxContent } from "@/lib/content";
 import { removeNumbering } from "@workspace/common/lib/string-utils";
 import { decodeURIS } from "@workspace/common/lib/uri";
+import { staticCategoryParams } from "@/lib/static-params";
 import type { CategoryParams } from "@workspace/common/structure/params.types";
 import { categories, slugsMap, subCategoriesMap } from "@workspace/common/structure/structure";
 import { Badge } from "@workspace/ui/components/badge";
@@ -10,6 +11,12 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@workspace
 import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
+export function generateStaticParams() {
+  return staticCategoryParams();
+}
+
+export const dynamicParams = false;
 
 export async function generateMetadata({ params }: { params: Promise<CategoryParams> }) {
   const { category } = await params;
