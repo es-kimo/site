@@ -1,13 +1,20 @@
 {
-  "extends": "@workspace/typescript-config/react-library.json",
   "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "types": ["vite/client"],
     "noEmit": true,
-    "declaration": false,
-    "declarationMap": false,
-    "types": ["vite/client"]
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+
+    // 실험실이다. 반쯤 쓰다 만 코드에 타입 검사가 훼방 놓지 않게 느슨하게 둔다.
+    // Vite는 어차피 타입 검사를 하지 않으므로 실행에는 영향이 없다.
+    "strict": false
   },
-  "include": ["src", "vite.config.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src", "vite.config.ts"]
 }
