@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/admin/", "/api/", "/anniversary/", "/database/"],
+      disallow: ["/admin/", "/api/", "/anniversary/", "/database/", "/vault/"],
     },
     sitemap: "https://khryu.dev/sitemap.xml",
   };

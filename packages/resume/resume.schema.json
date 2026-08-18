@@ -3,45 +3,23 @@
   "title": "Resume",
   "description": "이력서 데이터 스키마 — resume.yaml 작성 시 자동완성 및 검증에 사용됩니다.",
   "type": "object",
-  "required": ["basics", "positioning", "experienceSummary", "skills", "featuredProjects", "work", "sideProjects", "education", "training", "meta"],
+  "required": ["basics", "positioning", "skills", "work", "sideProjects", "education", "training", "certifications", "languages", "meta"],
   "additionalProperties": false,
   "definitions": {
-    "metric": {
-      "type": "object",
-      "required": ["label", "value"],
-      "additionalProperties": false,
-      "properties": {
-        "label": { "type": "string", "description": "지표명" },
-        "value": { "type": "string", "description": "값" }
-      }
-    },
     "keyContribution": {
       "type": "object",
-      "required": ["problem", "action", "result"],
+      "required": ["problem", "decision", "result"],
       "additionalProperties": false,
       "properties": {
+        "title": { "type": "string", "description": "한 줄 요약 제목" },
         "problem": { "type": "string", "description": "문제 상황" },
-        "action": { "type": "string", "description": "수행한 행동" },
+        "decision": { "type": "string", "description": "수행한 판단/행동" },
         "result": { "type": "string", "description": "결과" },
         "ownershipEvidence": {
           "type": "array",
           "items": { "type": "string" },
           "description": "오너십 근거"
-        },
-        "metrics": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/metric" },
-          "description": "정량 지표"
         }
-      }
-    },
-    "executionStep": {
-      "type": "object",
-      "required": ["title", "details"],
-      "additionalProperties": false,
-      "properties": {
-        "title": { "type": "string", "description": "실행 단계 제목" },
-        "details": { "type": "array", "items": { "type": "string" }, "description": "세부 내용" }
       }
     }
   },
@@ -54,20 +32,20 @@
       "properties": {
         "name": { "type": "string", "description": "영문 이름" },
         "nameKo": { "type": "string", "description": "한국어 이름" },
-        "label": { "type": "string", "description": "직함/역할 (예: Frontend Engineer)" },
+        "label": { "type": "string", "description": "직함/역할" },
         "email": { "type": "string", "format": "email" },
         "url": { "type": "string", "format": "uri", "description": "개인 웹사이트 URL" },
         "canonical": { "type": "string", "format": "uri", "description": "웹 이력서 정규 URL" },
         "summary": { "type": "string", "description": "자기소개 요약" },
         "profiles": {
           "type": "array",
-          "description": "온라인 프로필 목록 (GitHub, Blog 등)",
+          "description": "온라인 프로필 목록",
           "items": {
             "type": "object",
             "required": ["network", "username", "url"],
             "additionalProperties": false,
             "properties": {
-              "network": { "type": "string", "description": "플랫폼 이름 (예: GitHub, Blog)" },
+              "network": { "type": "string" },
               "username": { "type": "string" },
               "url": { "type": "string", "format": "uri" }
             }
@@ -75,149 +53,64 @@
         }
       }
     },
-
     "positioning": {
       "description": "포지셔닝 — 대표 역량과 지원 직군",
       "type": "object",
-      "required": ["headline", "targetRoles", "coreStrengths"],
+      "required": ["headline", "targetRoles"],
       "additionalProperties": false,
       "properties": {
         "headline": { "type": "string", "description": "한 줄 포지셔닝 메시지" },
         "targetRoles": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "지원 직군 (예: Frontend Engineer)"
-        },
-        "coreStrengths": {
-          "type": "array",
-          "description": "대표 역량 목록",
-          "items": {
-            "type": "object",
-            "required": ["id", "title", "description", "evidence"],
-            "additionalProperties": false,
-            "properties": {
-              "id": { "type": "string", "description": "고유 식별자" },
-              "title": { "type": "string", "description": "역량 제목" },
-              "description": { "type": "string", "description": "역량 설명" },
-              "evidence": {
-                "type": "array",
-                "items": { "type": "string" },
-                "description": "역량 근거"
-              }
-            }
-          }
+          "description": "지원 직군"
         }
       }
     },
-
-    "experienceSummary": {
-      "description": "경력 요약 — 주요 지표와 집중 영역",
-      "type": "object",
-      "required": ["totalExperience", "notableMetrics", "focusAreas"],
-      "additionalProperties": false,
-      "properties": {
-        "totalExperience": { "type": "string", "description": "총 경력 (예: 1+ year)" },
-        "notableMetrics": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/metric" },
-          "description": "주요 성과 지표"
-        },
-        "focusAreas": {
-          "type": "array",
-          "items": { "type": "string" },
-          "description": "집중 영역 키워드"
-        }
-      }
-    },
-
     "skills": {
-      "description": "기술 스택 및 자격",
+      "description": "기술 스택",
       "type": "object",
-      "required": ["frontend", "testing", "tooling", "design", "collaboration", "certifications", "english"],
+      "required": ["frontend", "testing", "tooling", "design", "collaboration"],
       "additionalProperties": false,
       "properties": {
-        "frontend": { "type": "array", "items": { "type": "string" }, "description": "프론트엔드 기술" },
-        "testing": { "type": "array", "items": { "type": "string" }, "description": "테스트 도구" },
-        "tooling": { "type": "array", "items": { "type": "string" }, "description": "빌드/개발 도구" },
-        "design": { "type": "array", "items": { "type": "string" }, "description": "디자인 도구" },
-        "collaboration": { "type": "array", "items": { "type": "string" }, "description": "협업 도구" },
-        "certifications": { "type": "array", "items": { "type": "string" }, "description": "자격증" },
-        "english": { "type": "array", "items": { "type": "string" }, "description": "영어 성적" }
+        "frontend": { "type": "array", "items": { "type": "string" } },
+        "testing": { "type": "array", "items": { "type": "string" } },
+        "tooling": { "type": "array", "items": { "type": "string" } },
+        "design": { "type": "array", "items": { "type": "string" } },
+        "collaboration": { "type": "array", "items": { "type": "string" } }
       }
     },
-
-    "featuredProjects": {
-      "description": "대표 프로젝트 — 문제·행동·결과 중심 상세 기술",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["id", "name", "company", "period", "scope", "role", "featured", "techStack", "oneLiner", "responsibilities", "keyContributions"],
-        "additionalProperties": false,
-        "properties": {
-          "id": { "type": "string", "description": "고유 식별자" },
-          "name": { "type": "string", "description": "프로젝트명" },
-          "company": { "type": "string", "description": "소속 회사" },
-          "period": { "type": "string", "description": "기간 (예: 2025.09 ~ 2025.12)" },
-          "scope": { "type": "string", "description": "프로젝트 범위 (예: v1.0)" },
-          "role": { "type": "string", "description": "역할" },
-          "featured": { "type": "boolean", "description": "대표 프로젝트 여부" },
-          "techStack": { "type": "array", "items": { "type": "string" }, "description": "사용 기술" },
-          "oneLiner": { "type": "string", "description": "한 줄 설명" },
-          "responsibilities": { "type": "array", "items": { "type": "string" }, "description": "담당 업무" },
-          "keyContributions": {
-            "type": "array",
-            "items": { "$ref": "#/definitions/keyContribution" },
-            "description": "핵심 기여 (문제·행동·결과)"
-          },
-          "collaboration": { "type": "array", "items": { "type": "string" }, "description": "협업 내역" },
-          "metrics": {
-            "type": "array",
-            "items": { "$ref": "#/definitions/metric" },
-            "description": "프로젝트 수준 정량 지표"
-          },
-          "deepDiveRef": { "type": "string", "description": "연결된 deepDive id" }
-        }
-      }
-    },
-
     "work": {
       "description": "경력사항 (회사 단위)",
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["company", "location", "department", "position", "startDate", "endDate", "achievementSummary", "projects"],
+        "required": ["company", "location", "department", "position", "startDate", "endDate", "projects"],
         "additionalProperties": false,
         "properties": {
-          "company": { "type": "string", "description": "회사명" },
+          "company": { "type": "string" },
           "location": { "type": "string" },
-          "department": { "type": "string", "description": "부서/팀명" },
-          "position": { "type": "string", "description": "직책" },
+          "department": { "type": "string" },
+          "position": { "type": "string" },
           "startDate": { "type": "string", "pattern": "^\\d{4}\\.\\d{2}$" },
-          "endDate": { "type": "string", "description": "빈 문자열이면 '현재 재직중'" },
-          "achievementSummary": {
-            "type": "array",
-            "items": { "type": "string" },
-            "description": "주요 성과 요약"
-          },
+          "endDate": { "type": "string", "description": "빈 문자열이면 현재 재직" },
           "projects": {
-            "description": "회사 내 프로젝트 (featuredProjects에 포함되지 않은 프로젝트)",
             "type": "array",
             "items": {
               "type": "object",
               "required": ["id", "name", "period", "role", "featured", "techStack", "oneLiner"],
               "additionalProperties": false,
               "properties": {
-                "id": { "type": "string", "description": "고유 식별자" },
-                "name": { "type": "string", "description": "프로젝트명" },
-                "period": { "type": "string", "description": "기간 (예: 2025.01 ~ 2025.03)" },
-                "role": { "type": "string", "description": "역할" },
-                "featured": { "type": "boolean", "description": "대표 프로젝트 여부" },
-                "techStack": { "type": "array", "items": { "type": "string" }, "description": "사용 기술" },
-                "oneLiner": { "type": "string", "description": "한 줄 설명" },
+                "id": { "type": "string" },
+                "name": { "type": "string" },
+                "period": { "type": "string" },
+                "role": { "type": "string" },
+                "featured": { "type": "boolean" },
+                "techStack": { "type": "array", "items": { "type": "string" } },
+                "oneLiner": { "type": "string" },
                 "keyContributions": {
                   "type": "array",
-                  "items": { "$ref": "#/definitions/keyContribution" },
-                  "description": "핵심 기여 (문제·행동·결과)"
+                  "items": { "$ref": "#/definitions/keyContribution" }
                 }
               }
             }
@@ -225,36 +118,32 @@
         }
       }
     },
-
     "sideProjects": {
       "description": "사이드 프로젝트 경험",
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id", "name", "teamSize", "status", "description", "keyContributions", "whyItMatters"],
+        "required": ["id", "name", "teamSize", "role", "status", "techStack", "oneLiner", "keyContributions"],
         "additionalProperties": false,
         "properties": {
-          "id": { "type": "string", "description": "고유 식별자" },
-          "name": { "type": "string", "description": "프로젝트명" },
-          "teamSize": { "type": "integer", "minimum": 1, "description": "팀 인원수" },
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "teamSize": { "type": "integer", "minimum": 1 },
+          "role": { "type": "string" },
           "status": {
             "type": "string",
-            "enum": ["awarded", "completed", "in-progress"],
-            "description": "awarded=수상, completed=완료, in-progress=진행중"
+            "enum": ["awarded", "completed", "in-progress"]
           },
-          "awardNote": { "type": "string", "description": "수상 내역 상세" },
-          "description": { "type": "string", "description": "프로젝트 설명" },
-          "metrics": {
+          "repoUrl": { "type": "string", "format": "uri" },
+          "techStack": { "type": "array", "items": { "type": "string" } },
+          "oneLiner": { "type": "string" },
+          "keyContributions": {
             "type": "array",
-            "items": { "$ref": "#/definitions/metric" },
-            "description": "정량 지표"
-          },
-          "keyContributions": { "type": "array", "items": { "type": "string" }, "description": "주요 기여/성과" },
-          "whyItMatters": { "type": "string", "description": "이 프로젝트가 중요한 이유" }
+            "items": { "$ref": "#/definitions/keyContribution" }
+          }
         }
       }
     },
-
     "education": {
       "description": "학력사항",
       "type": "array",
@@ -263,15 +152,14 @@
         "required": ["institution", "location", "area", "startDate", "endDate"],
         "additionalProperties": false,
         "properties": {
-          "institution": { "type": "string", "description": "학교명" },
-          "location": { "type": "string", "description": "소재지 (예: 서울)" },
-          "area": { "type": "string", "description": "학과/전공" },
-          "startDate": { "type": "string", "description": "입학일 (YYYY.MM)", "pattern": "^\\d{4}\\.\\d{2}$" },
-          "endDate": { "type": "string", "description": "졸업일 (YYYY.MM)", "pattern": "^\\d{4}\\.\\d{2}$" }
+          "institution": { "type": "string" },
+          "location": { "type": "string" },
+          "area": { "type": "string" },
+          "startDate": { "type": "string", "pattern": "^\\d{4}\\.\\d{2}$" },
+          "endDate": { "type": "string", "pattern": "^\\d{4}\\.\\d{2}$" }
         }
       }
     },
-
     "training": {
       "description": "직무관련 경험 (부트캠프, 아카데미 등)",
       "type": "array",
@@ -280,24 +168,47 @@
         "required": ["institution", "location", "course", "startDate", "endDate"],
         "additionalProperties": false,
         "properties": {
-          "institution": { "type": "string", "description": "교육기관명" },
-          "location": { "type": "string", "description": "소재지 (예: 서울, 온라인)" },
-          "course": { "type": "string", "description": "교육과정명" },
+          "institution": { "type": "string" },
+          "location": { "type": "string" },
+          "course": { "type": "string" },
           "startDate": { "type": "string", "pattern": "^\\d{4}\\.\\d{2}$" },
           "endDate": { "type": "string", "pattern": "^\\d{4}\\.\\d{2}$" }
         }
       }
     },
-
+    "certifications": {
+      "description": "자격증 목록",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" }
+        }
+      }
+    },
+    "languages": {
+      "description": "언어 역량",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "level"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "level": { "type": "string" }
+        }
+      }
+    },
     "meta": {
       "description": "메타 정보",
       "type": "object",
-      "required": ["version", "lastModified", "notes"],
+      "required": ["version", "lastModified"],
       "additionalProperties": false,
       "properties": {
-        "version": { "type": "string", "description": "이력서 버전 (예: 2.0.0-draft)" },
-        "lastModified": { "type": "string", "description": "최종 수정일 (YYYY-MM-DD)", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
-        "notes": { "type": "array", "items": { "type": "string" }, "description": "변경 이력 메모" }
+        "version": { "type": "string" },
+        "lastModified": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }
       }
     }
   }
