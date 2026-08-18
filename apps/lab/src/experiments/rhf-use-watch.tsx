@@ -87,7 +87,7 @@ function createFormControl<T extends FieldValues>(defaultValues: T) {
     defaultValue: _formValues[name],
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
       // TODO 1-4
-      _formValues[name] = e.target.value;
+      (_formValues as FieldValues)[name] = e.target.value;
       next({ name });
     },
   });
