@@ -197,8 +197,8 @@ function useRenderCount(): number {
 
 function Badge({ label, count }: { label: string; count: number }) {
   return (
-    <span className="text-xs font-mono text-gray-500">
-      {label} 렌더 <span className="font-bold text-gray-900">{count}</span>회
+    <span className="text-xs font-mono text-gray-500 dark:text-gray-400">
+      {label} 렌더 <span className="font-bold text-gray-900 dark:text-gray-100">{count}</span>회
     </span>
   );
 }
@@ -208,10 +208,10 @@ function WatchedField({ control }: { control: Control<FormShape> }) {
   const firstName = useWatch({ control, name: "firstName" });
 
   return (
-    <div className="border border-blue-300 rounded p-3 bg-blue-50">
+    <div className="border border-blue-300 rounded p-3 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/40">
       <Badge label="자식(useWatch)" count={renders} />
       <p className="mt-1 font-mono text-sm">
-        Watch: <span className="text-blue-700">{firstName || "(빈 값)"}</span>
+        Watch: <span className="text-blue-700 dark:text-blue-300">{firstName || "(빈 값)"}</span>
       </p>
     </div>
   );
@@ -228,10 +228,10 @@ export default function App() {
     <div className="p-6 max-w-lg mx-auto space-y-4">
       <h1 className="text-lg font-bold">미니 RHF 실습</h1>
 
-      <div className="border border-gray-300 rounded p-3 space-y-2">
+      <div className="border border-gray-300 rounded p-3 space-y-2 dark:border-gray-700">
         <Badge label="루트(useForm)" count={rootRenders} />
         <p className="font-mono text-sm">
-          watch(): <span className="text-gray-700">{watched || "(빈 값)"}</span>
+          watch(): <span className="text-gray-700 dark:text-gray-300">{watched || "(빈 값)"}</span>
         </p>
       </div>
 
@@ -239,18 +239,18 @@ export default function App() {
         <input
           {...register("firstName")}
           placeholder="firstName"
-          className="w-full border border-gray-300 rounded px-3 py-2"
+          className="w-full border border-gray-300 rounded px-3 py-2 bg-transparent dark:border-gray-600"
         />
         <input
           {...register("lastName")}
           placeholder="lastName (이건 아무도 안 본다)"
-          className="w-full border border-gray-300 rounded px-3 py-2"
+          className="w-full border border-gray-300 rounded px-3 py-2 bg-transparent dark:border-gray-600"
         />
       </div>
 
       <WatchedField control={control} />
 
-      <div className="text-xs text-gray-600 space-y-1 pt-2 border-t border-gray-200">
+      <div className="text-xs text-gray-600 space-y-1 pt-2 border-t border-gray-200 dark:text-gray-400 dark:border-gray-700">
         <p className="font-bold">확인 체크리스트</p>
         <p>L1+L2 → firstName 칠 때 자식만 증가, 루트는 1 고정</p>
         <p>L2 확인 → lastName 칠 때는 아무것도 안 늘어남</p>
