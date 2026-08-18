@@ -72,7 +72,7 @@ function createFormControl<T extends FieldValues>(defaultValues: T) {
     // TODO 1-3
     _observers.push(cb);
     return () => {
-      _observers.filter((observer) => observer !== cb);
+      _observers = _observers.filter((observer) => observer !== cb);
     };
   };
 
