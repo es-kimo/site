@@ -3,8 +3,13 @@ import { TableOfContents } from "@/components/TableOfContents";
 import { getMdxContent } from "@/lib/content";
 import { getPostContent, getPostMetadata } from "@/lib/metadata";
 import { decodeURIS } from "@workspace/common/lib/uri";
+import { staticSlugParams } from "@/lib/static-params";
 import { type SlugParams } from "@workspace/common/structure/params.types";
 import { Metadata } from "next";
+
+export function generateStaticParams() {
+  return staticSlugParams();
+}
 
 export async function generateMetadata({ params }: { params: Promise<SlugParams> }): Promise<Metadata> {
   const { category, subCategory, slug } = await params;
