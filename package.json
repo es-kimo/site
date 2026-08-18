@@ -5,6 +5,7 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "lab": "pnpm -F lab dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "blog:profile": "git config user.name 'Kihyun Ryu' && git config user.email 'khryu0610@gmail.com'",
