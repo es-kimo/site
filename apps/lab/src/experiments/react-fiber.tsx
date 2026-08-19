@@ -136,8 +136,8 @@ function createFiber(tag: WorkTag, debugName: string, pendingProps: Props | null
   //   alternate → null
 
   const fiber: Fiber = {
-    key: "",
-    type: "",
+    key: null,
+    type: null,
 
     tag,
     debugName,
@@ -157,7 +157,6 @@ function createFiber(tag: WorkTag, debugName: string, pendingProps: Props | null
   };
 
   return fiber;
-  throw new Error("TODO 1-1");
 }
 
 /* ═══════════════════════════════════════════════════════════════
