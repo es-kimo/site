@@ -411,6 +411,13 @@ function completeUnitOfWork(unitOfWork: Fiber): void {
     }
 
     completedWork = completedWork.return;
+
+    /**
+     * Level 1에서는 사실상 completedWork 하나만 갖고도 loop 자체는 구현할 수 있어.
+     * 그런데 React 관점에서는 workInProgress가 전역적인 "현재 작업 위치"라는 불변식을 유지하는 게 중요하다.
+     * 즉 언제 봐도 workInProgress는 React가 현재 어디까지 render하고 있는가를 의미하도록 만드는 거지.
+     * 이 개념이 나중에 yield가 나오면 중요해진다.
+     */
     workInProgress = completedWork;
   } while (completedWork !== null);
 }
