@@ -203,12 +203,13 @@ function linkChildren(parent: Fiber, children: Fiber[]): void {
   //
   // 마지막 sibling은 null이어야 한다.
   parent.child = children[0];
-  children[0].index = 0;
-  children[0].return = parent;
-  for (let i = 1; i < children.length; i++) {
-    children[i - 1].sibling = children[i];
-    children[i].index = i;
-    children[i].return = parent;
+
+  for (let i = 0; i < children.length; i++) {
+    const child = children[i];
+
+    child.return = parent;
+    child.index = i;
+    child.sibling = children[i + 1] ?? null;
   }
 }
 
