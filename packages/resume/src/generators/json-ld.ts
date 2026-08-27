@@ -1,4 +1,9 @@
-import type { ResumeData } from "../types.js";
+import type { ProjectBase, ResumeData } from "../types.js";
+
+/** YAML folded scalar(`>`)로 들어온 문단을 한 줄로 정규화합니다. */
+function line(text: string): string {
+  return text.replace(/\s*\n\s*/g, " ").trim();
+}
 
 /**
  * ResumeData → Schema.org JSON-LD 객체를 생성합니다.
@@ -6,25 +11,18 @@ import type { ResumeData } from "../types.js";
  * 검색엔진과 AI 크롤러가 구조화된 데이터로 파싱할 수 있습니다.
  */
 export function toJsonLd(data: ResumeData): Record<string, unknown> {
+  const allProjects: ProjectBase[] = [...data.work.flatMap((job) => job.projects), ...data.openSource, ...data.sideProjects];
+
   // 모든 기술 스택 키워드를 수집
   const allTechKeywords = new Set<string>();
-  for (const job of data.work) {
-    for (const proj of job.projects) {
-      for (const tech of proj.techStack) {
-        allTechKeywords.add(tech);
-      }
-    }
-  }
-  for (const proj of data.sideProjects) {
-    for (const tech of proj.techStack) {
+  for (const project of allProjects) {
+    for (const tech of project.techStack) {
       allTechKeywords.add(tech);
     }
   }
   for (const tech of data.skills.frontend) allTechKeywords.add(tech);
   for (const tech of data.skills.testing) allTechKeywords.add(tech);
   for (const tech of data.skills.tooling) allTechKeywords.add(tech);
-  for (const d of data.skills.design) allTechKeywords.add(d);
-  for (const c of data.skills.collaboration) allTechKeywords.add(c);
 
   return {
     "@context": "https://schema.org",
@@ -34,7 +32,7 @@ export function toJsonLd(data: ResumeData): Record<string, unknown> {
     jobTitle: data.basics.label,
     email: `mailto:${data.basics.email}`,
     url: data.basics.url,
-    description: data.basics.summary || data.basics.label,
+    description: line(data.basics.summary) || data.basics.label,
     sameAs: data.basics.profiles.map((p) => p.url),
     knowsAbout: [...allTechKeywords],
     alumniOf: [
@@ -63,6 +61,14 @@ export function toJsonLd(data: ResumeData): Record<string, unknown> {
       startDate: job.startDate,
       ...(job.endDate ? { endDate: job.endDate } : {}),
     })),
+    subjectOf: allProjects.map((project) => ({
+      "@type": "CreativeWork",
+      name: project.name,
+      abstract: line(project.oneLiner),
+      keywords: project.techStack,
+      ...(project.links?.repo ? { url: project.links.repo } : {}),
+    })),
+    award: data.awards.map((a) => (a.project ? `${a.title} — ${a.project}` : a.title)),
     hasCredential: data.certifications.map((cert) => ({
       "@type": "EducationalOccupationalCredential",
       name: cert.name,

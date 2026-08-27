@@ -36,31 +36,57 @@ export interface Skills {
   frontend: string[];
   testing: string[];
   tooling: string[];
-  design: string[];
-  collaboration: string[];
 }
 
-// ── Key Contributions (공용) ────────────────────────────────────────────────
+// ── Projects (공용) ─────────────────────────────────────────────────────────
 
-export interface KeyContribution {
-  title?: string;
-  problem: string;
-  decision: string;
-  result: string;
-  ownershipEvidence?: string[];
+/**
+ * 프로젝트에서 한 일 하나.
+ * `summary`에는 수행한 판단과 행동을, `impact`에는 검증 가능한 결과만 담습니다.
+ */
+export interface Highlight {
+  title: string;
+  summary: string;
+  /** 수치나 근거가 확인되는 결과만 기재합니다. */
+  impact?: string[];
+}
+
+export interface ProjectLinks {
+  repo?: string;
+  npm?: string;
+  docs?: string;
+  demo?: string;
+}
+
+/**
+ * 렌더링 비중.
+ * primary는 가장 크게, secondary는 그다음, supporting은 요약 수준으로 노출합니다.
+ */
+export type ProjectEmphasis = "primary" | "secondary" | "supporting";
+
+/** 모든 프로젝트 종류가 공유하는 필드 */
+export interface ProjectBase {
+  id: string;
+  name: string;
+  period?: string;
+  /** 맡은 직책 (예: Development Lead) */
+  role: string;
+  /** 실제 책임 범위. role만으로 드러나지 않는 담당 영역. */
+  scope?: string;
+  techStack: string[];
+  oneLiner: string;
+  /** 해결책의 수준을 판단하는 데 필요한 제약만 기재합니다. */
+  constraints?: string[];
+  highlights: Highlight[];
+  links?: ProjectLinks;
 }
 
 // ── Work Experience (회사 경력) ─────────────────────────────────────────────
 
-export interface WorkProject {
-  id: string;
-  name: string;
+export interface WorkProject extends ProjectBase {
   period: string;
-  role: string;
-  featured: boolean;
-  techStack: string[];
-  oneLiner: string;
-  keyContributions?: KeyContribution[];
+  scope: string;
+  emphasis: ProjectEmphasis;
 }
 
 export interface WorkExperience {
@@ -73,27 +99,24 @@ export interface WorkExperience {
   projects: WorkProject[];
 }
 
-// ── Side Projects ───────────────────────────────────────────────────────────
+// ── Open Source ─────────────────────────────────────────────────────────────
 
-export type ProjectStatus = "awarded" | "completed" | "in-progress";
-
-export interface SideProject {
-  id: string;
-  name: string;
-  teamSize: number;
-  role: string;
-  status: ProjectStatus;
-  repoUrl?: string;
-  techStack: string[];
-  oneLiner: string;
-  keyContributions: KeyContribution[];
+export interface OpenSourceProject extends ProjectBase {
+  period: string;
+  scope: string;
 }
 
-// ── Deep Dives (경험과 고민) ────────────────────────────────────────────────
+// ── Side Projects ───────────────────────────────────────────────────────────
 
-export interface ExecutionStep {
+export type SideProject = ProjectBase;
+
+// ── Awards ──────────────────────────────────────────────────────────────────
+
+export interface Award {
   title: string;
-  details: string[];
+  /** 수상 대상 프로젝트명 */
+  project?: string;
+  summary: string;
 }
 
 // ── Education & Training ────────────────────────────────────────────────────
@@ -137,7 +160,9 @@ export interface ResumeData {
   positioning: Positioning;
   skills: Skills;
   work: WorkExperience[];
+  openSource: OpenSourceProject[];
   sideProjects: SideProject[];
+  awards: Award[];
   education: Education[];
   training: Training[];
   certifications: Certification[];

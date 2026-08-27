@@ -7,7 +7,12 @@ basics:
   email: "khryu0610@gmail.com"
   url: "https://khryu.dev"
   canonical: "https://khryu.dev/resume"
-  summary: "책임이 분명한 설계를 지향합니다. 심전도 그래프 위의 복잡한 인터랙션 사이에 책임이 뒤섞이지 않도록 레이어를 분리했습니다.\n코드 리뷰에 맥락을 더해줄 방법을 고민합니다. 글로써 작업의 배경이나 코드 한 줄의 근거를 설명할 수 있고, 자동화 도구를 사용해 작업의 변경 범위를 시각화했습니다."
+  summary: >
+    React 기반 의료 제품과 사내 시스템을 개발하고 있습니다.
+    심전도 그래프의 태블릿 터치 인터랙션을 설계하고,
+    사내 디자인 시스템 3.0 개편을 주도했습니다.
+    개별 기능 구현뿐 아니라 여러 제품에서 반복되는 문제를
+    공통 구조와 자동화 도구로 해결하는 데 관심이 있습니다.
   profiles:
     - network: "GitHub"
       username: "es-kimo"
@@ -17,7 +22,7 @@ basics:
       url: "https://khryu.dev"
 
 positioning:
-  headline: "복잡한 조작과 공통 UI 변경을 안정적으로 다루는 프론트엔드 개발자"
+  headline: "복잡한 인터랙션과 여러 제품에 반복되는 문제를 구조화해 해결하는 프론트엔드 개발자"
   targetRoles:
     - "Frontend Developer"
     - "Frontend Platform Engineer"
@@ -27,25 +32,21 @@ skills:
     - "React"
     - "TypeScript"
     - "Next.js"
-    - "Zustand"
+    - "D3"
     - "TanStack Query"
+    - "Zustand"
     - "React Hook Form"
     - "Zod"
-    - "D3"
   testing:
     - "Vitest"
     - "Playwright"
     - "Mock Service Worker"
   tooling:
     - "Vite"
-    - "Yarn"
+    - "Node.js"
     - "pnpm"
+    - "Yarn"
     - "GitLab CI/CD"
-  design:
-    - "Figma"
-  collaboration:
-    - "Jira"
-    - "Notion"
 
 work:
   - company: "메디컬에이아이"
@@ -54,82 +55,138 @@ work:
     position: "Frontend Developer"
     startDate: "2024.11"
     endDate: ""
+
     projects:
+      - id: "maiui-3"
+        name: "MAIUI 3.0"
+        period: "2026.03 ~ 현재"
+        emphasis: "primary"
+        role: "Development Lead"
+        scope: "컴포넌트 구조 개편 및 디자인 자산 운영 자동화"
+
+        techStack:
+          - "React"
+          - "TypeScript"
+          - "Base UI"
+          - "Node.js"
+
+        oneLiner: >
+          제품에서 안전하게 확장·조합할 수 있는 컴포넌트 구조와
+          디자인 자산 자동화 체계를 구축한 사내 디자인 시스템 개편
+
+        constraints:
+          - "여러 제품이 동일한 디자인 시스템을 사용해 기존 사용성을 깨지 않는 마이그레이션이 필요"
+          - "제품에서 내부 DOM을 직접 선택해 스타일을 수정하는 등 컴포넌트 구현 세부사항에 대한 의존이 존재"
+          - "디자인 토큰과 아이콘 변경 사항을 사람이 확인하고 코드로 옮기는 운영 방식"
+
+        highlights:
+          - title: "확장 가능한 컴포넌트 API와 스타일링 기준 정립"
+            summary: >
+              컴포넌트마다 달랐던 API와 스타일링 방식을 정리하고,
+              기존 컴포넌트의 사용 편의성을 유지하면서 제품에서 필요한 부분을
+              조합할 수 있는 컴포넌트 구조와 컨벤션을 정의했습니다.
+
+          - title: "디자인 자산 동기화 자동화"
+            summary: >
+              디자인 변경 사항을 자동으로 검사하고 코드 생성,
+              변경 내역 작성, PR 생성까지 이어지는 갱신 파이프라인을 구축했습니다.
+            impact:
+              - "아이콘 코드 반영률 65% → 100%"
+              - "Figma 아이콘 376개 중 미반영 131개 일괄 해소"
+              - "평균 90일이던 갱신 주기를 수일 수준으로 단축"
+              - "12작업일 투자, 반복 작업 절감 기준 1년 이내 구축 비용 회수"
+
       - id: "ecg-ruler-tablet"
-        name: "ECG-GRAPH Ruler for Tablet"
-        period: "2025.02 ~ 2025.04"
-        role: "Frontend Developer"
-        featured: true
+        name: "ECG-GRAPH Tablet Interaction"
+        period: "2025.02 ~ 2025.05"
+        emphasis: "primary"
+        role: "Frontend Engineer"
+        scope: "태블릿 환경 지원 및 터치 인터랙션 설계"
+
         techStack:
           - "React"
           - "TypeScript"
           - "D3"
-        oneLiner: "태블릿 환경에서 확대, 이동, 정밀 측정이 서로 방해하지 않게 터치 조작을 판별하고 제어한 ECG 그래프 측정 도구"
-        keyContributions:
-          - title: "터치 의도를 즉시 판별하지 않는 지연 평가 설계"
-            problem: "데스크톱에서는 마우스와 키보드로 확대와 측정을 구분할 수 있었지만, 태블릿에서는 확대, 이동, 측정이 모두 손가락 터치로 시작되었습니다."
-            decision: "손가락이 화면에 닿은 순간 바로 기능을 정하지 않고, 800ms 유지 여부, 이동 거리, 터치 개수를 보고 사용자의 의도를 나중에 판단하도록 했습니다."
-            result: "단일 터치 입력에서도 줌·측정·정밀측정 의도를 높은 정확도로 구분하여 오작동을 줄였습니다."
+          - "SVG"
+          - "Playwright"
 
-          - title: "여러 기능 레이어가 공유하는 상태를 '트랜잭션'처럼 관리"
-            problem: "확대 기능과 측정 기능이 같은 pointer 이벤트를 동시에 받으면서, 한쪽이 동작하는 동안 다른 기능이 끼어들어 화면이 흔들리거나 측정이 끊기는 문제가 있었습니다."
-            decision: "5개 상태(Ruler, Zoom, PreciseMeasurement, ButtonDragging, RulerOff)를 갖는 Ref 기반 공유 제어 상태를 도입하고, 줌·측정 레이어 양쪽이 이 상태를 읽어 자기 동작의 실행 여부를 결정하도록 했습니다. 드래그처럼 짧은 행동은 진입 시 이전 상태를 저장하고 종료 시 복원하는 트랜잭션 방식으로 분리했습니다."
-            result: "여러 인터랙션 레이어가 같은 이벤트를 두고 경쟁하는 환경에서도, 각 행동이 서로를 방해하지 않는 구조를 만들었습니다."
+        oneLiner: >
+          의료진이 태블릿에서 심전도 그래프를 확대·이동하면서
+          원하는 구간을 정확하게 측정할 수 있도록 터치 상호작용을 설계
 
-          - title: "드래그 동작과 태블릿 전용 정책 분리"
-            problem: "태블릿 특성 상 드래그 가능한 요소가 늘어나면서, 드래그 자체의 메커니즘과 '드래그 중 다른 인터랙션을 어떻게 제어할 것인가'라는 플랫폼별(데스크톱·태블릿) 로직이 뒤섞일 수 있었습니다."
-            decision: "드래그의 기본 동작은 공통 훅으로 분리하고, 태블릿에서 필요한 상태 전환과 실행 조건은 별도 래퍼에서 주입하도록 나눴습니다."
-            result: "같은 드래그 요소를 데스크톱과 태블릿에서 서로 다른 기준으로 재사용할 수 있게 되었습니다."
+        constraints:
+          - "확대·이동·측정·정밀측정·도구 이동이 모두 동일한 손가락 입력에서 시작"
+          - "화면 좌표가 실제 ECG의 시간 및 전압 값으로 변환되므로 측정 정확도가 중요"
+          - "브라우저 기본 스크롤 및 핀치 제스처와 제품 인터랙션 간 충돌 가능"
 
-      - id: "maiui-3"
-        name: "MAIUI 3.0"
-        period: "2026.04 ~ 현재"
-        role: "Frontend Developer"
-        featured: true
+        highlights:
+          - title: "터치 입력 의도 판별"
+            summary: >
+              터치 유지 시간, 이동 거리, 손가락 수를 기준으로
+              확대·이동·측정 의도를 구분하고,
+              한 동작이 시작된 동안 다른 기능이 같은 입력을 처리하지 않도록
+              기능 간 상태 흐름을 설계했습니다.
+
+          - title: "측정 정확도 및 인터랙션 검증"
+            summary: >
+              화면 좌표와 실제 시간·전압 값 사이의 좌표 변환 및 상태 로직은
+              단위 테스트로 검증하고, 실제 터치 입력에 따른 상태 전이와
+              UI 변화는 브라우저 통합 테스트로 검증했습니다.
+            impact:
+              - "핀치 확대 중 측정점 생성 등 기능 간 입력 충돌 방지"
+              - "모바일 환경의 스크롤 간섭과 측정 인터랙션 충돌 검증"
+
+      - id: "migration-impact-analysis"
+        name: "디자인 시스템 마이그레이션 영향도 분석 도구"
+        period: "2026.03"
+        emphasis: "secondary"
+        role: "Development Lead"
+        scope: "AI 기반 코드 분석 기준 설계 및 리뷰 도구 개발"
+
         techStack:
-          - "React"
           - "TypeScript"
-          - "Radix"
           - "Node.js"
-        oneLiner: "사내 컴포넌트 라이브러리의 메이저 버전 개편"
-        keyContributions:
-          - title: "컴포넌트 스펙 문서화로 팀 내부 소통 비용 감소"
-            problem: "기존 버전에서는 컴포넌트마다 스펙 해석과 코드 스타일이 달라서 잦은 마이너 업데이트가 필요했습니다."
-            decision: "개발 규칙을 Git으로 관리해서 AI가 일관된 코드 초안을 생성하는 게 중요하다고 생각했습니다. 파일럿 컴포넌트를 만들며 폴더 구조, 스토리 작성 방식, 테스트 기준, 리뷰 기준을 문서로 정리했습니다."
-            result: "2명의 개발자가 동일한 수준의 컴포넌트를 작성해냈고, 리뷰가 설계와 사용성 검토에 더 집중될 수 있게 했습니다."
+          - "LLM"
 
-          - title: "디자인 토큰 변경 이력 관리로 팀 간 소통 비용 감소"
-            problem: "디자인 토큰 변경은 디자인 담당자에게 의존해, 소통 부재 시 실제 디자인과 코드가 불일치할 가능성이 있었습니다."
-            decision: "Git 변경 이력을 바탕으로 토큰의 추가, 수정, 삭제 내역을 Storybook changelog에서 확인할 수 있게하고, 크로스 체크를 협업 프로세스로 정착시켰습니다."
-            result: "디자인 토큰 변경 내역을 디자이너도 직접 확인할 수 있게 되었고, 디자인과 개발 사이의 소통 비용을 줄였습니다."
+        oneLiner: >
+          여러 제품의 디자인 시스템 사용처를 AI로 분석하고
+          변경 위험과 제품 맥락을 코드 리뷰에서 바로 확인할 수 있도록 만든 도구
 
-          - title: "컴포넌트 사용처 수집 도구로 마이그레이션 비용 감소"
-            problem: "프로덕트 단에서 교체해야할 컴포넌트가 산재했고, 리뷰에 오랜 시간이 걸릴 것으로 예상했습니다."
-            decision: "레포별 소스를 자동으로 모으고, 각 사용처를 유형과 위험도에 따라 나누는 대시보드를 만들었습니다."
-            result: "해당 결과를 코드 리뷰어 뿐만 아니라 디자인 QA에 활용하여 리뷰 시간을 단축하였습니다."
+        constraints:
+          - "공통 컴포넌트 사용처가 10개 제품에 분산"
+          - "진입 경로·노출 조건·변경 위험도는 정적 코드 검색만으로 판단하기 어려움"
+          - "정상 화면 흐름만 직접 확인할 경우 오류·권한·시간 초과 등 예외 경로 누락 가능"
 
-      - id: "mai-cs"
-        name: "고객지원 시스템"
-        period: "2025.07 ~ 2025.08, 2026.02 ~ 2026.03"
-        role: "Frontend Developer"
-        featured: false
-        techStack:
-          - "React"
-          - "TypeScript"
-          - "TanStack Query"
-          - "Zustand"
-        oneLiner: "고객지원 시스템 v1.1 개발 리드"
-        keyContributions:
-          - title: "프로젝트 리드"
-            problem: "v1.1은 기획서만 있고 개발 단위와 일정 근거가 부족한 상태에서 시작되었습니다."
-            decision: "기획서를 백로그와 티켓으로 나누고, 플래닝 포커로 작업 규모를 산정했습니다. 티켓별 소요 시간과 막힌 지점도 함께 기록했습니다."
-            result: "사내 컴포넌트 라이브러리에서 발견된 문제를 해결하는 것이 주요 병목 지점으로 확인해, 팀이 반복적으로 겪는 문제를 정의하고 해결했습니다."
+        highlights:
+          - title: "사람의 판단 기준을 15개 항목으로 구조화"
+            summary: >
+              사용 위치, 진입 경로, 노출 조건, 제품별 수정 내용,
+              변경 위험도 등 리뷰어가 확인하던 기준을 구조화해
+              AI가 동일한 형식으로 저장소를 분석하도록 만들었습니다.
+
+          - title: "AI 판단과 코드 검증의 책임 분리"
+            summary: >
+              맥락 해석과 1차 분류는 AI가 수행하되,
+              결과 형식과 허용 값, 중복 여부는 코드로 검증했습니다.
+              근거가 부족한 판단은 낮은 확신도로 남겨
+              AI 결과와 사람의 최종 판단을 분리했습니다.
+
+          - title: "코드 리뷰와 디자인 QA를 위한 대시보드 제공"
+            summary: >
+              저장소별 분석 결과를 자동 수집하고 유형, 위험도,
+              확인 여부에 따라 탐색할 수 있는 대시보드로 제공했습니다.
+            impact:
+              - "3일 동안 4개 제품에서 모달 사용 사례 132건 확보"
+              - "36건(약 27%)의 예외 상황 전용 사용처를 검토 범위에 포함"
+              - "코드 리뷰와 디자인 QA가 동일한 영향도 자료를 활용"
 
       - id: "mai-sales"
-        name: "판매관리 시스템"
-        period: "2025.09 ~ 2025.12"
-        role: "Frontend Developer"
-        featured: false
+        name: "사내 업무관리 시스템"
+        period: "2025.08 ~ 2025.12"
+        emphasis: "secondary"
+        role: "Frontend Engineer / Scrum Master"
+        scope: "대용량 다운로드 구조 개선 및 스프린트 운영"
+
         techStack:
           - "React"
           - "TypeScript"
@@ -137,52 +194,152 @@ work:
           - "Zustand"
           - "Zod"
           - "React Hook Form"
-        oneLiner: "회사의 자산, 매출, 거래처 정보를 관리하는 사내 시스템"
-        keyContributions:
-          - title: "대용량 파일 다운로드 처리"
-            problem: "대용량 파일 압축의 책임 소재, 운영체제별 다운로드 차이, 사이버 보안 정책을 함께 고려해야 했습니다."
-            decision: "스트리밍 다운로드로 전환해 네트워크 부담을 줄이고, 압축·암호화 연산을 서버(1:N)에서 클라이언트(1:1)로 분산해 동시 다운로드 구간의 서버 병목을 줄였습니다."
-            result: "동일 동시 요청 조건의 부하 테스트에서 서버 CPU/메모리 피크와 타임아웃 비율을 낮췄고, 지연 네트워크 환경에서도 다운로드 완료 안정성을 높였습니다."
 
-sideProjects:
-  - id: "voting-system"
-    name: "실시간 의결 투표 플랫폼"
-    teamSize: 2
-    role: "Frontend Developer"
-    status: "completed"
-    repoUrl: "https://github.com/vottega/client"
-    techStack:
-      - "React"
-      - "TypeScript"
-      - "SSE"
-    oneLiner: "의사정족수와 의결정족수를 지원하는 실시간 투표 시스템"
-    keyContributions:
-      - title: "SSE와 REST 사이의 데이터 덮어쓰기 방지"
-        problem: "SSE 이벤트와 REST 응답이 함께 쓰이는 환경에서, 늦게 도착한 오래된 이벤트가 최신 데이터를 덮어쓰는 문제가 있었습니다."
-        decision: "이벤트를 받은 시점과 캐시에 반영하는 시점에 각각 시간을 비교해, 오래된 이벤트가 최신 상태를 덮어쓰지 못하게 했습니다."
-        result: "SSE와 REST가 함께 동작하는 환경에서도 데이터가 어긋나지 않도록 처리했습니다."
+        oneLiner: >
+          대용량 파일 처리 병목을 스트림 기반으로 개선하고
+          자산·매출·거래처 관리 시스템 개발 일정을 조율한 프로젝트
 
-      - title: "SSE 재연결 시 유실 구간 복구"
-        problem: "탭 비활성화 등으로 SSE 연결이 끊기면, 그 사이 발생한 이벤트를 놓칠 수 있었습니다."
-        decision: "초기 연결과 재연결을 구분하고, 실제로 연결이 끊겼던 경우에만 서버 데이터를 다시 조회하도록 했습니다."
-        result: "불필요한 재요청을 줄이면서도 실시간 데이터의 정합성을 유지했습니다."
+        constraints:
+          - "파일 전체가 준비된 뒤 응답하는 기존 구조에서 대용량 요청 실패"
+          - "비밀번호를 서버에 전달하지 않는 기존 보안 원칙 유지 필요"
+          - "브라우저에서 압축·암호화 후처리를 수행해야 함"
 
+        highlights:
+          - title: "대용량 다운로드를 스트림 기반으로 전환"
+            summary: >
+              서버에서 데이터를 생성되는 대로 전송하고,
+              클라이언트에서도 데이터를 메모리에 누적하지 않고
+              가능한 환경에서는 즉시 파일로 기록하도록 처리 방식을 변경했습니다.
+
+          - title: "클라이언트 후처리의 메모리 사용량 개선"
+            summary: >
+              보안 원칙을 유지하기 위해 암호화 후처리는 클라이언트에서 수행하되,
+              전체 파일을 메모리에 올리지 않고 스트림 단위로 처리했습니다.
+            impact:
+              - "100MB ~ 1GB 파일 및 다양한 동시 요청 조건에서 검증"
+              - "기존 방식에서 실패하던 대용량 다운로드 완료"
+              - "1GB 처리 시 브라우저 메모리 약 1.9GB → 수십 MB"
+
+          - title: "스크럼 운영"
+            summary: >
+              주간 회의와 스프린트 회고를 운영하며 작업 현황과 이슈를 정리하고,
+              개발 일정과 우선순위를 지속적으로 조율했습니다.
+
+      - id: "mai-cs"
+        name: "고객지원 시스템"
+        period: "2025.07 ~ 2025.08, 2026.02 ~ 2026.03"
+        emphasis: "supporting"
+        role: "Frontend Engineer / Project Lead"
+        scope: "v1.1 개발 리드 및 개발 프로세스 개선"
+
+        techStack:
+          - "React"
+          - "TypeScript"
+          - "TanStack Query"
+          - "Zustand"
+
+        oneLiner: >
+          고객지원 시스템의 개발 단위와 일정을 관리하고,
+          제품 개발 과정에서 반복되는 디자인 시스템 병목을 발견한 프로젝트
+
+        highlights:
+          - title: "개발 단위와 일정 관리"
+            summary: >
+              기획서를 백로그와 티켓으로 나누고 작업 규모와 소요 시간을 산정해
+              일정과 우선순위를 관리했습니다.
+
+          - title: "반복되는 디자인 시스템 병목 발견"
+            summary: >
+              제품 요구사항을 구현할 때마다 디자인 시스템 수정과 재배포가 반복되는
+              구조적 문제를 확인했고, 이후 MAIUI 3.0 개편의 문제 정의로 연결했습니다.
+
+openSource:
   - id: "vue-kakao-map-lib"
-    name: "지도 API 컴포넌트화 라이브러리"
-    teamSize: 6
-    role: "Frontend Developer"
-    status: "completed"
-    repoUrl: "https://github.com/beautiful-source/vue3-kakao-maps"
+    name: "vue3-kakao-maps"
+    period: "2024.04 ~ 2024.11"
+    role: "npm Maintainer"
+    scope: "패키징·타입·배포 체계 구축"
+
     techStack:
       - "Vue"
       - "TypeScript"
       - "Vite"
-    oneLiner: "카카오맵 API를 Vue 컴포넌트로 사용할 수 있게 만든 오픈소스 라이브러리"
-    keyContributions:
-      - title: "빌드 산출물 검증과 테스트 환경 표준화"
-        problem: "6인의 개발자가 각기 다른 스타일의 코드를 작성하고, 테스트를 누락하는 경우가 있었습니다. 또한 라이브러리는 내부 구현이 잘 동작해도, 빌드 산출물이 소비자 프로젝트에서 제대로 해석되지 않으면 배포 후 문제가 발생할 수 있었습니다."
-        decision: "커스텀 Lint 룰을 개발해 빌드된 파일에 절대 경로가 남는 문제를 방지하고, 로컬 테스트 환경을 단순화해서 팀 세션을 소집해 공유했습니다."
-        result: "배포 전에 산출물 문제를 확인할 수 있는 기준이 생겼고, 팀원들이 적은 노력으로 같은 환경에서 기능을 구현하고 검증할 수 있게 했습니다."
+
+    oneLiner: >
+      카카오맵 API를 Vue 3 컴포넌트로 사용할 수 있도록 만든
+      오픈소스 라이브러리
+
+    constraints:
+      - "사용자의 Node 및 모듈 해석 환경을 통제할 수 없음"
+      - "코드뿐 아니라 빌드 산출물과 타입 선언이 소비자 프로젝트에서 정상적으로 해석돼야 함"
+
+    highlights:
+      - title: "소비자 환경을 고려한 패키지 구조 개선"
+        summary: >
+          CommonJS 환경에서 타입과 서브패스를 정상적으로 해석하지 못하는 문제를 해결하기 위해
+          코드와 타입 진입점을 환경별로 재구성하고 타입 선언 생성 방식을 개선했습니다.
+
+      - title: "배포 전 검증 자동화"
+        summary: >
+          내부 개발 환경에서의 정상 동작만 확인하는 대신,
+          빌드 산출물과 소비자 환경에서의 모듈 해석 문제를
+          배포 전에 확인할 수 있도록 검증 과정을 자동화했습니다.
+
+      - title: "오픈소스 운영"
+        summary: >
+          npm 메인테이너로 릴리스를 담당하고 실제 사용자 피드백과
+          외부 사용자가 제안한 문서 PR을 검토·반영했습니다.
+
+    links:
+      repo: "https://github.com/beautiful-source/vue3-kakao-maps"
+
+sideProjects:
+  - id: "voting-system"
+    name: "실시간 의결 투표 플랫폼"
+    role: "Frontend Developer"
+
+    techStack:
+      - "React"
+      - "TypeScript"
+      - "SSE"
+
+    oneLiner: >
+      의사정족수와 의결정족수를 지원하는 실시간 투표 시스템
+
+    highlights:
+      - title: "SSE와 REST 응답 간 race condition 처리"
+        summary: >
+          늦게 도착한 오래된 SSE 이벤트가 최신 REST 응답을 덮어쓰지 않도록
+          이벤트 수신 시점과 캐시 반영 시점을 비교해 오래된 데이터를 차단했습니다.
+
+      - title: "SSE 재연결 시 유실 구간 복구"
+        summary: >
+          실제 연결 중단이 발생한 경우에만 서버 데이터를 다시 조회해
+          불필요한 요청을 줄이면서 실시간 데이터 정합성을 유지했습니다.
+
+    links:
+      repo: "https://github.com/vottega/client"
+
+awards:
+  - title: "삼성청년SW아카데미 프로젝트 우수상"
+    project: "vue3-kakao-maps"
+    summary: >
+      Vue 3 환경의 카카오맵 지원 부족을 문제로 정의하고
+      오픈소스 라이브러리를 직접 배포했습니다.
+      이후 실제 사용자 피드백과 외부 PR을 반영하며 운영한 점을 인정받아 우수팀으로 선정됐습니다.
+
+  - title: "삼성청년SW아카데미 프로젝트 우수상"
+    project: "AI 노래 추천 및 채점 서비스"
+    summary: >
+      사용자의 음역대에 맞는 노래를 추천하고 모바일 웹에서 녹음부터
+      AI 채점까지 제공하는 서비스를 개발했습니다.
+      전체 UI 프로토타입을 직접 설계하고 최종 발표에서 핵심 기능을 실시간으로 시연했습니다.
+
+  - title: "Yonsei VR/AR 콘텐츠 아이디어 공모전 대상"
+    project: "외국인 유학생 대상 VR 한국어 학습 게임"
+    summary: >
+      지하철 이용과 음식점 주문 등 한국 생활에서 마주치는 상황을
+      가상 환경에서 경험하며 한국어를 학습하는 VR 콘텐츠를 기획했습니다.
 
 education:
   - institution: "연세대학교"
@@ -197,6 +354,7 @@ training:
     course: "비전공 Java반"
     startDate: "2023.07"
     endDate: "2024.06"
+
   - institution: "멋쟁이사자처럼 웹 프론트엔드 스쿨"
     location: "온라인"
     course: "프론트엔드 중점 과정"
@@ -211,5 +369,5 @@ languages:
     level: "OPIc IM2"
 
 meta:
-  version: "3.0.0"
-  lastModified: "2026-07-05"
+  version: "4.0.0"
+  lastModified: "2026-08-27"
