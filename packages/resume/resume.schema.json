@@ -3,52 +3,24 @@
   "title": "Resume",
   "description": "이력서 데이터 스키마 — resume.yaml 작성 시 자동완성 및 검증에 사용됩니다.",
   "type": "object",
-  "required": ["basics", "positioning", "skills", "work", "openSource", "sideProjects", "awards", "education", "training", "certifications", "languages", "meta"],
+  "required": ["basics", "positioning", "skills", "work", "sideProjects", "education", "training", "certifications", "languages", "meta"],
   "additionalProperties": false,
   "definitions": {
-    "highlight": {
-      "description": "프로젝트에서 한 일 하나. summary는 판단과 행동을, impact는 검증 가능한 결과만 담습니다.",
+    "keyContribution": {
       "type": "object",
-      "required": ["title", "summary"],
+      "required": ["problem", "decision", "result"],
       "additionalProperties": false,
       "properties": {
         "title": { "type": "string", "description": "한 줄 요약 제목" },
-        "summary": { "type": "string", "description": "수행한 판단과 행동" },
-        "impact": {
+        "problem": { "type": "string", "description": "문제 상황" },
+        "decision": { "type": "string", "description": "수행한 판단/행동" },
+        "result": { "type": "string", "description": "결과" },
+        "ownershipEvidence": {
           "type": "array",
-          "minItems": 1,
           "items": { "type": "string" },
-          "description": "검증 가능한 결과만 기재합니다. 수치나 근거가 약한 표현은 넣지 않습니다."
+          "description": "오너십 근거"
         }
       }
-    },
-    "links": {
-      "description": "프로젝트 관련 외부 링크",
-      "type": "object",
-      "minProperties": 1,
-      "additionalProperties": false,
-      "properties": {
-        "repo": { "type": "string", "format": "uri" },
-        "npm": { "type": "string", "format": "uri" },
-        "docs": { "type": "string", "format": "uri" },
-        "demo": { "type": "string", "format": "uri" }
-      }
-    },
-    "constraints": {
-      "type": "array",
-      "minItems": 1,
-      "items": { "type": "string" },
-      "description": "해결책의 수준을 판단하는 데 필요한 제약만 기재합니다. 모든 프로젝트에 넣지 않습니다."
-    },
-    "techStack": {
-      "type": "array",
-      "minItems": 1,
-      "items": { "type": "string" }
-    },
-    "highlights": {
-      "type": "array",
-      "minItems": 1,
-      "items": { "$ref": "#/definitions/highlight" }
     }
   },
   "properties": {
@@ -98,12 +70,14 @@
     "skills": {
       "description": "기술 스택",
       "type": "object",
-      "required": ["frontend", "testing", "tooling"],
+      "required": ["frontend", "testing", "tooling", "design", "collaboration"],
       "additionalProperties": false,
       "properties": {
         "frontend": { "type": "array", "items": { "type": "string" } },
         "testing": { "type": "array", "items": { "type": "string" } },
-        "tooling": { "type": "array", "items": { "type": "string" } }
+        "tooling": { "type": "array", "items": { "type": "string" } },
+        "design": { "type": "array", "items": { "type": "string" } },
+        "collaboration": { "type": "array", "items": { "type": "string" } }
       }
     },
     "work": {
@@ -124,48 +98,23 @@
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["id", "name", "period", "emphasis", "role", "scope", "techStack", "oneLiner", "highlights"],
+              "required": ["id", "name", "period", "role", "featured", "techStack", "oneLiner"],
               "additionalProperties": false,
               "properties": {
                 "id": { "type": "string" },
                 "name": { "type": "string" },
                 "period": { "type": "string" },
-                "emphasis": {
-                  "type": "string",
-                  "enum": ["primary", "secondary", "supporting"],
-                  "description": "렌더링 비중. primary는 가장 크게, secondary는 그다음, supporting은 요약 수준으로 노출합니다."
-                },
-                "role": { "type": "string", "description": "맡은 직책 (예: Development Lead)" },
-                "scope": { "type": "string", "description": "실제 책임 범위. role만으로 드러나지 않는 담당 영역을 한 줄로 씁니다." },
-                "techStack": { "$ref": "#/definitions/techStack" },
+                "role": { "type": "string" },
+                "featured": { "type": "boolean" },
+                "techStack": { "type": "array", "items": { "type": "string" } },
                 "oneLiner": { "type": "string" },
-                "constraints": { "$ref": "#/definitions/constraints" },
-                "highlights": { "$ref": "#/definitions/highlights" },
-                "links": { "$ref": "#/definitions/links" }
+                "keyContributions": {
+                  "type": "array",
+                  "items": { "$ref": "#/definitions/keyContribution" }
+                }
               }
             }
           }
-        }
-      }
-    },
-    "openSource": {
-      "description": "오픈소스 기여 및 운영 경험",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["id", "name", "period", "role", "scope", "techStack", "oneLiner", "highlights"],
-        "additionalProperties": false,
-        "properties": {
-          "id": { "type": "string" },
-          "name": { "type": "string" },
-          "period": { "type": "string" },
-          "role": { "type": "string" },
-          "scope": { "type": "string" },
-          "techStack": { "$ref": "#/definitions/techStack" },
-          "oneLiner": { "type": "string" },
-          "constraints": { "$ref": "#/definitions/constraints" },
-          "highlights": { "$ref": "#/definitions/highlights" },
-          "links": { "$ref": "#/definitions/links" }
         }
       }
     },
@@ -174,33 +123,24 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id", "name", "role", "techStack", "oneLiner", "highlights"],
+        "required": ["id", "name", "teamSize", "role", "status", "techStack", "oneLiner", "keyContributions"],
         "additionalProperties": false,
         "properties": {
           "id": { "type": "string" },
           "name": { "type": "string" },
-          "period": { "type": "string" },
+          "teamSize": { "type": "integer", "minimum": 1 },
           "role": { "type": "string" },
-          "scope": { "type": "string" },
-          "techStack": { "$ref": "#/definitions/techStack" },
+          "status": {
+            "type": "string",
+            "enum": ["awarded", "completed", "in-progress"]
+          },
+          "repoUrl": { "type": "string", "format": "uri" },
+          "techStack": { "type": "array", "items": { "type": "string" } },
           "oneLiner": { "type": "string" },
-          "constraints": { "$ref": "#/definitions/constraints" },
-          "highlights": { "$ref": "#/definitions/highlights" },
-          "links": { "$ref": "#/definitions/links" }
-        }
-      }
-    },
-    "awards": {
-      "description": "수상 내역",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["title", "summary"],
-        "additionalProperties": false,
-        "properties": {
-          "title": { "type": "string", "description": "수상명" },
-          "project": { "type": "string", "description": "수상 대상 프로젝트명" },
-          "summary": { "type": "string", "description": "무엇을 했고 왜 선정됐는지" }
+          "keyContributions": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/keyContribution" }
+          }
         }
       }
     },

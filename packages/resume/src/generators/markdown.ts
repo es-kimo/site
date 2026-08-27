@@ -1,58 +1,4 @@
-import type { ProjectBase, ResumeData } from "../types.js";
-
-/** YAML folded scalar(`>`)로 들어온 문단을 한 줄로 정규화합니다. */
-function line(text: string): string {
-  return text.replace(/\s*\n\s*/g, " ").trim();
-}
-
-/** `2026.03 ~ 현재 · Development Lead · 컴포넌트 구조 개편` 형태의 메타 줄 */
-function metaLine(project: ProjectBase): string {
-  return [project.period, project.role, project.scope].filter((part): part is string => Boolean(part)).map(line).join(" · ");
-}
-
-function renderProject(lines: string[], project: ProjectBase, heading: string): void {
-  lines.push(`${heading} ${project.name}`);
-  lines.push("");
-
-  const meta = metaLine(project);
-  if (meta) {
-    lines.push(`*${meta}*`);
-    lines.push("");
-  }
-
-  lines.push(line(project.oneLiner));
-  lines.push("");
-  lines.push(`기술 스택: ${project.techStack.join(", ")}`);
-  lines.push("");
-
-  if (project.links) {
-    const links = Object.entries(project.links).map(([label, url]) => `[${label}](${url})`);
-    if (links.length > 0) {
-      lines.push(`링크: ${links.join(" · ")}`);
-      lines.push("");
-    }
-  }
-
-  if (project.constraints && project.constraints.length > 0) {
-    lines.push("**제약**");
-    lines.push("");
-    for (const constraint of project.constraints) {
-      lines.push(`- ${line(constraint)}`);
-    }
-    lines.push("");
-  }
-
-  lines.push("**한 일**");
-  lines.push("");
-  for (const highlight of project.highlights) {
-    lines.push(`- **${line(highlight.title)}**`);
-    lines.push(`  ${line(highlight.summary)}`);
-    for (const impact of highlight.impact ?? []) {
-      lines.push(`  - ${line(impact)}`);
-    }
-  }
-  lines.push("");
-}
+import type { ResumeData } from "../types.js";
 
 /**
  * ResumeData → Markdown 문자열로 변환합니다.
@@ -67,7 +13,7 @@ export function toMarkdown(data: ResumeData): string {
   lines.push(`**${data.basics.label}**`);
   lines.push("");
   if (data.basics.summary) {
-    lines.push(line(data.basics.summary));
+    lines.push(data.basics.summary);
     lines.push("");
   }
 
@@ -84,12 +30,8 @@ export function toMarkdown(data: ResumeData): string {
   // ── Positioning ───────────────────────────────────────────────────────────
   lines.push("## 포지셔닝");
   lines.push("");
-  lines.push(line(data.positioning.headline));
+  lines.push(data.positioning.headline);
   lines.push("");
-  if (data.positioning.targetRoles.length > 0) {
-    lines.push(`지원 직군: ${data.positioning.targetRoles.join(", ")}`);
-    lines.push("");
-  }
 
   // ── Skills ────────────────────────────────────────────────────────────────
   const s = data.skills;
@@ -98,10 +40,45 @@ export function toMarkdown(data: ResumeData): string {
   if (s.frontend.length > 0) lines.push(`- Frontend: ${s.frontend.join(", ")}`);
   if (s.testing.length > 0) lines.push(`- Testing: ${s.testing.join(", ")}`);
   if (s.tooling.length > 0) lines.push(`- Tooling: ${s.tooling.join(", ")}`);
+  if (s.design.length > 0) lines.push(`- Design: ${s.design.join(", ")}`);
+  if (s.collaboration.length > 0) lines.push(`- Collaboration: ${s.collaboration.join(", ")}`);
   lines.push("");
 
+  // ── Featured Projects ─────────────────────────────────────────────────────
+  const featuredProjects = data.work.flatMap((job) => job.projects.filter((p) => p.featured).map((p) => ({ ...p, company: job.company })));
+  if (featuredProjects.length > 0) {
+    lines.push("## 대표 프로젝트");
+    lines.push("");
+    for (const proj of featuredProjects) {
+      const contributions = proj.keyContributions ?? [];
+
+      lines.push(`### ${proj.name}`);
+      lines.push("");
+      lines.push(`*${proj.company}* · ${proj.role} · *${proj.period}*`);
+      lines.push("");
+      lines.push(proj.oneLiner);
+      lines.push("");
+      lines.push(`기술 스택: ${proj.techStack.join(", ")}`);
+      lines.push("");
+
+      if (contributions.length > 0) {
+        lines.push("**핵심 기여**");
+        lines.push("");
+        for (const kc of contributions) {
+          const prefix = kc.title ? `- **${kc.title}**\n  ` : `- `;
+          lines.push(`${prefix}**문제**: ${kc.problem}`);
+          lines.push(`  **판단**: ${kc.decision}`);
+          lines.push(`  **결과**: ${kc.result}`);
+          if (kc.ownershipEvidence && kc.ownershipEvidence.length > 0) {
+            lines.push(`  오너십 근거: ${kc.ownershipEvidence.join(", ")}`);
+          }
+        }
+        lines.push("");
+      }
+    }
+  }
+
   // ── Work Experience ───────────────────────────────────────────────────────
-  // 프로젝트는 resume.yaml 에 적힌 순서(emphasis 순)를 그대로 따릅니다.
   if (data.work.length > 0) {
     lines.push("## 경력사항");
     lines.push("");
@@ -112,40 +89,52 @@ export function toMarkdown(data: ResumeData): string {
       lines.push(`${job.department} · ${job.position} · *${period}*`);
       lines.push("");
 
-      for (const project of job.projects) {
-        renderProject(lines, project, "####");
+      if (job.projects.length > 0) {
+        lines.push("**기타 프로젝트**");
+        lines.push("");
+        for (const proj of job.projects) {
+          lines.push(`#### ${proj.name}`);
+          lines.push("");
+          lines.push(`*${proj.period}* · ${proj.techStack.join(", ")}`);
+          lines.push("");
+          lines.push(proj.oneLiner);
+          lines.push("");
+          if (proj.keyContributions && proj.keyContributions.length > 0) {
+            for (const kc of proj.keyContributions) {
+              const prefix = kc.title ? `- **${kc.title}**\n  ` : `- `;
+              lines.push(`${prefix}**문제**: ${kc.problem}`);
+              lines.push(`  **판단**: ${kc.decision}`);
+              lines.push(`  **결과**: ${kc.result}`);
+            }
+            lines.push("");
+          }
+        }
       }
-    }
-  }
-
-  // ── Open Source ───────────────────────────────────────────────────────────
-  if (data.openSource.length > 0) {
-    lines.push("## 오픈소스");
-    lines.push("");
-    for (const project of data.openSource) {
-      renderProject(lines, project, "###");
     }
   }
 
   // ── Side Projects ─────────────────────────────────────────────────────────
   if (data.sideProjects.length > 0) {
-    lines.push("## 사이드 프로젝트");
+    lines.push("## 사이드 프로젝트 경험");
     lines.push("");
-    for (const project of data.sideProjects) {
-      renderProject(lines, project, "###");
+    for (const proj of data.sideProjects) {
+      const statusLabel = proj.status === "awarded" ? "수상" : proj.status === "in-progress" ? "진행중" : "";
+      const badge = statusLabel ? ` (${statusLabel})` : "";
+      const nameWithLink = proj.repoUrl ? `[${proj.name}](${proj.repoUrl})` : proj.name;
+      lines.push(`### ${nameWithLink}${badge} — ${proj.teamSize}인`);
+      lines.push("");
+      lines.push(`${proj.oneLiner} (${proj.role})`);
+      lines.push("");
+      lines.push(`기술 스택: ${proj.techStack.join(", ")}`);
+      lines.push("");
+      for (const h of proj.keyContributions) {
+        const prefix = h.title ? `- **${h.title}**\n  ` : `- `;
+        lines.push(`${prefix}**문제**: ${h.problem}`);
+        lines.push(`  **판단**: ${h.decision}`);
+        lines.push(`  **결과**: ${h.result}`);
+      }
+      lines.push("");
     }
-  }
-
-  // ── Awards ────────────────────────────────────────────────────────────────
-  if (data.awards.length > 0) {
-    lines.push("## 수상");
-    lines.push("");
-    for (const award of data.awards) {
-      const heading = award.project ? `${award.title} — ${award.project}` : award.title;
-      lines.push(`- **${heading}**`);
-      lines.push(`  ${line(award.summary)}`);
-    }
-    lines.push("");
   }
 
   // ── Certifications & Languages ────────────────────────────────────────────
