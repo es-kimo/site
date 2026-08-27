@@ -150,30 +150,7 @@ work:
             decision: "암호화에 필요한 후처리는 클라이언트에 남기되, 이 과정에서도 파일 전체를 한 번에 메모리에 올리지 않도록 스트림 단위로 처리했습니다."
             result: "비밀번호를 서버로 전달하지 않으면서도 대용량 파일 다운로드를 안정적으로 처리할 수 있는 구조를 만들었습니다."
 
-sideProjects:
-  - id: "voting-system"
-    name: "실시간 의결 투표 플랫폼"
-    teamSize: 2
-    role: "Frontend Developer"
-    status: "completed"
-    repoUrl: "https://github.com/vottega/client"
-    techStack:
-      - "React"
-      - "TypeScript"
-      - "SSE"
-    oneLiner: "의사정족수와 의결정족수를 지원하는 실시간 투표 시스템"
-
-    keyContributions:
-      - title: "SSE와 REST 사이의 데이터 덮어쓰기 방지"
-        problem: "SSE 이벤트와 REST 응답이 함께 들어오는 상황에서 늦게 도착한 오래된 이벤트가 더 최신인 서버 응답을 덮어쓰는 문제가 있었습니다."
-        decision: "이벤트를 받은 시점과 실제 캐시에 반영하는 시점에 각각 시간을 비교해, 현재 상태보다 오래된 이벤트는 반영하지 않도록 했습니다."
-        result: "SSE와 REST 응답 순서가 뒤바뀌어도 오래된 데이터가 최신 상태를 덮어쓰지 않도록 처리했습니다."
-
-      - title: "SSE 재연결 시 유실 구간 복구"
-        problem: "브라우저 탭 비활성화 등으로 SSE 연결이 끊기면 그 사이 서버에서 발생한 이벤트를 놓칠 수 있었습니다."
-        decision: "최초 연결과 재연결을 구분하고, 실제 연결 중단이 발생한 경우에만 서버 데이터를 다시 조회하도록 했습니다."
-        result: "연결 복구 시 불필요한 재요청은 줄이면서 끊긴 구간의 데이터를 다시 동기화할 수 있게 했습니다."
-
+openSource:
   - id: "vue-kakao-map-lib"
     name: "vue3-kakao-maps"
     teamSize: 6

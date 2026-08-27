@@ -3,7 +3,7 @@
   "title": "Resume",
   "description": "이력서 데이터 스키마 — resume.yaml 작성 시 자동완성 및 검증에 사용됩니다.",
   "type": "object",
-  "required": ["basics", "positioning", "skills", "work", "sideProjects", "education", "training", "certifications", "languages", "meta"],
+  "required": ["basics", "positioning", "skills", "work", "openSource", "education", "training", "certifications", "languages", "meta"],
   "additionalProperties": false,
   "definitions": {
     "keyContribution": {
@@ -118,8 +118,8 @@
         }
       }
     },
-    "sideProjects": {
-      "description": "사이드 프로젝트 경험",
+    "openSource": {
+      "description": "오픈소스 기여 및 운영 경험",
       "type": "array",
       "items": {
         "type": "object",

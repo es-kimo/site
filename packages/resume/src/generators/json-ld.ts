@@ -15,7 +15,7 @@ export function toJsonLd(data: ResumeData): Record<string, unknown> {
       }
     }
   }
-  for (const proj of data.sideProjects) {
+  for (const proj of data.openSource) {
     for (const tech of proj.techStack) {
       allTechKeywords.add(tech);
     }

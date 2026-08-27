@@ -73,11 +73,11 @@ export interface WorkExperience {
   projects: WorkProject[];
 }
 
-// ── Side Projects ───────────────────────────────────────────────────────────
+// ── Open Source ─────────────────────────────────────────────────────────────
 
 export type ProjectStatus = "awarded" | "completed" | "in-progress";
 
-export interface SideProject {
+export interface OpenSourceProject {
   id: string;
   name: string;
   teamSize: number;
@@ -137,7 +137,7 @@ export interface ResumeData {
   positioning: Positioning;
   skills: Skills;
   work: WorkExperience[];
-  sideProjects: SideProject[];
+  openSource: OpenSourceProject[];
   education: Education[];
   training: Training[];
   certifications: Certification[];

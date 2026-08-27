@@ -46,7 +46,7 @@ export function toJsonResume(data: ResumeData): Record<string, unknown> {
       startDate: t.startDate,
       endDate: t.endDate || undefined,
     })),
-    projects: data.sideProjects.map((p) => ({
+    projects: data.openSource.map((p) => ({
       name: p.name,
       description: p.oneLiner,
       highlights: p.keyContributions.map((c) => `${c.problem} → ${c.decision} → ${c.result}`),
