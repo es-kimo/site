@@ -26,7 +26,7 @@ const nextConfig = {
 /** @type {import('rehype-pretty-code').Options} */
 const options = {
   theme: {
-    dark: "github-dark-high-contrast",
+    dark: "monokai",
     light: "github-light-high-contrast",
   },
   keepBackground: false,
@@ -41,5 +41,4 @@ const withMDX = createMDX({
 });
 
 export default withMDX(nextConfig);
-
 

@@ -33,6 +33,12 @@
     --chart-5: 27 87% 67%;
     --code-block-border: #d9d9d9;
     --code-block-bg: #f8fafc;
+    --inline-code-background: #f1f1f1;
+    --inline-code-foreground: #7a5518;
+    --markdown-link: #4f7394;
+    --markdown-link-hover: #365d80;
+    --markdown-soft-border: rgba(15, 23, 42, 0.12);
+    --markdown-soft-surface: rgba(15, 23, 42, 0.025);
   }
 
   .dark {
@@ -60,8 +66,14 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    --code-block-border: #334155;
-    --code-block-bg: #1e293b;
+    --code-block-border: #181a1f;
+    --code-block-bg: #282c34;
+    --inline-code-background: #161616;
+    --inline-code-foreground: #d7ba7d;
+    --markdown-link: #6a9fcb;
+    --markdown-link-hover: #8ab7dc;
+    --markdown-soft-border: rgba(255, 255, 255, 0.1);
+    --markdown-soft-surface: rgba(255, 255, 255, 0.02);
   }
 }
 
