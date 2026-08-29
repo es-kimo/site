@@ -35,9 +35,11 @@ const options = {
 /** @type {import('@next/mdx').WithMDX} */
 const withMDX = createMDX({
   options: {
-    remarkPlugins: [["remark-gfm"]],
-    rehypePlugins: [["rehype-pretty-code", options]],
+    remarkPlugins: [["remark-gfm"], ["remark-math"]],
+    rehypePlugins: [["rehype-katex"], ["rehype-pretty-code", options]],
   },
 });
 
 export default withMDX(nextConfig);
+
+

@@ -3,6 +3,7 @@ import { Noto_Sans_KR } from "next/font/google";
 import { DynamicIsland } from "@/components/DynamicIsland";
 import { Providers } from "@/components/providers";
 import "@workspace/ui/globals.css";
+import "katex/dist/katex.min.css";
 import { Metadata } from "next";
 import { ViewTransitions } from "next-view-transitions";
 
