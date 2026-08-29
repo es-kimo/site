@@ -1,5 +1,7 @@
 import { EmbedIframe } from "@/components/EmbedIframe";
+import { Mermaid } from "@/components/Mermaid";
 import { Playground } from "@/components/Playground";
+import { SeriesNav } from "@/components/SeriesNav";
 import { formatPostDate } from "@/lib/date";
 import type { MDXComponents } from "mdx/types";
 import Image, { ImageProps } from "next/image";
@@ -198,6 +200,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     EmbedIframe,
     Playground,
+    Mermaid,
+    SeriesNav,
     ...components,
   };
 }
