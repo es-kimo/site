@@ -39,6 +39,10 @@
     --markdown-link-hover: #365d80;
     --markdown-soft-border: rgba(15, 23, 42, 0.12);
     --markdown-soft-surface: rgba(15, 23, 42, 0.025);
+    --markdown-panel-background: rgba(255, 255, 255, 0.72);
+    --markdown-panel-raised: rgba(255, 255, 255, 0.78);
+    --markdown-panel-hover: rgba(79, 115, 148, 0.07);
+    --markdown-panel-active: rgba(79, 115, 148, 0.1);
   }
 
   .dark {
@@ -74,6 +78,10 @@
     --markdown-link-hover: #8ab7dc;
     --markdown-soft-border: rgba(255, 255, 255, 0.1);
     --markdown-soft-surface: rgba(255, 255, 255, 0.02);
+    --markdown-panel-background: rgba(255, 255, 255, 0.025);
+    --markdown-panel-raised: rgba(255, 255, 255, 0.035);
+    --markdown-panel-hover: rgba(106, 159, 203, 0.08);
+    --markdown-panel-active: rgba(106, 159, 203, 0.12);
   }
 }
 

@@ -3,6 +3,7 @@ import { Mermaid } from "@/components/Mermaid";
 import { Playground } from "@/components/Playground";
 import { SeriesNav } from "@/components/SeriesNav";
 import { formatPostDate } from "@/lib/date";
+import { Lightbulb, ListTree, PencilLine } from "lucide-react";
 import type { MDXComponents } from "mdx/types";
 import Image, { ImageProps } from "next/image";
 
@@ -137,17 +138,25 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     Callout({ children, ...properties }) {
       return (
-        <div {...properties} className="my-3 flex gap-2.5 rounded-md border-l-2 border-[var(--markdown-link)]/60 bg-[var(--markdown-soft-surface)] px-3 py-2.5">
-          <span className="text-base">💡</span>
-          <div className="flex-1 text-foreground/85">{children}</div>
-        </div>
+        <aside {...properties} className="my-4 overflow-hidden rounded-lg border border-[var(--markdown-soft-border)] bg-[var(--markdown-panel-background)] shadow-sm">
+          <div className="flex items-center gap-2 border-b border-[var(--markdown-soft-border)] px-3 py-2">
+            <Lightbulb aria-hidden="true" className="size-3.5 text-[var(--inline-code-foreground)]" strokeWidth={1.8} />
+            <span className="text-xs font-medium text-foreground/70">잠깐 짚고 가기</span>
+          </div>
+          <div className="px-3 py-2.5 text-foreground/80 [&>p]:m-0">{children}</div>
+        </aside>
       );
     },
     AIAssisted(properties) {
       return (
-        <div {...properties} className="mt-6 mb-8 rounded-lg px-4 py-3 bg-muted/40 border border-border/50 text-sm text-muted-foreground flex items-start gap-2">
-          <span className="shrink-0">🤖</span>
-          <span>이 글의 주제와 흐름은 작성자의 생각이며, 본문 작성에 AI의 도움을 받았습니다.</span>
+        <div {...properties} className="my-4 flex items-start gap-2.5 rounded-lg border border-[var(--markdown-soft-border)] bg-[var(--markdown-panel-background)] px-3 py-2.5 text-xs leading-relaxed text-muted-foreground shadow-sm">
+          <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-md border border-[var(--markdown-soft-border)] bg-[var(--markdown-panel-raised)] text-[var(--markdown-link)]">
+            <PencilLine aria-hidden="true" className="size-3.5" strokeWidth={1.8} />
+          </span>
+          <span>
+            <strong className="block text-[10px] font-medium text-foreground/60">글을 쓰며</strong>
+            이 글의 주제와 흐름은 작성자의 생각이며, 본문 작성에 AI의 도움을 받았습니다.
+          </span>
         </div>
       );
     },
@@ -160,18 +169,22 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     TOC({ items, ...properties }) {
       return (
-        <nav {...properties} style={{ fontSize: "14px", lineHeight: "1.5" }} className="my-3 rounded-md border border-[var(--markdown-soft-border)] bg-[var(--markdown-soft-surface)] p-4">
-          <h2 style={{ fontSize: "16px", lineHeight: "1.4" }} className="mb-3 mt-0 border-b-0 pb-0 font-medium">
-            목차
-          </h2>
-          <ol className="my-0 ml-0 list-none space-y-2">
+        <nav {...properties} aria-label="목차" className="my-4 overflow-hidden rounded-lg border border-[var(--markdown-soft-border)] bg-[var(--markdown-panel-background)] text-sm shadow-sm">
+          <div className="flex items-center justify-between border-b border-[var(--markdown-soft-border)] px-3 py-2.5">
+            <div className="flex items-center gap-2">
+              <ListTree aria-hidden="true" className="size-3.5 text-[var(--markdown-link)]" strokeWidth={1.8} />
+              <span className="text-xs font-medium text-foreground/70">이 글의 흐름</span>
+            </div>
+            <span className="text-[10px] text-muted-foreground">{items.length}개 항목</span>
+          </div>
+          <ol className="m-0 list-none p-2">
             {items.map((item: { title: string }, index: number) => {
               const id = generateId(item.title);
               return (
-                <li key={id} className="mt-0">
-                  <a href={`#${id}`} style={{ fontSize: "14px", lineHeight: "1.5" }} className="group inline-flex items-start text-foreground/80 transition-colors hover:text-[var(--markdown-link)]">
-                    <span className="text-muted-foreground mr-2 min-w-[1.5rem]">{index + 1}.</span>
-                    <span className="group-hover:underline">{item.title}</span>
+                <li key={id}>
+                  <a href={`#${id}`} className="group grid grid-cols-[1.75rem_1fr] items-start rounded-md px-2 py-1.5 text-foreground/75 no-underline transition-colors hover:bg-[var(--markdown-panel-hover)] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--markdown-link)]/40">
+                    <span className="text-[10px] tabular-nums leading-5 text-muted-foreground transition-colors group-hover:text-[var(--markdown-link)]">{String(index + 1).padStart(2, "0")}</span>
+                    <span className="leading-5">{item.title}</span>
                   </a>
                 </li>
               );
@@ -182,9 +195,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     Footnote({ id, children, ...properties }) {
       return (
-        <sup {...properties} id={`fnref-${id}`}>
-          <a href={`#fn-${id}`} className="text-primary hover:underline">
-            [{children || id}]
+        <sup {...properties} id={`fnref-${id}`} className="mx-0.5 align-super leading-none">
+          <a href={`#fn-${id}`} aria-label={`각주 ${children || id}`} className="rounded-sm bg-[var(--markdown-panel-active)] px-1 py-0.5 font-mono text-[9px] font-medium text-[var(--markdown-link)] no-underline transition-colors hover:bg-[var(--markdown-panel-hover)]">
+            {children || id}
           </a>
         </sup>
       );
@@ -193,17 +206,23 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       // ids가 배열이면 그대로 사용, 아니면 배열로 변환
       const idArray = Array.isArray(ids) ? ids : [ids];
       return (
-        <div {...properties} className="text-sm leading-relaxed my-4">
+        <div {...properties} className="my-2 grid grid-cols-[auto_1fr] gap-2.5 rounded-md px-2 py-2 text-xs leading-relaxed transition-colors hover:bg-[var(--markdown-panel-hover)]">
           {/* 모든 id에 대한 숨겨진 앵커 포인트 생성 */}
           {idArray.map((id) => (
             <span key={id} id={`fn-${id}`} className="absolute opacity-0 pointer-events-none" />
           ))}
 
           {/* 번호 표시 (왼쪽 정렬) */}
-          <div className="font-mono text-muted-foreground text-xs mb-1">{idArray.map((id) => `[${id}]`)}</div>
+          <div className="flex flex-wrap content-start gap-1 pt-0.5">
+            {idArray.map((id) => (
+              <a key={id} href={`#fnref-${id}`} className="rounded border border-[var(--markdown-soft-border)] bg-[var(--markdown-panel-raised)] px-1.5 py-0.5 font-mono text-[9px] text-[var(--markdown-link)] no-underline">
+                {id}
+              </a>
+            ))}
+          </div>
 
           {/* 내용 (들여쓰기) */}
-          <div className="pl-4 border-l-2 border-muted/60 break-words text-foreground/80">{children} </div>
+          <div className="min-w-0 break-words text-foreground/70">{children}</div>
         </div>
       );
     },

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { SandpackProvider, SandpackLayout, SandpackCodeEditor, SandpackPreview, SandpackConsole } from "@codesandbox/sandpack-react";
 import { useTheme } from "next-themes";
+import { Code2 } from "lucide-react";
 
 interface PlaygroundProps {
   /** 메인 App.js 코드 */
@@ -30,11 +31,17 @@ export function Playground({ code, files, template = "react", showConsole = fals
   };
 
   if (!mounted) {
-    return <div className="my-8 rounded-lg overflow-hidden border border-border shadow-sm" style={{ height: editorHeight + previewHeight }} />;
+    return (
+      <div className="my-4 overflow-hidden rounded-lg border border-[var(--markdown-soft-border)] bg-[var(--markdown-panel-background)] shadow-sm">
+        <PlaygroundHeader />
+        <div className="animate-pulse bg-[var(--markdown-soft-surface)]" style={{ height: editorHeight + previewHeight }} />
+      </div>
+    );
   }
 
   return (
-    <div className="my-8 rounded-lg overflow-hidden border border-border shadow-sm">
+    <div className="my-4 overflow-hidden rounded-lg border border-[var(--markdown-soft-border)] bg-[var(--markdown-panel-background)] shadow-sm">
+      <PlaygroundHeader />
       <SandpackProvider
         template={template}
         theme={resolvedTheme === "dark" ? "dark" : "light"}
@@ -63,6 +70,21 @@ export function Playground({ code, files, template = "react", showConsole = fals
           />
         )}
       </SandpackProvider>
+    </div>
+  );
+}
+
+function PlaygroundHeader() {
+  return (
+    <div className="flex items-center justify-between gap-3 border-b border-[var(--markdown-soft-border)] px-3 py-2">
+      <span className="flex items-center gap-2 text-xs font-medium text-foreground/70">
+        <Code2 aria-hidden="true" className="size-3.5 text-[var(--markdown-link)]" strokeWidth={1.8} />
+        직접 실행해보기
+      </span>
+      <span className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+        <span aria-hidden="true" className="size-1.5 rounded-full bg-emerald-500/80" />
+        코드를 바꿔볼 수 있어요
+      </span>
     </div>
   );
 }

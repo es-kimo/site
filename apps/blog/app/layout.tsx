@@ -49,7 +49,10 @@ export default async function RootLayout({
   return (
     <ViewTransitions>
       <html lang="ko" suppressHydrationWarning>
-        <body className={`${notoSansKR.variable} font-sans antialiased `}>
+        <body
+          className={`${notoSansKR.variable} antialiased`}
+          style={{ fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}
+        >
           <Providers>
             <div className="max-w-blog mx-auto py-20 px-4">{children}</div>
             <DynamicIsland />
