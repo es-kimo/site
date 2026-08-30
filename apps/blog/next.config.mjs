@@ -1,4 +1,5 @@
 import createMDX from "@next/mdx";
+import { fileURLToPath } from "node:url";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -23,6 +24,9 @@ const nextConfig = {
   },
 };
 
+// @next/mdx는 플러그인을 문자열로만 받는다(Turbopack 직렬화). 상대 경로는 로더 기준으로 풀리므로 절대 경로를 넘긴다.
+const remarkToc = fileURLToPath(new URL("./lib/remark-toc.mjs", import.meta.url));
+
 /** @type {import('rehype-pretty-code').Options} */
 const options = {
   theme: {
@@ -35,8 +39,9 @@ const options = {
 /** @type {import('@next/mdx').WithMDX} */
 const withMDX = createMDX({
   options: {
-    remarkPlugins: [["remark-gfm"], ["remark-math"]],
-    rehypePlugins: [["rehype-katex"], ["rehype-pretty-code", options]],
+    remarkPlugins: [["remark-gfm"], ["remark-math"], [remarkToc]],
+    // rehype-slug는 rehype-katex보다 먼저 돌아야 수식 heading의 id가 깨지지 않는다
+    rehypePlugins: [["rehype-slug"], ["rehype-katex"], ["rehype-pretty-code", options]],
   },
 });
 

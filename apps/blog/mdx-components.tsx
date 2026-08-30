@@ -7,20 +7,6 @@ import { Lightbulb, ListTree, PencilLine } from "lucide-react";
 import type { MDXComponents } from "mdx/types";
 import Image, { ImageProps } from "next/image";
 
-// 헤딩 텍스트를 id로 변환하는 함수
-function generateId(text: string): string {
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/[()]/g, "") // 괄호 제거
-    .replace(/\s+/g, "-") // 공백을 하이픈으로
-    .replace(/[^\w\u3131-\uD79D-]/g, "") // 영문, 숫자, 한글, 하이픈만 유지
-    .replace(/--+/g, "-") // 연속된 하이픈을 하나로
-    .replace(/^-+/, "") // 시작 하이픈 제거
-    .replace(/-+$/, ""); // 끝 하이픈 제거
-}
-
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: ({ children, ...props }) => (
@@ -28,30 +14,21 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </h1>
     ),
-    h2: ({ children }) => {
-      const id = typeof children === "string" ? generateId(children) : "";
-      return (
-        <h2 id={id} className="mb-2 mt-6 scroll-m-20 text-lg font-semibold tracking-tight first:mt-0 text-foreground/95">
-          {children}
-        </h2>
-      );
-    },
-    h3: ({ children }) => {
-      const id = typeof children === "string" ? generateId(children) : "";
-      return (
-        <h3 id={id} className="mb-1 mt-3 scroll-m-20 text-base font-medium tracking-tight text-foreground/95">
-          {children}
-        </h3>
-      );
-    },
-    h4: ({ children }) => {
-      const id = typeof children === "string" ? generateId(children) : "";
-      return (
-        <h4 id={id} className="mb-1 mt-3 scroll-m-20 text-sm font-medium tracking-tight text-foreground/90">
-          {children}
-        </h4>
-      );
-    },
+    h2: ({ children, ...props }) => (
+      <h2 {...props} className="mb-2 mt-6 scroll-m-20 text-lg font-semibold tracking-tight first:mt-0 text-foreground/95">
+        {children}
+      </h2>
+    ),
+    h3: ({ children, ...props }) => (
+      <h3 {...props} className="mb-1 mt-3 scroll-m-20 text-base font-medium tracking-tight text-foreground/95">
+        {children}
+      </h3>
+    ),
+    h4: ({ children, ...props }) => (
+      <h4 {...props} className="mb-1 mt-3 scroll-m-20 text-sm font-medium tracking-tight text-foreground/90">
+        {children}
+      </h4>
+    ),
     p: ({ children }) => <p className="leading-relaxed">{children}</p>,
     a: ({ children, href, ...props }) => {
       const shouldOpenInNewTab = typeof href === "string" && href.startsWith("/embeds/");
@@ -178,11 +155,10 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
             <span className="text-[10px] text-muted-foreground">{items.length}개 항목</span>
           </div>
           <ol className="m-0 list-none p-2">
-            {items.map((item: { title: string }, index: number) => {
-              const id = generateId(item.title);
+            {items.map((item: { title: string; id: string }, index: number) => {
               return (
-                <li key={id}>
-                  <a href={`#${id}`} className="group grid grid-cols-[1.75rem_1fr] items-start rounded-md px-2 py-1.5 text-foreground/75 no-underline transition-colors hover:bg-[var(--markdown-panel-hover)] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--markdown-link)]/40">
+                <li key={item.id}>
+                  <a href={`#${item.id}`} className="group grid grid-cols-[1.75rem_1fr] items-start rounded-md px-2 py-1.5 text-foreground/75 no-underline transition-colors hover:bg-[var(--markdown-panel-hover)] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--markdown-link)]/40">
                     <span className="text-[10px] tabular-nums leading-5 text-muted-foreground transition-colors group-hover:text-[var(--markdown-link)]">{String(index + 1).padStart(2, "0")}</span>
                     <span className="leading-5">{item.title}</span>
                   </a>
