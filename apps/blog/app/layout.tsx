@@ -5,7 +5,6 @@ import { Providers } from "@/components/providers";
 import "@workspace/ui/globals.css";
 import "katex/dist/katex.min.css";
 import { Metadata } from "next";
-import { ViewTransitions } from "next-view-transitions";
 
 const notoSansKR = Noto_Sans_KR({
   subsets: ["latin"],
@@ -47,18 +46,19 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ViewTransitions>
-      <html lang="ko" suppressHydrationWarning>
-        <body
-          className={`${notoSansKR.variable} antialiased`}
-          style={{ fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}
-        >
-          <Providers>
-            <div className="max-w-blog mx-auto py-20 px-4">{children}</div>
-            <DynamicIsland />
-          </Providers>
-        </body>
-      </html>
-    </ViewTransitions>
+    <html lang="ko" suppressHydrationWarning>
+      <body
+        className={`${notoSansKR.variable} antialiased`}
+        style={{
+          fontFamily:
+            'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+        }}
+      >
+        <Providers>
+          <div className="max-w-blog mx-auto py-20 px-4">{children}</div>
+          <DynamicIsland />
+        </Providers>
+      </body>
+    </html>
   );
 }

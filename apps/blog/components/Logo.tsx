@@ -3,7 +3,7 @@
 import { ParticleSystem } from "@/lib/particles/system";
 import { NavigationMenu, NavigationMenuLink, navigationMenuTriggerStyle } from "@workspace/ui/components/navigation-menu";
 import { cn } from "@workspace/ui/lib/utils";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 const particleSystem = new ParticleSystem("khryu.dev");

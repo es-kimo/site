@@ -1,5 +1,5 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@workspace/ui/components/breadcrumb";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 
 export const BreadCrumb = ({ className, category, sub, link = true }: { className?: string; category: string; sub: string; link?: boolean }) => {
   return (

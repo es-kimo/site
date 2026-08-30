@@ -1,7 +1,7 @@
 import { IconLogo } from "@/components/IconLogo";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, navigationMenuTriggerStyle } from "@workspace/ui/components/navigation-menu";
 import { cn } from "@workspace/ui/lib/utils";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { ThemeChanger } from "../../ThemeChanger";
 import { Logo } from "@/components/Logo";
 

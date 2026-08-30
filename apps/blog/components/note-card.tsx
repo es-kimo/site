@@ -1,7 +1,7 @@
 import { getSlugMetadata } from "@/constants/notes";
 import { SlugParams } from "@/constants/params.types";
 import { formatPostDate } from "@/lib/date";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import { HTMLAttributes } from "react";
 
 export async function NoteCard({ category, slug }: SlugParams) {

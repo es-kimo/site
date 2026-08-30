@@ -1,7 +1,7 @@
 import { Button } from "@workspace/ui/components/button";
 import { ModeToggle } from "@workspace/ui/components/mode-toggle";
 import { Github } from "lucide-react";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 
 export const Header = () => {
   return (

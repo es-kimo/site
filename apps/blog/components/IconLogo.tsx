@@ -2,7 +2,7 @@ import { Button } from "@workspace/ui/components/button";
 import { cn } from "@workspace/ui/lib/utils";
 import { motion } from "motion/react";
 import { ChevronLeft } from "lucide-react";
-import { Link } from "next-view-transitions";
+import Link from "next/link";
 import Image from "next/image";
 import KHLogo from "../assets/icon.png";
 
