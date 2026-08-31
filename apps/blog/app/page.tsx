@@ -48,8 +48,7 @@ export default async function HomePage() {
             <ExternalLink href={SPLITS_URL}>splits.kr</ExternalLink>
           </h3>
           <p className="text-[15px] leading-relaxed break-keep text-muted-foreground">
-            쇼트트랙 기록을 같은 출생연도, 성별, 종목의 또래 집단과 비교하는 서비스입니다. 대한체육회 공식 대회 기록
-            20년치를 집계했고, 기록을 다루면서 정한 기준은 네 편의 글로 정리했습니다.
+            대한체육회 20년치 공식 대회 기록을 바탕으로 연령대와 종목별 쇼트트랙 기록 분포를 비교하는 서비스입니다. 데이터를 다루며 통계 기준을 세워 나간 과정을 네 편의 글로 정리했습니다.
           </p>
         </div>
 
