@@ -2,6 +2,7 @@ import { NoteGrid } from "@/components/note-grid";
 import { listNotes } from "@/constants/notes";
 import { categoryParams } from "@/constants/params";
 import { CategoryParams } from "@/constants/params.types";
+import { formatCategoryLabel } from "@/lib/category";
 import { decodeURIS } from "@workspace/common/lib/uri";
 import { Metadata } from "next";
 
@@ -18,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<CategoryPar
   const [decodedCategory] = decodeURIS(category);
 
   return {
-    title: `Writing | ${decodedCategory}`,
+    title: `Writing | ${formatCategoryLabel(decodedCategory)}`,
   };
 }
 

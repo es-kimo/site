@@ -1,5 +1,6 @@
 import { NavigationLink } from "@/components/navigation-link";
 import { ALL_NOTES, CATEGORIES, NOTES } from "@/constants/notes";
+import { formatCategoryLabel } from "@/lib/category";
 
 export function CategoryNavigationTab() {
   return (
@@ -9,7 +10,7 @@ export function CategoryNavigationTab() {
       </NavigationLink>
       {CATEGORIES.map((category) => (
         <NavigationLink key={category} href={`/writing/${category}`} count={NOTES[category]?.length ?? 0}>
-          {category}
+          {formatCategoryLabel(category)}
         </NavigationLink>
       ))}
     </nav>

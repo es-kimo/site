@@ -1,6 +1,7 @@
 import { SeriesNav } from "@/components/SeriesNav";
 import { getAdjacentNotes, type AdjacentNote } from "@/constants/notes";
 import { findSeriesPart } from "@/constants/series";
+import { formatCategoryLabel } from "@/lib/category";
 import { formatPostDate } from "@/lib/date";
 import Link from "next/link";
 
@@ -31,7 +32,7 @@ export async function ArticleFooter({ category, slug, date }: ArticleFooterProps
     <footer className="mx-auto mt-20 max-w-blog border-t border-foreground/15 pt-5">
       <div className="flex items-baseline justify-between gap-4">
         <Link href={`/writing/${category}`} className="text-sm text-muted-foreground no-underline underline-offset-2 transition-colors hover:text-foreground hover:underline">
-          {category} →
+          {formatCategoryLabel(category)} →
         </Link>
         <span className="text-xs tabular-nums text-muted-foreground">{formatPostDate(date, "korean")}</span>
       </div>

@@ -1,5 +1,6 @@
 import { getSlugMetadata } from "@/constants/notes";
 import { SlugParams } from "@/constants/params.types";
+import { formatCategoryLabel } from "@/lib/category";
 import { formatPostDate } from "@/lib/date";
 import Link from "next/link";
 
@@ -17,7 +18,7 @@ export async function NoteCard({ category, slug, headingLevel = 2 }: NoteCardPro
     // 링크는 제목 하나만 두고, after 오버레이로 카드 전체를 누를 수 있게 한다
     <article className="group relative">
       <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground">
-        <span>{category}</span>
+        <span>{formatCategoryLabel(category)}</span>
         <span className="tabular-nums">{formatPostDate(updatedAt ?? createdAt)}</span>
       </div>
       {/* 한글은 break-keep이 없으면 어절 중간에서 줄이 끊긴다 */}
