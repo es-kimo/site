@@ -1,12 +1,10 @@
 import { Category, NoteMetadata, Notes } from "@/constants/notes.types";
 import { getFolderNames } from "@/lib/file-system";
-import { isCategory } from "@/lib/type-guards";
 import path from "path";
 
 export const CONTENT_PATH = path.join(process.cwd(), "content");
 
-/** 카테고리 */
-export const CATEGORIES: Category[] = await getFolderNames(CONTENT_PATH);
+const contentCategories: Category[] = await getFolderNames(CONTENT_PATH);
 
 /** 글 제목 (draft 제외, 이미 디코딩된 params를 받음) */
 export const getSlugsByCategory = async (category: Category) => {
@@ -60,13 +58,14 @@ export const sortNotesByLatestDate = async (notes: NoteItem[]): Promise<NoteItem
     .map(({ category, slug }) => ({ category, slug }));
 };
 
-// TODO: use Promise all to start concurrently
-/** 노트 */
-export const NOTES: Notes = await (async () => {
-  const notes: Notes = {};
-  for (const category of CATEGORIES) {
-    notes[category] = isCategory(category) ? await getSlugsByCategory(category) : [];
-  }
+/** draft를 제외한 공개 글 */
+export const NOTES: Notes = Object.fromEntries(
+  await Promise.all(
+    contentCategories.map(async (category) => [category, await getSlugsByCategory(category)] as const),
+  ),
+);
 
-  return notes;
-})();
+/** 공개 글이 하나 이상 있는 카테고리 */
+export const CATEGORIES: Category[] = Object.entries(NOTES)
+  .filter(([, slugs]) => slugs.length > 0)
+  .map(([category]) => category);
