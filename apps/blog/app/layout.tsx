@@ -4,6 +4,9 @@ import "@workspace/ui/globals.css";
 import "katex/dist/katex.min.css";
 import { Metadata } from "next";
 
+/** 한글 글리프가 커서 unicode-range로 쪼갠 dynamic subset을 쓴다. 페이지마다 필요한 조각만 내려받는다. */
+const PRETENDARD_CSS = "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css";
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL("https://khryu.dev"),
@@ -38,6 +41,10 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
+        <link rel="stylesheet" href={PRETENDARD_CSS} />
+      </head>
       <body className="font-sans antialiased">
         <Providers>
           <div className="max-w-blog mx-auto py-20 px-4">{children}</div>
