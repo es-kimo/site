@@ -1,22 +1,13 @@
 import { NoteGrid } from "@/components/note-grid";
-import { getSlugMetadata, NOTES } from "@/constants/notes";
+import { NOTES, sortNotesByLatestDate } from "@/constants/notes";
 
 const RECENT_COUNT = 5;
 
 async function getRecentNotes() {
   const all = Object.entries(NOTES).flatMap(([category, slugs]) => slugs.map((slug) => ({ category, slug })));
+  const sortedNotes = await sortNotesByLatestDate(all);
 
-  const withDates = await Promise.all(
-    all.map(async ({ category, slug }) => {
-      const metadata = await getSlugMetadata(category, slug);
-      const date = metadata.other?.updatedAt ?? metadata.other?.createdAt ?? "1970-01-01";
-      return { category, slug, date };
-    }),
-  );
-
-  withDates.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-  return withDates.slice(0, RECENT_COUNT);
+  return sortedNotes.slice(0, RECENT_COUNT);
 }
 
 export default async function HomePage() {

@@ -25,8 +25,6 @@ export function NoteGrid({ notes }: NoteGridProps) {
             </Alert>
           </li>
         )}
-
-        {/* TODO: sort by created date */}
         {notes.map(({ category, slug }) => (
           <li key={`${category}-${slug}`} className="w-full">
             <NoteCard category={category} slug={slug} />

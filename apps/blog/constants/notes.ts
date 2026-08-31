@@ -23,7 +23,7 @@ export const getSlugsByCategory = async (category: Category) => {
         console.error(`Failed to load metadata for ${category}/${slug}:`, error);
         return null;
       }
-    })
+    }),
   );
 
   return publishedSlugs.filter((slug): slug is string => slug !== null);
@@ -34,6 +34,30 @@ export const getSlugsByCategory = async (category: Category) => {
 export const getSlugMetadata = async (category: Category, slug: string): Promise<NoteMetadata> => {
   const { metadata } = await import(`@/content/${category}/${slug}/page.mdx`);
   return metadata;
+};
+
+export type NoteItem = {
+  category: string;
+  slug: string;
+};
+
+/** 작성일을 기준으로 최신 글부터 정렬합니다. */
+export const sortNotesByLatestDate = async (notes: NoteItem[]): Promise<NoteItem[]> => {
+  const notesWithDates = await Promise.all(
+    notes.map(async (note) => {
+      const metadata = await getSlugMetadata(note.category, note.slug);
+      const latestDate = metadata.other.createdAt;
+
+      return { ...note, latestTimestamp: new Date(latestDate).getTime() };
+    }),
+  );
+
+  return notesWithDates
+    .sort(
+      (a, b) =>
+        b.latestTimestamp - a.latestTimestamp || `${a.category}/${a.slug}`.localeCompare(`${b.category}/${b.slug}`),
+    )
+    .map(({ category, slug }) => ({ category, slug }));
 };
 
 // TODO: use Promise all to start concurrently
