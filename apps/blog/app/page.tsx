@@ -2,6 +2,7 @@ import { ExternalLink, quietLinkClass } from "@/components/external-link";
 import { NoteGrid } from "@/components/note-grid";
 import { ALL_NOTES, sortNotesByLatestDate } from "@/constants/notes";
 import { SERIES_CATEGORY, SERIES_ITEMS, SPLITS_URL, seriesHref } from "@/constants/series";
+import Image from "next/image";
 import Link from "next/link";
 
 const RECENT_COUNT = 5;
@@ -44,11 +45,21 @@ export default async function HomePage() {
         <SectionHeading>Project</SectionHeading>
 
         <div className="mt-4 flex flex-col gap-1">
-          <h3 className="text-lg font-bold">
+          <h3 className="flex items-center gap-1.5 text-lg font-bold">
+            {/* splits.kr이 서비스하는 favicon.svg를 받아 두었다. 빌드/렌더 때 외부 요청을 하지 않으려고 public에 넣었다. */}
+            <Image
+              width={18}
+              height={18}
+              src="/splits-favicon.svg"
+              alt=""
+              aria-hidden
+              className="size-[1em] shrink-0"
+            />
             <ExternalLink href={SPLITS_URL}>splits.kr</ExternalLink>
           </h3>
           <p className="text-[15px] leading-relaxed break-keep text-muted-foreground">
-            대한체육회 20년치 공식 대회 기록을 바탕으로 연령대와 종목별 쇼트트랙 기록 분포를 비교하는 서비스입니다. 데이터를 다루며 통계 기준을 세워 나간 과정을 네 편의 글로 정리했습니다.
+            대한체육회 20년치 공식 대회 기록을 바탕으로 연령대와 종목별 쇼트트랙 기록 분포를 비교하는 서비스입니다.
+            데이터를 다루며 통계 기준을 세워 나간 과정을 네 편의 글로 정리했습니다.
           </p>
         </div>
 
