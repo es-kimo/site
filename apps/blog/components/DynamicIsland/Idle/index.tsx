@@ -1,14 +1,11 @@
 import { IconLogo } from "@/components/IconLogo";
-import { cn } from "@workspace/ui/lib/utils";
-import { ThemeChanger } from "../../ThemeChanger";
+import { ThemeChanger } from "@/components/ThemeChanger";
 
 export function IdleIsland() {
   return (
-    <div className={cn("w-full relative flex flex-row gap-2 justify-between transition-all duration-300 ease-in-out items-center max-h-[72px] overflow-visible rounded-full")}>
+    <div className="flex items-center justify-between gap-2 px-1.5 py-1">
       <IconLogo showBackHint />
-      <div className="flex items-center gap-1">
-        <ThemeChanger />
-      </div>
+      <ThemeChanger />
     </div>
   );
 }

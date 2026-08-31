@@ -18,9 +18,9 @@ export const IconLogo = ({ showBackHint = false }: IconLogoProps) => {
 
   if (!showBackHint) {
     return (
-      <Button variant="ghost" size="icon" aria-label="Go Home" asChild>
+      <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-transparent" aria-label="Go Home" asChild>
         <Link href="/">
-          <Image src={KHLogo} alt="KHLogo" width={24} height={24} />
+          <Image src={KHLogo} alt="KHLogo" width={22} height={22} />
         </Link>
       </Button>
     );
@@ -31,7 +31,7 @@ export const IconLogo = ({ showBackHint = false }: IconLogoProps) => {
       type="button"
       aria-label="Go Back"
       onClick={() => router.back()}
-      className={cn("group inline-flex items-center rounded-md", "h-9 pl-1 pr-2", "hover:bg-accent/50", "transition-colors duration-200")}
+      className={cn("group inline-flex items-center rounded-sm", "h-8 pl-1 pr-1.5", "transition-colors duration-200")}
     >
       <motion.div
         initial={{ width: 0, opacity: 0 }}
@@ -56,7 +56,7 @@ export const IconLogo = ({ showBackHint = false }: IconLogoProps) => {
           <ChevronLeft className="w-3.5 h-3.5 text-foreground/30 group-hover:text-foreground/70 transition-colors duration-200" strokeWidth={2.5} />
         </motion.div>
       </motion.div>
-      <Image src={KHLogo} alt="KHLogo" width={24} height={24} className="shrink-0" />
+      <Image src={KHLogo} alt="KHLogo" width={22} height={22} className="shrink-0" />
     </button>
   );
 };

@@ -40,31 +40,31 @@ export const ReaderIsland = () => {
   };
 
   return (
-    <div className="w-full mx-auto bg-background/20 backdrop-blur-xl rounded-md px-2 py-1 flex items-center gap-3" aria-label="Font size control">
+    <div className="flex items-center gap-1.5 px-1.5 py-1" aria-label="Font size control">
       <IconLogo showBackHint />
 
-      <Button variant="ghost" size="icon" onClick={decreaseSize} disabled={sizeIndex === 0} aria-label="Decrease font size">
+      <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:bg-transparent hover:text-foreground" onClick={decreaseSize} disabled={sizeIndex === 0} aria-label="Decrease font size">
         <Minus strokeWidth={2.5} />
       </Button>
 
-      <div className="flex items-center gap-1.5 px-1">
-        <span className="text-foreground/90 text-sm font-medium select-none" aria-hidden="true">
+      <div className="flex items-center gap-1.5">
+        <span className="text-muted-foreground text-xs select-none" aria-hidden="true">
           A
         </span>
 
         {/* Size indicator dots */}
         <div className="flex gap-1" role="status" aria-live="polite" aria-label={`Font size: ${FONT_SIZES[sizeIndex]?.label}`}>
           {FONT_SIZES.map((_, index) => (
-            <div key={index} className={cn("w-1 h-1 rounded-full transition-all duration-300", index === sizeIndex ? "bg-foreground w-4" : "bg-foreground/30")} />
+            <div key={index} className={cn("w-1 h-1 rounded-full transition-all duration-300", index === sizeIndex ? "bg-foreground w-4" : "bg-foreground/25")} />
           ))}
         </div>
 
-        <span className="text-foreground/90 text-lg font-medium select-none" aria-hidden="true">
+        <span className="text-muted-foreground text-base select-none" aria-hidden="true">
           A
         </span>
       </div>
 
-      <Button variant="ghost" size="icon" onClick={increaseSize} disabled={sizeIndex === FONT_SIZES.length - 1} aria-label="Increase font size">
+      <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:bg-transparent hover:text-foreground" onClick={increaseSize} disabled={sizeIndex === FONT_SIZES.length - 1} aria-label="Increase font size">
         <Plus strokeWidth={2.5} />
       </Button>
 

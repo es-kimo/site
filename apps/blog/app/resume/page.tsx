@@ -242,7 +242,7 @@ export default async function ResumePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <article className={cn("max-w-2xl mx-auto print:max-w-none print:mx-0 print:text-[11pt] print:leading-snug", "font-[family-name:var(--font-noto-sans-kr)]")}>
+      <article className={cn("max-w-2xl mx-auto print:max-w-none print:mx-0 print:text-[11pt] print:leading-snug")}>
         {/* ── Header ──────────────────────────────────────────────── */}
         <header className="mb-12 print:mb-6">
           <div className="flex items-baseline gap-3">

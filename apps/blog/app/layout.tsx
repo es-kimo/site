@@ -1,17 +1,8 @@
-import { Noto_Sans_KR } from "next/font/google";
-
 import { DynamicIsland } from "@/components/DynamicIsland";
 import { Providers } from "@/components/providers";
 import "@workspace/ui/globals.css";
 import "katex/dist/katex.min.css";
 import { Metadata } from "next";
-
-const notoSansKR = Noto_Sans_KR({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-noto-sans-kr",
-  display: "swap",
-});
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -47,13 +38,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <body
-        className={`${notoSansKR.variable} antialiased`}
-        style={{
-          fontFamily:
-            'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-        }}
-      >
+      <body className="font-sans antialiased">
         <Providers>
           <div className="max-w-blog mx-auto py-20 px-4">{children}</div>
           <DynamicIsland />

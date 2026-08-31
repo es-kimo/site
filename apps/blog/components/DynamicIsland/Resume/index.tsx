@@ -1,17 +1,16 @@
 import { IconLogo } from "@/components/IconLogo";
+import { ThemeChanger } from "@/components/ThemeChanger";
 import { Button } from "@workspace/ui/components/button";
-import { cn } from "@workspace/ui/lib/utils";
 import { Download } from "lucide-react";
-import { ThemeChanger } from "../../ThemeChanger";
 
 export function ResumeIsland() {
   return (
-    <div className={cn("w-full relative flex flex-row gap-2 justify-between transition-all duration-300 ease-in-out items-center max-h-[72px] overflow-visible rounded-full")}>
+    <div className="flex items-center justify-between gap-2 px-1.5 py-1">
       <IconLogo showBackHint />
-      <div className="flex items-center gap-1">
-        <Button variant="ghost" size="icon" asChild>
+      <div className="flex items-center gap-0.5">
+        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:bg-transparent hover:text-foreground" asChild>
           <a href="/resume.pdf" download aria-label="PDF 다운로드">
-            <Download className="h-[1.2rem] w-[1.2rem]" />
+            <Download />
           </a>
         </Button>
         <ThemeChanger />
