@@ -1,0 +1,45 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "terminal-notifier -message \"Claude가 $(basename \"$PWD\")에서 질문이 있습니다\" -title \"Claude Code\" -activate com.microsoft.VSCode -contentImage \"/Applications/Visual Studio Code.app/Contents/Resources/Code.icns\"; /usr/bin/afplay /System/Library/Sounds/Glass.aiff"
+          }
+        ]
+      },
+      {
+        "matcher": "ExitPlanMode",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "terminal-notifier -message \"$(basename \"$PWD\")에서 검토할 계획이 준비되었습니다\" -title \"Claude Code\" -activate com.microsoft.VSCode -contentImage \"/Applications/Visual Studio Code.app/Contents/Resources/Code.icns\"; /usr/bin/afplay /System/Library/Sounds/Glass.aiff"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "terminal-notifier -message \"$(basename \"$PWD\")에서 권한이 필요합니다\" -title \"Claude Code\" -activate com.microsoft.VSCode -contentImage \"/Applications/Visual Studio Code.app/Contents/Resources/Code.icns\"; /usr/bin/afplay /System/Library/Sounds/Glass.aiff"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "terminal-notifier -message \"$(basename \"$PWD\")에서 작업이 완료되었습니다\" -title \"Claude Code\" -activate com.microsoft.VSCode -contentImage \"/Applications/Visual Studio Code.app/Contents/Resources/Code.icns\"; /usr/bin/afplay /System/Library/Sounds/Hero.aiff"
+          }
+        ]
+      }
+    ]
+  }
+}
