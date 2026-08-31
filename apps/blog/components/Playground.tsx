@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { SandpackProvider, SandpackLayout, SandpackCodeEditor, SandpackPreview, SandpackConsole } from "@codesandbox/sandpack-react";
+import {
+  SandpackProvider,
+  SandpackLayout,
+  SandpackCodeEditor,
+  SandpackPreview,
+  SandpackConsole,
+} from "@codesandbox/sandpack-react";
 import { useTheme } from "next-themes";
 import { Code2 } from "lucide-react";
 
@@ -20,7 +26,14 @@ interface PlaygroundProps {
   previewHeight?: number;
 }
 
-export function Playground({ code, files, template = "react", showConsole = false, editorHeight = 350, previewHeight = 150 }: PlaygroundProps) {
+export function Playground({
+  code,
+  files,
+  template = "react",
+  showConsole = false,
+  editorHeight = 350,
+  previewHeight = 150,
+}: PlaygroundProps) {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -34,7 +47,10 @@ export function Playground({ code, files, template = "react", showConsole = fals
     return (
       <div className="my-4 overflow-hidden rounded-lg border border-[var(--markdown-soft-border)] bg-[var(--markdown-panel-background)] shadow-sm">
         <PlaygroundHeader />
-        <div className="animate-pulse bg-[var(--markdown-soft-surface)]" style={{ height: editorHeight + previewHeight }} />
+        <div
+          className="animate-pulse bg-[var(--markdown-soft-surface)]"
+          style={{ height: editorHeight + previewHeight }}
+        />
       </div>
     );
   }
@@ -47,7 +63,7 @@ export function Playground({ code, files, template = "react", showConsole = fals
         theme={resolvedTheme === "dark" ? "dark" : "light"}
         files={allFiles}
         options={{
-          initMode: "user-visible",
+          initMode: "lazy",
           initModeObserverOptions: { rootMargin: "1000px 0px" },
         }}
       >
@@ -58,8 +74,17 @@ export function Playground({ code, files, template = "react", showConsole = fals
             flexDirection: "column",
           }}
         >
-          <SandpackCodeEditor showLineNumbers showInlineErrors wrapContent style={{ height: editorHeight, flexGrow: 0, flexBasis: "auto" }} />
-          <SandpackPreview showOpenInCodeSandbox={false} showRefreshButton style={{ height: previewHeight, flexGrow: 0, flexBasis: "auto" }} />
+          <SandpackCodeEditor
+            showLineNumbers
+            showInlineErrors
+            wrapContent
+            style={{ height: editorHeight, flexGrow: 0, flexBasis: "auto" }}
+          />
+          <SandpackPreview
+            showOpenInCodeSandbox={false}
+            showRefreshButton
+            style={{ height: previewHeight, flexGrow: 0, flexBasis: "auto" }}
+          />
         </SandpackLayout>
         {showConsole && (
           <SandpackConsole
