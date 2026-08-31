@@ -3,7 +3,7 @@ import { Mermaid } from "@/components/Mermaid";
 import { Playground } from "@/components/Playground";
 import { SeriesNav } from "@/components/SeriesNav";
 import { formatPostDate } from "@/lib/date";
-import { Lightbulb, ListTree, PencilLine } from "lucide-react";
+import { Lightbulb, ListTree } from "lucide-react";
 import type { MDXComponents } from "mdx/types";
 import Image, { ImageProps } from "next/image";
 
@@ -122,19 +122,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
           </div>
           <div className="px-3 py-2.5 text-foreground/80 [&>p]:m-0">{children}</div>
         </aside>
-      );
-    },
-    AIAssisted(properties) {
-      return (
-        <div {...properties} className="my-4 flex items-start gap-2.5 rounded-lg border border-[var(--markdown-soft-border)] bg-[var(--markdown-panel-background)] px-3 py-2.5 text-xs leading-relaxed text-muted-foreground shadow-sm">
-          <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-md border border-[var(--markdown-soft-border)] bg-[var(--markdown-panel-raised)] text-[var(--markdown-link)]">
-            <PencilLine aria-hidden="true" className="size-3.5" strokeWidth={1.8} />
-          </span>
-          <span>
-            <strong className="block text-[10px] font-medium text-foreground/60">글을 쓰며</strong>
-            이 글의 주제와 흐름은 작성자의 생각이며, 본문 작성에 AI의 도움을 받았습니다.
-          </span>
-        </div>
       );
     },
     PostDate({ children, ...properties }) {
