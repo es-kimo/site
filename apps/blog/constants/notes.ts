@@ -70,6 +70,17 @@ export const CATEGORIES: Category[] = Object.entries(NOTES)
   .filter(([, slugs]) => slugs.length > 0)
   .map(([category]) => category);
 
+/** 카테고리 구분 없이 펼친 공개 글 (정렬 전) */
+export const ALL_NOTES: NoteItem[] = Object.entries(NOTES).flatMap(([category, slugs]) =>
+  slugs.map((slug) => ({ category, slug })),
+);
+
+/** 목록 페이지가 쓰는 최신순 글 목록. 카테고리를 주면 그 카테고리만 추린다. */
+export const listNotes = async (category?: Category): Promise<NoteItem[]> => {
+  const notes = category ? ALL_NOTES.filter((note) => note.category === category) : ALL_NOTES;
+  return sortNotesByLatestDate(notes);
+};
+
 export type AdjacentNote = NoteItem & { title: string };
 
 /**

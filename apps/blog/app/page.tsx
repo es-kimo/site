@@ -1,14 +1,12 @@
 import { ExternalLink, quietLinkClass } from "@/components/external-link";
 import { NoteGrid } from "@/components/note-grid";
-import { NOTES, sortNotesByLatestDate } from "@/constants/notes";
+import { ALL_NOTES, sortNotesByLatestDate } from "@/constants/notes";
 import { SERIES_CATEGORY, SERIES_ITEMS, SPLITS_URL, seriesHref } from "@/constants/series";
 import Link from "next/link";
 
 const RECENT_COUNT = 5;
 
 const SERIES_SLUGS = new Set(SERIES_ITEMS.map(({ slug }) => slug));
-
-const ALL_NOTES = Object.entries(NOTES).flatMap(([category, slugs]) => slugs.map((slug) => ({ category, slug })));
 
 async function getRecentNotes() {
   // 시리즈 네 편은 Project 섹션에서 전부 나열하므로 여기서는 제외한다
@@ -82,7 +80,7 @@ export default async function HomePage() {
             전체 {totalCount}편 →
           </Link>
         </div>
-        <NoteGrid notes={recentNotes} />
+        <NoteGrid notes={recentNotes} headingLevel={3} />
       </section>
     </div>
   );

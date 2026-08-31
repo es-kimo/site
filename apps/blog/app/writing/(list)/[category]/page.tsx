@@ -1,16 +1,30 @@
 import { NoteGrid } from "@/components/note-grid";
-import { getSlugsByCategory, sortNotesByLatestDate } from "@/constants/notes";
+import { listNotes } from "@/constants/notes";
+import { categoryParams } from "@/constants/params";
 import { CategoryParams } from "@/constants/params.types";
 import { decodeURIS } from "@workspace/common/lib/uri";
+import { Metadata } from "next";
+
+/** route group이 달라서 부모로부터 static param을 받을 수 없음 */
+export function generateStaticParams() {
+  return categoryParams;
+}
+
+/** 공개 글이 있는 카테고리 밖의 주소는 라우팅 단계에서 404가 된다 */
+export const dynamicParams = false;
+
+export async function generateMetadata({ params }: { params: Promise<CategoryParams> }): Promise<Metadata> {
+  const { category } = await params;
+  const [decodedCategory] = decodeURIS(category);
+
+  return {
+    title: `Writing | ${decodedCategory}`,
+  };
+}
 
 export default async function Page({ params }: { params: Promise<CategoryParams> }) {
   const { category } = await params;
   const [decodedCategory] = decodeURIS(category);
 
-  // draft 제외된 NOTES를 활용하여 글 목록 가져오기
-  const slugs = await getSlugsByCategory(decodedCategory);
-  const notes = slugs.map((slug) => ({ category: decodedCategory, slug }));
-  const sortedNotes = await sortNotesByLatestDate(notes);
-
-  return <NoteGrid notes={sortedNotes} />;
+  return <NoteGrid notes={await listNotes(decodedCategory)} />;
 }

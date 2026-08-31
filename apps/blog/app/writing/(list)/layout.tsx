@@ -6,15 +6,20 @@ export async function generateMetadata() {
   };
 }
 
-export default function RootLayout({
+export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <main className="space-y-6">
-      <CategoryNavigationTab />
-      {children}
+    <main>
+      <header>
+        <h1 className="text-2xl font-bold tracking-tight">Writing</h1>
+        <div className="mt-2">
+          <CategoryNavigationTab />
+        </div>
+      </header>
+      <div className="mt-8 pt-8">{children}</div>
     </main>
   );
 }
