@@ -1,9 +1,12 @@
+"use client";
+
 import { Button } from "@workspace/ui/components/button";
 import { cn } from "@workspace/ui/lib/utils";
 import { motion } from "motion/react";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import KHLogo from "../assets/icon.png";
 
 interface IconLogoProps {
@@ -11,6 +14,8 @@ interface IconLogoProps {
 }
 
 export const IconLogo = ({ showBackHint = false }: IconLogoProps) => {
+  const router = useRouter();
+
   if (!showBackHint) {
     return (
       <Button variant="ghost" size="icon" aria-label="Go Home" asChild>
@@ -22,7 +27,12 @@ export const IconLogo = ({ showBackHint = false }: IconLogoProps) => {
   }
 
   return (
-    <Link href="/" aria-label="Go Home" className={cn("group inline-flex items-center rounded-md", "h-9 pl-1 pr-2", "hover:bg-accent/50", "transition-colors duration-200")}>
+    <button
+      type="button"
+      aria-label="Go Back"
+      onClick={() => router.back()}
+      className={cn("group inline-flex items-center rounded-md", "h-9 pl-1 pr-2", "hover:bg-accent/50", "transition-colors duration-200")}
+    >
       <motion.div
         initial={{ width: 0, opacity: 0 }}
         animate={{ width: 14, opacity: 1 }}
@@ -47,6 +57,6 @@ export const IconLogo = ({ showBackHint = false }: IconLogoProps) => {
         </motion.div>
       </motion.div>
       <Image src={KHLogo} alt="KHLogo" width={24} height={24} className="shrink-0" />
-    </Link>
+    </button>
   );
 };
