@@ -1,36 +1,10 @@
+import { SERIES_ITEMS, seriesHref, seriesTitle } from "@/constants/series";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, BookOpen, Check } from "lucide-react";
 
 interface SeriesNavProps {
   currentPart: number;
 }
-
-const SERIES_ITEMS = [
-  {
-    part: 1,
-    title: "1단계: 백분위수와 K-익명성",
-    subtitle: "이 기록은 전국에서 상위 몇 %일까?",
-    slug: "percentile-and-k-anonymity",
-  },
-  {
-    part: 2,
-    title: "2단계: 코호트 생존분석과 잔존율",
-    subtitle: "초등학생 때 1등 하던 아이들은 나중에 어떻게 될까?",
-    slug: "cohort-survival-analysis",
-  },
-  {
-    part: 3,
-    title: "3단계: 공백 복귀율과 Stop Rule",
-    subtitle: "선수가 1년 동안 대회에 안 나오면 은퇴일까, 휴식일까?",
-    slug: "gap-return-rates-and-stop-rule",
-  },
-  {
-    part: 4,
-    title: "4단계: TrueSkill 베이지안 레이팅",
-    subtitle: "체스의 Elo나 Glicko-2 대신 왜 TrueSkill일까?",
-    slug: "trueskill-bayesian-rating",
-  },
-];
 
 export function SeriesNav({ currentPart }: SeriesNavProps) {
   const prev = SERIES_ITEMS.find((item) => item.part === currentPart - 1);
@@ -65,7 +39,7 @@ export function SeriesNav({ currentPart }: SeriesNavProps) {
                 {isComplete ? <Check aria-hidden="true" className="size-3" strokeWidth={2} /> : String(item.part).padStart(2, "0")}
               </span>
               <span className="min-w-0">
-                <span className={`block leading-5 ${isCurrent ? "font-medium text-foreground" : "text-foreground/75"}`}>{item.title}</span>
+                <span className={`block leading-5 ${isCurrent ? "font-medium text-foreground" : "text-foreground/75"}`}>{seriesTitle(item)}</span>
                 <span className="block truncate text-xs leading-5 text-muted-foreground">{item.subtitle}</span>
               </span>
               {isCurrent && <span className="ml-auto hidden shrink-0 text-[10px] text-[var(--markdown-link)] sm:block">지금 읽는 글</span>}
@@ -79,7 +53,7 @@ export function SeriesNav({ currentPart }: SeriesNavProps) {
                   {content}
                 </span>
               ) : (
-                <Link href={`/writing/Data/${item.slug}`} className="flex items-center gap-3 rounded-md px-2.5 py-2 transition-colors hover:bg-[var(--markdown-panel-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--markdown-link)]/40">
+                <Link href={seriesHref(item.slug)} className="flex items-center gap-3 rounded-md px-2.5 py-2 transition-colors hover:bg-[var(--markdown-panel-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--markdown-link)]/40">
                   {content}
                 </Link>
               )}
@@ -90,21 +64,21 @@ export function SeriesNav({ currentPart }: SeriesNavProps) {
 
       <div className="grid grid-cols-2 border-t border-[var(--markdown-soft-border)] text-xs">
         {prev ? (
-          <Link href={`/writing/Data/${prev.slug}`} className="group flex min-w-0 items-center gap-2 border-r border-[var(--markdown-soft-border)] px-3 py-2.5 text-foreground/70 transition-colors hover:bg-[var(--markdown-panel-hover)] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--markdown-link)]/40">
+          <Link href={seriesHref(prev.slug)} className="group flex min-w-0 items-center gap-2 border-r border-[var(--markdown-soft-border)] px-3 py-2.5 text-foreground/70 transition-colors hover:bg-[var(--markdown-panel-hover)] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--markdown-link)]/40">
             <ArrowLeft aria-hidden="true" className="size-3.5 shrink-0 transition-transform group-hover:-translate-x-0.5" />
             <span className="min-w-0">
               <span className="block text-[10px] text-muted-foreground">이전 이야기</span>
-              <span className="block truncate">{prev.title}</span>
+              <span className="block truncate">{seriesTitle(prev)}</span>
             </span>
           </Link>
         ) : (
           <span className="border-r border-[var(--markdown-soft-border)]" />
         )}
         {next ? (
-          <Link href={`/writing/Data/${next.slug}`} className="group flex min-w-0 items-center justify-end gap-2 px-3 py-2.5 text-right text-foreground/70 transition-colors hover:bg-[var(--markdown-panel-hover)] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--markdown-link)]/40">
+          <Link href={seriesHref(next.slug)} className="group flex min-w-0 items-center justify-end gap-2 px-3 py-2.5 text-right text-foreground/70 transition-colors hover:bg-[var(--markdown-panel-hover)] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--markdown-link)]/40">
             <span className="min-w-0">
               <span className="block text-[10px] text-muted-foreground">다음 이야기</span>
-              <span className="block truncate">{next.title}</span>
+              <span className="block truncate">{seriesTitle(next)}</span>
             </span>
             <ArrowRight aria-hidden="true" className="size-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" />
           </Link>
