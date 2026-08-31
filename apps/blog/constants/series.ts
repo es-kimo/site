@@ -39,3 +39,9 @@ export const SERIES_ITEMS: SeriesItem[] = [
 export const seriesHref = (slug: string) => `/writing/${SERIES_CATEGORY}/${slug}`;
 
 export const seriesTitle = ({ part, title }: SeriesItem) => `${part}단계: ${title}`;
+
+/** 글이 시리즈에 속하면 몇 번째인지 알려준다. 글 푸터가 시리즈 목록을 붙일지 판단하는 데 쓴다. */
+export const findSeriesPart = (category: string, slug: string): number | null => {
+  if (category !== SERIES_CATEGORY) return null;
+  return SERIES_ITEMS.find((item) => item.slug === slug)?.part ?? null;
+};

@@ -69,3 +69,25 @@ export const NOTES: Notes = Object.fromEntries(
 export const CATEGORIES: Category[] = Object.entries(NOTES)
   .filter(([, slugs]) => slugs.length > 0)
   .map(([category]) => category);
+
+export type AdjacentNote = NoteItem & { title: string };
+
+/**
+ * 같은 카테고리에서 바로 앞뒤에 쓴 글. 정렬이 최신순이라 older가 한 칸 뒤, newer가 한 칸 앞이다.
+ * 시리즈가 아닌 글의 푸터에서 다음에 읽을 글을 제안하는 데 쓴다.
+ */
+export const getAdjacentNotes = async (category: Category, slug: string) => {
+  const slugs = NOTES[category] ?? [];
+  const sorted = await sortNotesByLatestDate(slugs.map((s) => ({ category, slug: s })));
+  const index = sorted.findIndex((note) => note.slug === slug);
+
+  const at = async (position: number): Promise<AdjacentNote | null> => {
+    const note = index === -1 ? undefined : sorted[position];
+    if (!note) return null;
+
+    const metadata = await getSlugMetadata(note.category, note.slug);
+    return { ...note, title: metadata.title?.toString() ?? note.slug };
+  };
+
+  return { older: await at(index + 1), newer: await at(index - 1) };
+};

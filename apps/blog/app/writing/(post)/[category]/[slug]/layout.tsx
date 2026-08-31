@@ -1,3 +1,4 @@
+import { ArticleFooter } from "@/components/article-footer";
 import { getSlugMetadata } from "@/constants/notes";
 import { SlugParams } from "@/constants/params.types";
 import { formatPostDate } from "@/lib/date";
@@ -55,6 +56,7 @@ export default async function Layout({
         <p className="text-muted-foreground pt-2 text-xs font-semibold mb-1">{formatPostDate(updatedAt ?? createdAt, "korean")}</p>
         {children}
       </article>
+      <ArticleFooter category={decodedCategory} slug={decodedSlug} date={updatedAt ?? createdAt} />
     </section>
   );
 }

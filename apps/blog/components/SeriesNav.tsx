@@ -22,7 +22,7 @@ export function SeriesNav({ currentPart }: SeriesNavProps) {
   const next = SERIES_ITEMS.find((item) => item.part === currentPart + 1);
 
   return (
-    <nav aria-label="통계 및 데이터 분석 시리즈" className="my-5 border-y border-[var(--markdown-soft-border)] py-3">
+    <nav aria-label="통계 및 데이터 분석 시리즈">
       <div className="mb-3 flex items-baseline justify-between gap-4">
         <span className="text-xs font-semibold text-muted-foreground">통계와 데이터 이야기</span>
         <span className="text-xs tabular-nums text-muted-foreground">
