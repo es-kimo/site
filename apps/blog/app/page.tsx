@@ -1,3 +1,4 @@
+import { ExternalLink, quietLinkClass } from "@/components/external-link";
 import { NoteGrid } from "@/components/note-grid";
 import { NOTES, sortNotesByLatestDate } from "@/constants/notes";
 import { SERIES_CATEGORY, SERIES_ITEMS, SPLITS_URL, seriesHref } from "@/constants/series";
@@ -17,22 +18,6 @@ async function getRecentNotes() {
   return sortedNotes.slice(0, RECENT_COUNT);
 }
 
-function ExternalLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-baseline hover:text-foreground transition-colors"
-    >
-      <span className="underline underline-offset-2 decoration-foreground/20 hover:decoration-foreground">
-        {children}
-      </span>
-      <span className="text-[8px] -translate-y-1.5 ml-px">↗</span>
-    </a>
-  );
-}
-
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return <h2 className="text-sm font-semibold text-muted-foreground">{children}</h2>;
 }
@@ -46,18 +31,12 @@ export default async function HomePage() {
       <header>
         <h1 className="text-2xl font-bold tracking-tight">Kihyun Ryu</h1>
         <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2 text-sm text-muted-foreground">
-          <Link
-            href="/resume"
-            className="underline underline-offset-2 decoration-foreground/20 hover:decoration-foreground hover:text-foreground transition-colors"
-          >
+          <Link href="/resume" className={quietLinkClass}>
             Resume
           </Link>
           <ExternalLink href="https://github.com/es-kimo">GitHub</ExternalLink>
           <ExternalLink href="https://x.com/ryurlah">X</ExternalLink>
-          <a
-            href="/feed.xml"
-            className="underline underline-offset-2 decoration-foreground/20 hover:decoration-foreground hover:text-foreground transition-colors"
-          >
+          <a href="/feed.xml" className={quietLinkClass}>
             RSS
           </a>
         </div>
