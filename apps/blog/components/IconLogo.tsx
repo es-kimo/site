@@ -1,12 +1,9 @@
-"use client";
-
 import { Button } from "@workspace/ui/components/button";
 import { cn } from "@workspace/ui/lib/utils";
-import { motion } from "motion/react";
 import { ChevronLeft } from "lucide-react";
-import Link from "next/link";
+import { motion } from "motion/react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import KHLogo from "../assets/icon.png";
 
 interface IconLogoProps {
@@ -14,8 +11,6 @@ interface IconLogoProps {
 }
 
 export const IconLogo = ({ showBackHint = false }: IconLogoProps) => {
-  const router = useRouter();
-
   if (!showBackHint) {
     return (
       <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-transparent" aria-label="Go Home" asChild>
@@ -27,10 +22,9 @@ export const IconLogo = ({ showBackHint = false }: IconLogoProps) => {
   }
 
   return (
-    <button
-      type="button"
-      aria-label="Go Back"
-      onClick={() => router.back()}
+    <Link
+      href="/"
+      aria-label="Go Home"
       className={cn("group inline-flex items-center rounded-sm", "h-8 pl-1 pr-1.5", "transition-colors duration-200")}
     >
       <motion.div
@@ -53,10 +47,13 @@ export const IconLogo = ({ showBackHint = false }: IconLogoProps) => {
             delay: 1.2,
           }}
         >
-          <ChevronLeft className="w-3.5 h-3.5 text-foreground/30 group-hover:text-foreground/70 transition-colors duration-200" strokeWidth={2.5} />
+          <ChevronLeft
+            className="w-3.5 h-3.5 text-foreground/30 group-hover:text-foreground/70 transition-colors duration-200"
+            strokeWidth={2.5}
+          />
         </motion.div>
       </motion.div>
       <Image src={KHLogo} alt="KHLogo" width={22} height={22} className="shrink-0" />
-    </button>
+    </Link>
   );
 };
