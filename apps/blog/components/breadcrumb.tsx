@@ -1,5 +1,6 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@workspace/ui/components/breadcrumb";
-import { Link } from "next-view-transitions";
+import { formatCategoryLabel } from "@/lib/category";
+import Link from "next/link";
 
 export const BreadCrumb = ({ className, category, sub, link = true }: { className?: string; category: string; sub: string; link?: boolean }) => {
   return (
@@ -8,10 +9,10 @@ export const BreadCrumb = ({ className, category, sub, link = true }: { classNam
         <BreadcrumbItem>
           {link ? (
             <BreadcrumbLink asChild>
-              <Link href={`/writing/${category}`}>{category}</Link>
+              <Link href={`/writing/${category}`}>{formatCategoryLabel(category)}</Link>
             </BreadcrumbLink>
           ) : (
-            category
+            formatCategoryLabel(category)
           )}
         </BreadcrumbItem>
         <BreadcrumbSeparator />

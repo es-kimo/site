@@ -1,34 +1,23 @@
 "use client";
 
-import { NavigationMenuLink, navigationMenuTriggerStyle } from "@workspace/ui/components/navigation-menu";
 import { cn } from "@workspace/ui/lib/utils";
-import { useTransitionRouter } from "next-view-transitions";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
 
-export const restyledNavigationMenuTriggerStyle = () => cn(navigationMenuTriggerStyle(), "text-base text-neutral-400 hover:bg-inherit transition-colors duration-300 rounded-[initial] px-2");
-
-export function NavigationLink({ href, children, inclusiveActiveState }: { href: string; children: React.ReactNode; inclusiveActiveState?: boolean }) {
-  const pathname = usePathname();
-  const decodedPathname = decodeURIComponent(pathname);
-  const isActive = useMemo(() => {
-    if (inclusiveActiveState) {
-      return decodedPathname.startsWith(href);
-    }
-    return href === decodedPathname;
-  }, [href, decodedPathname, inclusiveActiveState]);
-  const router = useTransitionRouter();
+export function NavigationLink({ href, count, children }: { href: string; count: number; children: React.ReactNode }) {
+  const isActive = decodeURIComponent(usePathname()) === href;
 
   return (
-    <NavigationMenuLink
-      onClick={(e) => {
-        e.preventDefault();
-        router.push(href);
-      }}
+    <Link
       href={href}
-      className={cn(restyledNavigationMenuTriggerStyle(), isActive && "border-b-2 border-accent-foreground text-accent-foreground")}
+      aria-current={isActive ? "page" : undefined}
+      className={cn(
+        "inline-flex items-baseline gap-1.5 text-sm transition-colors",
+        isActive ? "font-medium text-foreground" : "text-muted-foreground hover:text-foreground",
+      )}
     >
       {children}
-    </NavigationMenuLink>
+      <span className="text-xs tabular-nums text-muted-foreground">{count}</span>
+    </Link>
   );
 }

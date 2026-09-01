@@ -113,11 +113,11 @@ export function toMarkdown(data: ResumeData): string {
     }
   }
 
-  // ── Side Projects ─────────────────────────────────────────────────────────
-  if (data.sideProjects.length > 0) {
-    lines.push("## 사이드 프로젝트 경험");
+  // ── Open Source ───────────────────────────────────────────────────────────
+  if (data.openSource.length > 0) {
+    lines.push("## 오픈소스");
     lines.push("");
-    for (const proj of data.sideProjects) {
+    for (const proj of data.openSource) {
       const statusLabel = proj.status === "awarded" ? "수상" : proj.status === "in-progress" ? "진행중" : "";
       const badge = statusLabel ? ` (${statusLabel})` : "";
       const nameWithLink = proj.repoUrl ? `[${proj.name}](${proj.repoUrl})` : proj.name;

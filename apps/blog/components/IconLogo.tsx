@@ -1,9 +1,9 @@
 import { Button } from "@workspace/ui/components/button";
 import { cn } from "@workspace/ui/lib/utils";
-import { motion } from "motion/react";
 import { ChevronLeft } from "lucide-react";
-import { Link } from "next-view-transitions";
+import { motion } from "motion/react";
 import Image from "next/image";
+import Link from "next/link";
 import KHLogo from "../assets/icon.png";
 
 interface IconLogoProps {
@@ -13,16 +13,20 @@ interface IconLogoProps {
 export const IconLogo = ({ showBackHint = false }: IconLogoProps) => {
   if (!showBackHint) {
     return (
-      <Button variant="ghost" size="icon" aria-label="Go Home" asChild>
+      <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-transparent" aria-label="Go Home" asChild>
         <Link href="/">
-          <Image src={KHLogo} alt="KHLogo" width={24} height={24} />
+          <Image src={KHLogo} alt="KHLogo" width={22} height={22} />
         </Link>
       </Button>
     );
   }
 
   return (
-    <Link href="/" aria-label="Go Home" className={cn("group inline-flex items-center rounded-md", "h-9 pl-1 pr-2", "hover:bg-accent/50", "transition-colors duration-200")}>
+    <Link
+      href="/"
+      aria-label="Go Home"
+      className={cn("group inline-flex items-center rounded-sm", "h-8 pl-1 pr-1.5", "transition-colors duration-200")}
+    >
       <motion.div
         initial={{ width: 0, opacity: 0 }}
         animate={{ width: 14, opacity: 1 }}
@@ -43,10 +47,13 @@ export const IconLogo = ({ showBackHint = false }: IconLogoProps) => {
             delay: 1.2,
           }}
         >
-          <ChevronLeft className="w-3.5 h-3.5 text-foreground/30 group-hover:text-foreground/70 transition-colors duration-200" strokeWidth={2.5} />
+          <ChevronLeft
+            className="w-3.5 h-3.5 text-foreground/30 group-hover:text-foreground/70 transition-colors duration-200"
+            strokeWidth={2.5}
+          />
         </motion.div>
       </motion.div>
-      <Image src={KHLogo} alt="KHLogo" width={24} height={24} className="shrink-0" />
+      <Image src={KHLogo} alt="KHLogo" width={22} height={22} className="shrink-0" />
     </Link>
   );
 };

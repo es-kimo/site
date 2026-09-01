@@ -1,55 +1,40 @@
 import { EmbedIframe } from "@/components/EmbedIframe";
+import { Mermaid } from "@/components/Mermaid";
 import { Playground } from "@/components/Playground";
 import { formatPostDate } from "@/lib/date";
+import { Lightbulb } from "lucide-react";
 import type { MDXComponents } from "mdx/types";
 import Image, { ImageProps } from "next/image";
-
-// 헤딩 텍스트를 id로 변환하는 함수
-function generateId(text: string): string {
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/[()]/g, "") // 괄호 제거
-    .replace(/\s+/g, "-") // 공백을 하이픈으로
-    .replace(/[^\w\u3131-\uD79D-]/g, "") // 영문, 숫자, 한글, 하이픈만 유지
-    .replace(/--+/g, "-") // 연속된 하이픈을 하나로
-    .replace(/^-+/, "") // 시작 하이픈 제거
-    .replace(/-+$/, ""); // 끝 하이픈 제거
-}
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: ({ children, ...props }) => (
-      <h1 className="scroll-m-20 text-3xl font-bold tracking-tight animate-fadein text-foreground/95" {...props}>
+      <h1
+        className="mb-2 mt-6 scroll-m-20 text-xl font-semibold tracking-tight text-foreground/95 first:mt-0"
+        {...props}
+      >
         {children}
       </h1>
     ),
-    h2: ({ children }) => {
-      const id = typeof children === "string" ? generateId(children) : "";
-      return (
-        <h2 id={id} className="mt-12 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0 text-foreground/95">
-          {children}
-        </h2>
-      );
-    },
-    h3: ({ children }) => {
-      const id = typeof children === "string" ? generateId(children) : "";
-      return (
-        <h3 id={id} className="mt-10 scroll-m-20 text-xl font-semibold tracking-tight text-foreground/95">
-          {children}
-        </h3>
-      );
-    },
-    h4: ({ children }) => {
-      const id = typeof children === "string" ? generateId(children) : "";
-      return (
-        <h4 id={id} className="mt-8 scroll-m-20 text-lg font-semibold tracking-tight text-foreground/90">
-          {children}
-        </h4>
-      );
-    },
-    p: ({ children }) => <p className="[&:not(:first-child)]:mt-7 tracking-wide">{children}</p>,
+    h2: ({ children, ...props }) => (
+      <h2
+        {...props}
+        className="mb-2 mt-6 scroll-m-20 text-lg font-semibold tracking-tight first:mt-0 text-foreground/95"
+      >
+        {children}
+      </h2>
+    ),
+    h3: ({ children, ...props }) => (
+      <h3 {...props} className="mb-1 mt-3 scroll-m-20 text-base font-medium tracking-tight text-foreground/95">
+        {children}
+      </h3>
+    ),
+    h4: ({ children, ...props }) => (
+      <h4 {...props} className="mb-1 mt-3 scroll-m-20 text-sm font-medium tracking-tight text-foreground/90">
+        {children}
+      </h4>
+    ),
+    p: ({ children }) => <p className="leading-relaxed">{children}</p>,
     a: ({ children, href, ...props }) => {
       const shouldOpenInNewTab = typeof href === "string" && href.startsWith("/embeds/");
       const target = props.target ?? (shouldOpenInNewTab ? "_blank" : undefined);
@@ -61,57 +46,125 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
           {...props}
           target={target}
           rel={rel}
-          className="text-primary hover:text-primary/80 underline decoration-primary/30 hover:decoration-primary/60 underline-offset-2 transition-colors duration-200 font-medium"
+          className="text-[var(--markdown-link)] hover:text-[var(--markdown-link-hover)] underline decoration-current/25 hover:decoration-current/55 underline-offset-2 transition-colors duration-200"
         >
           {children}
         </a>
       );
     },
-    blockquote: ({ children }) => <blockquote className="mt-7 border-l-2 pl-6 italic text-foreground/80">{children}</blockquote>,
+    blockquote: ({ children }) => (
+      <blockquote className="my-1 border-l-2 border-[var(--markdown-link)]/60 py-1 pl-3 text-foreground/75 [&>p]:my-0">
+        {children}
+      </blockquote>
+    ),
     table: ({ children }) => (
-      <div className="my-8 w-full overflow-y-auto">
-        <table className="w-full">{children}</table>
+      <div className="my-2 w-full overflow-x-auto rounded-md border border-[var(--markdown-soft-border)]">
+        <table className="w-full border-collapse text-sm">{children}</table>
       </div>
     ),
     tbody(properties) {
       return <tbody {...properties}></tbody>;
     },
     thead(properties) {
-      return <thead {...properties} className="bg-muted/50"></thead>;
+      return <thead {...properties} className="bg-[var(--markdown-soft-surface)]"></thead>;
     },
     tr(properties) {
-      return <tr {...properties} className="m-0 border-t p-0 even:bg-muted/30"></tr>;
+      return (
+        <tr
+          {...properties}
+          className="m-0 border-t border-[var(--markdown-soft-border)] p-0 first:border-t-0 even:bg-[var(--markdown-soft-surface)]"
+        ></tr>
+      );
     },
     th(properties) {
-      return <th {...properties} className="border px-4 py-3 text-left font-bold text-foreground/90 [&[align=center]]:text-center [&[align=right]]:text-right"></th>;
+      return (
+        <th
+          {...properties}
+          className="border-r border-[var(--markdown-soft-border)] px-2.5 py-1.5 text-left font-semibold text-foreground/85 last:border-r-0 [&[align=center]]:text-center [&[align=right]]:text-right"
+        ></th>
+      );
     },
     td(properties) {
-      return <td {...properties} className="border px-4 py-3 text-left text-foreground/85 [&[align=center]]:text-center [&[align=right]]:text-right"></td>;
+      return (
+        <td
+          {...properties}
+          className="border-r border-[var(--markdown-soft-border)] px-2.5 py-1.5 text-left text-foreground/80 last:border-r-0 [&[align=center]]:text-center [&[align=right]]:text-right"
+        ></td>
+      );
     },
     ul(properties) {
-      return <ul {...properties} className="my-6 ml-6 list-disc [&>li]:mt-3 [&>li]:pl-2"></ul>;
+      return (
+        <ul
+          {...properties}
+          className={`${properties.className ?? ""} my-2 list-disc pl-4 [&_ul]:pl-6 [&_ol]:pl-6 [&>li]:my-1 [&.contains-task-list]:list-none [&.contains-task-list]:pl-0`}
+        ></ul>
+      );
     },
     ol(properties) {
-      return <ol {...properties} className="my-6 ml-6 list-decimal [&>li]:mt-3 [&>li]:pl-2"></ol>;
+      return (
+        <ol
+          {...properties}
+          className={`${properties.className ?? ""} my-2 list-decimal pl-4 [&_ul]:pl-6 [&_ol]:pl-6 [&>li]:my-1 [&.contains-task-list]:list-none [&.contains-task-list]:pl-0`}
+        ></ol>
+      );
     },
     li(properties) {
-      return <li {...properties} className="text-foreground/90"></li>;
+      return (
+        <li
+          {...properties}
+          className={`${properties.className ?? ""} pl-1 text-foreground/90 marker:text-muted-foreground [&.task-list-item]:list-none [&.task-list-item]:pl-0`}
+        ></li>
+      );
+    },
+    input(properties) {
+      return (
+        <input
+          {...properties}
+          className={`${properties.className ?? ""} mr-2 size-3.5 align-[-1px] accent-[var(--markdown-link)]`}
+        />
+      );
+    },
+    details(properties) {
+      return (
+        <details
+          {...properties}
+          className={`${properties.className ?? ""} my-2 rounded-md border border-[var(--markdown-soft-border)] bg-[var(--markdown-soft-surface)] px-3 py-2 open:pb-3`}
+        ></details>
+      );
+    },
+    summary(properties) {
+      return (
+        <summary
+          {...properties}
+          className={`${properties.className ?? ""} cursor-pointer select-none font-medium text-foreground/85 marker:text-muted-foreground`}
+        ></summary>
+      );
     },
     code(properties) {
       return (
         <code
           {...properties}
-          className="rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold text-foreground/90 [pre_&]:bg-[var(--code-block-bg)] [pre_&]:p-0 [pre_&]:rounded-none [pre_&]:font-normal [pre_&]:text-[13px] [pre_&]:border-[var(--code-block-border)]"
+          className="break-words rounded bg-[var(--inline-code-background)] px-1 py-0.5 font-mono text-[0.9em] font-normal text-[var(--inline-code-foreground)] [pre_&]:break-normal [pre_&]:bg-[var(--code-block-bg)] [pre_&]:p-0 [pre_&]:rounded-none [pre_&]:font-normal [pre_&]:text-[13px] [pre_&]:text-foreground/90 [pre_&]:border-[var(--code-block-border)]"
         ></code>
       );
     },
     pre(properties) {
-      return <pre {...properties} className="border border-[var(--code-block-border)] rounded-[10px] p-4 bg-[var(--code-block-bg)] mt-8 overflow-x-auto"></pre>;
+      return (
+        <pre
+          {...properties}
+          className="my-2 overflow-x-auto rounded-lg border border-[var(--code-block-border)] bg-[var(--code-block-bg)] p-4 leading-relaxed shadow-sm"
+        ></pre>
+      );
     },
     hr(properties) {
-      return <hr {...properties} className="my-8 border-t" />;
+      return <hr {...properties} className="my-4 border-t border-[var(--markdown-soft-border)]" />;
     },
-    Image: (props) => <Image {...(props as ImageProps)} className="w-4/5 mx-auto my-8 rounded-lg" />,
+    Image: (props) => (
+      <Image
+        {...(props as ImageProps)}
+        className="mx-auto my-3 h-auto max-w-full rounded-md border border-[var(--markdown-soft-border)]"
+      />
+    ),
     Lead(properties) {
       return <p {...properties} className="text-xl text-muted-foreground"></p>;
     },
@@ -126,18 +179,16 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     Callout({ children, ...properties }) {
       return (
-        <div {...properties} className="mt-8 mb-8 rounded-lg p-5 bg-muted/50 flex gap-3 border-l-4 border-primary/30">
-          <span className="text-lg">💡</span>
-          <div className="flex-1 text-foreground/85">{children}</div>
-        </div>
-      );
-    },
-    AIAssisted(properties) {
-      return (
-        <div {...properties} className="mt-6 mb-8 rounded-lg px-4 py-3 bg-muted/40 border border-border/50 text-sm text-muted-foreground flex items-start gap-2">
-          <span className="shrink-0">🤖</span>
-          <span>이 글의 주제와 흐름은 작성자의 생각이며, 본문 작성에 AI의 도움을 받았습니다.</span>
-        </div>
+        <aside
+          {...properties}
+          className="my-4 overflow-hidden rounded-lg border border-[var(--markdown-soft-border)] bg-[var(--markdown-panel-background)] shadow-sm"
+        >
+          <div className="flex items-center gap-2 border-b border-[var(--markdown-soft-border)] px-3 py-2">
+            <Lightbulb aria-hidden="true" className="size-3.5 text-[var(--inline-code-foreground)]" strokeWidth={1.8} />
+            <span className="text-xs font-medium text-foreground/70">잠깐 짚고 가기</span>
+          </div>
+          <div className="px-3 py-2.5 text-foreground/80 [&>p]:m-0">{children}</div>
+        </aside>
       );
     },
     PostDate({ children, ...properties }) {
@@ -149,18 +200,22 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     TOC({ items, ...properties }) {
       return (
-        <nav {...properties} style={{ fontSize: "16px", lineHeight: "1.5" }} className="my-8 rounded-lg border bg-muted/50 p-6">
-          <h2 style={{ fontSize: "18px", lineHeight: "1.4" }} className="font-semibold mb-4 mt-0 border-b-0 pb-0">
-            목차
-          </h2>
-          <ol className="my-0 ml-0 list-none space-y-2">
-            {items.map((item: { title: string }, index: number) => {
-              const id = generateId(item.title);
+        <nav {...properties} aria-label="목차" className="my-5 border-y border-[var(--markdown-soft-border)] py-3">
+          <div className="mb-2 flex items-baseline justify-between gap-4">
+            <span className="text-xs font-semibold text-muted-foreground">목차</span>
+          </div>
+          <ol className="m-0 flex list-none flex-col gap-1.5 p-0">
+            {items.map((item: { title: string; id: string }, index: number) => {
               return (
-                <li key={id} className="mt-0">
-                  <a href={`#${id}`} style={{ fontSize: "14px", lineHeight: "1.5" }} className="text-foreground hover:text-primary transition-colors inline-flex items-start group">
-                    <span className="text-muted-foreground mr-2 min-w-[1.5rem]">{index + 1}.</span>
-                    <span className="group-hover:underline">{item.title}</span>
+                <li key={item.id}>
+                  <a
+                    href={`#${item.id}`}
+                    className="group grid grid-cols-[1.75rem_1fr] items-baseline text-sm text-foreground/75 no-underline transition-colors hover:text-foreground"
+                  >
+                    <span className="text-xs tabular-nums text-muted-foreground">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="leading-6 underline-offset-2 group-hover:underline">{item.title}</span>
                   </a>
                 </li>
               );
@@ -171,9 +226,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     },
     Footnote({ id, children, ...properties }) {
       return (
-        <sup {...properties} id={`fnref-${id}`}>
-          <a href={`#fn-${id}`} className="text-primary hover:underline">
-            [{children || id}]
+        <sup {...properties} id={`fnref-${id}`} className="ml-0.5 scroll-mt-20 align-super text-[0.7em] leading-none">
+          <a
+            href={`#fn-${id}`}
+            aria-label={`각주 ${children || id}`}
+            className="tabular-nums text-[var(--markdown-link)] no-underline underline-offset-2 hover:underline"
+          >
+            {children || id}
           </a>
         </sup>
       );
@@ -182,22 +241,28 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       // ids가 배열이면 그대로 사용, 아니면 배열로 변환
       const idArray = Array.isArray(ids) ? ids : [ids];
       return (
-        <div {...properties} className="text-sm leading-relaxed my-4">
-          {/* 모든 id에 대한 숨겨진 앵커 포인트 생성 */}
-          {idArray.map((id) => (
-            <span key={id} id={`fn-${id}`} className="absolute opacity-0 pointer-events-none" />
-          ))}
+        <div {...properties} className="my-1.5 grid grid-cols-[1.75rem_1fr] items-baseline text-xs leading-relaxed">
+          {/* 번호가 본문 각주로 돌아가는 링크이자 각주가 가리키는 도착점이다 */}
+          <span className="flex flex-wrap gap-x-1 tabular-nums">
+            {idArray.map((id) => (
+              <a
+                key={id}
+                id={`fn-${id}`}
+                href={`#fnref-${id}`}
+                className="scroll-mt-20 text-[var(--markdown-link)] no-underline underline-offset-2 hover:underline"
+              >
+                {id}
+              </a>
+            ))}
+          </span>
 
-          {/* 번호 표시 (왼쪽 정렬) */}
-          <div className="font-mono text-muted-foreground text-xs mb-1">{idArray.map((id) => `[${id}]`)}</div>
-
-          {/* 내용 (들여쓰기) */}
-          <div className="pl-4 border-l-2 border-muted/60 break-words text-foreground/80">{children} </div>
+          <div className="min-w-0 break-words text-foreground/70">{children}</div>
         </div>
       );
     },
     EmbedIframe,
     Playground,
+    Mermaid,
     ...components,
   };
 }

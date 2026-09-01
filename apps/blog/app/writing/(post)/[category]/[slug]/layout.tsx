@@ -1,3 +1,4 @@
+import { ArticleFooter } from "@/components/article-footer";
 import { getSlugMetadata } from "@/constants/notes";
 import { SlugParams } from "@/constants/params.types";
 import { formatPostDate } from "@/lib/date";
@@ -45,16 +46,17 @@ export default async function Layout({
   return (
     <section
       style={{
-        fontSize: "var(--article-font-size, 16px)",
-        lineHeight: "var(--article-line-height, 1.6)",
+        fontSize: "var(--article-font-size, 14px)",
+        lineHeight: "var(--article-line-height, 1.625)",
       }}
-      className="w-full transition-all"
+      className="relative left-1/2 w-[calc(100vw-2rem)] max-w-[52rem] -translate-x-1/2 transition-all"
     >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <article className="col-start-2 min-w-0 max-w-[65ch] mx-auto text-foreground/90">
+      <article className="mx-auto flex min-w-0 w-full flex-col gap-2 break-words text-foreground/90 selection:bg-primary/20">
         <p className="text-muted-foreground pt-2 text-xs font-semibold mb-1">{formatPostDate(updatedAt ?? createdAt, "korean")}</p>
         {children}
       </article>
+      <ArticleFooter category={decodedCategory} slug={decodedSlug} date={updatedAt ?? createdAt} />
     </section>
   );
 }

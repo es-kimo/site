@@ -6,7 +6,14 @@ type EmbedIframeProps = {
 
 export function EmbedIframe({ src, title, height = 4300 }: EmbedIframeProps) {
   return (
-    <div style={{ marginTop: 24, marginBottom: 12 }}>
+    <figure className="my-4 overflow-hidden rounded-lg border border-[var(--markdown-soft-border)] bg-[var(--markdown-panel-background)] shadow-sm">
+      <figcaption className="flex items-center justify-between gap-3 border-b border-[var(--markdown-soft-border)] px-3 py-2">
+        <span className="flex min-w-0 items-center gap-2 text-xs font-medium text-foreground/70">
+          <PanelsTopLeft aria-hidden="true" className="size-3.5 shrink-0 text-[var(--markdown-link)]" strokeWidth={1.8} />
+          함께 보기
+        </span>
+        <span className="truncate text-[10px] text-muted-foreground">{title}</span>
+      </figcaption>
       <iframe
         src={src}
         title={title}
@@ -15,11 +22,11 @@ export function EmbedIframe({ src, title, height = 4300 }: EmbedIframeProps) {
         style={{
           width: "100%",
           height,
-          border: "1px solid #e5e7eb",
-          borderRadius: "12px",
+          border: 0,
           background: "#fff",
         }}
       />
-    </div>
+    </figure>
   );
 }
+import { PanelsTopLeft } from "lucide-react";

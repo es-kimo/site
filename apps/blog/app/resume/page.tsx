@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { getResumeData } from "@workspace/resume/data";
 import { toJsonLd } from "@workspace/resume/generators/json-ld";
-import type { KeyContribution, ResumeData, SideProject, WorkProject } from "@workspace/resume/types";
+import type { KeyContribution, OpenSourceProject, ResumeData, WorkProject } from "@workspace/resume/types";
 import { cn } from "@workspace/ui/lib/utils";
 import type { Metadata } from "next";
 
@@ -75,8 +75,8 @@ function Tag({ children, variant = "default" }: { children: React.ReactNode; var
   );
 }
 
-function StatusBadge({ status }: { status: SideProject["status"] }) {
-  const config: Record<SideProject["status"], { label: string; className: string } | null> = {
+function StatusBadge({ status }: { status: OpenSourceProject["status"] }) {
+  const config: Record<OpenSourceProject["status"], { label: string; className: string } | null> = {
     awarded: { label: "수상", className: "bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400" },
     completed: null,
     "in-progress": { label: "진행중", className: "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400" },
@@ -189,7 +189,7 @@ function WorkProjectCard({ project }: { project: WorkProject }) {
   );
 }
 
-function SideProjectCard({ project }: { project: SideProject }) {
+function OpenSourceProjectCard({ project }: { project: OpenSourceProject }) {
   const contributions = project.keyContributions ?? [];
 
   return (
@@ -242,7 +242,7 @@ export default async function ResumePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <article className={cn("max-w-2xl mx-auto print:max-w-none print:mx-0 print:text-[11pt] print:leading-snug", "font-[family-name:var(--font-noto-sans-kr)]")}>
+      <article className={cn("max-w-2xl mx-auto print:max-w-none print:mx-0 print:text-[11pt] print:leading-snug")}>
         {/* ── Header ──────────────────────────────────────────────── */}
         <header className="mb-12 print:mb-6">
           <div className="flex items-baseline gap-3">
@@ -314,11 +314,11 @@ export default async function ResumePage() {
           </Section>
         )}
 
-        {/* ── 개인 프로젝트 ──────────────────────────────────── */}
-        {data.sideProjects.length > 0 && (
-          <Section title="개인 프로젝트">
-            {data.sideProjects.map((proj) => (
-              <SideProjectCard key={proj.id} project={proj} />
+        {/* ── 오픈소스 ──────────────────────────────────────── */}
+        {data.openSource.length > 0 && (
+          <Section title="오픈소스">
+            {data.openSource.map((proj) => (
+              <OpenSourceProjectCard key={proj.id} project={proj} />
             ))}
           </Section>
         )}

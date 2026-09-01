@@ -1,17 +1,12 @@
-import { Noto_Sans_KR } from "next/font/google";
-
 import { DynamicIsland } from "@/components/DynamicIsland";
 import { Providers } from "@/components/providers";
+import { SiteFooter } from "@/components/site-footer";
 import "@workspace/ui/globals.css";
+import "katex/dist/katex.min.css";
 import { Metadata } from "next";
-import { ViewTransitions } from "next-view-transitions";
 
-const notoSansKR = Noto_Sans_KR({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-noto-sans-kr",
-  display: "swap",
-});
+/** 한글 글리프가 커서 unicode-range로 쪼갠 dynamic subset을 쓴다. 페이지마다 필요한 조각만 내려받는다. */
+const PRETENDARD_CSS = "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -46,15 +41,23 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ViewTransitions>
-      <html lang="ko" suppressHydrationWarning>
-        <body className={`${notoSansKR.variable} font-sans antialiased `}>
-          <Providers>
-            <div className="max-w-blog mx-auto py-20 px-4">{children}</div>
-            <DynamicIsland />
-          </Providers>
-        </body>
-      </html>
-    </ViewTransitions>
+    <html lang="ko" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
+        <link rel="stylesheet" href={PRETENDARD_CSS} />
+      </head>
+      <body className="font-sans antialiased">
+        <Providers>
+          {/* 짧은 페이지에서도 푸터가 화면 아래에 붙도록 한다 */}
+          <div className="flex min-h-dvh flex-col print:block print:min-h-0">
+            <div className="flex-1">
+              <div className="max-w-blog mx-auto py-20 px-4">{children}</div>
+            </div>
+            <SiteFooter />
+          </div>
+          <DynamicIsland />
+        </Providers>
+      </body>
+    </html>
   );
 }

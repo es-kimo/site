@@ -31,6 +31,16 @@
     --chart-5: 27 87% 67%;
     --code-block-border: #d9d9d9;
     --code-block-bg: #f8fafc;
+    --inline-code-background: #f1f1f1;
+    --inline-code-foreground: #7a5518;
+    --markdown-link: #4f7394;
+    --markdown-link-hover: #365d80;
+    --markdown-soft-border: rgba(15, 23, 42, 0.12);
+    --markdown-soft-surface: rgba(15, 23, 42, 0.025);
+    --markdown-panel-background: rgba(255, 255, 255, 0.72);
+    --markdown-panel-raised: rgba(255, 255, 255, 0.78);
+    --markdown-panel-hover: rgba(79, 115, 148, 0.07);
+    --markdown-panel-active: rgba(79, 115, 148, 0.1);
   }
 
   .dark {
@@ -58,8 +68,18 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    --code-block-border: #334155;
-    --code-block-bg: #1e293b;
+    --code-block-border: #181a1f;
+    --code-block-bg: #282c34;
+    --inline-code-background: #161616;
+    --inline-code-foreground: #d7ba7d;
+    --markdown-link: #6a9fcb;
+    --markdown-link-hover: #8ab7dc;
+    --markdown-soft-border: rgba(255, 255, 255, 0.1);
+    --markdown-soft-surface: rgba(255, 255, 255, 0.02);
+    --markdown-panel-background: rgba(255, 255, 255, 0.025);
+    --markdown-panel-raised: rgba(255, 255, 255, 0.035);
+    --markdown-panel-hover: rgba(106, 159, 203, 0.08);
+    --markdown-panel-active: rgba(106, 159, 203, 0.12);
   }
 }
 
@@ -128,43 +148,6 @@
 
   code[data-line-numbers-max-digits="4"] > [data-line]::before {
     width: 2.25rem;
-  }
-
-  /* View Transitions - Language Toggle Animation */
-  ::view-transition-old(home-content),
-  ::view-transition-new(home-content) {
-    animation-duration: 0.4s;
-    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  ::view-transition-old(home-content) {
-    animation-name: fade-out-scale;
-  }
-
-  ::view-transition-new(home-content) {
-    animation-name: fade-in-scale;
-  }
-
-  @keyframes fade-out-scale {
-    from {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-    to {
-      opacity: 0;
-      transform: translateY(-8px) scale(0.98);
-    }
-  }
-
-  @keyframes fade-in-scale {
-    from {
-      opacity: 0;
-      transform: translateY(8px) scale(0.98);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
   }
 }
 

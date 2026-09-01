@@ -1,0 +1,264 @@
+export const metadata = {
+  title: "React 리렌더링 범위는 어떻게 결정될까",
+  description:
+    "setState 호출 시 React가 컴포넌트 트리를 순회하며 리렌더링을 건너뛰는(Bailout) 내부 메커니즘과 상태 위치에 따른 렌더링 최적화 원리를 다룹니다.",
+  keywords: [
+    "React",
+    "리렌더링",
+    "Fiber",
+    "bailout",
+    "memo",
+    "children",
+    "react-hook-form",
+    "useWatch",
+    "lanes",
+    "childLanes",
+  ],
+  alternate: {
+    canonical: "frontend/react-rerender-scope",
+  },
+  other: {
+    status: "ready",
+    createdAt: "2026-08-19T12:00:00",
+  },
+};
+
+# React 리렌더링 범위는 어떻게 결정될까
+
+<TOC items={toc} />
+
+## setState와 컴포넌트 트리
+
+흔히 컴포넌트에서 `setState`를 호출하면 해당 컴포넌트와 그 아래의 모든 자식 컴포넌트가 다시 실행된다고 알려져 있습니다.
+
+실제로 대부분의 경우 부모가 리렌더링되면 자식 컴포넌트 함수들도 함께 다시 호출됩니다. 하지만 React 내부를 들여다보면 항상 하위 트리 전체를 무조건 다시 실행하는 것은 아닙니다. React는 Fiber 트리를 순회하면서 조건을 만족하면 하위 트리의 실행을 건너뛰는 최적화(Bailout) 메커니즘을 가지고 있습니다.
+
+---
+
+## React가 화면을 갱신하는 3단계 과정
+
+리렌더링을 이해하려면 React가 업데이트를 처리하는 과정을 단계별로 구분해서 볼 필요가 있습니다.
+
+| 단계 | 설명 | 비고 |
+| :--- | :--- | :--- |
+| 1. 트리 탐색 (Traverse) | Fiber 트리를 내려가며 변경(Lane)이 있는 노드 확인 | 함수를 호출하지 않고 상태 표시만 확인 |
+| 2. 렌더 (Render) | 컴포넌트 함수를 호출하여 새로운 가상 DOM(JSX) 계산 | 연산 비용 발생 |
+| 3. 커밋 (Commit) | 이전 결과와 비교해 변경된 부분을 실제 브라우저 DOM에 반영 | 브라우저 렌더링 비용 발생 |
+
+React는 트리를 탐색하다가 변경 사항이 없는 컴포넌트를 만나면 함수 호출 자체를 건너뜁니다. 또한 렌더 단계에서 함수가 실행되었더라도, 계산된 결과가 이전과 같다면 커밋 단계에서 실제 DOM은 변경되지 않습니다.<Footnote id="1">1</Footnote>
+
+---
+
+## react-hook-form의 useWatch 동작 방식
+
+`react-hook-form`의 `useWatch`는 상태 범위를 좁히는 좋은 예시입니다. 아래 예제에서 `firstName` 칸에 값을 입력해 보세요.
+
+<Playground
+  editorHeight={300}
+  previewHeight={180}
+  code={`import { useMemo } from 'react';
+import { createForm } from './createForm';
+import { useWatch } from './useWatch';
+import { useRenderCount } from './useRenderCount';
+
+function WatchedField({ form, name }) {
+    const value = useWatch(form, name);
+    const count = useRenderCount();
+    return <div style={{ color: "#228be6" }}>자식(useWatch) 실행: <b>{count}</b>회 (값: "{value}")</div>;
+}
+
+export default function App() {
+    const form = useMemo(() => createForm({ firstName: '', lastName: '' }), []);
+    const count = useRenderCount();
+
+    return (
+        <div style={{ padding: 16, fontSize: 14, lineHeight: 1.8 }}>
+            <input {...form.register('firstName')} placeholder="firstName 입력" />
+            <input {...form.register('lastName')} placeholder="lastName 입력" />
+            <div>루트 컴포넌트 실행: <b>{count}</b>회</div>
+            <WatchedField form={form} name="firstName" />
+        </div>
+    );
+}`}
+  files={{
+    "/createForm.js": `export function createForm(defaultValues) {
+  const values = { ...defaultValues };
+  const listeners = new Map();
+
+  function subscribe(name, listener) {
+    if (!listeners.has(name)) listeners.set(name, new Set());
+    listeners.get(name).add(listener);
+    return () => listeners.get(name).delete(listener);
+  }
+
+  function setValue(name, value) {
+    values[name] = value;
+    const set = listeners.get(name);
+    if (set) set.forEach((listener) => listener(value));
+  }
+
+  function register(name) {
+    return {
+      name,
+      defaultValue: values[name],
+      onChange: (e) => setValue(name, e.target.value),
+    };
+  }
+
+  return { values, subscribe, setValue, register };
+}`,
+    "/useWatch.js": `import { useEffect, useState } from 'react';
+
+export function useWatch(form, name) {
+  const [value, setValue] = useState(() => form.values[name]);
+  useEffect(() => form.subscribe(name, setValue), [form, name]);
+  return value;
+}`,
+    "/useRenderCount.js": `import { useRef } from 'react';
+
+export function useRenderCount() {
+  const count = useRef(0);
+  count.current += 1;
+  return count.current;
+}`,
+    "/index.js": `import { createRoot } from "react-dom/client";
+import "./styles.css";
+import App from "./App";
+
+createRoot(document.getElementById("root")).render(<App />);`,
+  }}
+/>
+
+- `lastName`을 입력할 때: 루트와 자식 실행 횟수 모두 1회로 유지됩니다. (값은 React 밖의 객체에 저장)
+- `firstName`을 입력할 때: 이를 구독하는 `WatchedField` 컴포넌트의 실행 횟수만 증가하고 루트 컴포넌트는 다시 실행되지 않습니다.
+
+상태(`useState`)를 루트가 아닌 이를 필요로 하는 개별 자식 컴포넌트 안에서 관리하면 상위 컴포넌트들의 불필요한 재실행을 방지할 수 있습니다.
+
+---
+
+## Fiber 트리의 업데이트 전파와 Bailout 메커니즘
+
+자식 컴포넌트에서 `setState`가 발생했을 때 React는 트리를 다음과 같이 처리합니다.
+
+<Mermaid chart={`
+flowchart TD
+    subgraph Step1 ["1단계: setState 발생 시 상향 경로 표시 (Bottom-Up)"]
+        S_Root["Root Fiber<br/>(childLanes: '하위 노드에 업데이트 있음')"]
+        S_Form["Form Fiber<br/>(childLanes: '하위 노드에 업데이트 있음')"]
+        S_Child["WatchedField Fiber<br/>(lanes: '현재 노드에 setState 발생')"]
+        S_Child --> S_Form --> S_Root
+    end
+
+    Step1 --> Step2
+
+    subgraph Step2 ["2단계: Reconciler의 하향 탐색 (Top-Down)"]
+        R_Root["Root Fiber<br/>(탐색만 진행, 함수 실행 X)"] --> R_Side["Sidebar Fiber<br/>(표시 없음 -> 서브트리 건너뜀 Bailout)"]
+        R_Root --> R_Form["Form Fiber<br/>(탐색만 진행, 함수 실행 X)"]
+        R_Form --> R_Child["WatchedField Fiber<br/>(업데이트 노드 도달 -> 컴포넌트 함수 실행)"]
+    end
+`} />
+
+1. 상향 경로 표시 (`markUpdateLaneFromFiberToRoot`)<Footnote id="2">2</Footnote>  
+   자식 컴포넌트에서 `setState`가 호출되면, 부모들을 타고 루트까지 거슬러 올라가며 조상 노드들의 `childLanes`에 작업이 있음을 표시합니다.
+2. 하향 탐색 및 건너뛰기 (`bailoutOnAlreadyFinishedWork`)  
+   루트에서 작업을 시작할 때 `childLanes` 표시가 없는 가지(Sidebar)는 서브트리를 탐색하지 않고 건너뜁니다(Bailout). 표시가 있는 조상 노드는 컴포넌트 함수를 실행하지 않고 자식 노드로 이동합니다.
+
+---
+
+## 부모 컴포넌트가 렌더링될 때 자식도 실행되는 이유
+
+부모 컴포넌트가 리렌더링될 때 자식 컴포넌트 함수가 함께 호출되는 이유는 JSX의 동작 방식 때문입니다.
+
+```tsx
+// 부모 컴포넌트 함수가 실행될 때마다 매번 새로운 객체가 생성됨
+return <Child name="홍길동" />;
+```
+
+React는 자식 컴포넌트의 렌더링을 건너뛸지 결정할 때 이전 props와 새 props의 참조(Reference)를 비교합니다(`current.memoizedProps !== workInProgress.pendingProps`).  
+부모 함수가 다시 실행되면 새로운 JSX element 객체가 생성되므로 props의 참조가 바뀌어 자식 컴포넌트도 다시 실행됩니다.
+
+---
+
+## 불필요한 렌더링을 방지하는 2가지 방법
+
+자식 컴포넌트의 불필요한 재실행을 줄이는 대표적인 방법은 다음과 같습니다.
+
+| 방법 | 동작 원리 |
+| :--- | :--- |
+| `React.memo` | props 객체의 참조가 바뀌어도 내부 값들을 얕은 비교하여 같으면 렌더링을 건너뜀 |
+| `children` (컴포넌트 합성) | `children`으로 전달된 컴포넌트는 상위 부모에서 생성된 객체 참조를 유지하므로 렌더링을 건너뜀 |
+
+<Playground
+  editorHeight={300}
+  previewHeight={180}
+  code={`import { useState } from 'react';
+import { useRenderCount } from './useRenderCount';
+
+function Child({ label }) {
+    const count = useRenderCount();
+    return <li>{label} (실행: <b>{count}</b>회)</li>;
+}
+
+function Parent({ children }) {
+    const [n, setN] = useState(0);
+    const count = useRenderCount();
+    return (
+        <div style={{ border: '1px solid #ced4da', borderRadius: 8, padding: 12 }}>
+            <button onClick={() => setN(n + 1)}>부모 상태 변경 ({n})</button>
+            <ul style={{ margin: '8px 0 0', paddingLeft: 20 }}>
+                <li>부모 실행: <b>{count}</b>회</li>
+                <Child label="부모가 직접 만든 자식" />
+                {children}
+            </ul>
+        </div>
+    );
+}
+
+export default function App() {
+    return (
+        <div style={{ padding: 16 }}>
+            <Parent>
+                <Child label="children으로 주입된 자식 (memo 없음)" />
+            </Parent>
+        </div>
+    );
+}`}
+  files={{
+    "/useRenderCount.js": `import { useRef } from 'react';
+
+export function useRenderCount() {
+  const count = useRef(0);
+  count.current += 1;
+  return count.current;
+}`,
+    "/index.js": `import { createRoot } from "react-dom/client";
+import "./styles.css";
+import App from "./App";
+
+createRoot(document.getElementById("root")).render(<App />);`,
+  }}
+/>
+
+버튼을 눌러보면 `memo`를 적용하지 않아도 `children`으로 전달된 자식 컴포넌트는 실행 횟수가 1회로 유지되는 것을 확인할 수 있습니다.
+
+---
+
+## 정리하며
+
+렌더링 최적화를 고려할 때는 무조건 `React.memo`를 적용하기보다 다음 구조적인 접근을 먼저 고려하는 것이 효과적입니다.
+
+1. **상태 위치 최적화**: 상태를 사용하는 컴포넌트와 가까운 곳에 배치하면 불필요한 상위/하위 렌더링을 자연스럽게 줄일 수 있습니다.
+2. **컴포넌트 합성 활용**: `children` 패턴을 활용해 변하지 않는 UI의 element 참조를 유지합니다.
+3. **선별적인 `React.memo` 적용**: 연산 비용이 크거나 하위 트리가 복잡한 컴포넌트에 선별적으로 적용합니다.
+
+---
+
+## 참고 자료
+
+<FootnoteRef ids={["1"]}>
+  React Docs, [Render and Commit](https://react.dev/learn/render-and-commit)
+</FootnoteRef>
+
+<FootnoteRef ids={["2"]}>
+  React Reconciler Source Code (`markUpdateLaneFromFiberToRoot`, `bailoutOnAlreadyFinishedWork`)
+</FootnoteRef>
