@@ -522,7 +522,7 @@ function reconcileChildren(workInProgress: Fiber, nextChildren: MiniReactNode): 
   // workInProgress.child
   //
   // 에 첫 번째 child Fiber를 연결한다.
-  mountChildFibers(workInProgress, nextChildren);
+  workInProgress.child = mountChildFibers(workInProgress, nextChildren);
 }
 
 /* ═══════════════════════════════════════════════════════════════
