@@ -125,16 +125,22 @@ function createElement(
   //   props
   // }
 
-  const props = {
-    ...config,
-    children: children.length > 1 ? children : children.length === 1 ? children[0] : undefined,
-    key: undefined,
+  const { key = null, ...restConfig } = config ?? {};
+
+  const props: Props = {
+    ...restConfig,
   };
+
+  if (children.length === 1) {
+    props.children = children[0];
+  } else if (children.length > 1) {
+    props.children = children;
+  }
 
   return {
     $$typeof: MINI_ELEMENT_TYPE,
     type,
-    key: config.key,
+    key,
     props,
   };
 }
