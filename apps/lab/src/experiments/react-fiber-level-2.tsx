@@ -396,8 +396,11 @@ function createChild(returnFiber: Fiber, newChild: MiniReactNode): Fiber | null 
   }
 
   const fiber = createFiber(newChild);
-  fiber.return = returnFiber;
+  if (fiber === null) {
+    return null;
+  }
 
+  fiber.return = returnFiber;
   return fiber;
 }
 
@@ -492,9 +495,15 @@ function mountChildFibers(returnFiber: Fiber, newChildren: MiniReactNode): Fiber
   for (let i = 0; i < newChildrenArr.length; i++) {
     const child = newChildrenArr[i];
     const newFiber = createChild(returnFiber, child);
+
+    if (newFiber === null) {
+      continue;
+    }
+
     newFiber.index = i;
-    if (i === 0) {
-      firstChild = newFiber;
+
+    if (previousNewFiber === null) {
+      previousNewFiber = newFiber;
     } else {
       previousNewFiber.sibling = newFiber;
     }
