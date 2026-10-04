@@ -1172,11 +1172,13 @@ function updateWorkInProgressHook(): Hook {
     nextCurrentHook = currentFiber?.memoizedState ?? null;
   } else {
     nextCurrentHook = currentHook.next;
-    if (nextCurrentHook === null) {
-      throw new Error("Rendered more hooks...");
-    }
-    currentHook = nextCurrentHook;
   }
+
+  if (nextCurrentHook === null) {
+    throw new Error("Rendered more hooks than during the previous render");
+  }
+
+  currentHook = nextCurrentHook;
 
   const newHook: Hook = {
     memoizedState: currentHook?.memoizedState,
@@ -1185,11 +1187,11 @@ function updateWorkInProgressHook(): Hook {
 
   if (workInProgressHook === null) {
     currentlyRenderingFiber.memoizedState = newHook;
-    workInProgressHook = newHook;
   } else {
     workInProgressHook.next = newHook;
-    workInProgressHook = newHook;
   }
+
+  workInProgressHook = newHook;
 
   return newHook;
 }
@@ -1397,37 +1399,32 @@ function renderWithHooks(
   currentHook = null;
   workInProgressHook = null;
 
-  if (current === null) {
-    currentDispatcher = HooksDispatcherOnMount;
-  } else {
-    currentDispatcher = HooksDispatcherOnUpdate;
-  }
+  currentDispatcher = current === null ? HooksDispatcherOnMount : HooksDispatcherOnUpdate;
 
-  const children = Component(props);
+  let children: MiniReactNode;
 
-  if (current !== null) {
-    const currentFirstHook = current.memoizedState;
-    let renderedTooFewHooks = false;
+  try {
+    children = Component(props);
 
-    if (currentFirstHook !== null) {
-      if (currentHook === null) {
-        renderedTooFewHooks = true;
-      } else if (currentHook.next !== null) {
-        renderedTooFewHooks = true;
+    if (current !== null) {
+      const currentFirstHook = current.memoizedState;
+
+      if (currentFirstHook !== null) {
+        const renderedCurrentHook = currentHook as Hook | null;
+        if (renderedCurrentHook === null || renderedCurrentHook.next !== null) {
+          throw new Error("Rendered fewer hooks than expected");
+        }
       }
     }
 
+    return children;
+  } finally {
+    // ★ mount/update/error 전부 cleanup
     currentlyRenderingFiber = null;
     currentHook = null;
     workInProgressHook = null;
     currentDispatcher = null;
-
-    if (renderedTooFewHooks) {
-      throw new Error("Rendered fewer hooks than expected");
-    }
   }
-
-  return children;
 }
 
 /* ═══════════════════════════════════════════════════════════════
