@@ -1178,45 +1178,21 @@ function appendAllChildren(
 
   workInProgress: Fiber,
 ): void {
-  // TODO 5-1 ★★★★
-  //
-  // Fiber의 child/sibling/return 포인터를 이용해
-  // workInProgress 하위의 "최상위 Host node들"을
-  // parent에 append해라.
-  //
-  //
-  // 힌트:
-  //
-  // let node =
-  //   workInProgress.child;
-  //
-  // while (node !== null) {
-  //
-  //   if (
-  //     node.tag === "HostComponent" ||
-  //     node.tag === "HostText"
-  //   ) {
-  //
-  //     appendHostChild(
-  //       parent,
-  //       node.stateNode as HostInstance
-  //     );
-  //
-  //   } else if (
-  //     node.child !== null
-  //   ) {
-  //
-  //     node.child.return = node;
-  //     node = node.child;
-  //     continue;
-  //   }
-  //
-  //
-  //   // sibling이 없으면
-  //   // return을 따라 위로 올라가며
-  //   // sibling을 찾는다.
-  //
-  // }
+  let node = workInProgress.child;
+
+  while (node !== null) {
+    if (node.tag === "HostComponent" || node.tag === "HostText") {
+      appendHostChild(parent, node.stateNode as HostInstance);
+    } else if (node.child !== null) {
+      node.child.return = node;
+      node = node.child;
+      continue;
+    } else if (node.sibling === null) {
+      node = node.return;
+      continue;
+    }
+    node = node.sibling;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1246,31 +1222,15 @@ function appendAllChildren(
    ═══════════════════════════════════════════════════════════════ */
 
 function bubbleProperties(completedWork: Fiber): void {
-  // TODO 5-2 ★★★
-  //
-  // let subtreeFlags =
-  //   NoFlags;
-  //
-  //
-  // let child =
-  //   completedWork.child;
-  //
-  //
-  // while (child !== null) {
-  //
-  //   subtreeFlags |=
-  //     child.subtreeFlags;
-  //
-  //   subtreeFlags |=
-  //     child.flags;
-  //
-  //   child =
-  //     child.sibling;
-  // }
-  //
-  //
-  // completedWork.subtreeFlags =
-  //   subtreeFlags;
+  let subtreeFlags = NoFlags;
+  let child = completedWork.child;
+  while (child !== null) {
+    subtreeFlags |= child.subtreeFlags;
+    subtreeFlags |= child.flags;
+    child = child.sibling;
+  }
+
+  completedWork.subtreeFlags = subtreeFlags;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1320,121 +1280,44 @@ function completeWork(
 
   workInProgress: Fiber,
 ): void {
-  // TODO 5-3 ★★★★★
-  //
-  // switch (
-  //   workInProgress.tag
-  // )
-  //
-  //
-  // ───────────────────────────
-  // HostComponent
-  // ───────────────────────────
-  //
-  // const newProps =
-  //   workInProgress.pendingProps as Props;
-  //
-  //
-  // if (current === null) {
-  //
-  //   // MOUNT
-  //
-  //   const instance =
-  //     createInstance(
-  //       workInProgress.type as string,
-  //       newProps
-  //     );
-  //
-  //
-  //   appendAllChildren(
-  //     instance,
-  //     workInProgress
-  //   );
-  //
-  //
-  //   workInProgress.stateNode =
-  //     instance;
-  //
-  // } else {
-  //
-  //   // UPDATE
-  //
-  //   const oldProps =
-  //     current.memoizedProps as Props;
-  //
-  //
-  //   if (
-  //     haveHostPropsChanged(
-  //       oldProps,
-  //       newProps
-  //     )
-  //   ) {
-  //     workInProgress.flags |=
-  //       Update;
-  //   }
-  // }
-  //
-  //
-  // bubbleProperties(
-  //   workInProgress
-  // );
-  //
-  // return;
-  //
-  //
-  //
-  // ───────────────────────────
-  // HostText
-  // ───────────────────────────
-  //
-  // const newText =
-  //   workInProgress.pendingProps as string;
-  //
-  //
-  // if (current === null) {
-  //
-  //   workInProgress.stateNode =
-  //     createTextInstance(
-  //       newText
-  //     );
-  //
-  // } else {
-  //
-  //   const oldText =
-  //     current.memoizedProps as string;
-  //
-  //
-  //   if (
-  //     oldText !== newText
-  //   ) {
-  //     workInProgress.flags |=
-  //       Update;
-  //   }
-  // }
-  //
-  //
-  // bubbleProperties(
-  //   workInProgress
-  // );
-  //
-  // return;
-  //
-  //
-  //
-  // ───────────────────────────
-  // FunctionComponent
-  // HostRoot
-  // ───────────────────────────
-  //
-  // Host instance 생성 없음.
-  //
-  // bubbleProperties(
-  //   workInProgress
-  // );
-  //
-  // return;
+  switch (workInProgress.tag) {
+    case "HostComponent": {
+      const newProps = workInProgress.pendingProps as Props;
+      if (current === null) {
+        const instance = createInstance(workInProgress.type as string, newProps);
+        appendAllChildren(instance, workInProgress);
+        workInProgress.stateNode = instance;
+      } else {
+        const oldProps = current.memoizedProps as Props;
+        if (haveHostPropsChanged(oldProps, newProps)) {
+          workInProgress.flags |= Update;
+        }
+      }
+      bubbleProperties(workInProgress);
+      return;
+    }
 
-  throw new Error("TODO 5-3");
+    case "HostText": {
+      const newText = workInProgress.pendingProps as string;
+      if (current === null) {
+        workInProgress.stateNode = createTextInstance(newText);
+      } else {
+        const oldText = current.memoizedProps as string;
+        if (oldText !== newText) {
+          workInProgress.flags |= Update;
+        }
+      }
+      bubbleProperties(workInProgress);
+      return;
+    }
+
+    case "FunctionComponent":
+
+    case "HostRoot": {
+      bubbleProperties(workInProgress);
+      return;
+    }
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1538,48 +1421,19 @@ function renderRoot(
    ═══════════════════════════════════════════════════════════════ */
 
 function findHostParent(start: Fiber | null): HostParent {
-  // TODO 5-4 ★★★
-  //
-  // let parent = start;
-  //
-  //
-  // while (
-  //   parent !== null
-  // ) {
-  //
-  //   if (
-  //     parent.tag ===
-  //       "HostComponent"
-  //   ) {
-  //
-  //     return parent.stateNode
-  //       as HostElement;
-  //   }
-  //
-  //
-  //   if (
-  //     parent.tag ===
-  //       "HostRoot"
-  //   ) {
-  //
-  //     const root =
-  //       parent.stateNode
-  //         as FiberRoot;
-  //
-  //     return root.container;
-  //   }
-  //
-  //
-  //   parent =
-  //     parent.return;
-  // }
-  //
-  //
-  // throw new Error(
-  //   "Host parent not found"
-  // );
+  let parent = start;
+  while (parent !== null) {
+    if (parent.tag === "HostComponent") {
+      return parent.stateNode as HostElement;
+    }
+    if (parent.tag === "HostRoot") {
+      const root = parent.stateNode as FiberRoot;
+      return root.container;
+    }
+    parent = parent.return;
+  }
 
-  throw new Error("TODO 5-4");
+  throw new Error("Host parent not found");
 }
 
 /**
@@ -1628,87 +1482,29 @@ function getHostParent(fiber: Fiber): HostParent {
    ═══════════════════════════════════════════════════════════════ */
 
 function getHostSibling(fiber: Fiber): HostInstance | null {
-  // TODO 5-5 ★★★★★
-  //
-  // 실제 React commitPlacement에서
-  // 꽤 중요한 알고리즘.
-  //
-  //
-  // 목표:
-  //
-  // fiber 오른쪽 방향을 탐색해서
-  // "Placement 대상이 아닌"
-  // 첫 HostComponent / HostText를 찾는다.
-  //
-  //
-  // 힌트 구조:
-  //
-  // let node = fiber;
-  //
-  // siblingSearch:
-  // while (true) {
-  //
-  //   while (
-  //     node.sibling === null
-  //   ) {
-  //
-  //     const parent =
-  //       node.return;
-  //
-  //
-  //     if (
-  //       parent === null ||
-  //       parent.tag === "HostRoot" ||
-  //       parent.tag === "HostComponent"
-  //     ) {
-  //       return null;
-  //     }
-  //
-  //
-  //     node = parent;
-  //   }
-  //
-  //
-  //   node =
-  //     node.sibling;
-  //
-  //
-  //   while (
-  //     node.tag !== "HostComponent" &&
-  //     node.tag !== "HostText"
-  //   ) {
-  //
-  //     // 이 subtree 자체가 Placement라면
-  //     // 안정적인 기준점이 될 수 없다.
-  //
-  //     if (
-  //       node.flags & Placement
-  //     ) {
-  //       continue siblingSearch;
-  //     }
-  //
-  //
-  //     if (
-  //       node.child === null
-  //     ) {
-  //       continue siblingSearch;
-  //     }
-  //
-  //
-  //     node =
-  //       node.child;
-  //   }
-  //
-  //
-  //   if (
-  //     !(node.flags & Placement)
-  //   ) {
-  //     return node.stateNode
-  //       as HostInstance;
-  //   }
-  // }
-
-  throw new Error("TODO 5-5");
+  let node = fiber;
+  siblingSearch: while (true) {
+    while (node.sibling === null) {
+      const parent = node.return;
+      if (parent === null || parent.tag === "HostRoot" || parent.tag === "HostComponent") {
+        return null;
+      }
+      node = parent;
+    }
+    node = node.sibling;
+    while (node.tag !== "HostComponent" && node.tag !== "HostText") {
+      if (node.flags & Placement) {
+        continue siblingSearch;
+      }
+      if (node.child === null) {
+        continue siblingSearch;
+      }
+      node = node.child;
+    }
+    if (!(node.flags & Placement)) {
+      return node.stateNode as HostInstance;
+    }
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1737,54 +1533,25 @@ function insertOrAppendPlacementNode(
 
   parent: HostParent,
 ): void {
-  // TODO 5-6 ★★★
-  //
-  // if (
-  //   fiber.tag === "HostComponent" ||
-  //   fiber.tag === "HostText"
-  // ) {
-  //
-  //   const node =
-  //     fiber.stateNode
-  //       as HostInstance;
-  //
-  //
-  //   if (
-  //     before !== null
-  //   ) {
-  //     insertHostBefore(
-  //       parent,
-  //       node,
-  //       before
-  //     );
-  //   } else {
-  //     appendHostChild(
-  //       parent,
-  //       node
-  //     );
-  //   }
-  //
-  //   return;
-  // }
-  //
-  //
-  // let child =
-  //   fiber.child;
-  //
-  //
-  // while (
-  //   child !== null
-  // ) {
-  //
-  //   insertOrAppendPlacementNode(
-  //     child,
-  //     before,
-  //     parent
-  //   );
-  //
-  //   child =
-  //     child.sibling;
-  // }
+  if (fiber.tag === "HostComponent" || fiber.tag === "HostText") {
+    const node = fiber.stateNode as HostInstance;
+
+    if (before !== null) {
+      insertHostBefore(parent, node, before);
+    } else {
+      appendHostChild(parent, node);
+    }
+
+    return;
+  }
+
+  let child = fiber.child;
+
+  while (child !== null) {
+    insertOrAppendPlacementNode(child, before, parent);
+
+    child = child.sibling;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1792,25 +1559,9 @@ function insertOrAppendPlacementNode(
    ═══════════════════════════════════════════════════════════════ */
 
 function commitPlacement(finishedWork: Fiber): void {
-  // TODO 5-7
-  //
-  // const parent =
-  //   getHostParent(
-  //     finishedWork
-  //   );
-  //
-  //
-  // const before =
-  //   getHostSibling(
-  //     finishedWork
-  //   );
-  //
-  //
-  // insertOrAppendPlacementNode(
-  //   finishedWork,
-  //   before,
-  //   parent
-  // );
+  const parent = getHostParent(finishedWork);
+  const before = getHostSibling(finishedWork);
+  insertOrAppendPlacementNode(finishedWork, before, parent);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1836,42 +1587,23 @@ function collectHostChildrenForDeletion(
 
   result: HostInstance[],
 ): void {
-  // TODO 5-8 ★★★
-  //
-  // if (
-  //   fiber.tag === "HostComponent" ||
-  //   fiber.tag === "HostText"
-  // ) {
-  //
-  //   result.push(
-  //     fiber.stateNode
-  //       as HostInstance
-  //   );
-  //
-  //   // 중요:
-  //   // Host node를 찾았다면
-  //   // 그 내부로 더 내려가지 않는다.
-  //
-  //   return;
-  // }
-  //
-  //
-  // let child =
-  //   fiber.child;
-  //
-  //
-  // while (
-  //   child !== null
-  // ) {
-  //
-  //   collectHostChildrenForDeletion(
-  //     child,
-  //     result
-  //   );
-  //
-  //   child =
-  //     child.sibling;
-  // }
+  if (fiber.tag === "HostComponent" || fiber.tag === "HostText") {
+    result.push(fiber.stateNode as HostInstance);
+
+    // 중요:
+    // Host node를 찾았다면
+    // 그 내부로 더 내려가지 않는다.
+
+    return;
+  }
+
+  let child = fiber.child;
+
+  while (child !== null) {
+    collectHostChildrenForDeletion(child, result);
+
+    child = child.sibling;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1883,37 +1615,15 @@ function commitDeletion(
 
   returnFiber: Fiber,
 ): void {
-  // TODO 5-9 ★★★
-  //
-  // 삭제 Fiber의 부모 Fiber 자체가
-  // HostComponent일 수도 있으므로:
-  //
-  // const parent =
-  //   findHostParent(
-  //     returnFiber
-  //   );
-  //
-  //
-  // const hostChildren:
-  //   HostInstance[] = [];
-  //
-  //
-  // collectHostChildrenForDeletion(
-  //   childToDelete,
-  //   hostChildren
-  // );
-  //
-  //
-  // for (
-  //   const child of
-  //   hostChildren
-  // ) {
-  //
-  //   removeHostChild(
-  //     parent,
-  //     child
-  //   );
-  // }
+  const parent = findHostParent(returnFiber);
+
+  const hostChildren: HostInstance[] = [];
+
+  collectHostChildrenForDeletion(childToDelete, hostChildren);
+
+  for (const child of hostChildren) {
+    removeHostChild(parent, child);
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1927,50 +1637,21 @@ function commitDeletion(
    ═══════════════════════════════════════════════════════════════ */
 
 function commitUpdate(finishedWork: Fiber): void {
-  // TODO 5-10 ★★★
-  //
-  // switch (
-  //   finishedWork.tag
-  // ) {
-  //
-  //
-  // case "HostComponent":
-  //
-  //   const instance =
-  //     finishedWork.stateNode
-  //       as HostElement;
-  //
-  //
-  //   const newProps =
-  //     finishedWork.pendingProps
-  //       as Props;
-  //
-  //
-  //   instance.props =
-  //     extractHostProps(
-  //       newProps
-  //     );
-  //
-  //   return;
-  //
-  //
-  // case "HostText":
-  //
-  //   const text =
-  //     finishedWork.stateNode
-  //       as HostTextInstance;
-  //
-  //
-  //   text.text =
-  //     finishedWork.pendingProps
-  //       as string;
-  //
-  //   return;
-  //
-  //
-  // default:
-  //   return;
-  // }
+  switch (finishedWork.tag) {
+    case "HostComponent":
+      const instance = finishedWork.stateNode as HostElement;
+      const newProps = finishedWork.pendingProps as Props;
+      instance.props = extractHostProps(newProps);
+      return;
+
+    case "HostText":
+      const text = finishedWork.stateNode as HostTextInstance;
+      text.text = finishedWork.pendingProps as string;
+      return;
+
+    default:
+      return;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1994,64 +1675,22 @@ function commitUpdate(finishedWork: Fiber): void {
    ═══════════════════════════════════════════════════════════════ */
 
 function recursivelyTraverseMutationEffects(parentFiber: Fiber): void {
-  // TODO 5-11 ★★★★
-  //
-  // ──────────────────────────
-  // 1. deletions
-  // ──────────────────────────
-  //
-  // if (
-  //   parentFiber.flags &
-  //   ChildDeletion
-  // ) {
-  //
-  //   const deletions =
-  //     parentFiber.deletions;
-  //
-  //
-  //   if (
-  //     deletions !== null
-  //   ) {
-  //
-  //     for (
-  //       const childToDelete
-  //       of deletions
-  //     ) {
-  //
-  //       commitDeletion(
-  //         childToDelete,
-  //         parentFiber
-  //       );
-  //     }
-  //   }
-  // }
-  //
-  //
-  // ──────────────────────────
-  // 2. subtree
-  // ──────────────────────────
-  //
-  // if (
-  //   parentFiber.subtreeFlags &
-  //   MutationMask
-  // ) {
-  //
-  //   let child =
-  //     parentFiber.child;
-  //
-  //
-  //   while (
-  //     child !== null
-  //   ) {
-  //
-  //     commitMutationEffectsOnFiber(
-  //       child
-  //     );
-  //
-  //     child =
-  //       child.sibling;
-  //   }
-  // }
+  if (parentFiber.flags & ChildDeletion) {
+    const deletions = parentFiber.deletions;
+    if (deletions !== null) {
+      for (const childToDelete of deletions) {
+        commitDeletion(childToDelete, parentFiber);
+      }
+    }
+  }
+
+  if (parentFiber.subtreeFlags & MutationMask) {
+    let child = parentFiber.child;
+    while (child !== null) {
+      commitMutationEffectsOnFiber(child);
+      child = child.sibling;
+    }
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2059,47 +1698,17 @@ function recursivelyTraverseMutationEffects(parentFiber: Fiber): void {
    ═══════════════════════════════════════════════════════════════ */
 
 function commitMutationEffectsOnFiber(finishedWork: Fiber): void {
-  // TODO 5-12 ★★★★★
-  //
-  // 먼저 자식 쪽 effect:
-  //
-  // recursivelyTraverseMutationEffects(
-  //   finishedWork
-  // );
-  //
-  //
-  // 그다음 자신의 Placement:
-  //
-  // if (
-  //   finishedWork.flags &
-  //   Placement
-  // ) {
-  //
-  //   commitPlacement(
-  //     finishedWork
-  //   );
-  //
-  //
-  //   finishedWork.flags &=
-  //     ~Placement;
-  // }
-  //
-  //
-  // Update:
-  //
-  // if (
-  //   finishedWork.flags &
-  //   Update
-  // ) {
-  //
-  //   commitUpdate(
-  //     finishedWork
-  //   );
-  //
-  //
-  //   finishedWork.flags &=
-  //     ~Update;
-  // }
+  recursivelyTraverseMutationEffects(finishedWork);
+
+  if (finishedWork.flags & Placement) {
+    commitPlacement(finishedWork);
+    finishedWork.flags &= ~Placement;
+  }
+
+  if (finishedWork.flags & Update) {
+    commitUpdate(finishedWork);
+    finishedWork.flags &= ~Update;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2129,35 +1738,14 @@ function commitRoot(
 
   finishedWork: Fiber,
 ): void {
-  // TODO 5-13 ★★★★★
-  //
-  // const subtreeHasEffects =
-  //   (
-  //     finishedWork.subtreeFlags &
-  //     MutationMask
-  //   ) !== NoFlags;
-  //
-  //
-  // const rootHasEffect =
-  //   (
-  //     finishedWork.flags &
-  //     MutationMask
-  //   ) !== NoFlags;
-  //
-  //
-  // if (
-  //   subtreeHasEffects ||
-  //   rootHasEffect
-  // ) {
-  //
-  //   commitMutationEffects(
-  //     finishedWork
-  //   );
-  // }
-  //
-  //
-  // root.current =
-  //   finishedWork;
+  const subtreeHasEffects = (finishedWork.subtreeFlags & MutationMask) !== NoFlags;
+  const rootHasEffect = (finishedWork.flags & MutationMask) !== NoFlags;
+
+  if (subtreeHasEffects || rootHasEffect) {
+    commitMutationEffects(finishedWork);
+  }
+
+  root.current = finishedWork;
 }
 
 /* ═══════════════════════════════════════════════════════════════
