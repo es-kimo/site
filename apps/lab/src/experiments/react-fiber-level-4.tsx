@@ -370,20 +370,10 @@ function mountChildFibers(returnFiber: Fiber, newChildren: MiniReactNode): Fiber
    ═══════════════════════════════════════════════════════════════ */
 
 function useFiber(fiber: Fiber, pendingProps: Props | string | null): Fiber {
-  // TODO 4-1
-  //
-  // const clone =
-  //   createWorkInProgress(
-  //     fiber,
-  //     pendingProps
-  //   );
-  //
-  // clone.index = 0;
-  // clone.sibling = null;
-  //
-  // return clone;
-
-  throw new Error("TODO 4-1");
+  const clone = createWorkInProgress(fiber, pendingProps);
+  clone.index = 0;
+  clone.sibling = null;
+  return clone;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -399,40 +389,22 @@ function useFiber(fiber: Fiber, pendingProps: Props | string | null): Fiber {
  *   deletions = [Child]
  */
 function deleteChild(returnFiber: Fiber, childToDelete: Fiber): void {
-  // TODO 4-2
-  //
-  // const deletions =
-  //   returnFiber.deletions;
-  //
-  // if (deletions === null) {
-  //   returnFiber.deletions =
-  //     [childToDelete];
-  //
-  //   returnFiber.flags |=
-  //     ChildDeletion;
-  // } else {
-  //   deletions.push(
-  //     childToDelete
-  //   );
-  // }
+  const deletions = returnFiber.deletions;
+
+  if (deletions === null) {
+    returnFiber.deletions = [childToDelete];
+    returnFiber.flags |= ChildDeletion;
+  } else {
+    deletions.push(childToDelete);
+  }
 }
 
 function deleteRemainingChildren(returnFiber: Fiber, currentFirstChild: Fiber | null): void {
-  // TODO 4-3
-  //
-  // let child =
-  //   currentFirstChild;
-  //
-  // while (child !== null) {
-  //
-  //   deleteChild(
-  //     returnFiber,
-  //     child
-  //   );
-  //
-  //   child =
-  //     child.sibling;
-  // }
+  let child = currentFirstChild;
+  while (child != null) {
+    deleteChild(returnFiber, child);
+    child = child.sibling;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -440,80 +412,29 @@ function deleteRemainingChildren(returnFiber: Fiber, currentFirstChild: Fiber | 
    ═══════════════════════════════════════════════════════════════ */
 
 function updateTextNode(returnFiber: Fiber, current: Fiber | null, textContent: string): Fiber {
-  // TODO 4-4-A
-  //
-  // if (
-  //   current === null ||
-  //   current.tag !== "HostText"
-  // ) {
-  //
-  //   const created =
-  //     createFiberFromText(
-  //       textContent
-  //     );
-  //
-  //   created.return =
-  //     returnFiber;
-  //
-  //   return created;
-  // }
-  //
-  //
-  // const existing =
-  //   useFiber(
-  //     current,
-  //     textContent
-  //   );
-  //
-  // 기존 HostText를 재사용할 때
-  // debugName도 최신 text로
-  // 갱신해주면 로그 보기 좋다.
-  //
-  // existing.debugName =
-  //   `#text("${textContent}")`;
-  //
-  // existing.return =
-  //   returnFiber;
-  //
-  // return existing;
+  if (current === null || current.tag !== "HostText") {
+    const created = createFiberFromText(textContent);
+    created.return = returnFiber;
+    return created;
+  }
 
-  throw new Error("TODO 4-4-A");
+  const existing = useFiber(current, textContent);
+  existing.debugName = `#text("${textContent}")`;
+  existing.return = returnFiber;
+
+  return existing;
 }
 
 function updateElement(returnFiber: Fiber, current: Fiber | null, element: MiniReactElement): Fiber {
-  // TODO 4-4-B
-  //
-  // current !== null
-  // &&
-  // current.type === element.type
-  //
-  // 이라면 같은 type.
-  //
-  // const existing =
-  //   useFiber(
-  //     current,
-  //     element.props
-  //   );
-  //
-  // existing.return =
-  //   returnFiber;
-  //
-  // return existing;
-  //
-  //
-  // 아니라면:
-  //
-  // const created =
-  //   createFiberFromElement(
-  //     element
-  //   );
-  //
-  // created.return =
-  //   returnFiber;
-  //
-  // return created;
+  if (current !== null && current.type === element.type) {
+    const existing = useFiber(current, element.props);
+    existing.return = returnFiber;
+    return existing;
+  }
 
-  throw new Error("TODO 4-4-B");
+  const created = createFiberFromElement(element);
+  created.return = returnFiber;
+  return created;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -530,61 +451,24 @@ function updateElement(returnFiber: Fiber, current: Fiber | null, element: MiniR
    ═══════════════════════════════════════════════════════════════ */
 
 function updateSlot(returnFiber: Fiber, oldFiber: Fiber, newChild: MiniReactNode): Fiber | null {
-  // TODO 4-5 ★★★
-  //
-  // const key =
-  //   oldFiber.key;
-  //
-  //
-  // ───────────────────
-  // TEXT
-  // ───────────────────
-  //
-  // if (
-  //   typeof newChild === "string" ||
-  //   typeof newChild === "number"
-  // ) {
-  //
-  //   // text child에는
-  //   // explicit key가 없다.
-  //
-  //   if (key !== null) {
-  //     return null;
-  //   }
-  //
-  //   return updateTextNode(
-  //     returnFiber,
-  //     oldFiber,
-  //     String(newChild)
-  //   );
-  // }
-  //
-  //
-  // ───────────────────
-  // ELEMENT
-  // ───────────────────
-  //
-  // if (
-  //   isMiniElement(newChild)
-  // ) {
-  //
-  //   if (
-  //     newChild.key === key
-  //   ) {
-  //     return updateElement(
-  //       returnFiber,
-  //       oldFiber,
-  //       newChild
-  //     );
-  //   }
-  //
-  //   return null;
-  // }
-  //
-  //
-  // return null;
+  const key = oldFiber.key;
 
-  throw new Error("TODO 4-5");
+  if (typeof newChild === "string" || typeof newChild === "number") {
+    if (key !== null) {
+      return null;
+    }
+    return updateTextNode(returnFiber, oldFiber, String(newChild));
+  }
+
+  if (isMiniElement(newChild)) {
+    if (newChild.key === key) {
+      return updateElement(returnFiber, oldFiber, newChild);
+    }
+
+    return null;
+  }
+
+  return null;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -607,43 +491,17 @@ function updateSlot(returnFiber: Fiber, oldFiber: Fiber, newChild: MiniReactNode
    ═══════════════════════════════════════════════════════════════ */
 
 function mapRemainingChildren(currentFirstChild: Fiber): Map<string | number, Fiber> {
-  // TODO 4-6
-  //
-  // const existingChildren =
-  //   new Map<
-  //     string | number,
-  //     Fiber
-  //   >();
-  //
-  //
-  // let existingChild:
-  //   | Fiber
-  //   | null =
-  //   currentFirstChild;
-  //
-  //
-  // while (
-  //   existingChild !== null
-  // ) {
-  //
-  //   const key =
-  //     existingChild.key !== null
-  //       ? existingChild.key
-  //       : existingChild.index;
-  //
-  //   existingChildren.set(
-  //     key,
-  //     existingChild
-  //   );
-  //
-  //   existingChild =
-  //     existingChild.sibling;
-  // }
-  //
-  //
-  // return existingChildren;
+  const existingChildren = new Map<string | number, Fiber>();
 
-  throw new Error("TODO 4-6");
+  let existingChild: Fiber | null = currentFirstChild;
+
+  while (existingChild !== null) {
+    const key = existingChild.key !== null ? existingChild.key : existingChild.index;
+    existingChildren.set(key, existingChild);
+    existingChild = existingChild.sibling;
+  }
+
+  return existingChildren;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -659,60 +517,18 @@ function updateFromMap(
 
   newChild: MiniReactNode,
 ): Fiber | null {
-  // TODO 4-7 ★★★
-  //
-  //
-  // ───────────────────
-  // TEXT
-  // ───────────────────
-  //
-  // if (
-  //   typeof newChild === "string" ||
-  //   typeof newChild === "number"
-  // ) {
-  //
-  //   const matchedFiber =
-  //     existingChildren.get(
-  //       newIndex
-  //     ) ?? null;
-  //
-  //   return updateTextNode(
-  //     returnFiber,
-  //     matchedFiber,
-  //     String(newChild)
-  //   );
-  // }
-  //
-  //
-  // ───────────────────
-  // ELEMENT
-  // ───────────────────
-  //
-  // if (
-  //   isMiniElement(newChild)
-  // ) {
-  //
-  //   const lookupKey =
-  //     newChild.key !== null
-  //       ? newChild.key
-  //       : newIndex;
-  //
-  //   const matchedFiber =
-  //     existingChildren.get(
-  //       lookupKey
-  //     ) ?? null;
-  //
-  //   return updateElement(
-  //     returnFiber,
-  //     matchedFiber,
-  //     newChild
-  //   );
-  // }
-  //
-  //
-  // return null;
+  if (typeof newChild === "string" || typeof newChild === "number") {
+    const matchedFiber = existingChildren.get(newIndex) ?? null;
+    return updateTextNode(returnFiber, matchedFiber, String(newChild));
+  }
 
-  throw new Error("TODO 4-7");
+  if (isMiniElement(newChild)) {
+    const lookupKey = newChild.key !== null ? newChild.key : newIndex;
+    const matchedFiber = existingChildren.get(lookupKey) ?? null;
+    return updateElement(returnFiber, matchedFiber, newChild);
+  }
+
+  return null;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -729,58 +545,20 @@ function updateFromMap(
    ═══════════════════════════════════════════════════════════════ */
 
 function placeChild(newFiber: Fiber, lastPlacedIndex: number, newIndex: number): number {
-  // TODO 4-8 ★★★★★
-  //
-  // newFiber.index =
-  //   newIndex;
-  //
-  //
-  // const current =
-  //   newFiber.alternate;
-  //
-  //
-  // ─────────────────────
-  // 기존 Fiber를 재사용
-  // ─────────────────────
-  //
-  // if (current !== null) {
-  //
-  //   const oldIndex =
-  //     current.index;
-  //
-  //   if (
-  //     oldIndex <
-  //     lastPlacedIndex
-  //   ) {
-  //
-  //     // 이전 위치가
-  //     // 이미 지나갔다.
-  //     // → 이동 필요.
-  //
-  //     newFiber.flags |=
-  //       Placement;
-  //
-  //     return lastPlacedIndex;
-  //   }
-  //
-  //
-  //   // 아직 오른쪽에 있으므로
-  //   // 제자리에 남겨둘 수 있다.
-  //
-  //   return oldIndex;
-  // }
-  //
-  //
-  // ─────────────────────
-  // 새 Fiber
-  // ─────────────────────
-  //
-  // newFiber.flags |=
-  //   Placement;
-  //
-  // return lastPlacedIndex;
+  newFiber.index = newIndex;
+  const current = newFiber.alternate;
 
-  throw new Error("TODO 4-8");
+  if (current !== null) {
+    const oldIndex = current.index;
+    if (oldIndex < lastPlacedIndex) {
+      newFiber.flags |= Placement;
+      return lastPlacedIndex;
+    }
+    return oldIndex;
+  }
+
+  newFiber.flags |= Placement;
+  return lastPlacedIndex;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -872,17 +650,9 @@ function reconcileChildrenArray(
      *
      * 기존 div는 삭제 대상.
      */
-
-    // TODO 4-9-A
-    //
-    // if (
-    //   newFiber.alternate === null
-    // ) {
-    //   deleteChild(
-    //     returnFiber,
-    //     oldFiber
-    //   );
-    // }
+    if (newFiber.alternate === null) {
+      deleteChild(returnFiber, oldFiber);
+    }
 
     lastPlacedIndex = placeChild(newFiber, lastPlacedIndex, newIndex);
 
@@ -912,12 +682,7 @@ function reconcileChildrenArray(
      ───────────────────────────────────────── */
 
   if (newIndex === newChildren.length) {
-    // TODO 4-9-B
-    //
-    // deleteRemainingChildren(
-    //   returnFiber,
-    //   oldFiber
-    // );
+    deleteRemainingChildren(returnFiber, oldFiber);
 
     if (previousNewFiber !== null) {
       previousNewFiber.sibling = null;
@@ -942,43 +707,20 @@ function reconcileChildrenArray(
 
   if (oldFiber === null) {
     for (; newIndex < newChildren.length; newIndex++) {
-      // TODO 4-9-C
-      //
-      // const newFiber =
-      //   createChild(
-      //     returnFiber,
-      //     newChildren[newIndex]
-      //   );
-      //
-      //
-      // if (
-      //   newFiber === null
-      // ) {
-      //   continue;
-      // }
-      //
-      //
-      // lastPlacedIndex =
-      //   placeChild(
-      //     newFiber,
-      //     lastPlacedIndex,
-      //     newIndex
-      //   );
-      //
-      //
-      // if (
-      //   previousNewFiber === null
-      // ) {
-      //   resultingFirstChild =
-      //     newFiber;
-      // } else {
-      //   previousNewFiber.sibling =
-      //     newFiber;
-      // }
-      //
-      //
-      // previousNewFiber =
-      //   newFiber;
+      const newFiber = createChild(returnFiber, newChildren[newIndex]);
+      if (newFiber === null) {
+        continue;
+      }
+
+      lastPlacedIndex = placeChild(newFiber, lastPlacedIndex, newIndex);
+
+      if (previousNewFiber === null) {
+        resultingFirstChild = newFiber;
+      } else {
+        previousNewFiber.sibling = newFiber;
+      }
+
+      previousNewFiber = newFiber;
     }
 
     return resultingFirstChild;
@@ -1030,23 +772,11 @@ function reconcileChildrenArray(
      * 안 지우면 PHASE 6에서
      * 삭제 대상으로 잘못 판단된다.
      */
-
-    // TODO 4-9-D ★★★
-    //
-    // const current =
-    //   newFiber.alternate;
-    //
-    // if (current !== null) {
-    //
-    //   const lookupKey =
-    //     current.key !== null
-    //       ? current.key
-    //       : current.index;
-    //
-    //   existingChildren.delete(
-    //     lookupKey
-    //   );
-    // }
+    const current = newFiber.alternate;
+    if (current !== null) {
+      const lookupKey = current.key !== null ? current.key : current.index;
+      existingChildren.delete(lookupKey);
+    }
 
     lastPlacedIndex = placeChild(newFiber, lastPlacedIndex, newIndex);
 
@@ -1069,17 +799,7 @@ function reconcileChildrenArray(
 
      → 전부 삭제.
      ───────────────────────────────────────── */
-
-  // TODO 4-9-E
-  //
-  // existingChildren.forEach(
-  //   (child) => {
-  //     deleteChild(
-  //       returnFiber,
-  //       child
-  //     );
-  //   }
-  // );
+  existingChildren.forEach((child) => deleteChild(returnFiber, child));
 
   /*
    * 이전 render에서 복사됐을 수 있는
@@ -1120,7 +840,7 @@ function reconcileChildFibers(
    ═══════════════════════════════════════════════════════════════ */
 
 function reconcileChildren(current: Fiber | null, workInProgress: Fiber, nextChildren: MiniReactNode): void {
-  if (current === null || current.child === null) {
+  if (current === null) {
     workInProgress.child = mountChildFibers(workInProgress, nextChildren);
   } else {
     workInProgress.child = reconcileChildFibers(workInProgress, current.child, nextChildren);
