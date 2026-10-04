@@ -1104,55 +1104,24 @@ let workInProgressHook: Hook | null = null;
    ═══════════════════════════════════════════════════════════════ */
 
 function mountWorkInProgressHook(): Hook {
-  // TODO 6-1 ★★★★
-  //
-  // 현재 렌더 중 Fiber가 없다면
-  // Hook을 쓸 수 없다.
-  //
-  // if (
-  //   currentlyRenderingFiber === null
-  // ) {
-  //   throw ...
-  // }
-  //
-  //
-  // const hook: Hook = {
-  //   memoizedState: null,
-  //   next: null
-  // };
-  //
-  //
-  // 첫 번째 Hook이면:
-  //
-  // if (
-  //   workInProgressHook === null
-  // ) {
-  //
-  //   currentlyRenderingFiber.memoizedState =
-  //     hook;
-  //
-  //   workInProgressHook =
-  //     hook;
-  //
-  // }
-  //
-  //
-  // 두 번째 이후라면:
-  //
-  // else {
-  //
-  //   workInProgressHook.next =
-  //     hook;
-  //
-  //   workInProgressHook =
-  //     hook;
-  //
-  // }
-  //
-  //
-  // return hook;
+  if (currentlyRenderingFiber === null) {
+    throw new Error("렌더 중인 파이버가 없습니다.");
+  }
 
-  throw new Error("TODO 6-1");
+  const hook: Hook = {
+    memoizedState: null,
+    next: null,
+  };
+
+  if (workInProgressHook === null) {
+    currentlyRenderingFiber.memoizedState = hook;
+    workInProgressHook = hook;
+  } else {
+    workInProgressHook.next = hook;
+    workInProgressHook = hook;
+  }
+
+  return hook;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1192,65 +1161,37 @@ function mountWorkInProgressHook(): Hook {
    ═══════════════════════════════════════════════════════════════ */
 
 function updateWorkInProgressHook(): Hook {
-  // TODO 6-2 ★★★★★
-  //
-  // currentlyRenderingFiber가 없으면 throw
-  //
-  //
-  // 다음 current hook을 찾는다.
-  //
-  // let nextCurrentHook:
-  //   Hook | null;
-  //
-  //
-  // currentHook === null 이면
-  // 아직 첫 번째 Hook.
-  //
-  // const currentFiber =
-  //   currentlyRenderingFiber.alternate;
-  //
-  //
-  // nextCurrentHook =
-  //   currentFiber?.memoizedState ?? null;
-  //
-  //
-  // 이미 Hook을 하나 이상 처리했다면:
-  //
-  // nextCurrentHook =
-  //   currentHook.next;
-  //
-  //
-  // nextCurrentHook === null이면:
-  //
-  // 이전 render보다 Hook을
-  // 더 많이 호출했다는 뜻.
-  //
-  // throw new Error(
-  //   "Rendered more hooks..."
-  // )
-  //
-  //
-  // currentHook =
-  //   nextCurrentHook;
-  //
-  //
-  // 새로운 WIP Hook 생성:
-  //
-  // const newHook: Hook = {
-  //   memoizedState:
-  //     currentHook.memoizedState,
-  //
-  //   next: null
-  // };
-  //
-  //
-  // mount와 동일하게
-  // WIP hook list에 연결.
-  //
-  //
-  // return newHook;
+  if (currentlyRenderingFiber === null) {
+    throw new Error("렌더링 중인 파이버가 없습니다.");
+  }
 
-  throw new Error("TODO 6-2");
+  let nextCurrentHook: Hook | null;
+
+  if (currentHook === null) {
+    const currentFiber = currentlyRenderingFiber.alternate;
+    nextCurrentHook = currentFiber?.memoizedState ?? null;
+  } else {
+    nextCurrentHook = currentHook.next;
+    if (nextCurrentHook === null) {
+      throw new Error("Rendered more hooks...");
+    }
+    currentHook = nextCurrentHook;
+  }
+
+  const newHook: Hook = {
+    memoizedState: currentHook?.memoizedState,
+    next: null,
+  };
+
+  if (workInProgressHook === null) {
+    currentlyRenderingFiber.memoizedState = newHook;
+    workInProgressHook = newHook;
+  } else {
+    workInProgressHook.next = newHook;
+    workInProgressHook = newHook;
+  }
+
+  return newHook;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1340,26 +1281,11 @@ function createLevel7PlaceholderDispatch<T>(): Dispatch<T> {
    ═══════════════════════════════════════════════════════════════ */
 
 function mountState<T>(initialState: T): [T, Dispatch<T>] {
-  // TODO 6-3 ★★★
-  //
-  // const hook =
-  //   mountWorkInProgressHook();
-  //
-  //
-  // hook.memoizedState =
-  //   initialState;
-  //
-  //
-  // const dispatch =
-  //   createLevel7PlaceholderDispatch<T>();
-  //
-  //
-  // return [
-  //   hook.memoizedState as T,
-  //   dispatch
-  // ];
+  const hook = mountWorkInProgressHook();
+  hook.memoizedState = initialState;
+  const dispatch = createLevel7PlaceholderDispatch<T>();
 
-  throw new Error("TODO 6-3");
+  return [hook.memoizedState as T, dispatch];
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1387,22 +1313,9 @@ function mountState<T>(initialState: T): [T, Dispatch<T>] {
    ═══════════════════════════════════════════════════════════════ */
 
 function updateState<T>(_initialState: T): [T, Dispatch<T>] {
-  // TODO 6-4 ★★★
-  //
-  // const hook =
-  //   updateWorkInProgressHook();
-  //
-  //
-  // const dispatch =
-  //   createLevel7PlaceholderDispatch<T>();
-  //
-  //
-  // return [
-  //   hook.memoizedState as T,
-  //   dispatch
-  // ];
-
-  throw new Error("TODO 6-4");
+  const hook = updateWorkInProgressHook();
+  const dispatch = createLevel7PlaceholderDispatch<T>();
+  return [hook.memoizedState as T, dispatch];
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1478,145 +1391,43 @@ function renderWithHooks(
 
   props: Props,
 ): MiniReactNode {
-  // TODO 6-5 ★★★★★
-  //
-  //
-  // ─────────────────────────────
-  // 1. 현재 렌더 Fiber 설정
-  // ─────────────────────────────
-  //
-  // currentlyRenderingFiber =
-  //   workInProgress;
-  //
-  //
-  // ─────────────────────────────
-  // 2. WIP Hook list 초기화
-  // ─────────────────────────────
-  //
-  // createWorkInProgress에서
-  // 이전 memoizedState를 복사했지만
-  //
-  // 새로운 WIP Hook list를
-  // 다시 만들 것이므로:
-  //
-  // workInProgress.memoizedState =
-  //   null;
-  //
-  //
-  // currentHook =
-  //   null;
-  //
-  // workInProgressHook =
-  //   null;
-  //
-  //
-  // ─────────────────────────────
-  // 3. Dispatcher 선택
-  // ─────────────────────────────
-  //
-  // current === null이면:
-  //
-  //   HooksDispatcherOnMount
-  //
-  // 아니면:
-  //
-  //   HooksDispatcherOnUpdate
-  //
-  //
-  // currentDispatcher =
-  //   ...
-  //
-  //
-  // ─────────────────────────────
-  // 4. Component 실행
-  // ─────────────────────────────
-  //
-  // const children =
-  //   Component(props);
-  //
-  //
-  // Component 실행 중:
-  //
-  // useState()
-  // useState()
-  // useState()
-  //
-  // 가 순서대로 호출된다.
-  //
-  //
-  // ─────────────────────────────
-  // 5. Hook 개수 검증
-  // ─────────────────────────────
-  //
-  // current !== null이라면
-  // 이전 render에 남은 Hook이 있는지 확인.
-  //
-  //
-  // const currentFirstHook =
-  //   current.memoizedState;
-  //
-  //
-  // let renderedTooFewHooks =
-  //   false;
-  //
-  //
-  // if (
-  //   currentFirstHook !== null
-  // ) {
-  //
-  //   if (
-  //     currentHook === null
-  //   ) {
-  //
-  //     // 이전에는 Hook이 있었는데
-  //     // 이번에는 하나도 호출 안 함.
-  //
-  //     renderedTooFewHooks =
-  //       true;
-  //
-  //   } else if (
-  //     currentHook.next !== null
-  //   ) {
-  //
-  //     // 이전 Hook list가
-  //     // 아직 남아 있음.
-  //
-  //     renderedTooFewHooks =
-  //       true;
-  //   }
-  // }
-  //
-  //
-  // ─────────────────────────────
-  // 6. globals cleanup
-  // ─────────────────────────────
-  //
-  // currentlyRenderingFiber =
-  //   null;
-  //
-  // currentHook =
-  //   null;
-  //
-  // workInProgressHook =
-  //   null;
-  //
-  // currentDispatcher =
-  //   null;
-  //
-  //
-  // if (
-  //   renderedTooFewHooks
-  // ) {
-  //
-  //   throw new Error(
-  //     "Rendered fewer hooks than expected"
-  //   );
-  // }
-  //
-  //
-  // return children;
+  currentlyRenderingFiber = workInProgress;
 
-  throw new Error("TODO 6-5");
+  workInProgress.memoizedState = null;
+  currentHook = null;
+  workInProgressHook = null;
+
+  if (current === null) {
+    currentDispatcher = HooksDispatcherOnMount;
+  } else {
+    currentDispatcher = HooksDispatcherOnUpdate;
+  }
+
+  const children = Component(props);
+
+  if (current !== null) {
+    const currentFirstHook = current.memoizedState;
+    let renderedTooFewHooks = false;
+
+    if (currentFirstHook !== null) {
+      if (currentHook === null) {
+        renderedTooFewHooks = true;
+      } else if (currentHook.next !== null) {
+        renderedTooFewHooks = true;
+      }
+    }
+
+    currentlyRenderingFiber = null;
+    currentHook = null;
+    workInProgressHook = null;
+    currentDispatcher = null;
+
+    if (renderedTooFewHooks) {
+      throw new Error("Rendered fewer hooks than expected");
+    }
+  }
+
+  return children;
 }
 
 /* ═══════════════════════════════════════════════════════════════
