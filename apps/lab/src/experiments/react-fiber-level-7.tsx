@@ -1154,6 +1154,8 @@ function enqueueUpdate<T>(
     update.next = pending.next;
     pending.next = update;
   }
+
+  queue.pending = update;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1301,11 +1303,7 @@ function mountState<T>(initialState: T): [T, Dispatch<T>] {
    TODO 7-4
    ═══════════════════════════════════════════════════════════════ */
 
-function processUpdateQueue<T>(
-  baseState: T,
-
-  queue: UpdateQueue<T>,
-): T {
+function processUpdateQueue<T>(baseState: T, queue: UpdateQueue<T>): T {
   const pending = queue.pending;
 
   if (pending === null) {
@@ -1313,17 +1311,27 @@ function processUpdateQueue<T>(
   }
 
   const first = pending.next;
-  let update = first;
-  let newState;
+
+  if (first === null) {
+    throw new Error("Invalid update queue");
+  }
+
+  let update: StateUpdate<T> = first;
+  let newState = baseState;
+
   do {
-    if (typeof update?.action === "function") {
-      newState = update.action(baseState);
+    const action = update.action;
+
+    if (typeof action === "function") {
+      newState = (action as (previous: T) => T)(newState);
     } else {
-      newState = update?.action;
+      newState = action;
     }
 
-    update = update?.next ?? null;
+    update = update.next as StateUpdate<T>;
   } while (update !== first);
+
+  queue.pending = null;
 
   return newState;
 }
