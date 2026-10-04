@@ -1173,24 +1173,33 @@ function haveHostPropsChanged(oldProps: Props, newProps: Props): boolean {
    span의 completeWork 때 이미 조립되어 있기 때문.
    ═══════════════════════════════════════════════════════════════ */
 
-function appendAllChildren(
-  parent: HostElement,
-
-  workInProgress: Fiber,
-): void {
+function appendAllChildren(parent: HostElement, workInProgress: Fiber): void {
   let node = workInProgress.child;
 
   while (node !== null) {
+    // Host를 만나면 실제 Host node만 append.
+    // 그 Host의 내부로는 내려가지 않는다.
     if (node.tag === "HostComponent" || node.tag === "HostText") {
       appendHostChild(parent, node.stateNode as HostInstance);
     } else if (node.child !== null) {
-      node.child.return = node;
+      // FunctionComponent 등은 Host가 아니므로
+      // 실제 Host node를 찾으러 아래로 내려간다.
       node = node.child;
       continue;
-    } else if (node.sibling === null) {
-      node = node.return;
-      continue;
     }
+
+    // 현재 위치에서 오른쪽 sibling을 찾는다.
+    while (node.sibling === null) {
+      // 여기까지 올라왔으면
+      // workInProgress의 subtree를 전부 순회한 것.
+      if (node.return === null || node.return === workInProgress) {
+        return;
+      }
+
+      node = node.return;
+    }
+
+    // sibling이 있으면 그쪽으로 이동
     node = node.sibling;
   }
 }
