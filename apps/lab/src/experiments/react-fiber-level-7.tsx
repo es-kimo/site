@@ -1147,36 +1147,13 @@ function enqueueUpdate<T>(
 
   update: StateUpdate<T>,
 ): void {
-  /* TODO 7-1
-
-     1. queue.pending을 읽는다.
-
-     2. pending === null이면
-
-            update.next = update
-
-        로 자기 자신을 가리키는
-        circular list 생성.
-
-     3. pending이 있으면
-
-        기존:
-
-            oldest
-              ↓
-             ...
-              ↓
-            pending
-              └──→ oldest
-
-
-        신규 update를 맨 뒤에 넣는다.
-
-     4. queue.pending은
-        새 update를 가리키게 한다.
-  */
-
-  throw new Error("TODO 7-1");
+  const pending = queue.pending;
+  if (pending === null) {
+    update.next = update;
+  } else {
+    update.next = pending.next;
+    pending.next = update;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1224,33 +1201,22 @@ function dispatchSetState<T>(
 
   action: SetStateAction<T>,
 ): void {
-  /* TODO 7-2
+  if (currentlyRenderingFiber !== null) {
+    throw new Error("현재 render 중 setState는 L7에서는 지원하지 않는다.");
+  }
 
-     1. 현재 render 중 setState는
-        L7에서는 지원하지 않는다.
+  const newUpdate: StateUpdate<T> = {
+    action,
+    next: null,
+  };
 
-        currentlyRenderingFiber !== null
-        이면 에러를 던져도 좋다.
+  enqueueUpdate(queue, newUpdate);
 
+  if (queue.fiber === null) {
+    throw new Error("queue 삽입 실패");
+  }
 
-     2. StateUpdate 생성
-
-        {
-          action,
-          next: null
-        }
-
-
-     3. enqueueUpdate(queue, update)
-
-
-     4. queue.fiber가 없다면 에러
-
-
-     5. scheduleUpdateOnFiber(queue.fiber)
-  */
-
-  throw new Error("TODO 7-2");
+  scheduleUpdateOnFiber(queue.fiber);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1282,44 +1248,19 @@ function dispatchSetState<T>(
    ═══════════════════════════════════════════════════════════════ */
 
 function mountState<T>(initialState: T): [T, Dispatch<T>] {
-  /* TODO 7-3
+  const hook = mountWorkInProgressHook();
+  hook.memoizedState = initialState;
+  const queue: UpdateQueue<T> = {
+    pending: null,
+    dispatch: null,
+    fiber: currentlyRenderingFiber,
+  };
+  const dispatch: Dispatch<T> = (action) => dispatchSetState(queue, action);
 
-     1. mountWorkInProgressHook()
+  queue.dispatch = dispatch;
+  hook.queue = queue;
 
-     2. hook.memoizedState =
-        initialState
-
-     3. UpdateQueue 생성
-
-        {
-          pending: null,
-          dispatch: null,
-          fiber: currentlyRenderingFiber
-        }
-
-     4. dispatch 생성
-
-        const dispatch =
-          (action) =>
-            dispatchSetState(
-              queue,
-              action
-            )
-
-        중요:
-
-        dispatch는 Hook 객체가 아니라
-        queue를 closure로 잡는다.
-
-
-     5. queue.dispatch = dispatch
-
-     6. hook.queue = queue
-
-     7. [state, dispatch] 반환
-  */
-
-  throw new Error("TODO 7-3");
+  return [initialState, dispatch];
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1365,67 +1306,26 @@ function processUpdateQueue<T>(
 
   queue: UpdateQueue<T>,
 ): T {
-  /* TODO 7-4
+  const pending = queue.pending;
 
-     const pending =
-       queue.pending
+  if (pending === null) {
+    return baseState;
+  }
 
+  const first = pending.next;
+  let update = first;
+  let newState;
+  do {
+    if (typeof update?.action === "function") {
+      newState = update.action(baseState);
+    } else {
+      newState = update?.action;
+    }
 
-     pending === null
+    update = update?.next ?? null;
+  } while (update !== first);
 
-       → baseState 그대로 반환
-
-
-     pending !== null
-
-       → circular list 순회
-
-
-     가장 오래된 update:
-
-       pending.next
-
-
-     예:
-
-       A → B → C
-       ↑       │
-       └───────┘
-
-       pending = C
-
-       first = C.next = A
-
-
-     A부터 시작해서:
-
-       do {
-         action 처리
-         update = update.next
-       } while (update !== first)
-
-
-     action이 함수이면:
-
-       newState =
-         action(newState)
-
-
-     값이면:
-
-       newState =
-         action
-
-
-     전부 처리한 뒤:
-
-       queue.pending = null
-
-
-     마지막 newState 반환.
-  */
-
-  throw new Error("TODO 7-4");
+  return newState;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1474,56 +1374,25 @@ function processUpdateQueue<T>(
    ═══════════════════════════════════════════════════════════════ */
 
 function updateState<T>(_initialState: T): [T, Dispatch<T>] {
-  /* TODO 7-5
+  const hook = updateWorkInProgressHook();
+  const queue = hook.queue;
+  if (queue === null) {
+    throw new Error("no queue in hook");
+  }
 
-     1. updateWorkInProgressHook()
+  queue.fiber = currentlyRenderingFiber;
 
-     2. hook.queue를 가져온다.
+  const newState = processUpdateQueue(hook.memoizedState, queue);
 
-        queue === null이면 에러
+  hook.memoizedState = newState;
 
+  const dispatch = queue.dispatch;
 
-     3. queue.fiber를
+  if (dispatch === null) {
+    throw new Error("no dispatch created when mounted");
+  }
 
-        currentlyRenderingFiber
-
-        로 갱신한다.
-
-        현재 commit될 WIP Fiber가
-        이 queue의 최신 owner가 되는 것.
-
-
-     4. processUpdateQueue(
-          hook.memoizedState,
-          queue
-        )
-
-
-     5. 계산된 state를
-
-        hook.memoizedState
-
-        에 저장
-
-
-     6. queue.dispatch 가져오기
-
-        null이면 에러
-
-
-     7. [state, dispatch] 반환
-
-
-     중요:
-
-        update 때 새로운 dispatch를
-        만들지 않는다.
-
-        mount 때 만든 dispatch를
-        계속 재사용한다.
-  */
-
-  throw new Error("TODO 7-5");
+  return [newState, dispatch];
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2150,22 +2019,17 @@ function commitRoot(
    ═══════════════════════════════════════════════════════════════ */
 
 function getRootFromFiber(sourceFiber: Fiber): FiberRoot {
-  /* TODO 7-6
+  let node = sourceFiber;
 
-     let node = sourceFiber
+  while (node.return !== null) {
+    node = node.return;
+  }
 
-     while (node.return !== null) {
-       node = node.return
-     }
+  if (node.tag !== "HostRoot") {
+    throw new Error("root is not HostRoot");
+  }
 
-     최종 node가 HostRoot가 아니면
-     에러.
-
-     node.stateNode에서
-     FiberRoot 반환.
-  */
-
-  throw new Error("TODO 7-6");
+  return node.stateNode as FiberRoot;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2209,33 +2073,14 @@ function getRootFromFiber(sourceFiber: Fiber): FiberRoot {
    ═══════════════════════════════════════════════════════════════ */
 
 function scheduleUpdateOnFiber(fiber: Fiber): void {
-  /* TODO 7-7
+  const root = getRootFromFiber(fiber);
+  if (root.element === null) {
+    throw new Error("root.element is null");
+  }
 
-     1. getRootFromFiber(fiber)
+  const finishedWork = renderRoot(root, root.element);
 
-     2. root.element 확인
-
-        null이면 에러
-
-     3. renderRoot(
-          root,
-          root.element
-        )
-
-     4. commitRoot(
-          root,
-          finishedWork
-        )
-
-
-     L7에서는:
-
-       setState
-       =
-       즉시 synchronous render
-  */
-
-  throw new Error("TODO 7-7");
+  commitRoot(root, finishedWork);
 }
 
 /* ═══════════════════════════════════════════════════════════════
