@@ -161,7 +161,7 @@ const IdleLane: Lane = 0b1000;
    ============================================================= */
 
 function mergeLanes(a: Lanes, b: Lanes): Lanes {
-  return a & b;
+  return a | b;
 }
 
 function removeLanes(set: Lanes, subset: Lanes): Lanes {
@@ -1366,81 +1366,152 @@ function applyStateAction<T>(state: T, action: SetStateAction<T>): T {
 
 function updateState<T>(_initialState: T): [T, Dispatch<T>] {
   const hook = updateWorkInProgressHook();
-  const queue = hook.queue;
+
+  const queue = hook.queue as UpdateQueue<T> | null;
+
   if (queue === null) {
-    throw new Error("update queue not working");
+    throw new Error("update queue 없음");
   }
+
   if (currentlyRenderingFiber === null) {
-    throw new Error("currentlyRenderingFiber Empty");
+    throw new Error("rendering fiber 없음");
   }
+
   queue.fiber = currentlyRenderingFiber;
 
+  let baseQueue = hook.baseQueue as StateUpdate<T> | null;
+
   const pendingQueue = queue.pending;
-  let baseQueue = hook.baseQueue;
 
+  // pending → baseQueue
   if (pendingQueue !== null) {
-    if (baseQueue === null) {
-      baseQueue = pendingQueue;
-    } else {
-      const baseHead = baseQueue.next;
-      baseQueue.next = pendingQueue.next;
-      pendingQueue.next = baseHead;
+    queue.pending = null;
+
+    if (baseQueue !== null) {
+      const baseFirst = baseQueue.next;
+
+      const pendingFirst = pendingQueue.next;
+
+      if (baseFirst === null || pendingFirst === null) {
+        throw new Error("broken circular queue");
+      }
+
+      baseQueue.next = pendingFirst;
+
+      pendingQueue.next = baseFirst;
     }
+
+    // merged queue의 tail
+    baseQueue = pendingQueue;
+
+    // interrupted render에서도
+    // update를 잃지 않기 위해 current에도 보존
+    if (currentHook === null) {
+      throw new Error("currentHook 없음");
+    }
+
+    currentHook.baseQueue = baseQueue;
   }
 
-  if (currentHook === null) {
-    throw new Error("currentHook empty");
+  const dispatch = queue.dispatch;
+
+  if (dispatch === null) {
+    throw new Error("dispatch 없음");
   }
-  currentHook.baseQueue = baseQueue;
 
   if (baseQueue === null) {
-    return [hook.memoizedState as T, queue.dispatch as Dispatch<T>];
+    return [hook.memoizedState as T, dispatch];
   }
 
-  let first = baseQueue.next;
-  let newState = hook.baseState;
-  let newBaseState = null;
-  let newBaseQueueFirst = null;
-  let newBaseQueueLast = null;
-  let newBaseQueue = null;
+  const first = baseQueue.next;
 
-  let update = first;
+  if (first === null) {
+    throw new Error("broken circular queue");
+  }
+
+  let newState = hook.baseState as T;
+
+  let newBaseState = newState;
+
+  let newBaseQueueFirst: StateUpdate<T> | null = null;
+
+  let newBaseQueueLast: StateUpdate<T> | null = null;
+
+  let update: StateUpdate<T> = first;
+
   do {
-    const renderedUpdate = update as StateUpdate<T>;
-    const updateLane = renderedUpdate.lane;
+    const updateLane = update.lane;
+
     const shouldSkip = updateLane !== NoLane && !includesSomeLane(workInProgressRootRenderLane, updateLane);
 
     if (shouldSkip) {
-      newBaseQueue = update;
-      if (newBaseState === null) {
+      const clone: StateUpdate<T> = {
+        lane: updateLane,
+        action: update.action,
+        next: null,
+      };
+
+      if (newBaseQueueLast === null) {
+        newBaseQueueFirst = clone;
+
+        newBaseQueueLast = clone;
+
+        // 첫 skip 시점의 state
         newBaseState = newState;
+      } else {
+        newBaseQueueLast.next = clone;
+
+        newBaseQueueLast = clone;
       }
-      currentlyRenderingFiber.lanes |= updateLane;
-      continue;
+
+      currentlyRenderingFiber.lanes = mergeLanes(currentlyRenderingFiber.lanes, updateLane);
+    } else {
+      // 앞에서 skip이 있었다면
+      // 나중 rebase를 위해
+      // 처리된 update도 보존
+      if (newBaseQueueLast !== null) {
+        const clone: StateUpdate<T> = {
+          lane: NoLane,
+
+          action: update.action,
+
+          next: null,
+        };
+
+        newBaseQueueLast.next = clone;
+
+        newBaseQueueLast = clone;
+      }
+
+      newState = applyStateAction(newState, update.action);
     }
 
-    if (newBaseQueue !== null) {
-      baseQueue = update;
+    const next = update.next;
+
+    if (next === null) {
+      throw new Error("broken circular queue");
     }
-    newBaseState = applyStateAction(newState, renderedUpdate.action);
+
+    update = next;
   } while (update !== first);
 
-  if (newBaseQueue === null) {
+  if (newBaseQueueLast === null) {
+    // 모두 처리함
     hook.baseState = newState;
+
     hook.baseQueue = null;
   } else {
-    newBaseQueue.next = newBaseQueueFirst;
+    // circular list 완성
+    newBaseQueueLast.next = newBaseQueueFirst;
+
     hook.baseState = newBaseState;
+
     hook.baseQueue = newBaseQueueLast;
   }
 
   hook.memoizedState = newState;
 
-  if (hook.queue?.dispatch == null) {
-    throw new Error("not dispatched");
-  }
-
-  return [newState as T, hook.queue?.dispatch];
+  return [newState, dispatch];
 }
 
 /* =============================================================
