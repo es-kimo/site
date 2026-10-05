@@ -161,47 +161,15 @@ const IdleLane: Lane = 0b1000;
    ============================================================= */
 
 function mergeLanes(a: Lanes, b: Lanes): Lanes {
-  /* TODO 8-1
-
-     bitmask union.
-
-     예:
-
-       0010
-       0100
-       ----
-       0110
-
-  */
-
-  throw new Error("TODO 8-1");
+  return a & b;
 }
 
 function removeLanes(set: Lanes, subset: Lanes): Lanes {
-  /* TODO 8-1
-
-     set에서 subset bit 제거.
-
-     힌트:
-
-       set & ~subset
-  */
-
-  throw new Error("TODO 8-1");
+  return set & ~subset;
 }
 
 function includesSomeLane(a: Lanes, b: Lanes): boolean {
-  /* TODO 8-1
-
-     두 lane 집합이
-     하나라도 겹치는가?
-
-     힌트:
-
-       (a & b) !== 0
-  */
-
-  throw new Error("TODO 8-1");
+  return (a & b) !== 0;
 }
 
 /**
@@ -221,9 +189,7 @@ function includesSomeLane(a: Lanes, b: Lanes): boolean {
  * lanes & -lanes
  */
 function getHighestPriorityLane(lanes: Lanes): Lane {
-  /* TODO 8-1 */
-
-  throw new Error("TODO 8-1");
+  return lanes & -lanes;
 }
 
 function laneToString(lane: Lane): string {
@@ -1187,54 +1153,30 @@ function runWithLane(lane: Lane, callback: () => void): void {
    ============================================================= */
 
 function markUpdateLaneFromFiberToRoot(sourceFiber: Fiber, lane: Lane): FiberRoot {
-  /* TODO 8-2
+  sourceFiber.lanes |= lane;
 
-     1.
+  if (sourceFiber.alternate !== null) {
+    sourceFiber.alternate.lanes |= lane;
+  }
 
-     sourceFiber.lanes에
-     lane merge.
+  let parent = sourceFiber;
+  while (parent.return !== null) {
+    parent = parent.return;
+    parent.childLanes |= lane;
+    if (parent.alternate !== null) {
+      parent.alternate.childLanes |= lane;
+    }
+  }
 
+  if (parent.tag !== "HostRoot") {
+    throw new Error("root not root");
+  }
 
-     2.
+  const root = parent.stateNode as FiberRoot;
 
-     alternate가 있다면
-     alternate.lanes에도 merge.
+  root.pendingLanes |= lane;
 
-
-     3.
-
-     return을 타고 위로 올라가면서:
-
-       parent.childLanes |= lane
-
-     alternate가 있으면:
-
-       parent.alternate.childLanes |= lane
-
-
-     4.
-
-     최상단 Fiber가
-     HostRoot인지 확인.
-
-
-     5.
-
-     HostRoot.stateNode에서
-     FiberRoot 획득.
-
-
-     6.
-
-     root.pendingLanes |= lane
-
-
-     7.
-
-     root 반환.
-  */
-
-  throw new Error("TODO 8-2");
+  return root;
 }
 
 /* =============================================================
@@ -1299,65 +1241,25 @@ let workInProgressRootInterleavedUpdatedLanes: Lanes = NoLanes;
    ============================================================= */
 
 function dispatchSetState<T>(queue: UpdateQueue<T>, action: SetStateAction<T>): void {
-  /* TODO 8-3
+  if (currentlyRenderingFiber !== null) {
+    throw new Error("render phase update forbidden");
+  }
 
-     1.
+  const lane = requestUpdateLane();
 
-     currentlyRenderingFiber !== null이면
-     이번 학습 버전에서는
-     render-phase update 금지.
+  const update: StateUpdate<T> = {
+    lane,
+    action,
+    next: null,
+  };
 
+  enqueueUpdate(queue, update);
 
-     2.
+  if (queue.fiber === null) {
+    throw new Error("enqueue failed (queue - fiber not linked)");
+  }
 
-     const lane =
-       requestUpdateLane()
-
-
-     3.
-
-     StateUpdate 생성:
-
-       {
-         lane,
-         action,
-         next: null
-       }
-
-
-     4.
-
-     enqueueUpdate(
-       queue,
-       update
-     )
-
-
-     5.
-
-     queue.fiber 확인.
-
-
-     6.
-
-     scheduleUpdateOnFiber(
-       queue.fiber,
-       lane
-     )
-
-
-     중요:
-
-     여기서 render하지 않는다.
-
-     Scheduler에게:
-
-       "이 root에 lane 작업 있음"
-
-     만 기록한다.
-  */
-
-  throw new Error("TODO 8-3");
+  scheduleUpdateOnFiber(queue.fiber, lane);
 }
 
 /* =============================================================
@@ -1463,236 +1365,82 @@ function applyStateAction<T>(state: T, action: SetStateAction<T>): T {
    ============================================================= */
 
 function updateState<T>(_initialState: T): [T, Dispatch<T>] {
-  /* TODO 8-4
-
-     ─────────────────────
-     STEP 1
-     ─────────────────────
-
-     const hook =
-       updateWorkInProgressHook()
-
-
-     queue 가져오기.
-
-     queue.fiber =
-       currentlyRenderingFiber
-
-
-     ─────────────────────
-     STEP 2
-     pending → baseQueue merge
-     ─────────────────────
-
-     const pendingQueue =
-       queue.pending
-
-     let baseQueue =
-       hook.baseQueue
-
-
-     pendingQueue가 있다면:
-
-     A) baseQueue === null
-
-        baseQueue =
-          pendingQueue
-
-
-     B) 둘 다 있다면
-        두 circular list를 합친다.
-
-
-     예:
-
-     base:
-
-        A → B
-        ↑   │
-        └───┘
-
-     pending:
-
-        C → D
-        ↑   │
-        └───┘
-
-
-     결과:
-
-        A → B → C → D
-        ↑           │
-        └───────────┘
-
-
-     tail은 pendingQueue.
-
-
-     그리고:
-
-       hook.baseQueue =
-         baseQueue
-
-       queue.pending =
-         null
-
-
-     ★ 중요
-
-     interrupted render에서 update를
-     잃지 않도록:
-
-       currentHook.baseQueue =
-         baseQueue
-
-     도 해준다.
-
-
-     ─────────────────────
-     STEP 3
-     baseQueue 없으면
-     ─────────────────────
-
-     아무 update도 없으므로:
-
-       return [
-         hook.memoizedState,
-         queue.dispatch
-       ]
-
-
-     ─────────────────────
-     STEP 4
-     queue 순회
-     ─────────────────────
-
-     first =
-       baseQueue.next
-
-     newState =
-       hook.baseState
-
-
-     newBaseState =
-       null
-
-     newBaseQueueFirst =
-       null
-
-     newBaseQueueLast =
-       null
-
-
-     update를 first부터 순회.
-
-
-     각 update:
-
-       const updateLane =
-         update.lane
-
-
-       const shouldSkip =
-         updateLane !== NoLane
-         &&
-         !includesSomeLane(
-           workInProgressRootRenderLane,
-           updateLane
-         )
-
-
-     ─────────────────────
-     SKIP
-     ─────────────────────
-
-     이번 lane에서 처리할 수 없으면:
-
-       clone을 만들어
-       newBaseQueue에 저장.
-
-     첫 skip이라면:
-
-       newBaseState =
-         newState
-
-
-     그리고:
-
-       currentlyRenderingFiber.lanes
-         |= updateLane
-
-
-     ─────────────────────
-     PROCESS
-     ─────────────────────
-
-     처리 가능한 update라면:
-
-       만약 이미 앞에서
-       skipped update가 있었다면
-
-       이 processed update도
-       NoLane clone으로
-       baseQueue에 저장한다.
-
-       이유:
-
-       나중에 skipped update를
-       rebase할 때 다시 실행해야 함.
-
-
-       이후:
-
-       newState =
-         applyStateAction(
-           newState,
-           update.action
-         )
-
-
-     ─────────────────────
-     STEP 5
-     새 baseQueue 마무리
-     ─────────────────────
-
-     skip된 update가 하나도 없다면:
-
-       hook.baseState =
-         newState
-
-       hook.baseQueue =
-         null
-
-
-     skip이 있었다면:
-
-       newBaseQueueLast.next =
-         newBaseQueueFirst
-
-       hook.baseState =
-         newBaseState
-
-       hook.baseQueue =
-         newBaseQueueLast
-
-
-     ─────────────────────
-     STEP 6
-     ─────────────────────
-
-     hook.memoizedState =
-       newState
-
-
-     dispatch 확인 후:
-
-       return [
-         newState,
-         dispatch
-       ]
-  */
-
-  throw new Error("TODO 8-4");
+  const hook = updateWorkInProgressHook();
+  const queue = hook.queue;
+  if (queue === null) {
+    throw new Error("update queue not working");
+  }
+  if (currentlyRenderingFiber === null) {
+    throw new Error("currentlyRenderingFiber Empty");
+  }
+  queue.fiber = currentlyRenderingFiber;
+
+  const pendingQueue = queue.pending;
+  let baseQueue = hook.baseQueue;
+
+  if (pendingQueue !== null) {
+    if (baseQueue === null) {
+      baseQueue = pendingQueue;
+    } else {
+      const baseHead = baseQueue.next;
+      baseQueue.next = pendingQueue.next;
+      pendingQueue.next = baseHead;
+    }
+  }
+
+  if (currentHook === null) {
+    throw new Error("currentHook empty");
+  }
+  currentHook.baseQueue = baseQueue;
+
+  if (baseQueue === null) {
+    return [hook.memoizedState as T, queue.dispatch as Dispatch<T>];
+  }
+
+  let first = baseQueue.next;
+  let newState = hook.baseState;
+  let newBaseState = null;
+  let newBaseQueueFirst = null;
+  let newBaseQueueLast = null;
+  let newBaseQueue = null;
+
+  let update = first;
+  do {
+    const renderedUpdate = update as StateUpdate<T>;
+    const updateLane = renderedUpdate.lane;
+    const shouldSkip = updateLane !== NoLane && !includesSomeLane(workInProgressRootRenderLane, updateLane);
+
+    if (shouldSkip) {
+      newBaseQueue = update;
+      if (newBaseState === null) {
+        newBaseState = newState;
+      }
+      currentlyRenderingFiber.lanes |= updateLane;
+      continue;
+    }
+
+    if (newBaseQueue !== null) {
+      baseQueue = update;
+    }
+    newBaseState = applyStateAction(newState, renderedUpdate.action);
+  } while (update !== first);
+
+  if (newBaseQueue === null) {
+    hook.baseState = newState;
+    hook.baseQueue = null;
+  } else {
+    newBaseQueue.next = newBaseQueueFirst;
+    hook.baseState = newBaseState;
+    hook.baseQueue = newBaseQueueLast;
+  }
+
+  hook.memoizedState = newState;
+
+  if (hook.queue?.dispatch == null) {
+    throw new Error("not dispatched");
+  }
+
+  return [newState as T, hook.queue?.dispatch];
 }
 
 /* =============================================================
@@ -2052,13 +1800,7 @@ const UNIT_BUDGET = 5;
 let unitsProcessedInSlice = 0;
 
 function shouldYield(): boolean {
-  /* TODO 8-5
-
-     unitsProcessedInSlice가
-     UNIT_BUDGET 이상이면 true.
-  */
-
-  throw new Error("TODO 8-5");
+  return unitsProcessedInSlice >= UNIT_BUDGET;
 }
 
 /* =============================================================
@@ -2094,23 +1836,10 @@ function shouldYield(): boolean {
    ============================================================= */
 
 function workLoopConcurrent(): void {
-  /* TODO 8-6
-
-     while (
-       workInProgress !== null
-       &&
-       !shouldYield()
-     ) {
-
-       performUnitOfWork(
-         workInProgress
-       )
-
-       unitsProcessedInSlice++
-     }
-  */
-
-  throw new Error("TODO 8-6");
+  while (workInProgress !== null && !shouldYield()) {
+    performUnitOfWork(workInProgress);
+    unitsProcessedInSlice++;
+  }
 }
 
 function workLoopSync(): void {
@@ -2149,42 +1878,18 @@ function workLoopSync(): void {
    ============================================================= */
 
 function prepareFreshStack(root: FiberRoot, lane: Lane): void {
-  /* TODO 8-7
+  if (root.element === null) {
+    throw new Error("root element empty");
+  }
 
-     root.element이 없다면 에러.
+  const current = root.current;
+  const wipRoot = createWorkInProgress(current, { children: root.element });
 
-
-     const current =
-       root.current
-
-
-     const wipRoot =
-       createWorkInProgress(
-         current,
-         {
-           children:
-             root.element
-         }
-       )
-
-
-     workInProgressRoot =
-       root
-
-     workInProgressRootFiber =
-       wipRoot
-
-     workInProgressRootRenderLane =
-       lane
-
-     workInProgressRootInterleavedUpdatedLanes =
-       NoLanes
-
-     workInProgress =
-       wipRoot
-  */
-
-  throw new Error("TODO 8-7");
+  workInProgressRoot = root;
+  workInProgressRootFiber = wipRoot;
+  workInProgressRootRenderLane = lane;
+  workInProgressRootInterleavedUpdatedLanes = NoLanes;
+  workInProgress = wipRoot;
 }
 
 /* =============================================================
@@ -2210,37 +1915,11 @@ function prepareFreshStack(root: FiberRoot, lane: Lane): void {
    ============================================================= */
 
 function scheduleUpdateOnFiber(fiber: Fiber, lane: Lane): void {
-  /* TODO 8-8
+  const root = markUpdateLaneFromFiberToRoot(fiber, lane);
 
-     1.
-
-     const root =
-       markUpdateLaneFromFiberToRoot(
-         fiber,
-         lane
-       )
-
-
-     2.
-
-     만약 현재 바로 이 root를
-     concurrent render 중이라면:
-
-       workInProgressRoot === root
-       &&
-       workInProgress !== null
-
-     interleavedUpdatedLanes에
-     lane을 merge.
-
-
-     중요:
-
-     여기서 renderRoot 같은 걸
-     직접 호출하지 않는다.
-  */
-
-  throw new Error("TODO 8-8");
+  if (workInProgressRoot === root && workInProgress !== null) {
+    workInProgressRootInterleavedUpdatedLanes |= lane;
+  }
 }
 
 /* =============================================================
@@ -2488,163 +2167,47 @@ function commitRoot(root: FiberRoot, finishedWork: Fiber): void {
 type ConcurrentWorkResult = "idle" | "yielded" | "committed" | "restarted";
 
 function performConcurrentWorkOnRoot(root: FiberRoot): ConcurrentWorkResult {
-  /* TODO 8-9
+  const lane = getHighestPriorityLane(root.pendingLanes);
+  if (lane === NoLane) {
+    return "idle";
+  }
 
-     ──────────────────────
-     1. pending lane 선택
-     ──────────────────────
+  if (workInProgressRoot !== root || workInProgressRootRenderLane !== lane || workInProgress === null) {
+    prepareFreshStack(root, lane);
+  }
 
-     const lane =
-       getHighestPriorityLane(
-         root.pendingLanes
-       )
+  unitsProcessedInSlice = 0;
 
+  workLoopConcurrent();
 
-     lane === NoLane
+  if (workInProgress !== null) {
+    return "yielded";
+  }
 
-       → "idle"
+  if (includesSomeLane(workInProgressRootInterleavedUpdatedLanes, lane)) {
+    prepareFreshStack(root, lane);
+    return "restarted";
+  }
 
+  const finishedWork = workInProgressRootFiber;
+  if (finishedWork === null) {
+    throw new Error("no finished work");
+  }
+  commitRoot(root, finishedWork);
 
-     ──────────────────────
-     2. fresh render가 필요한가?
-     ──────────────────────
+  root.pendingLanes = removeLanes(root.pendingLanes, lane);
 
-     아래 중 하나면:
+  workInProgressRoot = null;
 
-       workInProgressRoot !== root
+  workInProgressRootFiber = null;
 
-       또는
+  workInProgressRootRenderLane = NoLane;
 
-       workInProgressRootRenderLane
-         !== lane
+  workInProgressRootInterleavedUpdatedLanes = NoLanes;
 
-       또는
+  workInProgress = null;
 
-       workInProgress === null
-
-
-     prepareFreshStack(
-       root,
-       lane
-     )
-
-
-     특히:
-
-     Default render를 yield한 사이
-     Sync update가 들어오면:
-
-       pending highest = Sync
-
-     현재 renderLane = Default
-
-     이므로 기존 WIP를 버리고
-     Sync용 fresh stack 생성.
-
-
-     ──────────────────────
-     3. 한 slice 실행
-     ──────────────────────
-
-     unitsProcessedInSlice = 0
-
-     workLoopConcurrent()
-
-
-     ──────────────────────
-     4. 아직 workInProgress 남음?
-     ──────────────────────
-
-     YES:
-
-       yield된 것.
-
-       return "yielded"
-
-
-     중요:
-
-     workInProgress 값을
-     보존한다.
-
-
-     ──────────────────────
-     5. 같은 lane update가
-        render 도중 들어왔는가?
-     ──────────────────────
-
-     if (
-       includesSomeLane(
-         workInProgressRootInterleavedUpdatedLanes,
-         lane
-       )
-     )
-
-     이미 지나간 Fiber에
-     같은 lane update가 생겼을 수 있다.
-
-     commit하면 안 되고
-     같은 lane으로 fresh render.
-
-       prepareFreshStack(
-         root,
-         lane
-       )
-
-       return "restarted"
-
-
-     ──────────────────────
-     6. render 완료
-     ──────────────────────
-
-     finishedWork =
-       workInProgressRootFiber
-
-     null이면 에러.
-
-
-     commitRoot(
-       root,
-       finishedWork
-     )
-
-
-     ──────────────────────
-     7. 처리 lane 제거
-     ──────────────────────
-
-     root.pendingLanes =
-       removeLanes(
-         root.pendingLanes,
-         lane
-       )
-
-
-     ──────────────────────
-     8. render globals reset
-     ──────────────────────
-
-     workInProgressRoot =
-       null
-
-     workInProgressRootFiber =
-       null
-
-     workInProgressRootRenderLane =
-       NoLane
-
-     workInProgressRootInterleavedUpdatedLanes =
-       NoLanes
-
-     workInProgress =
-       null
-
-
-     return "committed"
-  */
-
-  throw new Error("TODO 8-9");
+  return "committed";
 }
 
 /* =============================================================
@@ -2661,29 +2224,10 @@ function performConcurrentWorkOnRoot(root: FiberRoot): ConcurrentWorkResult {
    ============================================================= */
 
 function flushConcurrentWork(root: FiberRoot): void {
-  /* TODO 8-10
-
-     while (
-       root.pendingLanes !==
-       NoLanes
-     ) {
-
-       const result =
-         performConcurrentWorkOnRoot(
-           root
-         )
-
-       console.log 등을 이용해서:
-
-         yielded
-         restarted
-         committed
-
-       를 확인해봐도 좋다.
-     }
-  */
-
-  throw new Error("TODO 8-10");
+  while (root.pendingLanes !== NoLanes) {
+    const result = performConcurrentWorkOnRoot(root);
+    console.log("performConcurrentWorkOnRoot result: ", result);
+  }
 }
 
 /* =============================================================
