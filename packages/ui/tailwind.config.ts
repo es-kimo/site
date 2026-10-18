@@ -21,7 +21,6 @@ const config = {
     extend: {
       maxWidth: {
         blog: "var(--blog-max-w)",
-        yjshd: "var(--yjshd-max-w)",
       },
       colors: {
         border: "hsl(var(--border))",

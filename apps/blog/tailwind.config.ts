@@ -1,7 +1,6 @@
 import sharedConfig from "@workspace/ui/tailwind.config";
 import type { Config } from "tailwindcss";
 
-/** yjshd는 Noto Sans KR을 쓰므로 폰트는 공유 설정이 아니라 블로그에서만 덮어쓴다. */
 const config = {
   presets: [sharedConfig],
   content: sharedConfig.content,
