@@ -1,5 +1,5 @@
 {
-  "name": "@yjshd/mdx-cli",
+  "name": "@workspace/mdx-cli",
   "version": "1.0.0",
   "description": "MDX 파일과 메타데이터를 생성하는 CLI 도구",
   "main": "dist/cli.js",

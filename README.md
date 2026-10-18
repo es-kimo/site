@@ -10,10 +10,6 @@
 
 - https://khryu.dev
 
-### yjshd
-
-웹사이트입니다. CLI를 통해 콘텐츠를 작성·게시할 수 있도록 만들었습니다.
-
 ### lab
 
 React 동작 원리를 직접 코드로 확인해보는 실험실입니다. `apps/lab/src/experiments/`에 `.tsx` 파일을
@@ -29,7 +25,7 @@ pnpm lab
 | 패키지              | 설명                                                                |
 | ------------------- | ------------------------------------------------------------------- |
 | `ui`                | Radix UI 기반 공유 컴포넌트 라이브러리                              |
-| `common`            | 두 앱에서 공통으로 사용하는 유틸리티                                |
+| `common`            | 앱에서 공통으로 사용하는 유틸리티                                   |
 | `mdx-cli`           | MDX 콘텐츠 생성 CLI. 인터랙티브 프롬프트로 글 작성을 안내           |
 | `resume`            | YAML로 작성한 이력서를 Markdown, JSON Resume, JSON-LD 포맷으로 변환 |
 | `eslint-config`     | 공유 ESLint 설정                                                    |
