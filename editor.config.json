@@ -1,5 +1,6 @@
 {
   "branch": "blog",
+  "preview": "https://www.khryu.dev/preview",
   "syntax": { "gfm": true, "math": true },
   "collections": [
     {
