@@ -6,9 +6,10 @@ const STORAGE_KEY = "reader-font-size";
 export function readSavedSizeIndex(): number | null {
   let saved: string | null = null;
   try {
-    // iframe(/preview)에서는 브라우저 설정에 따라 저장소 접근이 막힌다
     saved = localStorage.getItem(STORAGE_KEY);
-  } catch {}
+  } catch {
+    // iframe(/preview)에서는 브라우저 설정에 따라 저장소 접근이 막힌다. 기본 크기를 쓴다.
+  }
   if (saved === null) return null;
   const index = Number.parseInt(saved, 10);
   return index >= 0 && index < FONT_SIZES.length ? index : null;
