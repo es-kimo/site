@@ -7,7 +7,7 @@ import { IdleIsland } from "./Idle";
 import { ReaderIsland } from "./Reader";
 import { ResumeIsland } from "./Resume";
 
-type View = "home" | "resume" | "reader" | "idle";
+export type View = "home" | "resume" | "reader" | "idle";
 
 function deriveView(segments: string[]): View {
   const [domain] = segments;
@@ -24,9 +24,10 @@ const viewComponents: Record<View, React.ReactNode> = {
   idle: <IdleIsland />,
 };
 
-export const DynamicIsland = () => {
+/** `view`를 주지 않으면 경로로 정한다. layout 밖에서 그려 경로를 읽을 수 없는 404는 직접 넘긴다. */
+export const DynamicIsland = ({ view: fixedView }: { view?: View }) => {
   const segments = useSelectedLayoutSegments();
-  const view = deriveView(segments);
+  const view = fixedView ?? deriveView(segments);
 
   return (
     <div className="fixed top-2 left-1/2 -translate-x-1/2 z-50 w-fit" data-dynamic-island style={{ maxWidth: "min(calc(100vw - 16px), var(--blog-max-w))" }}>

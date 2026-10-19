@@ -5,30 +5,19 @@ import { cn } from "@workspace/ui/lib/utils";
 import { Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DEFAULT_SIZE_INDEX, FONT_SIZES } from "./constants";
+import { applyArticleFontSize, readSavedSizeIndex, saveSizeIndex } from "./font-size";
 
 export const ReaderIsland = () => {
   const [sizeIndex, setSizeIndex] = useState(DEFAULT_SIZE_INDEX);
 
   useEffect(() => {
-    // Apply font size to article content
-    const currentSize = FONT_SIZES[sizeIndex];
-    document.documentElement.style.setProperty("--article-font-size", `${currentSize?.value}px`);
-    document.documentElement.style.setProperty("--article-scale", `${currentSize?.scale}`);
-    document.documentElement.style.setProperty("--article-line-height", `${currentSize?.lineHeight}`);
-
-    // Save preference
-    localStorage.setItem("reader-font-size", sizeIndex.toString());
+    applyArticleFontSize(sizeIndex);
+    saveSizeIndex(sizeIndex);
   }, [sizeIndex]);
 
   useEffect(() => {
-    // Load saved preference
-    const saved = localStorage.getItem("reader-font-size");
-    if (saved !== null) {
-      const index = Number.parseInt(saved, 10);
-      if (index >= 0 && index < FONT_SIZES.length) {
-        setSizeIndex(index);
-      }
-    }
+    const saved = readSavedSizeIndex();
+    if (saved !== null) setSizeIndex(saved);
   }, []);
 
   const decreaseSize = () => {

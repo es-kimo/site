@@ -1,6 +1,4 @@
-import { DynamicIsland } from "@/components/DynamicIsland";
 import { Providers } from "@/components/providers";
-import { SiteFooter } from "@/components/site-footer";
 import "@workspace/ui/globals.css";
 import "katex/dist/katex.min.css";
 import { Metadata } from "next";
@@ -47,16 +45,8 @@ export default async function RootLayout({
         <link rel="stylesheet" href={PRETENDARD_CSS} />
       </head>
       <body className="font-sans antialiased">
-        <Providers>
-          {/* 짧은 페이지에서도 푸터가 화면 아래에 붙도록 한다 */}
-          <div className="flex min-h-dvh flex-col print:block print:min-h-0">
-            <div className="flex-1">
-              <div className="max-w-blog mx-auto py-20 px-4">{children}</div>
-            </div>
-            <SiteFooter />
-          </div>
-          <DynamicIsland />
-        </Providers>
+        {/* 사이트 틀(섬·푸터·여백)은 (site)에 있다. /preview는 틀 없이 본문만 그린다. */}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
