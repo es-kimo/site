@@ -11,4 +11,22 @@ export const metadata = {
   },
 };
 
-# ㅇㅇㅇ
+
+<TOC items={toc} />
+
+# 제목
+
+## 1. hi
+### hello world
+## 2. bye
+
+<FootnoteRef ids={["1"]}>
+안녕하세요.
+</FootnoteRef>
+
+<Mermaid chart={`
+flowchart TD
+    A[시작] --> B[끝]
+`} />
+
+<Footnote id="1">각주입니다.</Footnote>
