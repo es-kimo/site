@@ -14,7 +14,7 @@
         "other.createdAt": { "type": "datetime" },
         "other.status": { "type": "select", "options": ["ready", "draft"] }
       },
-      "components": ["Footnote", "FootnoteRef", "Mermaid", "TOC"],
+      "components": ["Image", "Footnote", "FootnoteRef", "Mermaid", "TOC"],
       "editor": "source"
     }
   ]
